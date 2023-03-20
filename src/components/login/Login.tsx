@@ -106,10 +106,10 @@ const Login = () => {
                     {/* Divider */}
                     <Divider sx={{
                         '&::before, &::after': {
-                            borderColor: 'grey',
+                            borderColor: '999999',
                         },
                     }}>
-                        <Typography sx={{ color: 'grey' }}>or</Typography>
+                        <Typography sx={{ color: '#999999', }}>or</Typography>
                     </Divider>
                     {/* Button Cognizant SSO */}
                     <Button

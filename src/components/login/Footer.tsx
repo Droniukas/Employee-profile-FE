@@ -13,7 +13,7 @@ const Footer = () => {
     mt: 'auto'}}>
                 <Grid container sx={{
 
-
+                    color: '#999999',
                     mt: 'auto',
                     width: '100%',
                     bgcolor: 'third.main',
