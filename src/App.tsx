@@ -1,8 +1,14 @@
 import './App.css'
 import Login from './components/login/Login'
 import { createMuiTheme, ThemeProvider } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Footer from './components/login/Footer';
 
 const theme = createMuiTheme ({
+  typography: {
+    fontFamily: ['Inter', 'sans-serif'
+  ].join(','),
+},
   palette: {
       primary : {
         main: '#000048'
@@ -11,12 +17,25 @@ const theme = createMuiTheme ({
         main: '#78ECE8'
       }
   }
-})
+});
 
 function App() {
   return (
+    
     <ThemeProvider theme={theme}>
+    <Grid
+  container sx={{
+  spacing:0,
+  direction:'column',
+  alignItems:'center',
+  justifyContent:'center'
+
+}}
+>
+
     <Login></Login>
+    </Grid>
+    <Footer></Footer>
     </ThemeProvider>
   );
 }
