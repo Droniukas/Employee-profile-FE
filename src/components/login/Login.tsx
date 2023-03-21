@@ -12,7 +12,7 @@ const Login = () => {
     return (
         <Box sx={{
             width: '100%',
-            maxWidth: 360,
+            maxWidth: 400,
             bgcolor: 'third.main',
             justifyContent: 'center',
             direction: 'column',
@@ -21,17 +21,17 @@ const Login = () => {
             <Stack
                 spacing={{ xs: 1, sm: 2, md: 4 }}
             >
-                <Box component="div">
+                <Box component="div" sx={{
+                    my: 10,
+                    mb: 2
+                }}>
                     <Typography variant='h1' sx={{
                         height: '72px',
                         width: 253,
-                        my: 10,
-                        mb: 0,
                         fontWeight: '400',
-                        fontSize: '32px',
-                        lineSize: '32px',
+                        fontSize: 32,
                         fontStyle: 'Regular',
-                        lineHeight: '83%',
+                        lineHeight: 1.25,
                         color: 'primary.main'
                     }}
                     >
@@ -39,91 +39,97 @@ const Login = () => {
                     </Typography>
                 </Box>
                 {/* Email adress input */}
-                <Box component="form">
-                    <Box component="div" sx={{ py: 1 }}>
+                <Box component="form" sx={{}}>
+                    <Box component="div" sx={{ my: 2 }}>
                         <InputLabel sx={{
                             pb: 1,
                             color: 'primary.main'
                         }}
                         >
-                            <Typography sx={{ fontSize: '14px' }}>
+                            <Typography sx={{ fontSize: 14, fontWeight: 400}}>
                                 Email address
                             </Typography>
                         </InputLabel>
-                        <TextField fullWidth variant="outlined"
+                        <TextField fullWidth
+                            size="small"
+                            variant="outlined"
                             placeholder='e.g., name@cognizant.com'
                             required
                             id="email"
                             name="email"
                             autoComplete="email"
                             sx={{
-                                fontSize: '14px',
                                 '& fieldset': {
-                                    borderRadius: 2,
+                                    borderRadius: 2
                                 }
                             }}
                         />
                     </Box>
                     {/* Password adress input */}
-                    <Box component="div" sx={{ py: 1 }}>
+                    <Box component="div" sx={{ my: 2 }}>
                         <InputLabel sx={{
                             pb: 1,
                             color: 'primary.main'
                         }}
                         >
-                            <Typography sx={{ fontSize: '14px' }}>
+                            <Typography sx={{ fontSize: 14, fontWeight: 400}} >
                                 Password
                             </Typography >
                         </InputLabel>
-                        <TextField fullWidth variant="outlined"
+                        <TextField fullWidth
+                            size="small"
+                            variant="outlined"
                             required
                             name="password"
                             type="password"
                             id="password"
                             autoComplete="current-password"
                             sx={{
-                                fontSize: '14px',
                                 '& fieldset': {
                                     borderRadius: 2,
                                 }
                             }}
 
                         />
-                        <Link href="#" >
-                            Forgot password?
+                        <Link href="#">
+                            <Typography sx={{ fontSize: 14, fontWeight: 400, mt: 1 }}>
+                                Forgot password?
+                            </Typography>
                         </Link>
                     </Box>
                     {/* Button Sign in */}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-
-                        sx={{ fontWeight: '600', textTransform: 'none', borderRadius: '16px', mt: 3, mb: 2 }}
-                    >
-                        Sign in
-                    </Button>
-                    {/* Divider */}
-                    <Divider sx={{
-                        '&::before, &::after': {
-                            borderColor: '999999',
-                        },
-                    }}>
-                        <Typography sx={{ color: '#999999', }}>or</Typography>
-                    </Divider>
-                    {/* Button Cognizant SSO */}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="text"
-                        sx={{ fontWeight: '600', textTransform: 'none', borderRadius: '16px', mt: 3, mb: 2, bgcolor: 'secondary.main' }}
-                    >
-                        Sign in with Cognizant SSO
-                    </Button>
+                    <Box sx={{ my: 4 }}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"  
+                            sx={{ my: 1 }}
+                        >
+                            Sign in
+                        </Button>
+                        {/* Divider */}
+                        <Divider sx={{
+                            my: 1,
+                            '&::before, &::after': {
+                                borderColor: '999999',
+                            },
+                        }}>
+                            <Typography sx={{ color: '#999999', }}>or</Typography>
+                        </Divider>
+                        {/* Button Cognizant SSO */}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="text"
+                            sx={{ bgcolor: 'secondary.main', my: 1 }}
+                        >
+                            Sign in with Cognizant SSO
+                        </Button>
+                    </Box>
                 </Box>
             </Stack>
         </Box>
-        
+
     );
 }
 export default Login;
