@@ -56,30 +56,7 @@ const Header = () => {
             </div>
         </Box>
         
-        {/* Main information about the user */}
-        <Box sx={{position:'relative', padding:'150px', marginLeft: 20, paddingRight:100}}>
-            <Avatar 
-                alt="Cindy Baker" 
-                src="https://pbs.twimg.com/media/EPGPKKfVUAABUAJ.jpg" 
-                sx={{ position: 'absolute',
-                    width: 120,
-                    height: 120,
-                    left: '5vw',
-                    top: 200,
-                     }}/>
-
-            <h1 style={{position:'absolute',
-                        height: 40,
-                        left: '5vw',
-                        top: 320,
-                        }}>Linus tech</h1>
-
-            <h4 style={{position:'absolute',
-                        height: 20,
-                        left: '5vw',
-                        top: 375
-                        }}>Software Engineer at Supernova</h4>
-        </Box>
+        
     </>
   )
 }

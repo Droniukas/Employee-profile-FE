@@ -102,6 +102,7 @@ export default function SkillsTabList() {
             marginBottom: '10px',
             borderColor: '#DDDDDD',
             color: 'primary.main',
+            backgroundColor:'white'
           }}
         >
           <ListItem disablePadding>
@@ -109,9 +110,9 @@ export default function SkillsTabList() {
               onClick={() => {
                 handleClick(obj.name)
               }}
-              style={{ height: '72px' }}
+              style={{ height: '72px', backgroundColor:'white' }}
             >
-              <ListItemText primary={obj.name} disableTypography sx={{ fontWeight: '500' }} />
+              <ListItemText primary={obj.name} disableTypography sx={{ fontWeight: '500'}} />
               {get(open, `${obj.name}`) ? (
                 <ExpandLess />
               ) : (
@@ -162,9 +163,10 @@ export default function SkillsTabList() {
                   borderRadius: '10px',
                   marginTop: '10px',
                   marginBottom: '10px',
-                  marginLeft: `${30 + counter}px`,
+                  // marginLeft: `${30 + counter}px`,
                   borderColor: '#DDDDDD',
                   color: 'primary.main',
+                  backgroundColor:'white'
                 }}
               >
                 <ListItem disablePadding>
@@ -172,8 +174,8 @@ export default function SkillsTabList() {
                     onClick={() => {
                       handleClick(key2)
                     }}
-                    style={{ height: '72px' }}
-                  >
+                    style={{ height: '72px' }}>
+                      
                     <ListItemText
                       primary={get(obj, `${path}.${key2}.name`)!}
                       disableTypography
@@ -198,7 +200,7 @@ export default function SkillsTabList() {
 
   return (
     <>
-      <Box sx={{ width: '1176px', marginTop: '100px' }}>{iterate(testing)}</Box>
+      <Box sx={{ width: '80vw', marginTop: '70px' }}>{iterate(testing)}</Box>
     </>
   )
 }
