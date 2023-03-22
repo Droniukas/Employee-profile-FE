@@ -4,6 +4,7 @@ import { CssBaseline, Box, Tabs, Tab } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { checkboxClasses } from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography';
+import Header from './components/header/Header'
 
 const theme = createTheme({
   typography: {
@@ -97,6 +98,9 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+
+        <Header />
+
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px'}}>
           <Tabs value={value} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
             <Tab label="Skills"           {...a11yProps(0)} />
