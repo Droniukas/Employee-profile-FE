@@ -26,6 +26,7 @@ const Login = () => {
                     mb: 2
                 }}>
                     <Typography variant='h1' sx={{
+                        mt: 10,
                         height: '72px',
                         width: 253,
                         fontWeight: '400',
