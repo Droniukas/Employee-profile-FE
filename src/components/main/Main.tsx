@@ -3,6 +3,8 @@ import { Avatar, CssBaseline, Box, Tabs, Tab, ThemeProvider, Typography } from '
 import Theme from '..//..//data/Theme'
 import SkillsTabList from '../skills-tab/SkillsTabList';
 import FindEmployee from './findEmployee/FindEmployee';
+import './Main.scss';
+import user from '../../data/user/user.json';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -49,7 +51,7 @@ const Main = () => {
     <Box sx={{position:'relative', padding:'150px', marginLeft: 20, paddingRight:100}}>
     <Avatar 
         alt="Cindy Baker" 
-        src="https://pbs.twimg.com/media/EPGPKKfVUAABUAJ.jpg" 
+        src={user.image} 
         sx={{ position: 'absolute',
             width: 120,
             height: 120,
@@ -57,17 +59,9 @@ const Main = () => {
             top: 200,
             }}/>
 
-    <h1 style={{position:'absolute',
-                height: 40,
-                left: '5vw',
-                top: 320,
-                }}>Linus tech</h1>
+    <h1 className='name'>{user.name} {user.middle_name} {user.surname}</h1>
 
-    <h4 style={{position:'absolute',
-                height: 20,
-                left: '5vw',
-                top: 375
-                }}>Software Engineer at Supernova</h4>
+    <h4 className='position'>{user.title_id}</h4>
     </Box>
 
     <ThemeProvider theme={Theme}>
@@ -86,15 +80,19 @@ const Main = () => {
           <TabPanel value={value} index={0}>
             <SkillsTabList />
           </TabPanel>
+          
           <TabPanel value={value} index={1} >
             Achievements
           </TabPanel>
+
           <TabPanel value={value} index={2}>
             My projects
           </TabPanel>
+
           <TabPanel value={value} index={3}>
             <FindEmployee/>
           </TabPanel>
+
           <TabPanel value={value} index={4}>
             Project profiles
           </TabPanel>

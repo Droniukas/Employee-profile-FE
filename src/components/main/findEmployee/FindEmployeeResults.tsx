@@ -19,7 +19,9 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
     return (
         <List
             sx={{
-                width: '100%'
+                width: '140%',
+                backgroundColor: 'white', borderRadius: '10px',
+                boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0)',
             }}>
             {results
                 .sort((a, b) => a.name > b.name ? 1 : -1)
@@ -30,7 +32,8 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
                                 display: {
                                     xl: 'none',
                                     xs: 'none'
-                                }
+                                },
+                                
                             }}>
                             {result.middle_name
                                 ? fullName = `${result.name} ${result.middle_name} ${result.surname}`
@@ -40,7 +43,7 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
                         <ListItem alignItems='flex-start'>
                             <ListItemAvatar>
                                 <Avatar
-                                    src='/static/images/avatar/1.jpg'
+                                    src={result.image}
                                 />
                             </ListItemAvatar>
                             <ListItemText
@@ -55,10 +58,10 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
                                 }}
                             />
                         </ListItem>
-                        <Divider
+                        {/* <Divider
                             variant='fullWidth'
                             component='li'
-                        />
+                        /> */}
                     </>
                 ))}
         </List>

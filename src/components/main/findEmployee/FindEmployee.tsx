@@ -4,7 +4,6 @@ import SearchInput from '../../inputs/SearchInput';
 import EmployeeResult from '../../../models/EmployeeResult.interface';
 import FindEmployeeResults from './FindEmployeeResults';
 import useDebouncedState from '../../../hooks/useDebouncedState';
-import { WidthFull } from '@mui/icons-material';
 
 const FindEmployee = () => {
     const [inputValue, setInputValue] = useDebouncedState('', 500);
@@ -21,7 +20,7 @@ const FindEmployee = () => {
     }, [inputValue]);
 
     const getResults = async (searchValue: string) => {
-        const result = await (await fetch(`http://localhost:3005/employees/search?name=${searchValue}`)).json();
+        const result = await (await fetch(`http://localhost:3005/employees/search?name=${searchValue.toLowerCase()}`)).json();
 
         setResults(result);
     };
@@ -30,7 +29,6 @@ const FindEmployee = () => {
         <SearchInput
             placeholder='Search employees by name...'
             onChange={(value) => setInputValue(value)}
-            
         />
         <FindEmployeeResults
             results={results}

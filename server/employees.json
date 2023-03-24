@@ -1,0 +1,52 @@
+[
+    {
+        "id": 1,
+        "name": "First",
+        "surname": "Person1",
+        "middle_name": null,
+        "image": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&w=1000&q=80",
+        "hiring_date": "01-01-2023",
+        "exit_date": null,
+        "title_id": "Software Architect"
+    },
+    {
+        "id": 2,
+        "name": "Second",
+        "surname": "Person2",
+        "middle_name": null,
+        "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80",
+        "hiring_date": "02-01-2023",
+        "exit_date": null,
+        "title_id": "Front End Engineer"
+    },
+    {
+        "id": 3,
+        "name": "Third",
+        "surname": "Person3",
+        "middle_name": null,
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8CldTqNpzN9ENCGC79zNXg6EfcqEHXTLjQg&usqp=CAU",
+        "hiring_date": "02-03-2023",
+        "exit_date": null,
+        "title_id": "Software Engineer"
+    },
+    {
+        "id": 4,
+        "name": "Fourth",
+        "surname": "Person4",
+        "middle_name": null,
+        "image": "https://www.shutterstock.com/image-photo/close-portrait-happy-young-man-260nw-2063582093.jpg",
+        "hiring_date": "03-01-2023",
+        "exit_date": null,
+        "title_id": "Senior Software Manager"
+    },
+    {
+        "id": 5,
+        "name": "Fifth",
+        "surname": "Person5",
+        "middle_name": "Junior",
+        "image": "https://imageio.forbes.com/specials-images/imageserve/5f64397931669e167fc57eaf/0x0.jpg?format=jpg&width=1200",
+        "hiring_date": "02-05-2023",
+        "exit_date": "03-06-2023",
+        "title_id": "HR"
+    }
+]

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// import Icon from '@mui/material/Icon';
 import {
   Box,
   List,
@@ -12,15 +11,22 @@ import {
 } from '@mui/material'
 import { ExpandMore, ExpandLess } from '@mui/icons-material'
 import { get, update } from 'lodash'
+import Categories from './models/Categories.interface'
+import SkillsMatrix from './models/SkillsMatrix.interface'
 
 export default function SkillsTabList() {
-  /* you can pass a custom object  to the iterate function 
-  and it will return a nested list, object example,
-  take note that the structure and the property names have to be the same  */
+  /* you can pass a custom object to the iterate function 
+  and it will return a nested list, but take note 
+  that the structure and the property names have to be the same, 
+  there is an example 'testing below'*/
   // obj example
   const testing = {
     name: 'Testing',
     subItems: {
+      Others: {
+        name: 'Others',
+        skillsList: ['Regresion testing', 'Functional testing'],
+      },
       AutomationTesting: {
         name: 'Automation testing',
         subItems: {
@@ -42,14 +48,9 @@ export default function SkillsTabList() {
       NonFunctionalTesting: {
         name: 'Non-functional testing',
         subItems: {
-          CompatibilityTesting: {
-            name: 'Compatibility testing',
-          },
-          UsabilityTesting: {
-            name: 'Usability testing',
-          },
-          MaintainabilityTesting: {
-            name: 'Maintainability testing',
+          Others: {
+            name: 'Others',
+            skillsList: ['Compatibility testing', 'Usability testing', 'Maintainability testing'],
           },
           PerformanceTesting: {
             name: 'Performance testing',
@@ -65,32 +66,24 @@ export default function SkillsTabList() {
           },
         },
       },
-      RegresionTesting: {
-        name: 'Regresion testing',
-      },
-      FunctionalTesting: {
-        name: 'Functional testing',
-        skillsList: ['WCAG', 'standards', 'JAWS', 'VoiceOver', 'NVDA', 'AXE'],
-      },
     },
   }
 
   // useState
-  type Categories = { [key: string]: boolean }
-  const categoriesOpen: Categories = {}
-  const [open, setOpen] = useState(categoriesOpen)
-  function handleClick(name: string): void {
-    get(open, `${name}`)
-      ? update(open, `${name}`, () => false)
-      : update(open, `${name}`, () => true)
-    setOpen((prev) => {
-      return { ...prev }
+  const categoriesStateObj: Categories = {}
+  const [categoriesState, setCategoriesState] = useState(categoriesStateObj)
+  function HandleDropdownMenu(name: string): void {
+    get(categoriesState, `${name}`)
+      ? update(categoriesState, `${name}`, () => false)
+      : update(categoriesState, `${name}`, () => true)
+    setCategoriesState((prevStateObj) => {
+      return { ...prevStateObj }
     })
   }
 
   // main function
-  function iterate(obj: any) {
-    categoriesOpen[obj.name] = false
+  function CreateNestedList(skillsMatrixObj: SkillsMatrix) {
+    categoriesStateObj[skillsMatrixObj.name] = false
     return (
       <>
         <List
@@ -102,42 +95,49 @@ export default function SkillsTabList() {
             marginBottom: '10px',
             borderColor: '#DDDDDD',
             color: 'primary.main',
-            backgroundColor:'white'
           }}
         >
           <ListItem disablePadding>
             <ListItemButton
               onClick={() => {
-                handleClick(obj.name)
+                HandleDropdownMenu(skillsMatrixObj.name)
               }}
-              style={{ height: '72px', backgroundColor:'white' }}
+              style={{ height: '72px', backgroundColor: 'white', borderRadius: '10px'}}
             >
-              <ListItemText primary={obj.name} disableTypography sx={{ fontWeight: '500'}} />
-              {get(open, `${obj.name}`) ? (
+              <ListItemText
+                primary={skillsMatrixObj.name}
+                disableTypography
+                sx={{ fontWeight: '500' }}
+              />
+              {get(categoriesState, `${skillsMatrixObj.name}`) ? (
                 <ExpandLess />
               ) : (
-                <ExpandMore sx={{ transform: 'rotate(-90deg)' }} />
+                <ExpandMore sx={{ transform: 'rotate(-90deg)'}} />
               )}
             </ListItemButton>
           </ListItem>
-          {createSkillsList('skillsList', obj.name, obj)}
+          {CreateSkillsDropdown('skillsList', skillsMatrixObj.name, skillsMatrixObj)}
         </List>
-        {createSubItem('subItems', obj.name, obj, 0)}
+        {CreateSubItemsDropdown('subItems', skillsMatrixObj.name, skillsMatrixObj, 0)}
       </>
     )
   }
 
-  function createSkillsList(path: string, key: string, obj: any) {
+  function CreateSkillsDropdown(
+    skillsListPath: string,
+    categoryKeyForUseState: string,
+    skillsMatrixObj: SkillsMatrix,
+  ) {
     // path ending in .skillsList
-    if (Array.isArray(get(obj, path))) {
-      return get(obj, path).map((item: string) => {
+    if (Array.isArray(get(skillsMatrixObj, skillsListPath))) {
+      return get(skillsMatrixObj, skillsListPath).map((skillItemName: string) => {
         return (
           <>
-            <Collapse in={get(open, key)}>
+            <Collapse in={get(categoriesState, categoryKeyForUseState)}>
               <ListItem disablePadding sx={{ marginLeft: '27px' }}>
                 <FormControlLabel control={<Checkbox defaultValue={'false'} />} label='' />
                 <ListItemText
-                  primary={item}
+                  primary={skillItemName}
                   sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px' }}
                 ></ListItemText>
               </ListItem>
@@ -147,15 +147,26 @@ export default function SkillsTabList() {
       })
     }
   }
-  function createSubItem(path: string, key: string, obj: any, counter: number) {
+  function CreateSubItemsDropdown(
+    subItemsPath: string,
+    categoryKeyForUseState: string,
+    skillsMatrixObj: SkillsMatrix,
+    indent: number,
+  ) {
     // path ending in .subItems
-    if (get(obj, path)) {
-      const indent = (`${path}.foo.foo`.split('.').length - 1) * 15
-      return Object.keys(get(obj, path)!).map((key2) => {
-        categoriesOpen[key2] = false
+    if (get(skillsMatrixObj, subItemsPath)) {
+      // this takes the lenght of the path we are on and calculates the left-margin for the dropdown
+      // deeper levels are indented more so the longer the path is the more indent the dropdown has
+      // at the end of this function we pass it as the indent param for this function
+      // foo is just a placeholder path because it's easier to understand than adding +2 to the lenght :D
+      const marginLeft = (`${subItemsPath}.foo.foo`.split('.').length - 1) * 15
+      return Object.keys(
+        get(skillsMatrixObj, subItemsPath) ?? get(skillsMatrixObj, subItemsPath),
+      ).map((deeperCategoryKey) => {
+        categoriesStateObj[deeperCategoryKey] = false
         return (
           <>
-            <Collapse in={get(open, `${key}`)}>
+            <Collapse in={get(categoriesState, `${categoryKeyForUseState}`)}>
               <List
                 disablePadding
                 sx={{
@@ -163,34 +174,42 @@ export default function SkillsTabList() {
                   borderRadius: '10px',
                   marginTop: '10px',
                   marginBottom: '10px',
-                  // marginLeft: `${30 + counter}px`,
                   borderColor: '#DDDDDD',
                   color: 'primary.main',
-                  backgroundColor:'white'
+                  backgroundColor: 'white',
                 }}
               >
                 <ListItem disablePadding>
                   <ListItemButton
                     onClick={() => {
-                      handleClick(key2)
+                      HandleDropdownMenu(deeperCategoryKey)
                     }}
-                    style={{ height: '72px' }}>
-                      
+                    style={{ height: '72px', backgroundColor: 'white', borderRadius: '10px'}}
+                  >
                     <ListItemText
-                      primary={get(obj, `${path}.${key2}.name`)!}
+                      primary={get(skillsMatrixObj, `${subItemsPath}.${deeperCategoryKey}.name`)}
                       disableTypography
-                      sx={{ fontWeight: '500' }}
+                      sx={{ fontWeight: '500', backgroundColor: 'white', borderRadius: '10px'}}
                     />
-                    {get(open, `${key2}`) ? (
+                    {get(categoriesState, `${deeperCategoryKey}`) ? (
                       <ExpandLess />
                     ) : (
                       <ExpandMore sx={{ transform: 'rotate(-90deg)' }} />
                     )}
                   </ListItemButton>
                 </ListItem>
-                {createSkillsList(`${path}.${key2}.skillsList`, key2, obj)}
+                {CreateSkillsDropdown(
+                  `${subItemsPath}.${deeperCategoryKey}.skillsList`,
+                  deeperCategoryKey,
+                  skillsMatrixObj,
+                )}
               </List>
-              {createSubItem(`${path}.${key2}.subItems`, key2, obj, indent)}
+              {CreateSubItemsDropdown(
+                `${subItemsPath}.${deeperCategoryKey}.subItems`,
+                deeperCategoryKey,
+                skillsMatrixObj,
+                marginLeft,
+              )}
             </Collapse>
           </>
         )
@@ -200,7 +219,7 @@ export default function SkillsTabList() {
 
   return (
     <>
-      <Box sx={{ width: '80vw', marginTop: '70px' }}>{iterate(testing)}</Box>
+      <Box sx={{ width: '1176px', marginTop: '100px' }}>{CreateNestedList(testing)}</Box>
     </>
   )
 }
