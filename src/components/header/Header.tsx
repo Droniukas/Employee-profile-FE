@@ -7,6 +7,7 @@ import { WidthFull } from '@mui/icons-material';
 import './Header.scss';
 import user from '../../data/user/user.json';
 
+
 const Header = () => {
   return (
     <>
@@ -14,7 +15,6 @@ const Header = () => {
             {/* Left header: */}
         <Box sx={{ position: 'fixed', backgroundColor:'#FFFFFF', zIndex: 5, borderRight: 1, borderColor: 'divider', width: 100, height: '100%', display:'flex', justifyContent:'normal', alignItems:''}}>
             {/* Cognizant logo */}
-            
             <img src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png' alt='' className='image'></img>
 
             {/* My profile */}
