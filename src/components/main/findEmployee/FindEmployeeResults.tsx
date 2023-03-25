@@ -6,7 +6,6 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
 
 type Props = {
     results: EmployeeResult[];
@@ -14,7 +13,38 @@ type Props = {
 
 const FindEmployeeResults: React.FC<Props> = ({results}) => {
     if (!results.length) return null;
-    let fullName;
+
+    function renderResultItem(result: EmployeeResult) {
+        return (
+            <>
+                <ListItem alignItems='flex-start'>
+                    <ListItemAvatar>
+                        <Avatar
+                            src='/static/images/avatar/1.jpg'
+                        />
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={result.middleName
+                            ? `${result.name} ${result.middleName} ${result.surname}`
+                            : `${result.name} ${result.surname}`
+                        }
+                        secondary={
+                            <React.Fragment>
+                                {result.title}
+                            </React.Fragment>
+                        }
+                        sx={{
+                            color: '#000048'
+                        }}
+                    />
+                </ListItem>
+                <Divider
+                    variant='fullWidth'
+                    component='li'
+                />
+            </>
+        );
+    }
 
     return (
         <List
@@ -23,44 +53,7 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
             }}>
             {results
                 .sort((a, b) => a.name > b.name ? 1 : -1)
-                .map((result) => (
-                    <>
-                        <Box
-                            sx={{
-                                display: {
-                                    xl: 'none',
-                                    xs: 'none'
-                                }
-                            }}>
-                            {result.middle_name
-                                ? fullName = `${result.name} ${result.middle_name} ${result.surname}`
-                                : fullName = `${result.name} ${result.surname}`
-                            }
-                        </Box>
-                        <ListItem alignItems='flex-start'>
-                            <ListItemAvatar>
-                                <Avatar
-                                    src='/static/images/avatar/1.jpg'
-                                />
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={fullName}
-                                secondary={
-                                    <React.Fragment>
-                                        {result.title_id}
-                                    </React.Fragment>
-                                }
-                                sx={{
-                                    color: '#000048'
-                                }}
-                            />
-                        </ListItem>
-                        <Divider
-                            variant='fullWidth'
-                            component='li'
-                        />
-                    </>
-                ))}
+                .map((result) => (renderResultItem(result)))}
         </List>
     );
 };

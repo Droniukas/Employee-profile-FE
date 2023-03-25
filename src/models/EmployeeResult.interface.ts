@@ -1,12 +1,14 @@
 interface EmployeeResult {
-    id: number,
+    id: string,
     name: string,
     surname: string,
-    middle_name: string,
-    image: string,
-    hiring_date: string,
-    exit_date: string,
-    title_id: string,
+    middleName: string,
+    title: string,
+    hiringDate: string,
+    exitDate: string,
+    imageName: string,
+    imageType: string,
+    imageBytes: string,
 }
 
 export default EmployeeResult;
