@@ -25,15 +25,17 @@ const FindEmployee = () => {
         setResults(result);
     };
 
-    return <div className='find-employee__container'>
-        <SearchInput
-            placeholder='Search employees by name...'
-            onChange={(value) => setInputValue(value)}
-        />
-        <FindEmployeeResults
-            results={results}
-        />
-    </div>;
+    return (
+        <div className='find-employee-container'>
+            <SearchInput
+                placeholder='Search employees by name...'
+                onChange={(value) => setInputValue(value)}
+            />
+            <FindEmployeeResults
+                results={results}
+            />
+        </div>
+    );
 };
 
 export default FindEmployee;
