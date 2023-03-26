@@ -1,8 +1,27 @@
 .img {
-    position: absolute;
-    top: 1px;
+    position: fixed;
+    top: -200px;
     left: 0px;
-    width: 1900px;
-    height: 1900px;
+    width: 1600px;
+    height: 1600px;
     opacity: 5%;
+}
+html {
+    height: 100%;
+}
+
+body {
+    position: relative;
+}
+
+main {
+    margin: 0 auto;
+    min-height: calc(100vh);
+}
+
+footer {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Theme from '../../data/Theme'
 import {
   Box,
   List,
@@ -8,6 +9,7 @@ import {
   ListItem,
   FormControlLabel,
   Checkbox,
+  ThemeProvider,
 } from '@mui/material'
 import { ExpandMore, ExpandLess } from '@mui/icons-material'
 import { get, update } from 'lodash'
@@ -81,6 +83,7 @@ export default function SkillsTabList() {
     })
   }
 
+  
   // main function
   function CreateNestedList(skillsMatrixObj: SkillsMatrix) {
     categoriesStateObj[skillsMatrixObj.name] = false
@@ -94,7 +97,7 @@ export default function SkillsTabList() {
             marginTop: '10px',
             marginBottom: '10px',
             borderColor: '#DDDDDD',
-            color: 'primary.main',
+            color: '#000048'
           }}
         >
           <ListItem disablePadding>
@@ -138,7 +141,7 @@ export default function SkillsTabList() {
                 <FormControlLabel control={<Checkbox defaultValue={'false'} />} label='' />
                 <ListItemText
                   primary={skillItemName}
-                  sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px' }}
+                  sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px'}}
                 ></ListItemText>
               </ListItem>
             </Collapse>
@@ -216,6 +219,7 @@ export default function SkillsTabList() {
       })
     }
   }
+
 
   return (
     <>
