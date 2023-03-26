@@ -20,7 +20,7 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
                 <ListItem alignItems='flex-start'>
                     <ListItemAvatar>
                         <Avatar
-                            src='/static/images/avatar/1.jpg'
+                            src={`data:${result.imageType};base64,${result.imageBytes}`}
                         />
                     </ListItemAvatar>
                     <ListItemText
