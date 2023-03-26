@@ -1,8 +1,5 @@
 import Typography from '@mui/material/Typography';
-
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 
@@ -24,16 +21,16 @@ const Footer = () => {
                 alignSelf: 'center',
 
             }}>
-                <Grid item  >
-                    <Typography sx={{ align: 'center', p: 2 }}>Terms of Service</Typography>
+                <Grid item>
+                    <Typography sx={{align: 'center', p: 2}}>Terms of Service</Typography>
                 </Grid>
-                <Divider orientation="vertical" variant="middle" flexItem />
-                <Grid item >
-                    <Typography sx={{ align: 'center', p: 2 }}>Support</Typography>
+                <Divider orientation="vertical" variant="middle" flexItem/>
+                <Grid item>
+                    <Typography sx={{align: 'center', p: 2}}>Support</Typography>
                 </Grid>
-                <Divider orientation="vertical" variant="middle" flexItem />
-                <Grid item >
-                    <Typography sx={{ align: 'center', p: 2 }}>2022 Cognization</Typography>
+                <Divider orientation="vertical" variant="middle" flexItem/>
+                <Grid item>
+                    <Typography sx={{align: 'center', p: 2}}>2022 Cognization</Typography>
                 </Grid>
             </Grid>
         </Box>

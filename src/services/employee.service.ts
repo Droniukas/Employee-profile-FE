@@ -8,5 +8,5 @@ export class EmployeeService {
             }
         });
         return response.data;
-    }
+    };
 }
