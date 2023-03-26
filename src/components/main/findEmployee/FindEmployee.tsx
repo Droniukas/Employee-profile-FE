@@ -4,10 +4,12 @@ import SearchInput from '../../inputs/SearchInput';
 import EmployeeResult from '../../../models/EmployeeResult.interface';
 import FindEmployeeResults from './FindEmployeeResults';
 import useDebouncedState from '../../../hooks/useDebouncedState';
+import {EmployeeService} from '../../../services/employee.service';
 
 const FindEmployee = () => {
     const [inputValue, setInputValue] = useDebouncedState('', 500);
     const [results, setResults] = useState<EmployeeResult[]>([]);
+    const employeeService = new EmployeeService();
 
     useEffect(() => {
         if (inputValue) {
@@ -20,8 +22,8 @@ const FindEmployee = () => {
     }, [inputValue]);
 
     const getResults = async (searchValue: string) => {
-        const result = await (await fetch(`${process.env.REACT_APP_API_URL}/employee/search?name=${searchValue}`)).json();
-
+        const result = await employeeService.searchByName(searchValue);
+//        const result = await (await fetch(`${process.env.REACT_APP_API_URL}/employee/search?name=${searchValue}`)).json();
         setResults(result);
     };
 
