@@ -4,6 +4,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import Theme from './data/Theme';
 import Grid from '@mui/material/Grid';
 import LoginFooter from './components/login/LoginFooter';
+import Main from './components/main/Main';
 
 function App() {
     return (

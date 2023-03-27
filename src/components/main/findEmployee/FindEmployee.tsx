@@ -23,7 +23,6 @@ const FindEmployee = () => {
 
     const getResults = async (searchValue: string) => {
         const result = await employeeService.searchByName(searchValue);
-//        const result = await (await fetch(`${process.env.REACT_APP_API_URL}/employee/search?name=${searchValue}`)).json();
         setResults(result);
     };
 
