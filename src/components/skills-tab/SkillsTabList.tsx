@@ -1,26 +1,19 @@
 import React, { useState } from 'react'
-import Theme from '../../data/Theme'
-import {
-  Box,
-  List,
-  ListItemButton,
-  ListItemText,
-  Collapse,
-  ListItem,
-  FormControlLabel,
-  Checkbox,
-  ThemeProvider,
-} from '@mui/material'
+import { Box, List, ListItemButton, ListItemText, ListItem } from '@mui/material'
 import { ExpandMore, ExpandLess } from '@mui/icons-material'
 import { get, update } from 'lodash'
 import Categories from './models/Categories.interface'
 import SkillsMatrix from './models/SkillsMatrix.interface'
+import CreateSkillsDropdown from './CreateSkillsDropdown'
+import HandleDropdownMenu from './HandleDropdownMenu'
+import CreateSubItemsDropdown from './CreateSubItemsDropdown'
 
 export default function SkillsTabList() {
   /* you can pass a custom object to the iterate function 
   and it will return a nested list, but take note 
   that the structure and the property names have to be the same, 
   there is an example 'testing below'*/
+  // Lists cannot have the same name
   // obj example
   const testing = {
     name: 'Testing',
@@ -50,7 +43,7 @@ export default function SkillsTabList() {
       NonFunctionalTesting: {
         name: 'Non-functional testing',
         subItems: {
-          Others: {
+          Others2: {
             name: 'Others',
             skillsList: ['Compatibility testing', 'Usability testing', 'Maintainability testing'],
           },
@@ -73,17 +66,8 @@ export default function SkillsTabList() {
 
   // useState
   const categoriesStateObj: Categories = {}
-  const [categoriesState, setCategoriesState] = useState(categoriesStateObj)
-  function HandleDropdownMenu(name: string): void {
-    get(categoriesState, `${name}`)
-      ? update(categoriesState, `${name}`, () => false)
-      : update(categoriesState, `${name}`, () => true)
-    setCategoriesState((prevStateObj) => {
-      return { ...prevStateObj }
-    })
-  }
+  const [categoriesState, setCategoriesState] = useState<Categories>(categoriesStateObj)
 
-  
   // main function
   function CreateNestedList(skillsMatrixObj: SkillsMatrix) {
     categoriesStateObj[skillsMatrixObj.name] = false
@@ -97,15 +81,15 @@ export default function SkillsTabList() {
             marginTop: '10px',
             marginBottom: '10px',
             borderColor: '#DDDDDD',
-            color: '#000048'
+            color: 'primary.main',
           }}
         >
           <ListItem disablePadding>
             <ListItemButton
               onClick={() => {
-                HandleDropdownMenu(skillsMatrixObj.name)
+                HandleDropdownMenu(skillsMatrixObj.name, categoriesState, setCategoriesState)
               }}
-              style={{ height: '72px', backgroundColor: 'white', borderRadius: '10px'}}
+              style={{ height: '72px' }}
             >
               <ListItemText
                 primary={skillsMatrixObj.name}
@@ -115,111 +99,29 @@ export default function SkillsTabList() {
               {get(categoriesState, `${skillsMatrixObj.name}`) ? (
                 <ExpandLess />
               ) : (
-                <ExpandMore sx={{ transform: 'rotate(-90deg)'}} />
+                <ExpandMore sx={{ transform: 'rotate(-90deg)' }} />
               )}
             </ListItemButton>
           </ListItem>
-          {CreateSkillsDropdown('skillsList', skillsMatrixObj.name, skillsMatrixObj)}
+          {CreateSkillsDropdown(
+            'skillsList',
+            skillsMatrixObj.name,
+            skillsMatrixObj,
+            categoriesState,
+          )}
         </List>
-        {CreateSubItemsDropdown('subItems', skillsMatrixObj.name, skillsMatrixObj, 0)}
+        {CreateSubItemsDropdown(
+          'subItems',
+          skillsMatrixObj.name,
+          skillsMatrixObj,
+          0,
+          categoriesState,
+          setCategoriesState,
+          categoriesStateObj,
+        )}
       </>
     )
   }
-
-  function CreateSkillsDropdown(
-    skillsListPath: string,
-    categoryKeyForUseState: string,
-    skillsMatrixObj: SkillsMatrix,
-  ) {
-    // path ending in .skillsList
-    if (Array.isArray(get(skillsMatrixObj, skillsListPath))) {
-      return get(skillsMatrixObj, skillsListPath).map((skillItemName: string) => {
-        return (
-          <>
-            <Collapse in={get(categoriesState, categoryKeyForUseState)}>
-              <ListItem disablePadding sx={{ marginLeft: '27px' }}>
-                <FormControlLabel control={<Checkbox defaultValue={'false'} />} label='' />
-                <ListItemText
-                  primary={skillItemName}
-                  sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px'}}
-                ></ListItemText>
-              </ListItem>
-            </Collapse>
-          </>
-        )
-      })
-    }
-  }
-  function CreateSubItemsDropdown(
-    subItemsPath: string,
-    categoryKeyForUseState: string,
-    skillsMatrixObj: SkillsMatrix,
-    indent: number,
-  ) {
-    // path ending in .subItems
-    if (get(skillsMatrixObj, subItemsPath)) {
-      // this takes the lenght of the path we are on and calculates the left-margin for the dropdown
-      // deeper levels are indented more so the longer the path is the more indent the dropdown has
-      // at the end of this function we pass it as the indent param for this function
-      // foo is just a placeholder path because it's easier to understand than adding +2 to the lenght :D
-      const marginLeft = (`${subItemsPath}.foo.foo`.split('.').length - 1) * 15
-      return Object.keys(
-        get(skillsMatrixObj, subItemsPath) ?? get(skillsMatrixObj, subItemsPath),
-      ).map((deeperCategoryKey) => {
-        categoriesStateObj[deeperCategoryKey] = false
-        return (
-          <>
-            <Collapse in={get(categoriesState, `${categoryKeyForUseState}`)}>
-              <List
-                disablePadding
-                sx={{
-                  border: 1,
-                  borderRadius: '10px',
-                  marginTop: '10px',
-                  marginBottom: '10px',
-                  borderColor: '#DDDDDD',
-                  color: 'primary.main',
-                  backgroundColor: 'white',
-                }}
-              >
-                <ListItem disablePadding>
-                  <ListItemButton
-                    onClick={() => {
-                      HandleDropdownMenu(deeperCategoryKey)
-                    }}
-                    style={{ height: '72px', backgroundColor: 'white', borderRadius: '10px'}}
-                  >
-                    <ListItemText
-                      primary={get(skillsMatrixObj, `${subItemsPath}.${deeperCategoryKey}.name`)}
-                      disableTypography
-                      sx={{ fontWeight: '500', backgroundColor: 'white', borderRadius: '10px'}}
-                    />
-                    {get(categoriesState, `${deeperCategoryKey}`) ? (
-                      <ExpandLess />
-                    ) : (
-                      <ExpandMore sx={{ transform: 'rotate(-90deg)' }} />
-                    )}
-                  </ListItemButton>
-                </ListItem>
-                {CreateSkillsDropdown(
-                  `${subItemsPath}.${deeperCategoryKey}.skillsList`,
-                  deeperCategoryKey,
-                  skillsMatrixObj,
-                )}
-              </List>
-              {CreateSubItemsDropdown(
-                `${subItemsPath}.${deeperCategoryKey}.subItems`,
-                deeperCategoryKey,
-                skillsMatrixObj,
-                marginLeft,
-              )}
-            </Collapse>
-          </>
-        )
-      })
-    }
-  }
-
 
   return (
     <>

@@ -20,7 +20,7 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
                 <ListItem alignItems='flex-start'>
                     <ListItemAvatar>
                         <Avatar
-                            src='/static/images/avatar/1.jpg'
+                            src={`data:${result.imageType};base64,${result.imageBytes}`}
                         />
                     </ListItemAvatar>
                     <ListItemText
@@ -51,9 +51,7 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
             sx={{
                 width: '100%'
             }}>
-            {results
-                .sort((a, b) => a.name > b.name ? 1 : -1)
-                .map((result) => (renderResultItem(result)))}
+            {results.map((result) => (renderResultItem(result)))}
         </List>
     );
 };

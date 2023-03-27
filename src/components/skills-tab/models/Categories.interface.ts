@@ -1,4 +1,3 @@
 export default interface Categories {
-    [key: string]: boolean
-  }
-  
+  [key: string]: boolean
+}
