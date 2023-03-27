@@ -51,9 +51,7 @@ const FindEmployeeResults: React.FC<Props> = ({results}) => {
             sx={{
                 width: '100%'
             }}>
-            {results
-                .sort((a, b) => a.name > b.name ? 1 : -1)
-                .map((result) => (renderResultItem(result)))}
+            {results.map((result) => (renderResultItem(result)))}
         </List>
     );
 };
