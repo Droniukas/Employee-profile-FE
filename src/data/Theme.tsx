@@ -1,51 +1,33 @@
-import { createTheme } from '@mui/material/styles'
-import { checkboxClasses } from '@mui/material/Checkbox'
+import {createMuiTheme} from '@mui/material/styles';
 
-const Theme = createTheme({
-  typography: {
-    fontFamily: ['Inter', 'sans-serif'].join(','),
-    fontSize: 14,
-    button: {
-      fontWeight: 600,
-      textTransform: 'none',
-    },
-  },
+const Theme = createMuiTheme({
+    typography: {
+        fontFamily: ['Inter', 'sans-serif'
+        ].join(','),
+        fontSize: 14,
+        button: {
+            fontWeight: 600,
+            textTransform: 'none',
+        },
 
-  palette: {
-    primary: {
-      main: '#000048',
     },
-    secondary: {
-      main: '#78ECE8',
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: '100px',
+    palette: {
+        primary: {
+            main: '#000048'
         },
-      },
+        secondary: {
+            main: '#78ECE8'
+        }
     },
-    MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: '#adaec3',
-          [`&.${checkboxClasses.checked}`]: {
-            color: '#adaec3',
-          },
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '100px',
+                },
+            },
         },
-        checked: {},
-      },
     },
-    MuiFormControlLabel: {
-      styleOverrides: {
-        root: {
-          marginRight: '2px',
-        },
-      },
-    },
-  },
-})
+});
 
-export default Theme
+export default Theme;
