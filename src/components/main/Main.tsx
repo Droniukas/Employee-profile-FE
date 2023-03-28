@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, CssBaseline, Box, Tabs, Tab, ThemeProvider, Typography, Switch } from '@mui/material'
 import Theme from '..//..//data/Theme'
-import SkillsTabList from '../skills-tab/SkillsTabList';
 import FindEmployee from './findEmployee/FindEmployee';
 import './Main.scss';
 import { Routes, Route, Link, useLocation, NavLink } from 'react-router-dom';
 import {ROUTES} from '../routes/routes'
-import NotFound from '../../pages/NotFound';
 import EmployeeResult from '../../models/EmployeeResult.interface';
 import FindEmployeeResults from './findEmployee/FindEmployeeResults';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanelProps from './TabPanelProps.interface';
 import TabPanel from './TabPanel';
+import { EmployeeService } from '../../services/employee.service';
 
 function a11yProps(index: number) {
   return {
@@ -21,19 +20,19 @@ function a11yProps(index: number) {
 }
 
 const Main = () => {
-  
+  const [results, setResults] = useState<EmployeeResult>();
   const [value, setValue] = React.useState(0);
-  // ------------Trying to fetch stuff from database so i can display the user data:
 
-  // const [results, setResults] = useState<EmployeeResult[]>([]);
+  const employeeService = new EmployeeService();
 
-  // const getResults = async (searchValue: string) => {
+  const getResults = async (searchValue: string) => {
+      const result = await employeeService.searchById(searchValue);
+      setResults(result);
+  };
 
-  //   const result = await (await fetch(`${process.env.REACT_APP_API_URL}/employee`)).json();
-  //   setResults(result);
-  // };
-
-  // getResults('j');
+  useEffect(() => {
+    getResults('6979d331-027e-4a6b-8f64-1ee9bfe0ab71');
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -41,7 +40,8 @@ const Main = () => {
 
   return (
     <>
-    <ProfileInfo />
+    {results &&  <ProfileInfo  results={results}/>}
+   
     <ThemeProvider theme={Theme}>
         <CssBaseline />
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px'}}>
@@ -58,8 +58,7 @@ const Main = () => {
           <Routes>
             <Route index path={ROUTES.HOME} element={
                   <TabPanel value={value} index={0}>
-                    {/* <NavLink to={ROUTES.HOME} style={{textDecoration: 'none', boxShadow: 'none'}}>  */}
-                      <SkillsTabList />
+                      {/* <SkillsTabList /> */}
                   </TabPanel>
               } />
 
@@ -89,8 +88,6 @@ const Main = () => {
               </TabPanel>
               } />
             </Routes> 
-            
-            {/* <Route path='/*' element={<NotFound />} /> */}
         </Box>
       </ThemeProvider>
     </>

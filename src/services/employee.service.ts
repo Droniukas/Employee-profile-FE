@@ -9,4 +9,9 @@ export class EmployeeService {
         });
         return response.data;
     };
+    public async searchById(searchValue: string) {
+        const response = await axios.get(`/employee/${searchValue}`, {
+        });
+        return response.data;
+    };
 }

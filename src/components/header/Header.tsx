@@ -1,14 +1,27 @@
 import { Avatar, Box, checkboxClasses, createTheme, CssBaseline, ThemeProvider, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import { WidthFull } from '@mui/icons-material';
 import './Header.scss';
 import user from '../../data/user/user.json';
+import { EmployeeService } from '../../services/employee.service';
+import EmployeeResult from '../../models/EmployeeResult.interface';
 
 
 const Header = () => {
+    const [results, setResults] = useState<EmployeeResult>();
+    const employeeService = new EmployeeService();
+
+    const getResults = async (searchValue: string) => {
+        const result = await employeeService.searchById(searchValue);
+        setResults(result);
+    };
+    useEffect(() => {
+        getResults('6979d331-027e-4a6b-8f64-1ee9bfe0ab71');
+      }, []);
+
   return (
     <>
             {/* Left header: */}
@@ -35,7 +48,8 @@ const Header = () => {
             <NotificationsIcon sx={{width: 40, height: 40, marginRight:4, marginBottom: 1.1}}/>
                 <Avatar 
                 alt="Cindy Baker" 
-                src={user.image} 
+                src={`data:${results?.imageType};base64,${results?.imageBytes}`}
+                // src={results.image} 
                 sx={{ width: 65, height: 65, display:'inline-block'}}/>
             </div>
         </Box>
