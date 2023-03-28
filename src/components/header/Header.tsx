@@ -5,7 +5,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import { WidthFull } from '@mui/icons-material';
 import './Header.scss';
-import user from '../../data/user/user.json';
 import { EmployeeService } from '../../services/employee.service';
 import EmployeeResult from '../../models/EmployeeResult.interface';
 
@@ -15,11 +14,11 @@ const Header = () => {
     const employeeService = new EmployeeService();
 
     const getResults = async (searchValue: string) => {
-        const result = await employeeService.searchById(searchValue);
+        const result = await employeeService.getById(searchValue);
         setResults(result);
     };
     useEffect(() => {
-        getResults('6979d331-027e-4a6b-8f64-1ee9bfe0ab71');
+        getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
       }, []);
 
   return (
@@ -47,10 +46,9 @@ const Header = () => {
             <div className='topHeader'>
             <NotificationsIcon sx={{width: 40, height: 40, marginRight:4, marginBottom: 1.1}}/>
                 <Avatar 
-                alt="Cindy Baker" 
+                alt="User's profile picture" 
                 src={`data:${results?.imageType};base64,${results?.imageBytes}`}
-                // src={results.image} 
-                sx={{ width: 65, height: 65, display:'inline-block'}}/>
+                sx={{ width: 65, height: 65, marginTop: 1, display:'inline-block'}}/>
             </div>
         </Box>
     </>

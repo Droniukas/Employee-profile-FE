@@ -9,8 +9,8 @@ export class EmployeeService {
         });
         return response.data;
     };
-    public async searchById(searchValue: string) {
-        const response = await axios.get(`/employee/${searchValue}`, {
+    public async getById(id: string) {
+        const response = await axios.get(`/employee/${id}`, {
         });
         return response.data;
     };

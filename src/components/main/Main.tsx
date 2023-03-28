@@ -12,7 +12,7 @@ import TabPanelProps from '../../models/TabPanelProps.interface';
 import TabPanel from './TabPanel';
 import { EmployeeService } from '../../services/employee.service';
 
-function a11yProps(index: number) {
+function getIndexedProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
@@ -26,12 +26,12 @@ const Main = () => {
   const employeeService = new EmployeeService();
 
   const getResults = async (searchValue: string) => {
-      const result = await employeeService.searchById(searchValue);
+      const result = await employeeService.getById(searchValue);
       setResults(result);
   };
 
   useEffect(() => {
-    getResults('6979d331-027e-4a6b-8f64-1ee9bfe0ab71');
+    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -46,11 +46,11 @@ const Main = () => {
         <CssBaseline />
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px'}}>
           <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
-            <Tab label="Skills" value={ROUTES.HOME} to={ROUTES.HOME} component={Link} {...a11yProps(0)} />
-            <Tab label="Achievements" value={ROUTES.ACHIEVEMENTS} to={ROUTES.ACHIEVEMENTS} component={Link} {...a11yProps(1)} />
-            <Tab label="My projects" value={ROUTES.MY_PROJECTS} to={ROUTES.MY_PROJECTS} component={Link} {...a11yProps(2)} />
-            <Tab label="Search" value={ROUTES.SEARCH} to={ROUTES.SEARCH} component={Link} {...a11yProps(3)} />
-            <Tab label="Project profiles" value={ROUTES.PROJECT_PROFILES} to={ROUTES.PROJECT_PROFILES} component={Link} {...a11yProps(4)} />
+            <Tab label="Skills" value={ROUTES.HOME} to={ROUTES.HOME} component={Link} {...getIndexedProps(0)} />
+            <Tab label="Achievements" value={ROUTES.ACHIEVEMENTS} to={ROUTES.ACHIEVEMENTS} component={Link} {...getIndexedProps(1)} />
+            <Tab label="My projects" value={ROUTES.MY_PROJECTS} to={ROUTES.MY_PROJECTS} component={Link} {...getIndexedProps(2)} />
+            <Tab label="Search" value={ROUTES.SEARCH} to={ROUTES.SEARCH} component={Link} {...getIndexedProps(3)} />
+            <Tab label="Project profiles" value={ROUTES.PROJECT_PROFILES} to={ROUTES.PROJECT_PROFILES} component={Link} {...getIndexedProps(4)} />
           </Tabs>
         </Box>
         
@@ -58,7 +58,7 @@ const Main = () => {
           <Routes>
             <Route index path={ROUTES.HOME} element={
                   <TabPanel value={value} index={0}>
-                      {/* <SkillsTabList /> */}
+
                   </TabPanel>
               } />
 
