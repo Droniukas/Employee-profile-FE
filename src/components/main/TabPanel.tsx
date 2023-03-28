@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react'
-import TabPanelProps from './TabPanelProps.interface';
+import TabPanelProps from '../../models/TabPanelProps.interface';
 
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;

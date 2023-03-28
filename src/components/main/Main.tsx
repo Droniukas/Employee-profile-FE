@@ -8,7 +8,7 @@ import {ROUTES} from '../routes/routes'
 import EmployeeResult from '../../models/EmployeeResult.interface';
 import FindEmployeeResults from './findEmployee/FindEmployeeResults';
 import ProfileInfo from './profileInfo/ProfileInfo';
-import TabPanelProps from './TabPanelProps.interface';
+import TabPanelProps from '../../models/TabPanelProps.interface';
 import TabPanel from './TabPanel';
 import { EmployeeService } from '../../services/employee.service';
 

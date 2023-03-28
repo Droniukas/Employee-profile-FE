@@ -29,9 +29,10 @@ function App() {
         <img src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png' alt='' className='img'></img>
         <main>
           <Header />
-            <NavLink to={ROUTES.LOGIN}><Button  title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120,  backgroundColor: '#c8e6c9'}}
+            <NavLink to={ROUTES.LOGIN}>
+              <Button  title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120,  backgroundColor: '#c8e6c9'}}
               onClick={() => setAppState(AppState.LOGIN_PAGE)}>
-                Go to login (TEMPORARY button)</Button>
+                Go to LOGIN (TEMPORARY)</Button>
             </NavLink>
           <Main />
           
@@ -55,7 +56,7 @@ function App() {
                   <NavLink to={ROUTES.HOME}>
                     <Button title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120, backgroundColor: '#c8e6c9'}}
                   onClick={() => setAppState(AppState.LANDING_PAGE)}>
-                    go to main(TEMPORARY)</Button>
+                    go to MAIN (TEMPORARY)</Button>
                   </NavLink>
             </Grid>
             <LoginFooter></LoginFooter>
