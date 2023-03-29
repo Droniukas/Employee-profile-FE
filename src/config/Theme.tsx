@@ -1,6 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const Theme = createTheme ({
+const theme = createTheme ({
     typography:  {
       fontFamily: ['Inter', 'sans-serif'
     ].join(','),
@@ -32,4 +32,4 @@ const Theme = createTheme ({
   
   });
 
-  export default Theme;
+  export default theme;
