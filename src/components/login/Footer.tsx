@@ -10,7 +10,6 @@ const Footer = () => {
     return (
         <Box component='footer' sx={{
             width: '100%',
-            position: 'fixed',
             bottom: 0,
             mt: 'auto'
         }}>
@@ -33,7 +32,7 @@ const Footer = () => {
                 </Grid>
                 <Divider orientation="vertical" variant="middle" flexItem />
                 <Grid item >
-                    <Typography sx={{ align: 'center', p: 2 }}>2022 Cognization</Typography>
+                    <Typography sx={{ align: 'center', p: 2 }}>{new Date().getFullYear()} Cognization</Typography>
                 </Grid>
             </Grid>
         </Box>

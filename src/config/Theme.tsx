@@ -1,10 +1,10 @@
-import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const Theme = createMuiTheme ({
-    typography: {
+const Theme = createTheme ({
+    typography:  {
       fontFamily: ['Inter', 'sans-serif'
     ].join(','),
-    fontSize: 14,
+    fontSize:14,
     button: { 
       fontWeight: 600,
       textTransform: 'none',
