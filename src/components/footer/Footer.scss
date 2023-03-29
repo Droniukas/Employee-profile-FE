@@ -1,7 +1,14 @@
-.footer {
-    width: 100vw;
-    height: 100px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.policy {
+    position: absolute;
+    margin-left: 90vw;
+    padding-top: 20px;
 }
+
+.copyright {
+    position: absolute;
+    margin-left: 10vw;
+    padding-left: 70px;
+    padding-top: 20px;
+}
+
+

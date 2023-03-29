@@ -17,7 +17,7 @@ const SearchInput: React.FC<Props> = ({placeholder, onChange}) => {
                 width: '50vw',
                 justifyContent: 'flex-start',
                 direction: 'column',
-                alignSelf: 'flex-start'
+                alignSelf: 'flex-start',
             }}
         >
             <TextField
@@ -29,6 +29,8 @@ const SearchInput: React.FC<Props> = ({placeholder, onChange}) => {
                     input: {
                         color: '#000048',
                     },
+                    backgroundColor:'white',
+                    borderRadius: 12,
                 }}
                 fullWidth
                 id='input-with-icon-textfield'
