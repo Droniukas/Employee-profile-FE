@@ -25,8 +25,8 @@ const Main = () => {
 
   const employeeService = new EmployeeService();
 
-  const getResults = async (searchValue: string) => {
-      const result = await employeeService.getById(searchValue);
+  const getResults = async (id: string) => {
+      const result = await employeeService.getById(id);
       setResults(result);
   };
 

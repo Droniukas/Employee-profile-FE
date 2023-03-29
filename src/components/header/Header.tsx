@@ -13,13 +13,13 @@ const Header = () => {
     const [results, setResults] = useState<EmployeeResult>();
     const employeeService = new EmployeeService();
 
-    const getResults = async (searchValue: string) => {
-        const result = await employeeService.getById(searchValue);
+    const getResults = async (id: string) => {
+        const result = await employeeService.getById(id);
         setResults(result);
     };
     useEffect(() => {
         getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
-      }, []);
+    }, []);
 
   return (
     <>
@@ -46,7 +46,6 @@ const Header = () => {
             <div className='topHeader'>
             <NotificationsIcon sx={{width: 40, height: 40, marginRight:4, marginBottom: 1.1}}/>
                 <Avatar 
-                alt="User's profile picture" 
                 src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                 sx={{ width: 65, height: 65, marginTop: 1, display:'inline-block'}}/>
             </div>

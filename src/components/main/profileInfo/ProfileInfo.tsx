@@ -14,7 +14,6 @@ const ProfileInfo: React.FC<Props> = ({results}) => {
     <>
         <Box sx={{position:'relative', padding:'150px', marginLeft: 20, paddingRight:100}}>
             <Avatar 
-                alt="User's profile picture"
                 src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                 sx={{ position: 'absolute',
                     width: 120,
