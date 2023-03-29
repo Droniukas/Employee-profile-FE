@@ -17,7 +17,7 @@ const SearchInput: React.FC<Props> = ({placeholder, onChange}) => {
                 width: '50vw',
                 justifyContent: 'flex-start',
                 direction: 'column',
-                alignSelf: 'flex-start'
+                alignSelf: 'flex-start',
             }}
         >
             <TextField

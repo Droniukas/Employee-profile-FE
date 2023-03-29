@@ -1,14 +1,26 @@
 import { Avatar, Box, checkboxClasses, createTheme, CssBaseline, ThemeProvider, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import { WidthFull } from '@mui/icons-material';
 import './Header.scss';
-import user from '../../data/user/user.json';
+import { EmployeeService } from '../../services/employee.service';
+import EmployeeResult from '../../models/EmployeeResult.interface';
 
 
 const Header = () => {
+    const [results, setResults] = useState<EmployeeResult>();
+    const employeeService = new EmployeeService();
+
+    const getResults = async (id: string) => {
+        const result = await employeeService.getById(id);
+        setResults(result);
+    };
+    useEffect(() => {
+        getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    }, []);
+
   return (
     <>
             {/* Left header: */}
@@ -34,13 +46,12 @@ const Header = () => {
             <div className='topHeader'>
             <NotificationsIcon sx={{width: 40, height: 40, marginRight:4, marginBottom: 1.1}}/>
                 <Avatar 
-                alt="Cindy Baker" 
-                src={user.image} 
-                sx={{ width: 65, height: 65, display:'inline-block'}}/>
+                src={`data:${results?.imageType};base64,${results?.imageBytes}`}
+                sx={{ width: 65, height: 65, marginTop: 1, display:'inline-block'}}/>
             </div>
         </Box>
     </>
   )
 }
 
-export default Header
+export default Header;

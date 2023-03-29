@@ -1,22 +1,28 @@
 import { Avatar, Box } from '@mui/material'
-import React from 'react'
-import user from '../../../data/user/user.json';
+import React, { useState } from 'react'
+import EmployeeResult from '../../../models/EmployeeResult.interface';
+import { EmployeeService } from '../../../services/employee.service';
 
-const ProfileInfo = () => {
+type Props = {
+  results: EmployeeResult;
+};
+
+const ProfileInfo: React.FC<Props> = ({results}) => {
+  if (!results) return null;
+
   return (
     <>
         <Box sx={{position:'relative', padding:'150px', marginLeft: 20, paddingRight:100}}>
             <Avatar 
-                alt="Cindy Baker" 
-                src={user.image} 
+                src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                 sx={{ position: 'absolute',
                     width: 120,
                     height: 120,
                     left: '5vw',
                     top: 200,
                     }}/>
-            <h1 className='name'>{user.name} {user.middle_name} {user.surname}</h1>
-            <h4 className='position'>{user.title_id}</h4>
+            <h1 className='name'>{results.name} {results.middleName} {results.surname}</h1>
+            <h4 className='position'>{results.title}</h4>
         </Box>
     </>
   )

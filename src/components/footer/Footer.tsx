@@ -10,8 +10,6 @@ const Footer = () => {
                 <p className='footer policy'>Privacy policy</p>
             </Box>
         </>
-        // <div className='footer'>
-        // </div>
     );
 };
 
