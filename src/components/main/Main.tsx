@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, CssBaseline, Box, Tabs, Tab, ThemeProvider, Typography, Switch } from '@mui/material'
-import Theme from '..//..//data/Theme'
+import Theme from '..//..//config/Theme'
 import FindEmployee from './findEmployee/FindEmployee';
 import './Main.scss';
 import { Routes, Route, Link, useLocation, NavLink } from 'react-router-dom';
