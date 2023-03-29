@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 
-const Footer = () => {
+const LoginFooter = () => {
     return (
         <Box component='footer' sx={{
             width: '100%',
@@ -37,4 +37,4 @@ const Footer = () => {
     );
 }
 
-export default Footer;
+export default LoginFooter;
