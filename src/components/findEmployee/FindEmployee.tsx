@@ -25,8 +25,8 @@ const FindEmployee = () => {
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      event.preventDefault();
       if (event.key === 'Enter') {
+        event.preventDefault();
         getResults();
       }
     };
