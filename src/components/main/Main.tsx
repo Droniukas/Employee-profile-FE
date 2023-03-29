@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material'
-import Theme from '..//..//data/Theme'
-import FindEmployee from '../findEmployee/FindEmployee'
-import './Main.scss'
-import { Routes, Route, Link } from 'react-router-dom'
-import { ROUTES } from '../routes/routes'
+import React, {useEffect, useState} from 'react';
+import {Link, Route, Routes} from 'react-router-dom';
+import './Main.scss';
+import Theme from '../../data/Theme'
+import {Box, CssBaseline, Tab, Tabs, ThemeProvider} from '@mui/material'
+import FindEmployee from './findEmployee/FindEmployee';
+import {ROUTES} from '../routes/routes'
 import Employee from '../../models/Employee.interface'
 import ProfileInfo from './profileInfo/ProfileInfo'
 import TabPanel from './TabPanel'
@@ -19,10 +19,10 @@ function getIndexedProps(index: number) {
 }
 
 const Main = () => {
-  const [results, setResults] = useState<Employee>()
-  const [value, setValue] = React.useState(0)
+  const [results, setResults] = useState<Employee>();
+  const [value, setValue] = React.useState(0);
 
-  const employeeService = new EmployeeService()
+    const employeeService = new EmployeeService();
 
   const getResults = async (id: string) => {
     const result = await employeeService.getById(id)
@@ -141,4 +141,4 @@ const Main = () => {
     )
 }
 
-export default Main
+export default Main;
