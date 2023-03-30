@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { CssBaseline, Box, Tabs, Tab, ThemeProvider, Typography, Switch } from '@mui/material'
+import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material'
 import Theme from '..//..//data/Theme'
 import FindEmployee from '../findEmployee/FindEmployee'
 import './Main.scss'
-import { Routes, Route, Link, useLocation, NavLink } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import { ROUTES } from '../routes/routes'
-import EmployeeResult from '../../models/EmployeeResult.interface'
-import FindEmployeeResults from '../findEmployee/FindEmployeeResults'
+import Employee from '../../models/Employee.interface'
 import ProfileInfo from './profileInfo/ProfileInfo'
-import TabPanelProps from '../../models/TabPanelProps.interface'
 import TabPanel from './TabPanel'
 import { EmployeeService } from '../../services/employee.service'
 
@@ -20,7 +18,7 @@ function getIndexedProps(index: number) {
 }
 
 const Main = () => {
-  const [results, setResults] = useState<EmployeeResult>()
+  const [results, setResults] = useState<Employee>()
   const [value, setValue] = React.useState(0)
 
   const employeeService = new EmployeeService()

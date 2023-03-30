@@ -1,33 +1,50 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState } from 'react';
 import './FindEmployee.scss';
 import SearchInput from '../inputs/SearchInput';
-import EmployeeResult from '../../models/EmployeeResult.interface';
 import FindEmployeeResults from './FindEmployeeResults';
-import useDebouncedState from '../../hooks/useDebouncedState';
 import { EmployeeService } from '../../services/employee.service';
 import { TablePagination } from '@mui/material';
+import Employee from '../../models/Employee.interface';
 
 const FindEmployee = () => {
-  // const [inputValue, setInputValue] = useDebouncedState('', 500);
-  const [inputValue, setInputValue] = useState('');
-  const [results, setResults] = useState<EmployeeResult[]>([]);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
-  const [page, setPage] = useState<number>(1);
-
+  const [results, setResults] = useState<Employee[]>([]);
+  const [resultCount, setResultCount] = useState<number>(0);
   const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
-
+  
   const employeeService = new EmployeeService();
+  
+  const [inputValue, _setInputValue] = useState('');
+  const inputValueRef = useRef(inputValue);
+  function setInputValue(val: string) {
+    inputValueRef.current = val;
+    _setInputValue(val);
+  }
+  
+  const [rowsPerPage, _setRowsPerPage] = useState<number>(10);
+  const rowsPerPageRef = useRef(rowsPerPage);
+  function setRowsPerPage(val: number) {
+    rowsPerPageRef.current = val;
+    _setRowsPerPage(val);
+  }
+
+  const [page, _setPage] = useState<number>(0);
+  const pageRef = useRef(page);
+  function setPage(val: number) {
+    pageRef.current = val;
+    _setPage(val);
+  }
 
   const getResults = async () => {
-    const result = await employeeService.searchByName(inputValue, page, rowsPerPage);
-    setResults(result);
+    const result = await employeeService.searchByName(inputValueRef.current, pageRef.current, rowsPerPageRef.current);
+    setResults(result.employees);
+    setResultCount(result.count);
   };
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        event.preventDefault();
         getResults();
+        event.preventDefault();
       }
     };
     window.addEventListener('keydown', keyDownHandler);
@@ -37,15 +54,14 @@ const FindEmployee = () => {
     };
   }, []);
 
-  const renderResults = useCallback(() => <FindEmployeeResults results={results} />, [results]);
-
-  const handleChangePage = ( event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
     getResults();
-    
   };
 
-  const handleChangeRowsPerPage = ( event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     getResults();
@@ -59,17 +75,20 @@ const FindEmployee = () => {
           onChange={(value) => setInputValue(value)}
         />
       </div>
-      {renderResults()}
-
-      <TablePagination
-        component='div'
-        count={results.length}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions = {rowSizeOptions}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {results.length > 0 && (
+        <>
+          <FindEmployeeResults results={results} />
+          <TablePagination
+            component='div'
+            count={resultCount}
+            page={!resultCount || resultCount <= 0 ? 0 : pageRef.current}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPageRef.current}
+            rowsPerPageOptions={rowSizeOptions}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      )}
     </>
   );
 };
