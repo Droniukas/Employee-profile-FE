@@ -8,7 +8,7 @@ import Employee from '../../models/Employee.interface';
 
 const FindEmployee = () => {
   const [results, setResults] = useState<Employee[]>([]);
-  const [resultCount, setResultCount] = useState<number>(0);
+  const [totalResultCount, setResultCount] = useState<number>(0);
   const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
   
   const employeeService = new EmployeeService();
@@ -43,6 +43,7 @@ const FindEmployee = () => {
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
+        setPage(0);
         getResults();
         event.preventDefault();
       }
@@ -80,8 +81,8 @@ const FindEmployee = () => {
           <FindEmployeeResults results={results} />
           <TablePagination
             component='div'
-            count={resultCount}
-            page={!resultCount || resultCount <= 0 ? 0 : pageRef.current}
+            count={totalResultCount}
+            page={!totalResultCount || totalResultCount <= 0 ? 0 : pageRef.current}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPageRef.current}
             rowsPerPageOptions={rowSizeOptions}
