@@ -27,6 +27,20 @@ const FindEmployee = () => {
     _setRowsPerPage(val);
   }
 
+  const [inputValue, _setInputValue] = useState('');
+  const inputValueRef = useRef(inputValue);
+  function setInputValue(val: string) {
+    inputValueRef.current = val;
+    _setInputValue(val);
+  }
+
+  const [rowsPerPage, _setRowsPerPage] = useState<number>(10);
+  const rowsPerPageRef = useRef(rowsPerPage);
+  function setRowsPerPage(val: number) {
+    rowsPerPageRef.current = val;
+    _setRowsPerPage(val);
+  }
+
   const [page, _setPage] = useState<number>(0);
   const pageRef = useRef(page);
   function setPage(val: number) {

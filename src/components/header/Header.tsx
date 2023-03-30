@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
-
-import './Header.scss';
-import { EmployeeService } from '../../services/employee.service';
+import {EmployeeService} from '../../services/employee.service';
 import Employee from '../../models/Employee.interface';
 
 const Header = () => {
