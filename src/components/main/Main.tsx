@@ -9,6 +9,7 @@ import Employee from '../../models/Employee.interface'
 import ProfileInfo from './profileInfo/ProfileInfo'
 import TabPanel from './TabPanel'
 import { EmployeeService } from '../../services/employee.service'
+import ProjectProfiles from './projectProfiles/ProjectProfiles';
 
 function getIndexedProps(index: number) {
   return {
@@ -124,19 +125,18 @@ const Main = () => {
               }
             />
 
-            <Route
-              path={ROUTES.PROJECT_PROFILES}
-              element={
-                <TabPanel value={value} index={4}>
-                  Project profiles
-                </TabPanel>
-              }
-            />
-          </Routes>
-        </Box>
-      </ThemeProvider>
-    </>
-  )
+                        }/>
+
+                        <Route path={ROUTES.PROJECT_PROFILES} element={
+                            <TabPanel value={value} index={4}>
+                                <ProjectProfiles/>
+                            </TabPanel>
+                        }/>
+                    </Routes>
+                </Box>
+            </ThemeProvider>
+        </>
+    )
 }
 
 export default Main
