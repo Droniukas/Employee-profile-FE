@@ -6,16 +6,16 @@ import {Box, CssBaseline, Tab, Tabs, ThemeProvider} from '@mui/material'
 import FindEmployee from './findEmployee/FindEmployee';
 import {ROUTES} from '../routes/routes'
 import Employee from '../../models/Employee.interface'
-import ProfileInfo from './profileInfo/ProfileInfo'
-import TabPanel from './TabPanel'
-import { EmployeeService } from '../../services/employee.service'
+import ProfileInfo from './profileInfo/ProfileInfo';
+import TabPanel from './TabPanel';
+import {EmployeeService} from '../../services/employee.service';
 import ProjectProfiles from './projectProfiles/ProjectProfiles';
 
 function getIndexedProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  }
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
 }
 
 const Main = () => {
@@ -24,18 +24,18 @@ const Main = () => {
 
     const employeeService = new EmployeeService();
 
-  const getResults = async (id: string) => {
-    const result = await employeeService.getById(id)
-    setResults(result)
-  }
+    const getResults = async (id: string) => {
+        const result = await employeeService.getById(id);
+        setResults(result);
+    };
 
-  useEffect(() => {
-    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`)
-  }, [])
+    useEffect(() => {
+        getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    }, []);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
-  }
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
 
   return (
     <>
@@ -125,20 +125,19 @@ const Main = () => {
               }
             />
 
-                        }/>
-
-                        <Route path={ROUTES.PROJECT_PROFILES}
-                               element={
-                                   <TabPanel value={value}
-                                             index={4}>
-                                       <ProjectProfiles/>
-                                   </TabPanel>
-                               }/>
-                    </Routes>
-                </Box>
-            </ThemeProvider>
-        </>
-    )
+            <Route
+              path={ROUTES.PROJECT_PROFILES}
+              element={
+                <TabPanel value={value} index={4}>
+                  Project profiles
+                </TabPanel>
+              }
+            />
+          </Routes>
+        </Box>
+      </ThemeProvider>
+    </>
+  )
 }
 
 export default Main;
