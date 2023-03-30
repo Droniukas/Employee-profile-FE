@@ -3,11 +3,11 @@ import Login from './components/login/Login'
 import {ThemeProvider} from '@mui/material/styles';
 import Theme from './config/Theme';
 import Grid from '@mui/material/Grid';
-import LoginFooter from './components/login/LoginFooter';
 import Main from './components/main/Main';
 import React, { useState } from 'react'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
+import LoginFooter from './components/login/LoginFooter';
 import './App.scss'
 import { yellow } from '@mui/material/colors'
 import { Button } from '@mui/material';
@@ -49,17 +49,18 @@ function App() {
                 spacing: 0,
                 direction: 'column',
                 alignItems: 'center',
+                minHeight: '100vh',
                 justifyContent: 'center'
             }}
             >
-                <Login></Login>
+                <Login/>
                   <NavLink to={ROUTES.HOME}>
                     <Button title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120, backgroundColor: '#c8e6c9'}}
                   onClick={() => setAppState(AppState.LANDING_PAGE)}>
                     go to MAIN (TEMPORARY)</Button>
                   </NavLink>
+                  <LoginFooter/>
             </Grid>
-            <LoginFooter></LoginFooter>
       </ThemeProvider>
     )}
   </>

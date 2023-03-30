@@ -8,6 +8,8 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import {  useForm, SubmitHandler } from 'react-hook-form';
+import { useLoginForm } from './validateLogin';
+
 
 interface FormInputs {
     email: string;
@@ -15,20 +17,19 @@ interface FormInputs {
 }
 
 const Login: FC = () => {
-    const { register, handleSubmit, control, formState: { errors } } = useForm<FormInputs>();
-    const [isEmailEmpty, setIsEmailEmpty] = useState(true);
-    const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
-
-    const formSubmithandler: SubmitHandler<FormInputs> = (data: FormInputs) => {
-        console.log('form data', data);
-        console.log(data);
-    };
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsEmailEmpty(event.target.value === '');
-    };
-    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsPasswordEmpty(event.target.value === '');
-    };
+    const {
+        register,
+        handleSubmit,
+        control,
+        errors,
+        passwordValidationRules,
+        emailValidationRules,
+        isEmailEmpty,
+        isPasswordEmpty,
+        formSubmithandler,
+        handleEmailChange,
+        handlePasswordChange,
+      } = useLoginForm();
 
     return (
         <Box sx={{
@@ -79,15 +80,15 @@ const Login: FC = () => {
                             required
                             id="email"
                             autoComplete="email"
-                            {...register('email', {
-                                required: 'Required field',
-                                pattern: {
-                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: 'Email address should be in the format username@domain.com',
-                                },
-                            })}
-                            error={!!errors?.email}
-                            helperText={errors?.email ? errors.email.message : null}
+                            {...register('email', emailValidationRules)}
+                            error={!!errors.email}
+                            helperText={
+                                isEmailEmpty || errors.email ? 
+                                  errors.email?.type === 'pattern'
+                                    ? 'Email address should be in the format username@domain.com'
+                                    : ''
+                                  : null
+                              }
                             onChange={handleEmailChange}
                             sx={{
                                 '& fieldset': {
@@ -113,12 +114,9 @@ const Login: FC = () => {
                             id="password"
                             type='password'
                             autoComplete="current-password"
-                            inputProps={{
-                                pattern: '^[^\\s]+$',
-                              }}
-                            {...register('password')}
+                              {...register('password', passwordValidationRules)}
                             error={!!errors?.password}
-                            helperText={errors?.password ? errors.password.message : ''}
+                            helperText={errors.password ? errors.password.message : ''}
                             onChange={handlePasswordChange}
                             sx={{'& fieldset': {borderRadius: 2,}}}
                         />
@@ -135,6 +133,7 @@ const Login: FC = () => {
                             variant="contained"
                             disabled={isEmailEmpty || isPasswordEmpty}
                             sx={{ my: 1 }}
+                            
                         >
                             Sign in
                         </Button>
@@ -160,4 +159,5 @@ const Login: FC = () => {
         </Box>
     );
 }
+
 export default Login;

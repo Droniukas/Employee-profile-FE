@@ -3,11 +3,10 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 
-const Footer = () => {
+const LoginFooter = () => {
     return (
         <Box component='footer' sx={{
             width: '100%',
-            position: 'fixed',
             bottom: 0,
             mt: 'auto'
         }}>
@@ -16,25 +15,22 @@ const Footer = () => {
                 mt: 'auto',
                 width: '100%',
                 bgcolor: 'third.main',
-                justifyContent: 'center',
-                direction: 'column',
-                alignSelf: 'center',
-
+                justifyContent: 'center'
             }}>
-                <Grid item>
-                    <Typography sx={{align: 'center', p: 2}}>Terms of Service</Typography>
+                <Grid item  >
+                    <Typography sx={{ align: 'center', p: 2 }}>Terms of Service</Typography>
                 </Grid>
-                <Divider orientation="vertical" variant="middle" flexItem/>
-                <Grid item>
-                    <Typography sx={{align: 'center', p: 2}}>Support</Typography>
+                <Divider orientation="vertical" variant="middle" flexItem />
+                <Grid item >
+                    <Typography sx={{ align: 'center', p: 2 }}>Support</Typography>
                 </Grid>
-                <Divider orientation="vertical" variant="middle" flexItem/>
-                <Grid item>
-                    <Typography sx={{align: 'center', p: 2}}>2022 Cognization</Typography>
+                <Divider orientation="vertical" variant="middle" flexItem />
+                <Grid item >
+                    <Typography sx={{ align: 'center', p: 2 }}>{new Date().getFullYear()} Cognization</Typography>
                 </Grid>
             </Grid>
         </Box>
     );
 }
 
-export default Footer;
+export default LoginFooter;
