@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material'
-import theme from '..//..//config/theme'
+import Theme from '..//..//data/Theme'
 import FindEmployee from '../findEmployee/FindEmployee'
 import './Main.scss'
 import { Routes, Route, Link } from 'react-router-dom'
@@ -40,7 +40,7 @@ const Main = () => {
     <>
       {results && <ProfileInfo results={results} />}
 
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Theme}>
         <CssBaseline />
         <Box
           sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}
