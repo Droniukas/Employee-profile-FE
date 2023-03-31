@@ -129,7 +129,7 @@ const Main = () => {
               path={ROUTES.PROJECT_PROFILES}
               element={
                 <TabPanel value={value} index={4}>
-                  Project profiles
+                  <ProjectProfiles/>
                 </TabPanel>
               }
             />

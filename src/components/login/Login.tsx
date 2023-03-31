@@ -51,14 +51,6 @@ const Login = () => {
                                 fontSize: 14,
                                 fontWeight: 400,
                             }}>
-                            color: 'primary.main'
-                        }}
-                        >
-                            <Typography sx={{
-                                fontSize: 14,
-                                fontWeight: 400
-                            }}
-                            >
                                 Email address
                             </Typography>
                         </InputLabel>
