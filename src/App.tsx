@@ -9,7 +9,6 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import LoginFooter from './components/login/LoginFooter';
 import './App.scss'
-import { yellow } from '@mui/material/colors'
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import {ROUTES} from './components/routes/routes'

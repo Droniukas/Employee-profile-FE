@@ -29,7 +29,7 @@ export const useLoginForm = () => {
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
 
   const formSubmithandler: SubmitHandler<FormInputs> = (data: FormInputs) => {
-    axios.post('/api/login', data)
+    axios.post(`${process.env.REACT_APP_API_URL}`+'/login', data)
     .then(response=>
       {console.log(response.data);
     })

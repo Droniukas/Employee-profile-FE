@@ -7,14 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import {  useForm, SubmitHandler } from 'react-hook-form';
 import { useLoginForm } from './validateLogin';
-
-
-interface FormInputs {
-    email: string;
-    password: string;
-}
 
 const Login: FC = () => {
     const {
