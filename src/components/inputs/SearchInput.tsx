@@ -24,13 +24,12 @@ const SearchInput: React.FC<Props> = ({placeholder, onChange}) => {
                 sx={{
                     fontSize: '14px',
                     '& fieldset': {
-                        borderRadius: 12,
+                        borderRadius: 8,
                     },
                     input: {
                         color: '#000048',
                     },
-                    backgroundColor:'white',
-                    borderRadius: 12,
+                    backgroundColor:'white'
                 }}
                 fullWidth
                 id='input-with-icon-textfield'
