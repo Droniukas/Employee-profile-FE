@@ -1,7 +1,7 @@
 import './App.css'
 import Login from './components/login/Login'
 import {ThemeProvider} from '@mui/material/styles';
-import Theme from './data/Theme';
+import theme from './config/theme';
 import Grid from '@mui/material/Grid';
 import Main from './components/main/Main';
 import React, { useState } from 'react'
