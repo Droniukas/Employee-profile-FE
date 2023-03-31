@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import axios from 'axios';
 
 interface FormInputs {
   email: string;
@@ -28,8 +29,14 @@ export const useLoginForm = () => {
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
 
   const formSubmithandler: SubmitHandler<FormInputs> = (data: FormInputs) => {
+    axios.post('/api/login', data)
+    .then(response=>
+      {console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
     console.log('form data', data);
-    console.log(data);
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
