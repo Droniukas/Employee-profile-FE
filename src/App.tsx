@@ -40,10 +40,11 @@ function App() {
                                     width: 100,
                                     left: 120,
                                     top: 120,
-                                    backgroundColor: '#c8e6c9'
+                                    backgroundColor: '#c8e6c9',
                                 }}
                                 onClick={() => setAppState(AppState.LOGIN_PAGE)}>
-                            Go to LOGIN (TEMPORARY)</Button>
+                            Go to LOGIN (TEMPORARY)
+                        </Button>
                     </NavLink>
                     <Main/>
                 </main>
@@ -52,6 +53,7 @@ function App() {
                 </footer>
                 </body>
             )}
+
             {appState === AppState.LOGIN_PAGE && (
                 <ThemeProvider theme={Theme}>
                     <Grid container
@@ -59,9 +61,8 @@ function App() {
                               spacing: 0,
                               direction: 'column',
                               alignItems: 'center',
-                              justifyContent: 'center'
-                          }}
-                    >
+                              justifyContent: 'center',
+                          }}>
                         <Login></Login>
                         <NavLink to={ROUTES.HOME}>
                             <Button title='go to main'
@@ -71,10 +72,11 @@ function App() {
                                         width: 100,
                                         left: 120,
                                         top: 120,
-                                        backgroundColor: '#c8e6c9'
+                                        backgroundColor: '#c8e6c9',
                                     }}
                                     onClick={() => setAppState(AppState.LANDING_PAGE)}>
-                                go to MAIN (TEMPORARY)</Button>
+                                go to MAIN (TEMPORARY)
+                            </Button>
                         </NavLink>
                     </Grid>
                     <LoginFooter></LoginFooter>

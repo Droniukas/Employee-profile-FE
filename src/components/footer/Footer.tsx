@@ -14,7 +14,7 @@ const Footer = () => {
                 borderColor: 'divider',
                 height: 100,
                 width: '100%',
-                display: 'flex'
+                display: 'flex',
             }}>
                 <p className='footer copyright'>Copyright © 2023 Cognizant</p>
                 <p className='footer policy'>Privacy policy</p>

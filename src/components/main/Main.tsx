@@ -127,11 +127,13 @@ const Main = () => {
 
                         }/>
 
-                        <Route path={ROUTES.PROJECT_PROFILES} element={
-                            <TabPanel value={value} index={4}>
-                                <ProjectProfiles/>
-                            </TabPanel>
-                        }/>
+                        <Route path={ROUTES.PROJECT_PROFILES}
+                               element={
+                                   <TabPanel value={value}
+                                             index={4}>
+                                       <ProjectProfiles/>
+                                   </TabPanel>
+                               }/>
                     </Routes>
                 </Box>
             </ThemeProvider>
