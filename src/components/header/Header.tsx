@@ -1,16 +1,16 @@
-import { Avatar, Box, checkboxClasses, createTheme, CssBaseline, ThemeProvider, Typography } from '@mui/material'
+import { Avatar, Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
-import { WidthFull } from '@mui/icons-material';
+
 import './Header.scss';
 import { EmployeeService } from '../../services/employee.service';
-import EmployeeResult from '../../models/EmployeeResult.interface';
+import Employee from '../../models/Employee.interface';
 
 
 const Header = () => {
-    const [results, setResults] = useState<EmployeeResult>();
+    const [results, setResults] = useState<Employee>();
     const employeeService = new EmployeeService();
 
     const getResults = async (id: string) => {
