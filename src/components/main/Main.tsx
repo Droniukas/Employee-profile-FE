@@ -89,7 +89,7 @@ const Main = () => {
           </Tabs>
         </Box>
 
-        <Box display='flex' justifyContent='left' alignItems='left' paddingLeft='300px'>
+        <Box display='flex' justifyContent='left' alignItems='left' paddingLeft='230px'>
           <Routes>
             <Route
               index
