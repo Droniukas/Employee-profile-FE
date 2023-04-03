@@ -6,6 +6,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Employee from '../../models/Employee.interface';
+import StatusChip from './StatusChip';
 
 type Props = {
   results: Employee[];
@@ -14,15 +15,22 @@ type Props = {
 const FindEmployeeResults: React.FC<Props> = ({ results }) => {
   if (!results) return null;
 
+  const isInactiveOrDismissed = (status: string): boolean => {
+    return ['INACTIVE', 'DISMISSED'].includes(status);
+  };
+
   const renderResultItem = (result: Employee) => {
     return (
       <>
         <ListItem alignItems='flex-start'>
           <ListItemAvatar>
-            <Avatar src={`data:${result.imageType};base64,${result.imageBytes}`} 
-            sx={{
-              border: '0.01px solid lightgrey'
-           }}/>
+            <Avatar
+              src={`data:${result.imageType};base64,${result.imageBytes}`}
+              sx={{
+                border: '0.01px solid lightgrey',
+                opacity: isInactiveOrDismissed(result.status) ? 0.35 : 1,
+              }}
+            />
           </ListItemAvatar>
           <ListItemText
             primary={
@@ -30,9 +38,15 @@ const FindEmployeeResults: React.FC<Props> = ({ results }) => {
                 ? `${result.name} ${result.middleName} ${result.surname}`
                 : `${result.name} ${result.surname}`
             }
-            secondary={<React.Fragment>{result.title}</React.Fragment>}
+            secondary={
+              <>
+                {result.title}
+                <span style={{ margin: '0 12px' }}>/</span>
+                <StatusChip status={result.status} />
+              </>
+            }
             sx={{
-              color: '#000048',
+              color: isInactiveOrDismissed(result.status) ? '#666666' : '#000048',
             }}
           />
         </ListItem>
