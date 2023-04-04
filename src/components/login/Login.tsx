@@ -15,13 +15,17 @@ const Login = () => {
             bgcolor: 'third.main',
             justifyContent: 'center',
             direction: 'column',
-            alignSelf: 'center',
+            alignSelf: 'center'
         }}>
-            <Stack spacing={{xs: 1, sm: 2, md: 4}}>
+            <Stack spacing={{
+                xs: 1,
+                sm: 2,
+                md: 4
+            }}>
                 <Box component="div"
                      sx={{
                          my: 10,
-                         mb: 2,
+                         mb: 2
                      }}>
                     <Typography variant='h1'
                                 sx={{
@@ -32,24 +36,25 @@ const Login = () => {
                                     fontSize: 32,
                                     fontStyle: 'Regular',
                                     lineHeight: 1.25,
-                                    color: 'primary.main',
+                                    color: 'primary.main'
                                 }}>
                         Welcome to Employee Profile
                     </Typography>
                 </Box>
+                {/* Email adress input */}
                 <Box component="form"
                      sx={{}}>
                     <Box component="div"
                          sx={{
-                             my: 2,
+                             my: 2
                          }}>
                         <InputLabel sx={{
                             pb: 1,
-                            color: 'primary.main',
+                            color: 'primary.main'
                         }}>
                             <Typography sx={{
                                 fontSize: 14,
-                                fontWeight: 400,
+                                fontWeight: 400
                             }}>
                                 Email address
                             </Typography>
@@ -65,20 +70,21 @@ const Login = () => {
                                    sx={{
                                        '& fieldset': {
                                            borderRadius: 2
-                                       },
+                                       }
                                    }}/>
                     </Box>
+                    {/* Password input */}
                     <Box component="div"
                          sx={{
-                             my: 2,
+                             my: 2
                          }}>
                         <InputLabel sx={{
                             pb: 1,
-                            color: 'primary.main',
+                            color: 'primary.main'
                         }}>
                             <Typography sx={{
                                 fontSize: 14,
-                                fontWeight: 400,
+                                fontWeight: 400
                             }}>
                                 Password
                             </Typography>
@@ -94,29 +100,31 @@ const Login = () => {
                                    sx={{
                                        '& fieldset': {
                                            borderRadius: 2,
-                                       },
+                                       }
                                    }}/>
                         <Link href="#">
                             <Typography sx={{
                                 fontSize: 14,
                                 fontWeight: 400,
-                                mt: 1,
+                                mt: 1
                             }}>
                                 Forgot password?
                             </Typography>
                         </Link>
                     </Box>
+                    {/* Button Sign in */}
                     <Box sx={{
-                        my: 4,
+                        my: 4
                     }}>
                         <Button type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{
-                                    my: 1,
+                                    my: 1
                                 }}>
                             Sign in
                         </Button>
+                        {/* Divider */}
                         <Divider sx={{
                             my: 1,
                             '&::before, &::after': {
@@ -125,16 +133,15 @@ const Login = () => {
                         }}>
                             <Typography sx={{
                                 color: '#999999',
-                            }}>
-                                or
-                            </Typography>
+                            }}>or</Typography>
                         </Divider>
+                        {/* Button Cognizant SSO */}
                         <Button type="submit"
                                 fullWidth
                                 variant="text"
                                 sx={{
                                     bgcolor: 'secondary.main',
-                                    my: 1,
+                                    my: 1
                                 }}>
                             Sign in with Cognizant SSO
                         </Button>

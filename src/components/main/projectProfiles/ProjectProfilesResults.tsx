@@ -1,12 +1,11 @@
 import React from 'react';
 import ProjectsResult from '../../../models/ProjectProfilesResult.interface';
-import EmployeeResult from '../../../models/EmployeeResult.interface';
+import Employee from '../../../models/Employee.interface';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -125,7 +124,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
         }
     }
 
-    function renderEmployeesAvatarGroup(employees: EmployeeResult[]) {
+    function renderEmployeesAvatarGroup(employees: Employee[]) {
         const employeeAmount = employees.length;
         const avatarsNeed = Math.min(3, employeeAmount);
         const employeesForAvatars = [];
@@ -144,7 +143,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
         );
     }
 
-    function renderEmployeeAvatar(employee: EmployeeResult) {
+    function renderEmployeeAvatar(employee: Employee) {
         return (
             <Avatar src={`data:${employee.imageType};base64,${employee.imageBytes}`}
                     sx={{

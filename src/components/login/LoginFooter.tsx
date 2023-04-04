@@ -3,14 +3,14 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 
-const LoginFooter = () => {
+const Footer = () => {
     return (
         <Box component='footer'
              sx={{
                  width: '100%',
                  position: 'fixed',
                  bottom: 0,
-                 mt: 'auto',
+                 mt: 'auto'
              }}>
             <Grid container
                   sx={{
@@ -25,35 +25,30 @@ const LoginFooter = () => {
                 <Grid item>
                     <Typography sx={{
                         align: 'center',
-                        p: 2,
-                    }}>
-                        Terms of Service
-                    </Typography>
+                        p: 2
+                    }}>Terms of Service</Typography>
                 </Grid>
                 <Divider orientation="vertical"
                          variant="middle"
                          flexItem/>
                 <Grid item>
                     <Typography sx={{
-                        align: 'center', p: 2,
-                    }}>
-                        Support
-                    </Typography>
+                        align: 'center',
+                        p: 2
+                    }}>Support</Typography>
                 </Grid>
                 <Divider orientation="vertical"
                          variant="middle"
                          flexItem/>
                 <Grid item>
-                    <Typography sx={
-                        {
-                            align: 'center', p: 2,
-                        }}>
-                        2022 Cognization
-                    </Typography>
+                    <Typography sx={{
+                        align: 'center',
+                        p: 2
+                    }}>2022 Cognization</Typography>
                 </Grid>
             </Grid>
         </Box>
     );
 }
 
-export default LoginFooter;
+export default Footer;

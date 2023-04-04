@@ -3,7 +3,7 @@ import {Avatar, Box} from '@mui/material'
 import Employee from '../../../models/Employee.interface';
 
 type Props = {
-  results: Employee;
+    results: Employee;
 };
 
 const ProfileInfo: React.FC<Props> = ({results}) => {
@@ -15,7 +15,7 @@ const ProfileInfo: React.FC<Props> = ({results}) => {
                 position: 'relative',
                 padding: '150px',
                 marginLeft: 20,
-                paddingRight: 100,
+                paddingRight: 100
             }}>
                 <Avatar src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                         sx={{
@@ -25,12 +25,8 @@ const ProfileInfo: React.FC<Props> = ({results}) => {
                             left: '5vw',
                             top: 200,
                         }}/>
-                <h1 className='name'>
-                    {results.name} {results.middleName} {results.surname}
-                </h1>
-                <h4 className='position'>
-                    {results.title}
-                </h4>
+                <h1 className='name'>{results.name} {results.middleName} {results.surname}</h1>
+                <h4 className='position'>{results.title}</h4>
             </Box>
         </>
     )

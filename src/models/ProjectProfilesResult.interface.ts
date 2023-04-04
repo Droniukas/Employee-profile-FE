@@ -1,4 +1,4 @@
-import EmployeeResult from './EmployeeResult.interface';
+import Employee from './Employee.interface';
 
 interface ProjectProfilesResult {
     id: string,
@@ -6,7 +6,7 @@ interface ProjectProfilesResult {
     startDate: string,
     endDate: string,
     description: string,
-    employees: EmployeeResult[],
+    employees: Employee[],
 }
 
 export default ProjectProfilesResult;
