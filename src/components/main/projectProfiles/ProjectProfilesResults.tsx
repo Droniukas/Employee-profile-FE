@@ -1,5 +1,6 @@
 import React from 'react';
 import ProjectsResult from '../../../models/ProjectProfilesResult.interface';
+import EmployeeResult from '../../../models/EmployeeResult.interface';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -59,7 +60,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                                 fontSize: 14,
                                 pt: 1,
                             }}>
-                                {result.startDate} - {result.endDate}
+                                {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
                             </Typography>
                             <Typography sx={{
                                 color: '#000048',
@@ -83,14 +84,17 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                               xs={6}>
                             <Box alignItems='flex-start'
                                  display='flex'>
-                                {renderEmployeesAvatarGroup(result.id)}
-                                {setStatus(result.status)}
+                                {renderEmployeesAvatarGroup(result.employees)}
+                            </Box>
+                            <Box alignItems='flex-end'
+                                 display='flex'>
+                                {setStatus(result.startDate, result.endDate)}
                                 <IconButton aria-label='edit'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
-                                                left: 270,
-                                                top: -13,
+                                                left: 455,
+                                                top: -35,
                                                 backgroundColor: '#F4F4F4',
                                             }}>
                                     <EditIcon/>
@@ -99,8 +103,8 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
-                                                left: 280,
-                                                top: -13,
+                                                left: 470,
+                                                top: -35,
                                                 backgroundColor: '#F4F4F4',
                                             }}>
                                     <DeleteIcon/>
@@ -113,26 +117,47 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
         );
     }
 
-    function renderEmployeesAvatarGroup(projectId: string) {//need to finish this
+    function correctDateFormat(date: string) {
+        if (date === null) {
+            return null;
+        } else {
+            return (new Date(date)).toDateString();
+        }
+    }
+
+    function renderEmployeesAvatarGroup(employees: EmployeeResult[]) {
+        const employeeAmount = employees.length;
+        const avatarsNeed = Math.min(3, employeeAmount);
+        const employeesForAvatars = [];
+
+        for (let i = 0; i < avatarsNeed; i++) {
+            employeesForAvatars[i] = employees[i];
+        }
+
         return (
             <>
                 <AvatarGroup>
-                    <Avatar src='{`data:${result.imageType};base64,${result.imageBytes}`}'
-                            sx={{
-                                width: 24,
-                                height: 24,
-                            }}/>
-                    <Avatar src='{`data:${result.imageType};base64,${result.imageBytes}`}'
-                            sx={{
-                                width: 24,
-                                height: 24,
-                            }}/>
-                    <Avatar src='{`data:${result.imageType};base64,${result.imageBytes}`}'
-                            sx={{
-                                width: 24,
-                                height: 24,
-                            }}/>
+                    {employeesForAvatars.map((employee) => (renderEmployeeAvatar(employee)))}
                 </AvatarGroup>
+                {calculateAdditionalEmployees(employeeAmount)}
+            </>
+        );
+    }
+
+    function renderEmployeeAvatar(employee: EmployeeResult) {
+        return (
+            <Avatar src={`data:${employee.imageType};base64,${employee.imageBytes}`}
+                    sx={{
+                        width: 24,
+                        height: 24,
+                    }}/>
+        );
+    }
+
+    function calculateAdditionalEmployees(avatarsUsed: number) {
+        if (avatarsUsed > 3) {
+            const additionalemployees = avatarsUsed - 3;
+            return (
                 <Typography sx={{
                     color: '#666666',
                     fontSize: 14,
@@ -141,47 +166,54 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                     left: 10,
                     top: -13,
                 }}>
-                    +XX employees
+                    +{additionalemployees} {additionalemployees === 1 ? 'employee' : 'employees'}
                 </Typography>
-            </>
-        );
+            );
+        }
     }
 
-    function setStatus(projectStatus: string) {
+    function setStatus(startDate: string, endDate: string) {
         let statusColor;
         let fontColor;
+        let projectStatus;
+        const today = new Date();
+        const startDateFormatted = new Date(startDate);
+        const endDateFormatted = new Date(endDate);
 
-        switch (projectStatus) {
-            case 'Ongoing':
+        if (startDateFormatted > today) {
+            projectStatus = 'Future';
+            statusColor = 'rgba(113, 175, 251, 0.31)';
+            fontColor = 'rgba(0, 114, 255, 1)';
+        } else {
+            if (endDate === null || endDateFormatted > today) {
+                projectStatus = 'Ongoing';
                 statusColor = 'rgba(59, 248, 100, 0.24)';
                 fontColor = 'rgba(26, 175, 85, 1)';
-                break;
-            case 'Delayed':
-                statusColor = 'rgba(102, 102, 102, 1)';//need red color
-                fontColor = 'black';
-                break;
-            case 'Finished':
-                statusColor = 'rgba(102, 102, 102, 1)';//need blue color
-                fontColor = 'black';
-                break;
-            default:
-                statusColor = 'rgba(102, 102, 102, 1)';
-                fontColor = 'black';
-                break;
+            } else {
+                projectStatus = 'Finished';
+                statusColor = 'rgba(92, 92, 92, 0.23)';
+                fontColor = 'rgba(50, 50, 50, 1)';
+            }
         }
 
         return (
             <>
-                <Button sx={{
-                    position: 'relative',
-                    left: 65,
-                    top: -7,
-                    background: {statusColor},
-                    color: {fontColor},
-                    borderRadius: 1,
-                }}>
+                <Box display='flex'
+                     sx={{
+                         position: 'relative',
+                         left: 250,
+                         top: -45,
+                         background: statusColor,
+                         color: fontColor,
+                         borderRadius: 1,
+                         fontSize: 14,
+                         width: 90,
+                         height: 28,
+                         justifyContent: 'center',
+                         alignItems: 'center',
+                     }}>
                     {projectStatus}
-                </Button>
+                </Box>
             </>
         );
     }
