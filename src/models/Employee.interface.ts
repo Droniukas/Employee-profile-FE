@@ -6,6 +6,7 @@ interface Employee {
     title: string,
     hiringDate: string,
     exitDate: string,
+    status: string,
     imageName: string,
     imageType: string,
     imageBytes: string,
