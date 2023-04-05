@@ -136,6 +136,13 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
         return (
             <>
                 <AvatarGroup>
+                    <Avatar sx={{
+                        width: 24,
+                        height: 24,
+                        display: {
+                            xs: 'none',
+                        }
+                    }}/>
                     {employeesForAvatars.map((employee) => (renderEmployeeAvatar(employee)))}
                 </AvatarGroup>
                 {calculateAdditionalEmployees(employeeAmount)}
@@ -200,8 +207,8 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                 <Box display='flex'
                      sx={{
                          position: 'relative',
-                         left: 250,
-                         top: -45,
+                         left: 270,
+                         top: -40,
                          background: statusColor,
                          color: fontColor,
                          borderRadius: 1,

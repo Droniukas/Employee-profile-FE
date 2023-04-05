@@ -28,7 +28,7 @@ const ProjectProfiles = () => {
                      position: 'relative',
                      my: 0.25,
                      width: 1344,
-                     left: -270,
+                     left: -200,
                  }}>
                 <Button type='submit'
                         variant='contained'
@@ -43,7 +43,7 @@ const ProjectProfiles = () => {
                 position: 'relative',
                 my: 2,
                 width: 1344,
-                left: -270,
+                left: -200,
             }}>
                 <ProjectProfilesResult results={results}/>
             </Box>
