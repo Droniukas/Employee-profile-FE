@@ -38,7 +38,7 @@ const StatusChip: React.FC<Props> = ({ status }) => {
       />
       <span style={{ textTransform: 'capitalize' }}>{status.toLowerCase()}</span>
     </Box>
-    );
+  );
 };
 
 export default StatusChip;

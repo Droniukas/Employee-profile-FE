@@ -65,7 +65,7 @@ const FindEmployeeResults: React.FC<Props> = ({ results }) => {
         {results.map((result) => renderResultItem(result))}
       </List>
     </>
-    );
+  );
 };
 
 export default FindEmployeeResults;

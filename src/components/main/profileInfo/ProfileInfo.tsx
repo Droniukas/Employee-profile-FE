@@ -24,7 +24,7 @@ const ProfileInfo: React.FC<Props> = ({results}) => {
             <h4 className='position'>{results.title}</h4>
         </Box>
     </>
-    )
+  )
 }
 
 export default ProfileInfo

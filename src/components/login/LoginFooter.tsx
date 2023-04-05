@@ -34,7 +34,7 @@ const Footer = () => {
                 </Grid>
             </Grid>
         </Box>
-        );
+    );
 }
 
 export default Footer;

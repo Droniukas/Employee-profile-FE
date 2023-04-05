@@ -91,7 +91,7 @@ const FindEmployee = () => {
         </>
       )}
     </>
-    );
+  );
 };
 
 export default FindEmployee;
