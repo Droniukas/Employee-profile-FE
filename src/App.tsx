@@ -48,7 +48,7 @@ function App() {
                 spacing: 0,
                 direction: 'column',
                 alignItems: 'center',
-                minHeight: '100vh',
+                minHeight: '50vh',
                 justifyContent: 'center'
             }}
             >

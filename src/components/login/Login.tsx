@@ -7,7 +7,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import { useLoginForm } from './validateLogin';
+import { useLoginForm } from './validation/validateLogin';
+import { validationRules } from './validation/validationRules';
 
 const Login: FC = () => {
     const {
@@ -15,14 +16,17 @@ const Login: FC = () => {
         handleSubmit,
         control,
         errors,
-        passwordValidationRules,
-        emailValidationRules,
         isEmailEmpty,
         isPasswordEmpty,
         formSubmithandler,
         handleEmailChange,
         handlePasswordChange,
-      } = useLoginForm();
+    } = useLoginForm();
+    const {
+        passwordValidationRules,
+        emailValidationRules,
+
+    } = validationRules();
 
     return (
         <Box sx={{
@@ -76,12 +80,12 @@ const Login: FC = () => {
                             {...register('email', emailValidationRules)}
                             error={!!errors.email}
                             helperText={
-                                isEmailEmpty || errors.email ? 
-                                  errors.email?.type === 'pattern'
-                                    ? 'Email address should be in the format username@domain.com'
-                                    : ''
-                                  : null
-                              }
+                                isEmailEmpty || errors.email ?
+                                    errors.email?.type === 'pattern'
+                                        ? 'Email address should be in the format username@domain.com'
+                                        : ''
+                                    : null
+                            }
                             onChange={handleEmailChange}
                             sx={{
                                 '& fieldset': {
@@ -107,11 +111,11 @@ const Login: FC = () => {
                             id="password"
                             type='password'
                             autoComplete="current-password"
-                              {...register('password', passwordValidationRules)}
+                            {...register('password', passwordValidationRules)}
                             error={!!errors?.password}
                             helperText={errors.password ? errors.password.message : ''}
                             onChange={handlePasswordChange}
-                            sx={{'& fieldset': {borderRadius: 2,}}}
+                            sx={{ '& fieldset': { borderRadius: 2, } }}
                         />
                         <Link href="#">
                             <Typography sx={{ fontSize: 14, fontWeight: 400, mt: 1 }}>
@@ -126,7 +130,7 @@ const Login: FC = () => {
                             variant="contained"
                             disabled={isEmailEmpty || isPasswordEmpty}
                             sx={{ my: 1 }}
-                            
+
                         >
                             Sign in
                         </Button>
@@ -146,6 +150,7 @@ const Login: FC = () => {
                         >
                             Sign in with Cognizant SSO
                         </Button>
+                    {Object.keys (errors).length > 0 && (<Typography color="error" align="center" >Incorrect email or password.</Typography>)}
                     </Box>
                 </Box>
             </Stack>

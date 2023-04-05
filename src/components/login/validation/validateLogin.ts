@@ -1,22 +1,12 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
+import axios, { AxiosHeaders } from 'axios';
+import {LoginService } from '../../../services/login.service';
 
 interface FormInputs {
   email: string;
   password: string;
 }
-
-const emailValidationRules = {
-  required: true,
-  pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-};
-
-
-const passwordValidationRules = {
-  required: true,
-  pattern: /^\S+$/
-};
 
 export const useLoginForm = () => {
   const {
@@ -28,17 +18,13 @@ export const useLoginForm = () => {
   const [isEmailEmpty, setIsEmailEmpty] = useState(true);
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
 
-  const formSubmithandler: SubmitHandler<FormInputs> = (data: FormInputs) => {
-    axios.post(`${process.env.REACT_APP_API_URL}`+'/login', data)
-    .then(response=>
-      {console.log(response.data);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-    console.log('form data', data);
-  };
+  const formSubmithandler: SubmitHandler<FormInputs> = async (data: FormInputs) => {try {
+    const responseData = await LoginService(data); 
+  } catch (error) {
+    console.log(error);
+  }
 
+  };
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsEmailEmpty(event.target.value === '');
   };
@@ -54,8 +40,6 @@ export const useLoginForm = () => {
     errors,
     isEmailEmpty,
     isPasswordEmpty,
-    passwordValidationRules,
-    emailValidationRules,
     formSubmithandler,
     handleEmailChange,
     handlePasswordChange,
