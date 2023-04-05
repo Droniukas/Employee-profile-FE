@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import './ProjectProfiles.scss';
 import ProjectProfilesResult from './ProjectProfilesResults';
-import ProjectsResult from '../../../models/ProjectProfilesResult.interface';
-import {ProjectsService} from '../../../services/projects.service';
+import ProjectsResult from '../../models/ProjectProfilesResult.interface';
+import {ProjectsService} from '../../services/projects.service';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 

@@ -45,7 +45,7 @@ const SearchInput: React.FC<Props> = ({placeholder, onChange}) => {
                 onChange={(event) => onChange(event.target.value)}
             />
         </Box>
-    );
+        );
 };
 
 export default SearchInput;

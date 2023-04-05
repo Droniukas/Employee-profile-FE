@@ -1,41 +1,41 @@
-import React, {useEffect, useState} from 'react'
-import {Routes, Route, Link} from 'react-router-dom'
-import './Main.scss'
+import React, { useEffect, useState } from 'react'
+import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material'
 import Theme from '..//..//data/Theme'
-import {ROUTES} from '../routes/routes'
-import {CssBaseline, Box, Tabs, Tab, ThemeProvider} from '@mui/material'
 import FindEmployee from '../findEmployee/FindEmployee'
+import './Main.scss'
+import { Routes, Route, Link } from 'react-router-dom'
+import { ROUTES } from '../routes/routes'
 import Employee from '../../models/Employee.interface'
 import ProfileInfo from './profileInfo/ProfileInfo'
 import TabPanel from './TabPanel'
-import {EmployeeService} from '../../services/employee.service'
-import ProjectProfiles from './projectProfiles/ProjectProfiles';
+import { EmployeeService } from '../../services/employee.service'
+import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 
 function getIndexedProps(index: number) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    }
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  }
 }
 
 const Main = () => {
-    const [results, setResults] = useState<Employee>()
-    const [value, setValue] = React.useState(0)
+  const [results, setResults] = useState<Employee>()
+  const [value, setValue] = React.useState(0)
 
-    const employeeService = new EmployeeService()
+  const employeeService = new EmployeeService()
 
-    const getResults = async (id: string) => {
-        const result = await employeeService.getById(id)
-        setResults(result)
-    }
+  const getResults = async (id: string) => {
+    const result = await employeeService.getById(id)
+    setResults(result)
+  }
 
-    useEffect(() => {
-        getResults(`${process.env.REACT_APP_TEMP_USER_ID}`)
-    }, [])
+  useEffect(() => {
+    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`)
+  }, [])
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue)
-    }
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+  }
 
   return (
     <>
@@ -90,19 +90,13 @@ const Main = () => {
           </Tabs>
         </Box>
 
-                <Box display='flex'
-                     justifyContent='left'
-                     alignItems='left'
-                     paddingLeft='230px'>
-                    <Routes>
-                        <Route index
-                               path={ROUTES.HOME}
-                               element={
-                                   <TabPanel value={value}
-                                             index={0}>
-                                       Skills
-                                   </TabPanel>
-                               }/>
+        <Box display='flex' justifyContent='left' alignItems='left' paddingLeft='230px'>
+          <Routes>
+            <Route
+              index
+              path={ROUTES.HOME}
+              element={<TabPanel value={value} index={0}></TabPanel>}
+            />
 
             <Route
               path={ROUTES.ACHIEVEMENTS}
@@ -113,33 +107,36 @@ const Main = () => {
               }
             />
 
-                        <Route path={ROUTES.MY_PROJECTS}
-                               element={
-                                   <TabPanel value={value}
-                                             index={2}>
-                                       My projects
-                                   </TabPanel>
-                               }/>
+            <Route
+              path={ROUTES.MY_PROJECTS}
+              element={
+                <TabPanel value={value} index={2}>
+                  My projects
+                </TabPanel>
+              }
+            />
 
-                        <Route path={ROUTES.SEARCH}
-                               element={
-                                   <TabPanel value={value}
-                                             index={3}>
-                                       <FindEmployee/>
-                                   </TabPanel>
-                               }/>
+            <Route
+              path={ROUTES.SEARCH}
+              element={
+                <TabPanel value={value} index={3}>
+                  <FindEmployee />
+                </TabPanel>
+              }
+            />
 
-                        <Route path={ROUTES.PROJECT_PROFILES}
-                               element={
-                                   <TabPanel value={value}
-                                             index={4}>
-                                       <ProjectProfiles/>
-                                   </TabPanel>
-                               }/>
-                    </Routes>
-                </Box>
-            </ThemeProvider>
-        </>
+            <Route
+              path={ROUTES.PROJECT_PROFILES}
+              element={
+                <TabPanel value={value} index={4}>
+                    <ProjectProfiles/>
+                </TabPanel>
+              }
+            />
+          </Routes>
+        </Box>
+      </ThemeProvider>
+    </>
     )
 }
 
