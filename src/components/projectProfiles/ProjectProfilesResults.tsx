@@ -23,17 +23,17 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [projectToDelete, setProjectToDelete] = useState<ProjectsResult | null>(null);
 
-    function renderResultItem(result: ProjectsResult) {
-        const handleDeleteClick = () => {
-            setProjectToDelete(result);
-            setShowDeleteConfirmation(true);
-          };
-        
-        const handleDeleteConfirmationClose = () => {
-            setProjectToDelete(null);
-            setShowDeleteConfirmation(false);
-        };
+    const handleDeleteConfirmationClose = () => {
+        setProjectToDelete(null);
+        setShowDeleteConfirmation(false);
+    };
 
+    const handleDeleteClick = (result: ProjectsResult) => {
+        setProjectToDelete(result);
+        setShowDeleteConfirmation(true);
+    };
+
+    function renderResultItem(result: ProjectsResult) {
         return (
             <>
                 <ListItem alignItems='flex-start'
@@ -113,7 +113,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
                                             }}>
                                     <EditIcon/>
                                 </IconButton>
-                                <IconButton aria-label='delete'
+                                <IconButton className='btn-delete' aria-label='delete'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
@@ -121,16 +121,14 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
                                                 top: -35,
                                                 backgroundColor: '#F4F4F4',
                                             }}
-                                            onClick={handleDeleteClick}>
+                                            autoFocus={showDeleteConfirmation}
+                                            onClick={() => handleDeleteClick(result)}>
                                     <DeleteIcon/>
                                 </IconButton>
                             </Box>
                         </Grid>
                     </Grid>
                 </ListItem>
-                {showDeleteConfirmation && (
-                    <DeleteConfirmationDialog project={projectToDelete!} onClose={handleDeleteConfirmationClose} onDelete={handleProjectDelete} />
-                )}
             </>
         );
     }
@@ -260,11 +258,20 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
         );
     } else {
         return (
-            <List sx={{
-                width: '100%',
-            }}>
-                {results.map((result) => (renderResultItem(result)))}
-            </List>
+            <>
+                <List sx={{
+                    width: '100%',
+                }}>
+                    {results.map((result) => (renderResultItem(result)))}
+                </List>
+                {(showDeleteConfirmation && projectToDelete) && (
+                    <DeleteConfirmationDialog 
+                        project={projectToDelete} 
+                        onClose={handleDeleteConfirmationClose} 
+                        onDelete={handleProjectDelete}
+                    />
+                )}
+            </>
         );
     }
 };

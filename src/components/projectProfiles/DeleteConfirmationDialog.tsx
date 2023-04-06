@@ -28,7 +28,7 @@ type DeleteConfirmationDialogProps = {
     };
 
     return (
-      <Dialog open={true} maxWidth='md'>
+      <Dialog open={true} maxWidth='xl'>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <Typography>
