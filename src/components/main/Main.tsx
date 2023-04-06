@@ -9,6 +9,7 @@ import Employee from '../../models/Employee.interface'
 import ProfileInfo from './profileInfo/ProfileInfo'
 import TabPanel from './TabPanel'
 import { EmployeeService } from '../../services/employee.service'
+import ProjectProfiles from '../projectProfiles/ProjectProfiles'
 
 function getIndexedProps(index: number) {
   return {
@@ -94,7 +95,9 @@ const Main = () => {
             <Route
               index
               path={ROUTES.HOME}
-              element={<TabPanel value={value} index={0}></TabPanel>}
+              element={<TabPanel value={value} index={0}>
+                Skills
+            </TabPanel>}
             />
 
             <Route
@@ -128,7 +131,7 @@ const Main = () => {
               path={ROUTES.PROJECT_PROFILES}
               element={
                 <TabPanel value={value} index={4}>
-                  Project profiles
+                  <ProjectProfiles/>
                 </TabPanel>
               }
             />

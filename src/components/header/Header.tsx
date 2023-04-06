@@ -28,10 +28,10 @@ const Header = () => {
             <img src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png' alt='' className='image'></img>
             <div className='profile'>
                 <div className='roundBox'></div>
-                <PersonIcon sx={{width:50, 
-                                height: 50, 
-                                marginLeft: 1.9, 
-                                marginTop: 1.9, 
+                <PersonIcon sx={{width:50,
+                                height: 50,
+                                marginLeft: 1.9,
+                                marginTop: 1.9,
                                 color: 'linear-gradient(90deg, #3D54CE 0.02%, #35CACF 100.04%), #000048'}}/>
                 <h4 className='profileText'>My profile</h4>
             </div>
@@ -45,7 +45,7 @@ const Header = () => {
         <Box sx={{ position: 'fixed', zIndex: 4, backgroundColor:'#FFFFFF', borderBottom: 2, borderColor: 'divider', height:100, width: '100%', display:'flex', justifyContent:'right', alignItems:'right'}}>
             <div className='topHeader'>
             <NotificationsIcon sx={{width: 40, height: 40, marginRight:4, marginBottom: 1.1}}/>
-                <Avatar 
+                <Avatar
                 src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                 sx={{ width: 65, height: 65, marginTop: 1, display:'inline-block'}}/>
             </div>
