@@ -1,13 +1,13 @@
 import './App.css'
 import Login from './components/login/Login'
 import {ThemeProvider} from '@mui/material/styles';
-import theme from './config/theme';
+import Theme from './data/Theme';
 import Grid from '@mui/material/Grid';
+import LoginFooter from './components/login/LoginFooter';
 import Main from './components/main/Main';
 import React, { useState } from 'react'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
-import LoginFooter from './components/login/LoginFooter';
 import './App.scss'
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
@@ -19,7 +19,7 @@ enum AppState {
 }
 
 function App() {
-  const [appState, setAppState] = useState<AppState>(AppState.LANDING_PAGE);
+  const [appState, setAppState] = useState<AppState>(AppState.LOGIN_PAGE);
 
   return (
   <>
@@ -34,7 +34,7 @@ function App() {
                 Go to LOGIN (TEMPORARY)</Button>
             </NavLink>
           <Main />
-
+          
         </main>
         <footer>
           <Footer />
@@ -42,24 +42,23 @@ function App() {
       </body>
     )}
     {appState === AppState.LOGIN_PAGE && (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Theme}>
             <Grid
                 container sx={{
                 spacing: 0,
                 direction: 'column',
                 alignItems: 'center',
-                minHeight: '50vh',
                 justifyContent: 'center'
             }}
             >
-                <Login/>
+                <Login></Login>
                   <NavLink to={ROUTES.HOME}>
                     <Button title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120, backgroundColor: '#c8e6c9'}}
                   onClick={() => setAppState(AppState.LANDING_PAGE)}>
                     go to MAIN (TEMPORARY)</Button>
                   </NavLink>
-                  <LoginFooter/>
             </Grid>
+            <LoginFooter></LoginFooter>
       </ThemeProvider>
     )}
   </>
