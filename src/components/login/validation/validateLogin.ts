@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import axios, { AxiosHeaders } from 'axios';
 import {LoginService } from '../../../services/login.service';
 
 interface FormInputs {

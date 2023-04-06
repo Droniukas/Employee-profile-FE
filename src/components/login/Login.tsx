@@ -14,7 +14,6 @@ const Login: FC = () => {
     const {
         register,
         handleSubmit,
-        control,
         errors,
         isEmailEmpty,
         isPasswordEmpty,

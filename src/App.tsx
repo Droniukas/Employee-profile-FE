@@ -1,7 +1,7 @@
 import './App.css'
 import Login from './components/login/Login'
 import {ThemeProvider} from '@mui/material/styles';
-import Theme from './data/Theme';
+import theme from './config/theme';
 import Grid from '@mui/material/Grid';
 import LoginFooter from './components/login/LoginFooter';
 import Main from './components/main/Main';
@@ -42,7 +42,7 @@ function App() {
       </body>
     )}
     {appState === AppState.LOGIN_PAGE && (
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
             <Grid
                 container sx={{
                 spacing: 0,
