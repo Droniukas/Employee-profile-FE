@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProjectsResult from '../../models/ProjectProfilesResult.interface';
 import Employee from '../../models/Employee.interface';
 import Grid from '@mui/material/Grid';
@@ -12,13 +12,28 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import FolderIcon from '@mui/icons-material/Folder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 type Props = {
     results: ProjectsResult[];
+    handleProjectDelete: (id: string) => void;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({results}) => {
+const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) => {
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [projectToDelete, setProjectToDelete] = useState<ProjectsResult | null>(null);
+
     function renderResultItem(result: ProjectsResult) {
+        const handleDeleteClick = () => {
+            setProjectToDelete(result);
+            setShowDeleteConfirmation(true);
+          };
+        
+        const handleDeleteConfirmationClose = () => {
+            setProjectToDelete(null);
+            setShowDeleteConfirmation(false);
+        };
+
         return (
             <>
                 <ListItem alignItems='flex-start'
@@ -105,13 +120,17 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                                                 left: 470,
                                                 top: -35,
                                                 backgroundColor: '#F4F4F4',
-                                            }}>
+                                            }}
+                                            onClick={handleDeleteClick}>
                                     <DeleteIcon/>
                                 </IconButton>
                             </Box>
                         </Grid>
                     </Grid>
                 </ListItem>
+                {showDeleteConfirmation && (
+                    <DeleteConfirmationDialog project={projectToDelete!} onClose={handleDeleteConfirmationClose} onDelete={handleProjectDelete} />
+                )}
             </>
         );
     }

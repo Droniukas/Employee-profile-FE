@@ -6,34 +6,33 @@ import Typography from '@mui/material/Typography';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import ProjectsResult from '../../models/ProjectProfilesResult.interface';
-import { ProjectsService } from '../../services/projects.service';
 
 type DeleteConfirmationDialogProps = {
     project: ProjectsResult;
     onClose: () => void;
+    onDelete: (id: string) => void;
   };
   
   const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
     project,
     onClose,
+    onDelete,
   }) => {
-    const projectsService = new ProjectsService();
-    
     const handleDeleteClick = async () => {    
-        await projectsService.deleteProjectById(project.id);
+        onDelete(project.id);
         onClose();
     };
   
     const handleCancelClick = () => {
       onClose();
     };
-  
+
     return (
-      <Dialog open={true}>
+      <Dialog open={true} maxWidth='md'>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <Typography>
-            Deletion cannot be reverted. Are you sure project {project.title} should be deleted?
+            Deletion cannot be reverted. Are you sure project <Typography component="span" fontWeight="bold">{project.title}</Typography> should be deleted?
           </Typography>
         </DialogContent>
         <DialogActions>
