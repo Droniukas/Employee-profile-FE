@@ -98,6 +98,13 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
                               xs={6}>
                             <Box alignItems='flex-start'
                                  display='flex'>
+                                 <Avatar sx={{
+                                            width: 24,
+                                            height: 24,
+                                            display: {
+                                                xs: 'none',
+                                            }
+                                 }}/>
                                 {renderEmployeesAvatarGroup(result.employees)}
                             </Box>
                             <Box alignItems='flex-end'
@@ -152,13 +159,6 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
         return (
             <>
                 <AvatarGroup>
-                    <Avatar sx={{
-                        width: 24,
-                        height: 24,
-                        display: {
-                            xs: 'none',
-                        }
-                    }}/>
                     {employeesForAvatars.map((employee) => (renderEmployeeAvatar(employee)))}
                 </AvatarGroup>
                 {calculateAdditionalEmployees(employeeAmount)}
