@@ -5,4 +5,8 @@ export class ProjectsService {
         const response = await axios.get('/project/all', {});
         return response.data;
     };
+
+    public async deleteProjectById(id: string) {
+        await axios.patch(`/project/delete/${id}`, {});
+      }         
 }

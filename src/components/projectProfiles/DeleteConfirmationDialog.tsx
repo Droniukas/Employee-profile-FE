@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import ProjectsResult from '../../models/ProjectProfilesResult.interface';
+import { ProjectsService } from '../../services/projects.service';
 
 type DeleteConfirmationDialogProps = {
     project: ProjectsResult;
@@ -16,7 +17,10 @@ type DeleteConfirmationDialogProps = {
     project,
     onClose,
   }) => {
-    const handleDeleteClick = async () => {
+    const projectsService = new ProjectsService();
+    
+    const handleDeleteClick = async () => {    
+        await projectsService.deleteProjectById(project.id);
         onClose();
     };
   
