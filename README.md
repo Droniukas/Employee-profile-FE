@@ -39,6 +39,12 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+### `npm run pre-commit`
+
+Once done with your changes and ready to commit, please run this command.
+
+With that your code will be formatted by our code style and you’ll get immediate feedback on what might be off/not per guidelines. Like scss class names or unused variables and such and be sure to fix them where possible.
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).

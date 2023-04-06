@@ -1,12 +1,13 @@
 import Employee from './Employee.interface';
 
-interface ProjectProfilesResult {
+interface Project {
     id: string,
     title: string,
     startDate: string,
     endDate: string,
     description: string,
     employees: Employee[],
+    status: string,
 }
 
-export default ProjectProfilesResult;
+export default Project;

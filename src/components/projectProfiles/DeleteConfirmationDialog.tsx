@@ -5,10 +5,10 @@ import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import ProjectsResult from '../../models/ProjectProfilesResult.interface';
+import Project from '../../models/Project.interface';
 
 type DeleteConfirmationDialogProps = {
-  project: ProjectsResult;
+  project: Project;
   onClose: () => void;
   onDelete: (id: string) => void;
 };
