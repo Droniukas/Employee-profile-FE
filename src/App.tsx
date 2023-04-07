@@ -13,6 +13,7 @@ import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import {ROUTES} from './components/routes/routes'
 import ProfileInfo from './components/main/profileInfo/ProfileInfo';
+import TabPanel from './components/main/TabPanel';
 
 export enum AppState {
   LANDING_PAGE = 'LandingPage',
@@ -20,26 +21,22 @@ export enum AppState {
 }
 
 function App() {
-  const [appState, setAppState] = useState<AppState>(AppState.LOGIN_PAGE);
+  const [appState, setAppState] = useState<AppState>(AppState.LANDING_PAGE);
   const handleAppStateChange = (newState: AppState) => {setAppState(newState);};
 
   return (
   <>
     {appState === AppState.LANDING_PAGE && (
       <body>
-        <img src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png' alt='' className='img'></img>
         <main>
           <Header />
-            <NavLink to={ROUTES.LOGIN}>
-              <Button  title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120,  backgroundColor: '#c8e6c9'}}
-              onClick={() => setAppState(AppState.LOGIN_PAGE)}>
-                Go to LOGIN (TEMPORARY)</Button>
-            </NavLink>
+          <img src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png' alt='' className='img'></img>
+          <TabPanel index={0} value={0}/>
           <Main />
-        </main>
-        <footer>
+          <footer>
           <Footer />
         </footer>
+        </main>
       </body>
     )}
     {appState === AppState.LOGIN_PAGE && (
