@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 
 const ProjectProfiles = () => {
     const [results, setResults] = useState<ProjectsResult[]>([]);
-
+    const [openPopup, setOpenPopup] = useState<boolean>(false);
     const projectsService = new ProjectsService();
 
     useEffect(() => {
@@ -20,10 +20,15 @@ const ProjectProfiles = () => {
         setResults(result);
     };
 
-    const handleProjectDelete = async (id: string) => {
-        await projectsService.deleteProjectById(id);
-        setResults(results.filter((project) => project.id !== id));
-      };
+      const closeProjectForm = () => {
+        setOpenPopup(false);
+      }
+
+        const handleProjectDelete = async (id: string) => {
+            await projectsService.deleteProjectById(id);
+            setResults(results.filter((project) => project.id !== id));
+          };
+
 
     return (
         <div className='project-profiles-container'>
@@ -44,13 +49,14 @@ const ProjectProfiles = () => {
                     Add new project
                 </Button>
             </Box>
+             {openPopup && <ProjectForm onClose={closeProjectForm} />}
             <Box sx={{
                 position: 'relative',
                 my: 2,
                 width: 1344,
                 left: -200,
             }}>
-                <ProjectProfilesResult results={results} handleProjectDelete={handleProjectDelete}/>
+                <ProjectProfilesResult results={results}  handleProjectDelete={handleProjectDelete}/>
             </Box>
         </div>
     );
