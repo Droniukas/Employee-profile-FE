@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -9,11 +9,19 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { useLoginForm } from './validation/validateLogin';
 import { validationRules } from './validation/validationRules';
+import { useNavigate } from 'react-router-dom';
+import { AppState } from '../../App';
+import { LoginService } from '../../services/login.service';
 
-const Login: FC = () => {
+type LoginProps = {
+    setAppState: (newState: AppState) => void;
+  };
+
+const Login: React.FC<LoginProps> = ( { setAppState } ) => {
     const {
         register,
         handleSubmit,
+        control,
         errors,
         isEmailEmpty,
         isPasswordEmpty,
@@ -24,8 +32,17 @@ const Login: FC = () => {
     const {
         passwordValidationRules,
         emailValidationRules,
-
     } = validationRules();
+
+    const handleButtonClick = handleSubmit(async (data) => {
+      try {
+        const responseData = await LoginService(data);
+        setAppState(AppState.LANDING_PAGE);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  
 
     return (
         <Box sx={{
@@ -128,7 +145,9 @@ const Login: FC = () => {
                             fullWidth
                             variant="contained"
                             disabled={isEmailEmpty || isPasswordEmpty}
+                            onClick={handleButtonClick}
                             sx={{ my: 1 }}
+                            
 
                         >
                             Sign in
@@ -142,7 +161,7 @@ const Login: FC = () => {
                             <Typography sx={{ color: '#999999', }}>or</Typography>
                         </Divider>
                         <Button
-                            type="submit"
+                            type="submit"   
                             fullWidth
                             variant="text"
                             sx={{ bgcolor: 'secondary.main', my: 1 }}

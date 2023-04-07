@@ -1,15 +1,11 @@
-import axios from 'axios';
-interface FormInputs {
-    email: string;
-    password: string;
-  }
+import LoginInterface from '../models/Login.interface';
+import axios from './axios';
 
-export const LoginService = (data: FormInputs) => {
+export const LoginService = (data: LoginInterface) => {
   return axios.post(`${process.env.REACT_APP_API_URL}` + '/user/get', data)
     .then(response => {
       if (response.status === 200){
-        const redirectUrl = response.data.redirectUrl;
-        window.location.href = redirectUrl;
+        return data;
       }
       return response.data;
     })

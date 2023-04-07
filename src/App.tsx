@@ -12,14 +12,16 @@ import './App.scss'
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import {ROUTES} from './components/routes/routes'
+import ProfileInfo from './components/main/profileInfo/ProfileInfo';
 
-enum AppState {
+export enum AppState {
   LANDING_PAGE = 'LandingPage',
   LOGIN_PAGE = 'LoginPage'
 }
 
 function App() {
   const [appState, setAppState] = useState<AppState>(AppState.LOGIN_PAGE);
+  const handleAppStateChange = (newState: AppState) => {setAppState(newState);};
 
   return (
   <>
@@ -34,7 +36,6 @@ function App() {
                 Go to LOGIN (TEMPORARY)</Button>
             </NavLink>
           <Main />
-          
         </main>
         <footer>
           <Footer />
@@ -51,14 +52,9 @@ function App() {
                 justifyContent: 'center'
             }}
             >
-                <Login></Login>
-                  <NavLink to={ROUTES.HOME}>
-                    <Button title='go to main' style={{position:'relative', height:100, width:100, left: 120, top: 120, backgroundColor: '#c8e6c9'}}
-                  onClick={() => setAppState(AppState.LANDING_PAGE)}>
-                    go to MAIN (TEMPORARY)</Button>
-                  </NavLink>
+              <Login setAppState={handleAppStateChange} />
             </Grid>
-            <LoginFooter></LoginFooter>
+            <LoginFooter/>
       </ThemeProvider>
     )}
   </>
