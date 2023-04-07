@@ -1,3 +1,4 @@
+import { FormikValues } from 'formik';
 import axios from './axios';
 
 export class ProjectsService {
@@ -6,20 +7,20 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async createProject( project: FormikValues) {
+  public async createProject(project: FormikValues) {
     const response = await axios.post('/project', {
-      ...project
+      ...project,
     });
     return response.data;
   }
 
-  public async updateProject( project: FormikValues) {
+  public async updateProject(project: FormikValues) {
     const response = await axios.put('/project', {
-      ...project
+      ...project,
     });
     return response.data;
   }
-    public async deleteProjectById(id: string) {
-        await axios.patch(`/project/delete/${id}`, {});
-      }
+  public async deleteProjectById(id: string) {
+    await axios.patch(`/project/delete/${id}`, {});
+  }
 }

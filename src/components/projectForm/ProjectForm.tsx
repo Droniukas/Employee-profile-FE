@@ -92,7 +92,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
         <Button
           sx={{ width: 15, height: 30 }}
           onClick={() => {
-            dirty ? setConfirmationDialog(true) : onClose;
+            dirty ? setConfirmationDialog(true) : onClose();
           }}
         >
           <CloseIcon fontSize='medium' />
@@ -266,7 +266,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
             color='info'
             sx={{ m: 1 }}
             onClick={() => {
-              dirty ? setConfirmationDialog(true) : onClose;
+              dirty ? setConfirmationDialog(true) : onClose();
             }}
           >
             Cancel

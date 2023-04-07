@@ -1,4 +1,4 @@
-import React, { useRef, useState }  from 'react';
+import React, { useRef, useState } from 'react';
 import Employee from '../../models/Employee.interface';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -16,10 +16,11 @@ import Project from '../../models/Project.interface';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 type Props = {
-    results: Project[];
+  results: Project[];
+  handleProjectDelete: (id: string) => void;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) => {
+const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }) => {
   const [projectToEdit, setProjectToEdit] = useState<Project>();
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   // const buttonToFocusRef = useRef();
@@ -33,119 +34,132 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
     setOpenPopup(true);
   };
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [projectToDelete, setProjectToDelete] = useState<ProjectsResult | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
-    const handleDeleteConfirmationClose = () => {
-        setProjectToDelete(null);
-        setShowDeleteConfirmation(false);
-    };
+  const handleDeleteConfirmationClose = () => {
+    setProjectToDelete(null);
+    setShowDeleteConfirmation(false);
+  };
 
-    const handleDeleteClick = (result: ProjectsResult) => {
-        setProjectToDelete(result);
-        setShowDeleteConfirmation(true);
-    };
-    function renderResultItem(result: Project) {
-        return (
-          <div key={result.id}>
-                <ListItem alignItems='flex-start'
-                          sx={{
-                              border: 1,
-                              borderColor: '#DDDDDD',
-                              borderRadius: 2,
-                              backgroundColor: 'white',
-                              mb: 1,
-                          }}>
-                    <Grid container
-                          direction='row'
-                          justifyContent='flex-start'
-                          alignItems='center'
-                          spacing={0.5}>
-                        <Grid item
-                              xs={1}>
-                            <Box display='flex'
-                                 sx={{
-                                     border: 1,
-                                     borderColor: '#DDDDDD',
-                                     borderRadius: '50%',
-                                     width: 56,
-                                     height: 56,
-                                     justifyContent: 'center',
-                                     alignItems: 'center',
-                                 }}>
-                                <FolderIcon sx={{
-                                    color: '#000048',
-                                    fontSize: 26,
-                                }}/>
-                            </Box>
-                        </Grid>
-                        <Grid item
-                              xs={5}>
-                            <Typography sx={{
-                                color: '#666666',
-                                fontSize: 14,
-                                pt: 1,
-                            }}>
-                                {correctDateFormat(result.startDate)} -{' '} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
-                            </Typography>
-                            <Typography sx={{
-                                color: '#000048',
-                                fontSize: 20,
-                            }}>
-                                {result.title}
-                            </Typography>
-                            <Typography sx={{
-                                color: '#666666',
-                                fontSize: 14,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                display: '-webkit-box',
-                                WebkitLineClamp: '3',
-                                WebkitBoxOrient: 'vertical',
-                            }}>
-                                {result.description}
-                            </Typography>
-                        </Grid>
-                        <Grid item
-                              xs={6}>
-                            <Box alignItems='flex-start'
-                                 display='flex'>
-                                {renderEmployeesAvatarGroup(result.employees)}
-                            </Box>
-                            <Box alignItems='flex-end'
-                                 display='flex'>
-                                {setStatus(result.startDate, result.endDate)}
-                                <IconButton 
-                                className='btn-edit'
-                                aria-label='edit'
-                                            sx={{
-                                                color: '#000048',
-                                                position: 'relative',
-                                                left: 455,
-                                                top: -35,
-                                                backgroundColor: '#F4F4F4',
-                                            }}
-                                            onClick={() => setProject(result)}
-                                            >
-                                    <EditIcon/>
-                                </IconButton>
-                                <IconButton className='btn-delete' aria-label='delete'
-                                            sx={{
-                                                color: '#000048',
-                                                position: 'relative',
-                                                left: 470,
-                                                top: -35,
-                                                backgroundColor: '#F4F4F4',
-                                            }}
-                                            onClick={() => handleDeleteClick(result)}>
-                                    <DeleteIcon/>
-                                </IconButton>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </ListItem>
-            </div>
-        );
-    }
+  const handleDeleteClick = (result: Project) => {
+    setProjectToDelete(result);
+    setShowDeleteConfirmation(true);
+  };
+  function renderResultItem(result: Project) {
+    return (
+      <div key={result.id}>
+        <ListItem
+          alignItems='flex-start'
+          sx={{
+            border: 1,
+            borderColor: '#DDDDDD',
+            borderRadius: 2,
+            backgroundColor: 'white',
+            mb: 1,
+          }}
+        >
+          <Grid
+            container
+            direction='row'
+            justifyContent='flex-start'
+            alignItems='center'
+            spacing={0.5}
+          >
+            <Grid item xs={1}>
+              <Box
+                display='flex'
+                sx={{
+                  border: 1,
+                  borderColor: '#DDDDDD',
+                  borderRadius: '50%',
+                  width: 56,
+                  height: 56,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <FolderIcon
+                  sx={{
+                    color: '#000048',
+                    fontSize: 26,
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={5}>
+              <Typography
+                sx={{
+                  color: '#666666',
+                  fontSize: 14,
+                  pt: 1,
+                }}
+              >
+                {correctDateFormat(result.startDate)} - -{' '}
+                {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+              </Typography>
+              <Typography
+                sx={{
+                  color: '#000048',
+                  fontSize: 20,
+                }}
+              >
+                {result.title}
+              </Typography>
+              <Typography
+                sx={{
+                  color: '#666666',
+                  fontSize: 14,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: '3',
+                  WebkitBoxOrient: 'vertical',
+                }}
+              >
+                {result.description}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Box alignItems='flex-start' display='flex'>
+                {renderEmployeesAvatarGroup(result.employees)}
+              </Box>
+              <Box alignItems='flex-end' display='flex'>
+                {setStatus(result.startDate, result.endDate)}
+                <IconButton
+                  className='btn-edit'
+                  aria-label='edit'
+                  sx={{
+                    color: '#000048',
+                    position: 'relative',
+                    left: 455,
+                    top: -35,
+                    backgroundColor: '#F4F4F4',
+                  }}
+                  onClick={() => setProject(result)}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  className='btn-delete'
+                  aria-label='delete'
+                  sx={{
+                    color: '#000048',
+                    position: 'relative',
+                    left: 470,
+                    top: -35,
+                    backgroundColor: '#F4F4F4',
+                  }}
+                  onClick={() => handleDeleteClick(result)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Grid>
+          </Grid>
+        </ListItem>
+      </div>
+    );
+  }
 
   function correctDateFormat(date: string) {
     if (date === null) {
@@ -183,16 +197,18 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
     );
   }
 
-    function renderEmployeeAvatar(employee: Employee) {
-        return (
-            <Avatar key = {employee.id}
-                    src={`data:${employee.imageType};base64,${employee.imageBytes}`}
-                    sx={{
-                        width: 24,
-                        height: 24,
-                    }}/>
-        );
-    }
+  function renderEmployeeAvatar(employee: Employee) {
+    return (
+      <Avatar
+        key={employee.id}
+        src={`data:${employee.imageType};base64,${employee.imageBytes}`}
+        sx={{
+          width: 24,
+          height: 24,
+        }}
+      />
+    );
+  }
 
   function calculateAdditionalEmployees(avatarsUsed: number) {
     if (avatarsUsed > 3) {
@@ -262,38 +278,46 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
     );
   }
 
-    if (!results.length) {
-        return (
-            <List sx={{
-                width: '100%',
-            }}>
-                <ListItem alignItems='flex-start'>
-                    <Typography sx={{
-                        color: '#000048',
-                        fontSize: 20,
-                    }}>
-                        No projects added.
-                    </Typography>
-                </ListItem>
-            </List>
-        );
-    } else {
-        return (
-            <List sx={{
-                width: '100%',
-            }}>
-                {results.map((result) => (renderResultItem(result)))}
-            </List>
-             {openPopup && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
-             {(showDeleteConfirmation && projectToDelete) && (
-              <DeleteConfirmationDialog 
-                  project={projectToDelete} 
-                  onClose={handleDeleteConfirmationClose} 
-                  onDelete={handleProjectDelete}
-              />
-          )}
-        );
-    }
+  if (!results.length) {
+    return (
+      <List
+        sx={{
+          width: '100%',
+        }}
+      >
+        <ListItem alignItems='flex-start'>
+          <Typography
+            sx={{
+              color: '#000048',
+              fontSize: 20,
+            }}
+          >
+            No projects added.
+          </Typography>
+        </ListItem>
+      </List>
+    );
+  } else {
+    return (
+      <>
+        {openPopup && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {showDeleteConfirmation && projectToDelete && (
+          <DeleteConfirmationDialog
+            project={projectToDelete}
+            onClose={handleDeleteConfirmationClose}
+            onDelete={handleProjectDelete}
+          />
+        )}
+        <List
+          sx={{
+            width: '100%',
+          }}
+        >
+          {results.map((result) => renderResultItem(result))}
+        </List>
+      </>
+    );
+  }
 };
 
 export default ProjectProfilesResult;
