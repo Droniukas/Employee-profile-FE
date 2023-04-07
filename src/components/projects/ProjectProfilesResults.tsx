@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Employee from '../../models/Employee.interface';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -21,11 +21,6 @@ type Props = {
 const ProjectProfilesResult: React.FC<Props> = ({ results }) => {
   const [projectToEdit, setProjectToEdit] = useState<Project>();
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  // const buttonToFocusRef = useRef();
-
-  const closeEditForm = () => {
-    setOpenPopup(false);
-  };
 
   const setProject = (project: Project) => {
     setProjectToEdit(project);
@@ -282,7 +277,9 @@ const ProjectProfilesResult: React.FC<Props> = ({ results }) => {
   } else {
     return (
       <>
-        {openPopup && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && (
+          <ProjectForm openPopup={openPopup} setOpenPopup={setOpenPopup} project={projectToEdit} />
+        )}
         <List
           sx={{
             width: '100%',
