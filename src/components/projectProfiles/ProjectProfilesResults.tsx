@@ -103,7 +103,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
                             <Box alignItems='flex-end'
                                  display='flex'>
                                 {setStatus(result.startDate, result.endDate)}
-                                <IconButton aria-label='edit'
+                                <IconButton className='btn-edit' aria-label='edit'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',

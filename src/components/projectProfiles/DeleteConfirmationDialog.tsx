@@ -8,41 +8,44 @@ import Button from '@mui/material/Button';
 import ProjectsResult from '../../models/ProjectProfilesResult.interface';
 
 type DeleteConfirmationDialogProps = {
-    project: ProjectsResult;
-    onClose: () => void;
-    onDelete: (id: string) => void;
-  };
-  
-  const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
-    project,
-    onClose,
-    onDelete,
-  }) => {
-    const handleDeleteClick = async () => {    
-        onDelete(project.id);
-        onClose();
-    };
-  
-    const handleCancelClick = () => {
-      onClose();
-    };
+  project: ProjectsResult;
+  onClose: () => void;
+  onDelete: (id: string) => void;
+};
 
-    return (
-      <Dialog open={true} maxWidth='xl'>
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Deletion cannot be reverted. Are you sure project <Typography component="span" fontWeight="bold">{project.title}</Typography> should be deleted?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelClick}>Cancel</Button>
-          <Button onClick={handleDeleteClick} color='error'>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
+  project,
+  onClose,
+  onDelete,
+}) => {
+  const handleDeleteClick = async () => {
+    onDelete(project.id);
+    onClose();
   };
-  
-  export default DeleteConfirmationDialog;
+
+  const handleCancelClick = () => {
+    onClose();
+  };
+
+  return (
+    <Dialog open={true} maxWidth='xl'>
+      <DialogTitle>Confirm Deletion</DialogTitle>
+      <DialogContent>
+        <Typography>
+          Are you sure project{' '}
+          <Typography component='span' fontWeight='bold'>
+            {project.title}
+          </Typography>
+          {' '}should be deleted?
+        </Typography>
+        <Typography>Deletion cannot be reverted.</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancelClick}>Cancel</Button>
+        <Button onClick={handleDeleteClick} color='error'>Delete</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export default DeleteConfirmationDialog;
