@@ -18,7 +18,7 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
   onClose,
   onDelete,
 }) => {
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = () => {
     onDelete(project.id);
     onClose();
   };
