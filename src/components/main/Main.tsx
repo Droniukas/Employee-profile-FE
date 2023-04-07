@@ -1,41 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material'
-import Theme from '..//..//data/Theme'
-import FindEmployee from '../findEmployee/FindEmployee'
-import './Main.scss'
-import { Routes, Route, Link } from 'react-router-dom'
-import { ROUTES } from '../routes/routes'
-import Employee from '../../models/Employee.interface'
-import ProfileInfo from './profileInfo/ProfileInfo'
-import TabPanel from './TabPanel'
-import { EmployeeService } from '../../services/employee.service'
-import ProjectProfiles from '../projectProfiles/ProjectProfiles'
+import React, { useEffect, useState } from 'react';
+import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material';
+import Theme from '..//..//data/Theme';
+import FindEmployee from '../findEmployee/FindEmployee';
+import './Main.scss';
+import { Routes, Route, Link } from 'react-router-dom';
+import { ROUTES } from '../routes/routes';
+import Employee from '../../models/Employee.interface';
+import ProfileInfo from './profileInfo/ProfileInfo';
+import TabPanel from './TabPanel';
+import { EmployeeService } from '../../services/employee.service';
+import ProjectProfiles from '../projects/projectProfiles/ProjectProfiles';
 
 function getIndexedProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
-  }
+  };
 }
 
 const Main = () => {
-  const [results, setResults] = useState<Employee>()
-  const [value, setValue] = React.useState(0)
+  const [results, setResults] = useState<Employee>();
+  const [value, setValue] = React.useState(0);
 
-  const employeeService = new EmployeeService()
+  const employeeService = new EmployeeService();
 
   const getResults = async (id: string) => {
-    const result = await employeeService.getById(id)
-    setResults(result)
-  }
+    const result = await employeeService.getById(id);
+    setResults(result);
+  };
 
   useEffect(() => {
-    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`)
-  }, [])
+    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
-  }
+    setValue(newValue);
+  };
 
   return (
     <>
@@ -95,9 +95,11 @@ const Main = () => {
             <Route
               index
               path={ROUTES.HOME}
-              element={<TabPanel value={value} index={0}>
-                Skills
-            </TabPanel>}
+              element={
+                <TabPanel value={value} index={0}>
+                  Skills
+                </TabPanel>
+              }
             />
 
             <Route
@@ -131,7 +133,7 @@ const Main = () => {
               path={ROUTES.PROJECT_PROFILES}
               element={
                 <TabPanel value={value} index={4}>
-                  <ProjectProfiles/>
+                  <ProjectProfiles />
                 </TabPanel>
               }
             />
@@ -139,7 +141,7 @@ const Main = () => {
         </Box>
       </ThemeProvider>
     </>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
