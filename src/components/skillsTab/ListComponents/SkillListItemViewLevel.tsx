@@ -1,11 +1,11 @@
-import { ThemeProvider, Tooltip, Typography } from '@mui/material'
-import Theme from '../../../data/theme'
-import { SkillLevel } from '../models/enums/SkillLevel'
+import { ThemeProvider, Tooltip, Typography } from '@mui/material';
+import Theme from '../../../data/Theme';
+import { SkillLevel } from '../models/enums/SkillLevel';
 
 type Props = {
-  primaryText: SkillLevel | null
-  tooltipText: string
-}
+  primaryText: SkillLevel | null;
+  tooltipText: string;
+};
 
 function SkillListItemLevel({ primaryText, tooltipText }: Props) {
   return (
@@ -30,7 +30,7 @@ function SkillListItemLevel({ primaryText, tooltipText }: Props) {
         </Typography>
       </Tooltip>
     </ThemeProvider>
-  )
+  );
 }
 
-export default SkillListItemLevel
+export default SkillListItemLevel;

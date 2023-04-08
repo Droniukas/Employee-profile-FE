@@ -1,0 +1,30 @@
+.name {
+    position: absolute;
+    height: 40px;
+    left: 5vw;
+    top: 320px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    color: #000048;
+}
+
+.position {
+    position: absolute;
+    height: 20px;
+    left: 5vw;
+    top: 365px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #666666;}
+
+.main {
+    width: 100vw;
+    min-height: calc(100vh - 400px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}

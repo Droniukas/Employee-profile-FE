@@ -6,11 +6,7 @@
 .pnp.js
 /temp
 /src/forTesting
-/src/components/skills-tab-tree
-/src/components/skills-tab-2
-/src/components/skills-tab-3
 /personal
-
 # testing
 /coverage
 
@@ -27,3 +23,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.idea

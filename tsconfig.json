@@ -20,5 +20,5 @@
     "strictNullChecks": true,
     "downlevelIteration": true
   },
-  "include": ["src"]
+  "include": ["src", "server"]
 }

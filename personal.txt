@@ -9,3 +9,5 @@
 ask about should you put your code into service or controller
 
 insert all data into DB
+
+rename skill tab data to skillsTabData

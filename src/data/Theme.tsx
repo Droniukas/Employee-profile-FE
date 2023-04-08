@@ -1,8 +1,9 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles';
+import { checkboxClasses } from '@mui/material/Checkbox';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
-    greyBtn: true
+    greyBtn: true;
   }
 }
 
@@ -47,15 +48,11 @@ const Theme = createTheme({
       styleOverrides: {
         root: {
           color: '#adaec3',
+          [`&.${checkboxClasses.checked}`]: {
+            color: '#adaec3',
+          },
         },
         checked: {},
-      },
-    },
-    MuiFormControlLabel: {
-      styleOverrides: {
-        root: {
-          marginRight: '1px',
-        },
       },
     },
     MuiList: {
@@ -74,7 +71,14 @@ const Theme = createTheme({
         },
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        root: {
+          marginRight: '2px',
+        },
+      },
+    },
   },
-})
+});
 
-export default Theme
+export default Theme;
