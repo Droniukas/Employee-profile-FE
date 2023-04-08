@@ -1,26 +1,16 @@
-import './App.css'
 import Login from './components/login/Login'
-import {ThemeProvider} from '@mui/material/styles';
-import Theme from './data/Theme';
-import Grid from '@mui/material/Grid';
-import Footer from './components/login/Footer';
+import { ThemeProvider } from '@mui/material/styles'
+import theme from './data/theme'
+import SkillsTabData from './components/skillsTab/SkillsTabData'
 
 function App() {
-  return ( 
-    <ThemeProvider theme={Theme}>
-    <Grid
-  container sx={{
-  spacing:0,
-  direction:'column',
-  alignItems:'center',
-  justifyContent:'center'
-}}
->
-    <Login></Login>
-    </Grid>
-    <Footer></Footer>
-    </ThemeProvider>
-  );
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <SkillsTabData />
+      </ThemeProvider>
+    </>
+  )
 }
 
 export default App
