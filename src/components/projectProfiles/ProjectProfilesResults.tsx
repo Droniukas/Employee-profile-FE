@@ -35,7 +35,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
 
     function renderResultItem(result: ProjectsResult) {
         return (
-            <>
+            <div key={result.id}>
                 <ListItem alignItems='flex-start'
                           sx={{
                               border: 1,
@@ -121,7 +121,6 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
                                                 top: -35,
                                                 backgroundColor: '#F4F4F4',
                                             }}
-                                            autoFocus={showDeleteConfirmation}
                                             onClick={() => handleDeleteClick(result)}>
                                     <DeleteIcon/>
                                 </IconButton>
@@ -129,7 +128,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
                         </Grid>
                     </Grid>
                 </ListItem>
-            </>
+            </div>
         );
     }
 
@@ -169,7 +168,8 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) 
 
     function renderEmployeeAvatar(employee: Employee) {
         return (
-            <Avatar src={`data:${employee.imageType};base64,${employee.imageBytes}`}
+            <Avatar key = {employee.id}
+                    src={`data:${employee.imageType};base64,${employee.imageBytes}`}
                     sx={{
                         width: 24,
                         height: 24,
