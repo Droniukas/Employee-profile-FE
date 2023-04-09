@@ -19,7 +19,7 @@ import Project from '../../models/Project.interface';
 import { FormikValues, useFormik } from 'formik';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { projectSchema } from '../../schemas/projectSchema';
+import {projectSchema} from '../../schemas/projectSchema';
 import dayjs from 'dayjs';
 
 type Props = {
