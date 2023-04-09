@@ -7,6 +7,7 @@ interface ProjectProfilesResult {
     endDate: string,
     description: string,
     employees: Employee[],
+    status: string,
 }
 
 export default ProjectProfilesResult;
