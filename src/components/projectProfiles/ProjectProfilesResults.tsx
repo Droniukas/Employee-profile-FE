@@ -14,10 +14,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ProjectForm from '../projectForm/ProjectForm';
 import Project from '../../models/Project.interface';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import { ButtonBaseActions } from '@mui/material';
 
 type Props = {
   results: Project[];
+  rerender: () => void;
   handleProjectDelete: (id: string) => void;
   focusProjectId?: string;
 };
@@ -26,16 +26,19 @@ const ProjectProfilesResult: React.FC<Props> = ({
   results,
   handleProjectDelete,
   focusProjectId,
+  rerender
 }) => {
-  const [projectToEdit, setProjectToEdit] = useState<Project>();
+  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
-  const closeEditForm = () => {
+  const closeEditForm = (projectId?: string) => {
     setOpenPopup(false);
+    setProjectToEdit(null);
+    rerender();
   };
 
   useEffect(() => {
@@ -48,7 +51,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
     setProjectToEdit(project);
     setOpenPopup(true);
   };
-  
+
   const handleDeleteConfirmationClose = () => {
     setProjectToDelete(null);
     setShowDeleteConfirmation(false);
@@ -315,7 +318,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
   } else {
     return (
       <>
-        {openPopup && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {(openPopup && projectToEdit) && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}

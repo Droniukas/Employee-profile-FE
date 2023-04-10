@@ -17,6 +17,10 @@ const ProjectProfiles = () => {
     getResults();
   }, []);
 
+  const rerenderProjects = () => {
+    getResults();
+  }
+
   const getResults = async () => {
     const result = await projectsService.getAllProjects();
     setResults(result);
@@ -66,10 +70,14 @@ const ProjectProfiles = () => {
           left: -200,
         }}
       >
-        <ProjectProfilesResult results={results} handleProjectDelete={handleProjectDelete} focusProjectId={addedProjectId}/>
+        <ProjectProfilesResult rerender={rerenderProjects} results={results} handleProjectDelete={handleProjectDelete} focusProjectId={addedProjectId}/>
       </Box>
     </div>
   );
 };
 
 export default ProjectProfiles;
+function forceUpdate() {
+  throw new Error('Function not implemented.');
+}
+

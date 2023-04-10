@@ -41,18 +41,19 @@ const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
     employees: [],
   };
 
-  const handleFormSubmit = async (values: FormikValues) => {
+  const handleFormSubmit = async () => {
     let result;
     values.title.trim();
     values.description.trim();
 
-    if (project) result = await projectsService.updateProject(values);
-    else result = await projectsService.createProject(values);
-
-    resetForm();
-
-    if(!project) onClose(result.id);
-    else onClose();
+    if (project) {
+      result = await projectsService.updateProject(values);
+      onClose();
+    }
+    else {
+      result = await projectsService.createProject(values);
+      onClose(result.id);
+    }
   };
 
   if (project) initialValues = project;
@@ -61,12 +62,10 @@ const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
     touched,
     errors,
     dirty,
-    resetForm,
     handleBlur,
     handleChange,
     setFieldValue,
     setFieldTouched,
-    handleSubmit,
   } = useFormik({
     initialValues,
     onSubmit: handleFormSubmit,
@@ -273,7 +272,10 @@ const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
           >
             Cancel
           </Button>
-          <Button sx={{ m: 1 }} variant='contained' onClick={() => handleSubmit()}>
+          <Button 
+          sx={{ m: 1 }} 
+          variant='contained' 
+          onClick={handleFormSubmit}>
             Save
           </Button>
         </Box>
