@@ -10,6 +10,7 @@ import ProjectForm from '../projectForm/ProjectForm';
 const ProjectProfiles = () => {
   const [results, setResults] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
+  const [addedProjectId, setAddedProjectId] = useState<string>('');
   const projectsService = new ProjectsService();
 
   useEffect(() => {
@@ -21,8 +22,10 @@ const ProjectProfiles = () => {
     setResults(result);
   };
 
-  const closeProjectForm = () => {
+  const closeProjectForm = (projectId?: string) => {
     setOpenPopup(false);
+    if (projectId) setAddedProjectId(projectId);
+    getResults();
   };
 
   const handleProjectDelete = async (id: string) => {
@@ -63,7 +66,7 @@ const ProjectProfiles = () => {
           left: -200,
         }}
       >
-        <ProjectProfilesResult results={results} handleProjectDelete={handleProjectDelete} />
+        <ProjectProfilesResult results={results} handleProjectDelete={handleProjectDelete} focusProjectId={addedProjectId}/>
       </Box>
     </div>
   );

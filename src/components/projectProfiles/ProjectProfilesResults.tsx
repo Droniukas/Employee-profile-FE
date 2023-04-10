@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Employee from '../../models/Employee.interface';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,28 +14,41 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ProjectForm from '../projectForm/ProjectForm';
 import Project from '../../models/Project.interface';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import { ButtonBaseActions } from '@mui/material';
 
 type Props = {
   results: Project[];
   handleProjectDelete: (id: string) => void;
+  focusProjectId?: string;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }) => {
+const ProjectProfilesResult: React.FC<Props> = ({
+  results,
+  handleProjectDelete,
+  focusProjectId,
+}) => {
   const [projectToEdit, setProjectToEdit] = useState<Project>();
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  // const buttonToFocusRef = useRef();
+  const buttonToFocusRef = useRef<HTMLButtonElement>(null);
+
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
   const closeEditForm = () => {
     setOpenPopup(false);
   };
 
+  useEffect(() => {
+    if (buttonToFocusRef.current) {
+      buttonToFocusRef.current.focus();
+    }
+  }, [buttonToFocusRef.current]);
+
   const setProject = (project: Project) => {
     setProjectToEdit(project);
     setOpenPopup(true);
   };
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-
+  
   const handleDeleteConfirmationClose = () => {
     setProjectToDelete(null);
     setShowDeleteConfirmation(false);
@@ -45,6 +58,7 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
     setProjectToDelete(result);
     setShowDeleteConfirmation(true);
   };
+
   function renderResultItem(result: Project) {
     return (
       <div key={result.id}>
@@ -126,6 +140,7 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
               <Box alignItems='flex-end' display='flex'>
                 {setStatus(result.startDate, result.endDate)}
                 <IconButton
+                  ref={focusProjectId === result.id ? buttonToFocusRef : null}
                   className='btn-edit'
                   aria-label='edit'
                   sx={{

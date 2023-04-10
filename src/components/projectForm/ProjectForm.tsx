@@ -23,11 +23,11 @@ import {projectSchema} from '../../schemas/projectSchema';
 import dayjs from 'dayjs';
 
 type Props = {
-  onClose: () => void;
+  onClose: (projectId?:string) => void;
   project?: Project;
 };
 
-const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
+const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
 
@@ -50,7 +50,9 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
     else result = await projectsService.createProject(values);
 
     resetForm();
-    onClose();
+
+    if(!project) onClose(result.id);
+    else onClose();
   };
 
   if (project) initialValues = project;
@@ -82,7 +84,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           <Button onClick={() => setConfirmationDialog(false)} color='error' variant='contained'>
             Cancel
           </Button>
-          <Button onClick={onClose} sx={{ m: 1 }} variant='contained'>
+          <Button onClick={() => onClose()} sx={{ m: 1 }} variant='contained'>
             confirm
           </Button>
         </DialogActions>
