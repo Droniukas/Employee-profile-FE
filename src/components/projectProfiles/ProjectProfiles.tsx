@@ -20,6 +20,11 @@ const ProjectProfiles = () => {
         setResults(result);
     };
 
+    const handleProjectDelete = async (id: string) => {
+        await projectsService.deleteProjectById(id);
+        setResults(results.filter((project) => project.id !== id));
+      };
+
     return (
         <div className='project-profiles-container'>
             <Box display='flex'
@@ -45,7 +50,7 @@ const ProjectProfiles = () => {
                 width: 1344,
                 left: -200,
             }}>
-                <ProjectProfilesResult results={results}/>
+                <ProjectProfilesResult results={results} handleProjectDelete={handleProjectDelete}/>
             </Box>
         </div>
     );

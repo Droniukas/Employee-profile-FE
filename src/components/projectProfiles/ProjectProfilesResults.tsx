@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProjectsResult from '../../models/ProjectProfilesResult.interface';
 import Employee from '../../models/Employee.interface';
 import Grid from '@mui/material/Grid';
@@ -12,15 +12,30 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import FolderIcon from '@mui/icons-material/Folder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 type Props = {
     results: ProjectsResult[];
+    handleProjectDelete: (id: string) => void;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({results}) => {
+const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete}) => {
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [projectToDelete, setProjectToDelete] = useState<ProjectsResult | null>(null);
+
+    const handleDeleteConfirmationClose = () => {
+        setProjectToDelete(null);
+        setShowDeleteConfirmation(false);
+    };
+
+    const handleDeleteClick = (result: ProjectsResult) => {
+        setProjectToDelete(result);
+        setShowDeleteConfirmation(true);
+    };
+
     function renderResultItem(result: ProjectsResult) {
         return (
-            <>
+            <div key={result.id}>
                 <ListItem alignItems='flex-start'
                           sx={{
                               border: 1,
@@ -88,7 +103,7 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                             <Box alignItems='flex-end'
                                  display='flex'>
                                 {setStatus(result.startDate, result.endDate)}
-                                <IconButton aria-label='edit'
+                                <IconButton className='btn-edit' aria-label='edit'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
@@ -98,21 +113,22 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
                                             }}>
                                     <EditIcon/>
                                 </IconButton>
-                                <IconButton aria-label='delete'
+                                <IconButton className='btn-delete' aria-label='delete'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
                                                 left: 470,
                                                 top: -35,
                                                 backgroundColor: '#F4F4F4',
-                                            }}>
+                                            }}
+                                            onClick={() => handleDeleteClick(result)}>
                                     <DeleteIcon/>
                                 </IconButton>
                             </Box>
                         </Grid>
                     </Grid>
                 </ListItem>
-            </>
+            </div>
         );
     }
 
@@ -152,7 +168,8 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
 
     function renderEmployeeAvatar(employee: Employee) {
         return (
-            <Avatar src={`data:${employee.imageType};base64,${employee.imageBytes}`}
+            <Avatar key = {employee.id}
+                    src={`data:${employee.imageType};base64,${employee.imageBytes}`}
                     sx={{
                         width: 24,
                         height: 24,
@@ -241,11 +258,20 @@ const ProjectProfilesResult: React.FC<Props> = ({results}) => {
         );
     } else {
         return (
-            <List sx={{
-                width: '100%',
-            }}>
-                {results.map((result) => (renderResultItem(result)))}
-            </List>
+            <>
+                <List sx={{
+                    width: '100%',
+                }}>
+                    {results.map((result) => (renderResultItem(result)))}
+                </List>
+                {(showDeleteConfirmation && projectToDelete) && (
+                    <DeleteConfirmationDialog 
+                        project={projectToDelete} 
+                        onClose={handleDeleteConfirmationClose} 
+                        onDelete={handleProjectDelete}
+                    />
+                )}
+            </>
         );
     }
 };
