@@ -1,10 +1,11 @@
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Typography from '@mui/material/Typography';
-import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Typography from '@mui/material/Typography';
+import React from 'react';
+
 import Project from '../../models/Project.interface';
 
 type DeleteConfirmationDialogProps = {
@@ -35,14 +36,16 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
           Are you sure project{' '}
           <Typography component='span' fontWeight='bold'>
             {project.title}
-          </Typography>
-          {' '}should be deleted?
+          </Typography>{' '}
+          should be deleted?
         </Typography>
         <Typography>Deletion cannot be reverted.</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancelClick}>Cancel</Button>
-        <Button onClick={handleDeleteClick} color='error'>Delete</Button>
+        <Button onClick={handleDeleteClick} color='error'>
+          Delete
+        </Button>
       </DialogActions>
     </Dialog>
   );

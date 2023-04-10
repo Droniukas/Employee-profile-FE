@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import './ProjectProfiles.scss';
-import ProjectProfilesResult from './ProjectProfilesResults';
-import Project from '../../models/Project.interface';
-import { ProjectsService } from '../../services/projects.service';
+
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import React, { useEffect, useState } from 'react';
+
+import Project from '../../models/Project.interface';
+import { ProjectsService } from '../../services/projects.service';
 import ProjectForm from '../projectForm/ProjectForm';
+import ProjectProfilesResult from './ProjectProfilesResults';
 
 const ProjectProfiles = () => {
   const [results, setResults] = useState<Project[]>([]);
@@ -19,7 +21,7 @@ const ProjectProfiles = () => {
 
   const rerenderProjects = () => {
     getResults();
-  }
+  };
 
   const getResults = async () => {
     const result = await projectsService.getAllProjects();
@@ -70,7 +72,12 @@ const ProjectProfiles = () => {
           left: -200,
         }}
       >
-        <ProjectProfilesResult rerender={rerenderProjects} results={results} handleProjectDelete={handleProjectDelete} focusProjectId={addedProjectId}/>
+        <ProjectProfilesResult
+          rerender={rerenderProjects}
+          results={results}
+          handleProjectDelete={handleProjectDelete}
+          focusProjectId={addedProjectId}
+        />
       </Box>
     </div>
   );
@@ -80,4 +87,3 @@ export default ProjectProfiles;
 function forceUpdate() {
   throw new Error('Function not implemented.');
 }
-

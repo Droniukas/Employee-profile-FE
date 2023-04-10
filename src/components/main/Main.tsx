@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material';
-import Theme from '..//..//data/Theme';
-import FindEmployee from '../findEmployee/FindEmployee';
 import './Main.scss';
-import { Routes, Route, Link } from 'react-router-dom';
-import { ROUTES } from '../routes/routes';
+
+import { Box, CssBaseline, Tab, Tabs, ThemeProvider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+
+import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
+import { EmployeeService } from '../../services/employee.service';
+import FindEmployee from '../findEmployee/FindEmployee';
+import ProjectProfiles from '../projectProfiles/ProjectProfiles';
+import { ROUTES } from '../routes/routes';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
-import { EmployeeService } from '../../services/employee.service';
-import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 
 function getIndexedProps(index: number) {
   return {
@@ -41,7 +43,7 @@ const Main = () => {
     <>
       {results && <ProfileInfo results={results} />}
 
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box
           sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}

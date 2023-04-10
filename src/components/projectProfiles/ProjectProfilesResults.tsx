@@ -1,18 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Employee from '../../models/Employee.interface';
-import Grid from '@mui/material/Grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import FolderIcon from '@mui/icons-material/Folder';
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import FolderIcon from '@mui/icons-material/Folder';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ProjectForm from '../projectForm/ProjectForm';
+import React, { useEffect, useRef, useState } from 'react';
+
+import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
+import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 type Props = {
@@ -26,7 +27,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
   results,
   handleProjectDelete,
   focusProjectId,
-  rerender
+  rerender,
 }) => {
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
@@ -35,7 +36,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
-  const closeEditForm = (projectId?: string) => {
+  const closeEditForm = () => {
     setOpenPopup(false);
     setProjectToEdit(null);
     rerender();
@@ -63,6 +64,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
   };
 
   function renderResultItem(result: Project) {
+    console.log(result.id, focusProjectId);
     return (
       <div key={result.id}>
         <ListItem
@@ -318,7 +320,9 @@ const ProjectProfilesResult: React.FC<Props> = ({
   } else {
     return (
       <>
-        {(openPopup && projectToEdit) && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <ProjectForm onClose={closeEditForm} project={projectToEdit} />
+        )}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}

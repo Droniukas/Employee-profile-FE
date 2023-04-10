@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
@@ -12,22 +13,22 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import { ProjectsService } from '../../services/projects.service';
-import Project from '../../models/Project.interface';
-import { FormikValues, useFormik } from 'formik';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import {projectSchema} from '../../schemas/projectSchema';
 import dayjs from 'dayjs';
+import { useFormik } from 'formik';
+import React, { useState } from 'react';
+
+import Project from '../../models/Project.interface';
+import { projectSchema } from '../../schemas/projectSchema';
+import { ProjectsService } from '../../services/projects.service';
 
 type Props = {
-  onClose: (projectId?:string) => void;
+  onClose: (projectId?: string) => void;
   project?: Project;
 };
 
-const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
+const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
 
@@ -49,8 +50,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
     if (project) {
       result = await projectsService.updateProject(values);
       onClose();
-    }
-    else {
+    } else {
       result = await projectsService.createProject(values);
       onClose(result.id);
     }
@@ -272,10 +272,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project}) => {
           >
             Cancel
           </Button>
-          <Button 
-          sx={{ m: 1 }} 
-          variant='contained' 
-          onClick={handleFormSubmit}>
+          <Button sx={{ m: 1 }} variant='contained' onClick={handleFormSubmit}>
             Save
           </Button>
         </Box>
