@@ -1,8 +1,9 @@
 import LoginInterface from '../models/Login.interface';
 import axios from './axios';
 
-export const LoginService = (data: LoginInterface) => {
-  return axios.post(`${process.env.REACT_APP_API_URL}` + '/user/get', data)
+export class LoginService {
+public async checkCredentials(data: LoginInterface){
+  const response = await axios.post( '/user/get', data)
     .then(response => {
       if (response.status === 200){
         return data;
@@ -13,3 +14,4 @@ export const LoginService = (data: LoginInterface) => {
       throw error;
     });
 };
+}

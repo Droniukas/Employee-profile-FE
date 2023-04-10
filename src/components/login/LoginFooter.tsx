@@ -22,15 +22,15 @@ const Footer = () => {
 
             }}>
                 <Grid item>
-                    <Typography sx={{align: 'center', p: 2}}>Terms of Service</Typography>
+                    <Typography sx={{ align: 'center', p: 2 }}>Terms of Service</Typography>
                 </Grid>
-                <Divider orientation="vertical" variant="middle" flexItem/>
+                <Divider orientation="vertical" variant="middle" flexItem />
                 <Grid item>
-                    <Typography sx={{align: 'center', p: 2}}>Support</Typography>
+                    <Typography sx={{ align: 'center', p: 2 }}>Support</Typography>
                 </Grid>
-                <Divider orientation="vertical" variant="middle" flexItem/>
+                <Divider orientation="vertical" variant="middle" flexItem />
                 <Grid item>
-                    <Typography sx={{align: 'center', p: 2}}>{new Date().getFullYear()} Cognization</Typography>
+                    <Typography sx={{ align: 'center', p: 2 }}>{new Date().getFullYear()} Cognizant</Typography>
                 </Grid>
             </Grid>
         </Box>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -7,42 +7,55 @@ import InputLabel from '@mui/material/InputLabel';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import { useLoginForm } from './validation/validateLogin';
-import { validationRules } from './validation/validationRules';
+import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 import { useNavigate } from 'react-router-dom';
 import { AppState } from '../../App';
 import { LoginService } from '../../services/login.service';
+import LoginInterface from '../../models/Login.interface';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 type LoginProps = {
     setAppState: (newState: AppState) => void;
-  };
+};
 
-const Login: React.FC<LoginProps> = ( { setAppState } ) => {
+const Login: React.FC<LoginProps> = ({ setAppState }) => {
     const {
         register,
         handleSubmit,
         control,
-        errors,
-        isEmailEmpty,
-        isPasswordEmpty,
-        formSubmithandler,
-        handleEmailChange,
-        handlePasswordChange,
-    } = useLoginForm();
-    const {
-        passwordValidationRules,
-        emailValidationRules,
-    } = validationRules();
+        formState: { errors },
+    } = useForm<LoginInterface>();
+    const [isEmailEmpty, setIsEmailEmpty] = useState(true);
+    const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
+    const navigate = useNavigate();
+
+    const formSubmithandler: SubmitHandler<LoginInterface> = async (data: LoginInterface) => {
+        try {
+            const loginService = new LoginService();
+            const responseData = await loginService.checkCredentials(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsEmailEmpty(event.target.value === '');
+    };
+
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsPasswordEmpty(event.target.value === '');
+    };
 
     const handleButtonClick = handleSubmit(async (data) => {
-      try {
-        const responseData = await LoginService(data);
-        setAppState(AppState.LANDING_PAGE);
-      } catch (error) {
-        console.log(error);
-      }
+        try {
+            const loginService = new LoginService();
+            const responseData = await loginService.checkCredentials(data);
+            setAppState(AppState.LANDING_PAGE);
+        } catch (error) {
+            console.log(error);
+        }
     });
-  
+
 
     return (
         <Box sx={{
@@ -147,7 +160,7 @@ const Login: React.FC<LoginProps> = ( { setAppState } ) => {
                             disabled={isEmailEmpty || isPasswordEmpty}
                             onClick={handleButtonClick}
                             sx={{ my: 1 }}
-                            
+
 
                         >
                             Sign in
@@ -161,14 +174,14 @@ const Login: React.FC<LoginProps> = ( { setAppState } ) => {
                             <Typography sx={{ color: '#999999', }}>or</Typography>
                         </Divider>
                         <Button
-                            type="submit"   
+                            type="submit"
                             fullWidth
                             variant="text"
                             sx={{ bgcolor: 'secondary.main', my: 1 }}
                         >
                             Sign in with Cognizant SSO
                         </Button>
-                    {Object.keys (errors).length > 0 && (<Typography color="error" align="center" >Incorrect email or password.</Typography>)}
+                        {Object.keys(errors).length > 0 && (<Typography color="error" align="center" >Incorrect email or password.</Typography>)}
                     </Box>
                 </Box>
             </Stack>
