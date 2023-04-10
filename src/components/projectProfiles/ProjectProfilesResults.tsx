@@ -143,25 +143,37 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete, f
     }
 
     function renderEmployeesAvatarGroup(employees: Employee[]) {
-        const employeeAmount = employees.length;
-        const avatarsNeed = Math.min(3, employeeAmount);
-        const employeesForAvatars = [];
+        const avatarsNeed = 3;
+        let counter = 0;
+        let additionalEmployees = 0;
 
-        for (let i = 0; i < avatarsNeed; i++) {
-            employeesForAvatars[i] = employees[i];
-        }
+        const filteredEmployeesList = employees.filter((employee) => {
+            if (employee.status === 'ACTIVE') {
+                if (counter < avatarsNeed) {
+                    counter++;
+                    return employee;
+                } else {
+                    additionalEmployees++;
+                }
+            }
+        })
 
         return (
             <>
                 <AvatarGroup>
-                    <Avatar sx={{
-                        width: 24,
-                        height: 24,
-                        display: 'none',
-                    }}/>
-                    {employeesForAvatars.map((employee) => (renderEmployeeAvatar(employee)))}
+                    {filteredEmployeesList.map((employee) => (renderEmployeeAvatar(employee)))}
                 </AvatarGroup>
-                {calculateAdditionalEmployees(employeeAmount)}
+                <Typography sx={{
+                    color: '#666666',
+                    fontSize: 14,
+                    pt: 2,
+                    position: 'relative',
+                    left: 10,
+                    top: -13,
+                    display: additionalEmployees === 0 ? 'none' : 'inline',
+                }}>
+                    +{additionalEmployees} {additionalEmployees === 1 ? 'employee' : 'employees'}
+                </Typography>
             </>
         );
     }
@@ -175,24 +187,6 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete, f
                         height: 24,
                     }}/>
         );
-    }
-
-    function calculateAdditionalEmployees(avatarsUsed: number) {
-        if (avatarsUsed > 3) {
-            const additionalEmployees = avatarsUsed - 3;
-            return (
-                <Typography sx={{
-                    color: '#666666',
-                    fontSize: 14,
-                    pt: 2,
-                    position: 'relative',
-                    left: 10,
-                    top: -13,
-                }}>
-                    +{additionalEmployees} {additionalEmployees === 1 ? 'employee' : 'employees'}
-                </Typography>
-            );
-        }
     }
 
     function setStatusColors(projectStatus: string) {
