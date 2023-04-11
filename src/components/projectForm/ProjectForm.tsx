@@ -22,6 +22,7 @@ import React, { useState } from 'react';
 import Project from '../../models/Project.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
+import AddMemberForm from './AddMemberForm';
 
 type Props = {
   onClose: (projectId?: string) => void;
@@ -31,6 +32,7 @@ type Props = {
 const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
+  const [showAddMemberForm, setShowAddMemberForm] = useState<boolean>(false);
 
   const [endDateExists, setEndDateExists] = useState<boolean>(false);
   let initialValues: Project = {
@@ -252,7 +254,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
               follow their career within organization
             </Typography>
 
-            <Link sx={{ color: '#000048' }} href='#'>
+            <Link sx={{ color: '#000048' }} onClick={() => setShowAddMemberForm(true)}>
               <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>
                 Add team member
               </Typography>
@@ -277,7 +279,8 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           </Button>
         </Box>
       </Box>
-    </Dialog>
+      {showAddMemberForm && project && <AddMemberForm project={project} />}
+    </Dialog>   
   );
 };
 
