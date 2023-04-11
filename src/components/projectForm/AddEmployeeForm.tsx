@@ -1,18 +1,19 @@
-import { Box, Dialog, Typography } from '@mui/material';
+import { Box, Button, Dialog, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Project from '../../models/Project.interface';
 import SearchInput from '../inputs/SearchInput';
 import Employee from '../../models/Employee.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
-import FindEmployeeResults from '../findEmployee/FindEmployeeResults';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
+import EmployeeList from './EmployeeList';
+import CloseIcon from '@mui/icons-material/Close';
 
 type Props = {
   project?: Project;
 };
 
-const AddMemberForm: React.FC<Props> = ({ project }) => {
+const AddEmployeeForm: React.FC<Props> = ({ project }) => {
   const [searchValue, setSearchValue] = useState('');
   const [allNonAddedEmployees, setAllNonAddedEmployees] = useState<Employee[]>([]);
   const [filteredNonAddedEmployees, setfilteredNonAddedEmployees] = useState<Employee[]>([]);
@@ -61,12 +62,17 @@ const AddMemberForm: React.FC<Props> = ({ project }) => {
   };
 
   return (
-    <Dialog open={true} maxWidth='sm'>
-      <Box component='form' sx={{ marginX: 5, marginY: 3 }}>
+    <Dialog open={true} fullWidth maxWidth='md'>
+      <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
+        <Button sx={{ width: 15, height: 30 }}>
+          <CloseIcon fontSize='medium' />
+        </Button>
+      </Box>
+      <Box component='form' sx={{ marginX: 10, marginY: 3 }}>
         <Typography
           variant='h1'
           sx={{
-            mb: 2,
+            mb: 3,
             fontWeight: 400,
             fontSize: 25,
             fontStyle: 'Regular',
@@ -80,12 +86,12 @@ const AddMemberForm: React.FC<Props> = ({ project }) => {
           onChange={(value) => setSearchValue(value)}
         />
         {filteredNonAddedEmployees.length > 0 ? (
-          <FindEmployeeResults results={allNonAddedEmployees} />
+          <EmployeeList employees={allNonAddedEmployees} />
         ) : (
-          <FindEmployeeResults results={allNonAddedEmployees} />
+          <EmployeeList employees={allNonAddedEmployees} />
         )}
       </Box>
     </Dialog>
   );
 };
-export default AddMemberForm;
+export default AddEmployeeForm;

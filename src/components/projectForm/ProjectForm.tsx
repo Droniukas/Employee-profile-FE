@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 import Project from '../../models/Project.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
-import AddMemberForm from './AddMemberForm';
+import AddEmployeeForm from './AddEmployeeForm';
 
 type Props = {
   onClose: (projectId?: string) => void;
@@ -75,7 +75,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
   });
 
   return (
-    <Dialog open={true} maxWidth='md'>
+    <Dialog open={true} maxWidth='lg'>
       <Dialog open={confirmationDialog} maxWidth='xl'>
         <DialogTitle>Confirm exit</DialogTitle>
         <DialogContent>
@@ -279,8 +279,8 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           </Button>
         </Box>
       </Box>
-      {showAddMemberForm && <AddMemberForm project={project} />}
-    </Dialog>   
+      {showAddMemberForm && <AddEmployeeForm project={project} />}
+    </Dialog>
   );
 };
 
