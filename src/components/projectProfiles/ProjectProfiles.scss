@@ -1,32 +1,30 @@
 .project-profiles-container {
-    width: 100%;
-    height: 100%;
-    padding: 0 15%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 0 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
-.btn-delete:before, 
-.btn-edit:before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    background-color: currentColor;
-    opacity: 0;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1),
-                transform 200ms cubic-bezier(0.4, 0, 0.2, 1);          
-  }
-  
-  .btn-delete:focus:before,
-  .btn-edit:focus:before {
-    opacity: 0.12;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  
+.btn-delete::before,
+.btn-edit::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  opacity: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1), transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-delete:focus::before,
+.btn-edit:focus::before {
+  opacity: 0.12;
+  transform: translate(-50%, -50%) scale(1);
+}

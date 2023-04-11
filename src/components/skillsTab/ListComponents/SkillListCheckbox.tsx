@@ -1,7 +1,8 @@
 import { Checkbox, checkboxClasses } from '@mui/material';
-import { ViewState } from '../models/enums/ViewState';
 import { useSelector } from 'react-redux';
+
 import { ViewStateRoot } from '../../../store/types';
+import { ViewState } from '../models/enums/ViewState';
 
 type Props = {
   isDisabled: boolean;

@@ -1,9 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 
-import skillNamesReducer from '../features/savedSkills'
-import viewStateReducer from '../features/viewState'
-import onCancelReducer from '../features/onCancel'
-import loadingReducer from '../features/loading'
+import loadingReducer from '../features/loading';
+import onCancelReducer from '../features/onCancel';
+import skillNamesReducer from '../features/savedSkills';
+import viewStateReducer from '../features/viewState';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +12,6 @@ const store = configureStore({
     loading: loadingReducer,
     onCancel: onCancelReducer,
   },
-})
+});
 
-export default store
+export default store;

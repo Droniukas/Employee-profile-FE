@@ -1,16 +1,17 @@
 import { Box, FormControlLabel, ListItem, ListItemText } from '@mui/material';
 import { useEffect, useState } from 'react';
-import SkillCheckbox from './SkillListCheckbox';
-import { ViewState } from '../models/enums/ViewState';
 import { useDispatch, useSelector } from 'react-redux';
-import { SavedSkillsDataRoot, ViewStateRoot, onCancelRoot } from '../../../store/types';
-import { SkillLevel } from '../models/enums/SkillLevel';
+
 import { setSavedSkills } from '../../../features/savedSkills';
-import LevelDropdownField from './LevelDropdownField';
-import SkillListItemLevel from './SkillListItemViewLevel';
+import { onCancelRoot, SavedSkillsDataRoot, ViewStateRoot } from '../../../store/types';
+import { SkillLevel } from '../models/enums/SkillLevel';
 import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip';
-import SkillListItemErrorText from './SkillListItemErrorText';
+import { ViewState } from '../models/enums/ViewState';
 import { SkillData } from '../models/interfaces/SkillData.interface';
+import LevelDropdownField from './LevelDropdownField';
+import SkillCheckbox from './SkillListCheckbox';
+import SkillListItemErrorText from './SkillListItemErrorText';
+import SkillListItemLevel from './SkillListItemViewLevel';
 
 type Props = {
   skillObj: SkillData;
@@ -24,9 +25,7 @@ function SkillListItem({ skillObj }: Props) {
 
   useEffect(() => {
     setChecked(skillObj.checked);
-    skillObj.skillLevel !== null
-      ? setSkillLevel(skillObj.skillLevel)
-      : setSkillLevel(SkillLevel.NONE);
+    skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);
   }, [onCancel]);
 
   const savedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value);
@@ -76,11 +75,9 @@ function SkillListItem({ skillObj }: Props) {
                 onChange={onCheckboxChange}
               />
             }
-            label=''
+            label=""
           />
-          <ListItemText
-            sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}
-          >
+          <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
             {skillObj.skill}
             {skillObj.hasError ? <SkillListItemErrorText /> : null}
           </ListItemText>

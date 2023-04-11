@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { CssBaseline, Box, Tabs, Tab, ThemeProvider } from '@mui/material';
-import Theme from '../../config/theme'
-import FindEmployee from '../findEmployee/FindEmployee';
 import './Main.scss';
-import { Routes, Route, Link } from 'react-router-dom';
-import { ROUTES } from '../routes/routes';
+
+import { Box, CssBaseline, Tab, Tabs, ThemeProvider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+
+import Theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
+import { EmployeeService } from '../../services/employee.service';
+import FindEmployee from '../findEmployee/FindEmployee';
+import ProjectProfiles from '../projectProfiles/ProjectProfiles';
+import { ROUTES } from '../routes/routes';
+import SkillTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
-import { EmployeeService } from '../../services/employee.service';
-import ProjectProfiles from '../projectProfiles/ProjectProfiles';
-import SkillTabData from '../skillsTab/SkillsTabData';
 
 function getIndexedProps(index: number) {
   return {
@@ -44,45 +46,26 @@ const Main = () => {
 
       <ThemeProvider theme={Theme}>
         <CssBaseline />
-        <Box
-          sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}
-        >
-          <Tabs
-            value={location.pathname}
-            onChange={handleChange}
-            indicatorColor='secondary'
-            aria-label='secondary'
-          >
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
+          <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
+            <Tab label="Skills" value={ROUTES.HOME} to={ROUTES.HOME} component={Link} {...getIndexedProps(0)} />
             <Tab
-              label='Skills'
-              value={ROUTES.HOME}
-              to={ROUTES.HOME}
-              component={Link}
-              {...getIndexedProps(0)}
-            />
-            <Tab
-              label='Achievements'
+              label="Achievements"
               value={ROUTES.ACHIEVEMENTS}
               to={ROUTES.ACHIEVEMENTS}
               component={Link}
               {...getIndexedProps(1)}
             />
             <Tab
-              label='My projects'
+              label="My projects"
               value={ROUTES.MY_PROJECTS}
               to={ROUTES.MY_PROJECTS}
               component={Link}
               {...getIndexedProps(2)}
             />
+            <Tab label="Search" value={ROUTES.SEARCH} to={ROUTES.SEARCH} component={Link} {...getIndexedProps(3)} />
             <Tab
-              label='Search'
-              value={ROUTES.SEARCH}
-              to={ROUTES.SEARCH}
-              component={Link}
-              {...getIndexedProps(3)}
-            />
-            <Tab
-              label='Project profiles'
+              label="Project profiles"
               value={ROUTES.PROJECT_PROFILES}
               to={ROUTES.PROJECT_PROFILES}
               component={Link}
@@ -91,7 +74,7 @@ const Main = () => {
           </Tabs>
         </Box>
 
-        <Box display='flex' justifyContent='left' alignItems='left' paddingLeft='230px'>
+        <Box display="flex" justifyContent="left" alignItems="left" paddingLeft="230px">
           <Routes>
             <Route
               index

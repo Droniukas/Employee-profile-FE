@@ -1,7 +1,5 @@
-import { createTheme } from '@mui/material/styles';
 import { checkboxClasses } from '@mui/material/Checkbox';
-import viewState from '../features/viewState';
-import { ViewState } from '../components/skillsTab/models/enums/ViewState';
+import { createTheme } from '@mui/material/styles';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {

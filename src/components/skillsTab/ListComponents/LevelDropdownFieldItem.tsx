@@ -1,11 +1,12 @@
-import { ListItemButton, ListItemText, Tooltip } from '@mui/material'
-import { SkillLevel } from '../models/enums/SkillLevel'
+import { ListItemButton, ListItemText, Tooltip } from '@mui/material';
+
+import { SkillLevel } from '../models/enums/SkillLevel';
 
 type Props = {
-  primaryText: SkillLevel
-  onSelection: () => void
-  tooltipTitle: string
-}
+  primaryText: SkillLevel;
+  onSelection: () => void;
+  tooltipTitle: string;
+};
 
 function LevelDropdownFieldItem({ primaryText, onSelection, tooltipTitle }: Props) {
   return (
@@ -16,7 +17,7 @@ function LevelDropdownFieldItem({ primaryText, onSelection, tooltipTitle }: Prop
         </ListItemButton>
       </Tooltip>
     </>
-  )
+  );
 }
 
-export default LevelDropdownFieldItem
+export default LevelDropdownFieldItem;

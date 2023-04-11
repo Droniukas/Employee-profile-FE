@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import SkillsTab from './SkillsTab';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { setLoading } from '../../features/loading';
-import axios from 'axios';
-import { setViewState } from '../../features/viewState';
-import { SavedSkillsDataRoot } from '../../store/types';
-import { SkillLevel } from './models/enums/SkillLevel';
-import { SkillData } from './models/interfaces/SkillData.interface';
-import { SavedSkills } from './models/interfaces/SavedSkillData.interface';
 import { triggerOnCancel } from '../../features/onCancel';
 import { setSavedSkills } from '../../features/savedSkills';
+import { setViewState } from '../../features/viewState';
 import { SkillsService } from '../../services/skills.service';
+import { SavedSkillsDataRoot } from '../../store/types';
+import { SkillLevel } from './models/enums/SkillLevel';
+import { SavedSkills } from './models/interfaces/SavedSkillData.interface';
+import { SkillData } from './models/interfaces/SkillData.interface';
+import SkillsTab from './SkillsTab';
 
 function SkillsTabData() {
   const [skillDataArr, setSkillDataArr] = useState<Array<SkillData>>([]);
@@ -54,16 +54,17 @@ function SkillsTabData() {
 
   async function handleSave() {
     if (errorCheck()) return;
-    dispatch(setViewState({}));
     savedSkills.forEach(async (obj) => {
-      skillsService.updateEmployeeSkill(obj);
+      await skillsService.updateEmployeeSkill(obj);
     });
+    dispatch(setViewState({}));
     dispatch(setSavedSkills([]));
     await fetchData();
   }
 
   async function handleCancel() {
     skillDataArr.forEach((obj) => (obj.hasError = false));
+    await fetchData();
     dispatch(setSavedSkills([]));
     dispatch(setViewState({}));
     dispatch(triggerOnCancel({}));
@@ -72,11 +73,7 @@ function SkillsTabData() {
   return (
     <>
       {skillDataArr ? (
-        <SkillsTab
-          skillData={skillDataArr}
-          saveFunction={handleSave}
-          cancelFunction={handleCancel}
-        />
+        <SkillsTab skillDataArray={skillDataArr} saveFunction={handleSave} cancelFunction={handleCancel} />
       ) : null}
     </>
   );

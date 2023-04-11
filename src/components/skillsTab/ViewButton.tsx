@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button } from '@mui/material';
 
 export enum StyleVariants {
   CONTAINED = 'contained',
@@ -6,17 +6,17 @@ export enum StyleVariants {
 }
 
 type Props = {
-  text: string
-  styleVariant: StyleVariants
-  handleClick: () => void
-}
+  text: string;
+  styleVariant: StyleVariants;
+  handleClick: () => void;
+};
 
 function viewButton({ text, styleVariant, handleClick }: Props) {
   return (
     <Button variant={styleVariant} onClick={handleClick}>
       {text}
     </Button>
-  )
+  );
 }
 
-export default viewButton
+export default viewButton;

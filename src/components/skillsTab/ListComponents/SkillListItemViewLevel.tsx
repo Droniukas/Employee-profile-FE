@@ -1,5 +1,6 @@
 import { ThemeProvider, Tooltip, Typography } from '@mui/material';
-import Theme from '../../../data/Theme';
+
+import theme from '../../../config/theme';
 import { SkillLevel } from '../models/enums/SkillLevel';
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 
 function SkillListItemLevel({ primaryText, tooltipText }: Props) {
   return (
-    <ThemeProvider theme={Theme}>
+    <ThemeProvider theme={theme}>
       <Tooltip title={tooltipText} disableInteractive>
         <Typography
           sx={{

@@ -1,23 +1,24 @@
-import { Dispatch } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AnyAction } from '@reduxjs/toolkit'
-import ViewButton, { StyleVariants } from './ViewButton'
-import { ViewState } from './models/enums/ViewState'
-import { ViewStateRoot } from '../../store/types'
-import { setViewState } from '../../features/viewState'
+import { AnyAction } from '@reduxjs/toolkit';
+import { Dispatch } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setViewState } from '../../features/viewState';
+import { ViewStateRoot } from '../../store/types';
+import { ViewState } from './models/enums/ViewState';
+import ViewButton, { StyleVariants } from './ViewButton';
 
 type Props = {
-  saveFunction: () => void
-  cancelFunction: () => void
-}
+  saveFunction: () => void;
+  cancelFunction: () => void;
+};
 
 function ViewButtons({ saveFunction, cancelFunction }: Props) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   function changeView(dispatch: Dispatch<AnyAction>) {
-    dispatch(setViewState({}))
+    dispatch(setViewState({}));
   }
 
-  const viewState = useSelector((state: ViewStateRoot) => state.viewState.value)
+  const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   return (
     <>
       {viewState === ViewState.VIEW_STATE && (
@@ -25,7 +26,7 @@ function ViewButtons({ saveFunction, cancelFunction }: Props) {
           text={'Edit skills'}
           styleVariant={StyleVariants.CONTAINED}
           handleClick={() => {
-            changeView(dispatch)
+            changeView(dispatch);
           }}
         />
       )}
@@ -35,20 +36,20 @@ function ViewButtons({ saveFunction, cancelFunction }: Props) {
             text={'Cancel'}
             styleVariant={StyleVariants.GREY}
             handleClick={() => {
-              cancelFunction()
+              cancelFunction();
             }}
           />
           <ViewButton
             text={'Save'}
             styleVariant={StyleVariants.CONTAINED}
             handleClick={() => {
-              saveFunction()
+              saveFunction();
             }}
           />
         </>
       )}
     </>
-  )
+  );
 }
 
-export default ViewButtons
+export default ViewButtons;

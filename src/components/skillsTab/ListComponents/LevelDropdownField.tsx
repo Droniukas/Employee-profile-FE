@@ -1,38 +1,39 @@
-import { Collapse, List, ListItemButton, ListItemText, Tooltip } from '@mui/material'
-import { useState } from 'react'
-import { SkillLevel } from '../models/enums/SkillLevel'
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { setSavedSkills } from '../../../features/savedSkills'
-import { useDispatch, useSelector } from 'react-redux'
-import { SavedSkillsDataRoot } from '../../../store/types'
-import LevelDropdownFieldItem from './LevelDropdownFieldItem'
-import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip'
-import { SkillData } from '../models/interfaces/SkillData.interface'
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { Collapse, List, ListItemButton, ListItemText, Tooltip } from '@mui/material';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setSavedSkills } from '../../../features/savedSkills';
+import { SavedSkillsDataRoot } from '../../../store/types';
+import { SkillLevel } from '../models/enums/SkillLevel';
+import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip';
+import { SkillData } from '../models/interfaces/SkillData.interface';
+import LevelDropdownFieldItem from './LevelDropdownFieldItem';
 
 type Props = {
-  skillLevel: SkillLevel | null
-  setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>
-  skillObj: SkillData
-  tooltipText: string
-}
+  skillLevel: SkillLevel | null;
+  setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>;
+  skillObj: SkillData;
+  tooltipText: string;
+};
 
 function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }: Props) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const handleClick = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
-  const savedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value)
-  const dispatch = useDispatch()
+  const savedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value);
+  const dispatch = useDispatch();
 
   function onDropdownChange(selectedSkill: SkillLevel) {
-    setSkillLevel(selectedSkill)
+    setSkillLevel(selectedSkill);
     dispatch(
       setSavedSkills([
         ...savedSkills.filter((item) => item.id !== skillObj.id),
         { id: skillObj.id, skill: skillObj.skill, checked: true, skillLevel: selectedSkill },
       ]),
-    )
+    );
   }
 
   return (
@@ -67,45 +68,43 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
         </Tooltip>
-        <Collapse in={open} timeout='auto' unmountOnExit>
-          <List component='div' disablePadding sx={{ margin: 0 }}>
-            {[SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT].map(
-              (skillLevelName) => {
-                let tooltipText: string
-                switch (skillLevelName) {
-                  case SkillLevel.BASIC:
-                    tooltipText = SkillLevelTooltip.BASIC
-                    break
-                  case SkillLevel.INTERMEDIATE:
-                    tooltipText = SkillLevelTooltip.INTERMEDIATE
-                    break
-                  case SkillLevel.EXPERT:
-                    tooltipText = SkillLevelTooltip.EXPERT
-                    break
-                  default:
-                    tooltipText = ''
-                }
-                function handleSkillSelection() {
-                  setSkillLevel(skillLevelName)
-                  setOpen(!open)
-                  onDropdownChange(skillLevelName)
-                }
-                if (skillLevelName === skillLevel) return null
-                return (
-                  <LevelDropdownFieldItem
-                    onSelection={handleSkillSelection}
-                    primaryText={skillLevelName}
-                    key={skillLevelName}
-                    tooltipTitle={tooltipText}
-                  />
-                )
-              },
-            )}
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding sx={{ margin: 0 }}>
+            {[SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT].map((skillLevelName) => {
+              let tooltipText: string;
+              switch (skillLevelName) {
+                case SkillLevel.BASIC:
+                  tooltipText = SkillLevelTooltip.BASIC;
+                  break;
+                case SkillLevel.INTERMEDIATE:
+                  tooltipText = SkillLevelTooltip.INTERMEDIATE;
+                  break;
+                case SkillLevel.EXPERT:
+                  tooltipText = SkillLevelTooltip.EXPERT;
+                  break;
+                default:
+                  tooltipText = '';
+              }
+              function handleSkillSelection() {
+                setSkillLevel(skillLevelName);
+                setOpen(!open);
+                onDropdownChange(skillLevelName);
+              }
+              if (skillLevelName === skillLevel) return null;
+              return (
+                <LevelDropdownFieldItem
+                  onSelection={handleSkillSelection}
+                  primaryText={skillLevelName}
+                  key={skillLevelName}
+                  tooltipTitle={tooltipText}
+                />
+              );
+            })}
           </List>
         </Collapse>
       </List>
     </>
-  )
+  );
 }
 
-export default LevelDropdownField
+export default LevelDropdownField;
