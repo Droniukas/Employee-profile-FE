@@ -9,7 +9,7 @@ declare module '@mui/material/Button' {
   }
 }
 
-const Theme = createTheme({
+const theme = createTheme({
   typography: {
     fontFamily: ['Inter', 'sans-serif'].join(','),
     fontSize: 14,
@@ -83,4 +83,4 @@ const Theme = createTheme({
   },
 });
 
-export default Theme;
+export default theme;

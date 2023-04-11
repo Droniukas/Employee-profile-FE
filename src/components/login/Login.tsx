@@ -1,3 +1,4 @@
+import React, { FC, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -6,9 +7,56 @@ import InputLabel from '@mui/material/InputLabel';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
+import { useNavigate } from 'react-router-dom';
+import { AppState } from '../../App';
+import { LoginService } from '../../services/login.service';
+import LoginInterface from '../../models/Login.interface';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+type LoginProps = {
+    setAppState: (newState: AppState) => void;
+};
+
+const Login: React.FC<LoginProps> = ({ setAppState }) => {
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm<LoginInterface>();
+    const [isEmailEmpty, setIsEmailEmpty] = useState(true);
+    const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
+    const navigate = useNavigate();
+
+    const formSubmithandler: SubmitHandler<LoginInterface> = async (data: LoginInterface) => {
+        try {
+            const loginService = new LoginService();
+            const responseData = await loginService.checkCredentials(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsEmailEmpty(event.target.value === '');
+    };
+
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsPasswordEmpty(event.target.value === '');
+    };
+
+    const handleButtonClick = handleSubmit(async (data) => {
+        try {
+            const loginService = new LoginService();
+            const responseData = await loginService.checkCredentials(data);
+            setAppState(AppState.LANDING_PAGE);
+        } catch (error) {
+            console.log(error);
+        }
+    });
 
 
-const Login = () => {
     return (
         <Box sx={{
             width: '100%',
@@ -39,26 +87,35 @@ const Login = () => {
                         Welcome to Employee Profile
                     </Typography>
                 </Box>
-                {/* Email adress input */}
-                <Box component="form" sx={{}}>
+                <Box component="form" onSubmit={handleSubmit(formSubmithandler)}>
                     <Box component="div" sx={{ my: 2 }}>
                         <InputLabel sx={{
                             pb: 1,
                             color: 'primary.main'
                         }}
                         >
-                            <Typography sx={{ fontSize: 14, fontWeight: 400}}>
+                            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
                                 Email address
                             </Typography>
                         </InputLabel>
-                        <TextField fullWidth
+                        <TextField
+                            fullWidth
                             size="small"
                             variant="outlined"
                             placeholder='e.g., name@cognizant.com'
                             required
                             id="email"
-                            name="email"
                             autoComplete="email"
+                            {...register('email', emailValidationRules)}
+                            error={!!errors.email}
+                            helperText={
+                                isEmailEmpty || errors.email ?
+                                    errors.email?.type === 'pattern'
+                                        ? 'Email address should be in the format username@domain.com'
+                                        : ''
+                                    : null
+                            }
+                            onChange={handleEmailChange}
                             sx={{
                                 '& fieldset': {
                                     borderRadius: 2
@@ -66,14 +123,13 @@ const Login = () => {
                             }}
                         />
                     </Box>
-                    {/* Password adress input */}
                     <Box component="div" sx={{ my: 2 }}>
                         <InputLabel sx={{
                             pb: 1,
                             color: 'primary.main'
                         }}
                         >
-                            <Typography sx={{ fontSize: 14, fontWeight: 400}} >
+                            <Typography sx={{ fontSize: 14, fontWeight: 400 }} >
                                 Password
                             </Typography >
                         </InputLabel>
@@ -81,16 +137,14 @@ const Login = () => {
                             size="small"
                             variant="outlined"
                             required
-                            name="password"
-                            type="password"
                             id="password"
+                            type='password'
                             autoComplete="current-password"
-                            sx={{
-                                '& fieldset': {
-                                    borderRadius: 2,
-                                }
-                            }}
-
+                            {...register('password', passwordValidationRules)}
+                            error={!!errors?.password}
+                            helperText={errors.password ? errors.password.message : ''}
+                            onChange={handlePasswordChange}
+                            sx={{ '& fieldset': { borderRadius: 2, } }}
                         />
                         <Link href="#">
                             <Typography sx={{ fontSize: 14, fontWeight: 400, mt: 1 }}>
@@ -98,17 +152,19 @@ const Login = () => {
                             </Typography>
                         </Link>
                     </Box>
-                    {/* Button Sign in */}
                     <Box sx={{ my: 4 }}>
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
+                            disabled={isEmailEmpty || isPasswordEmpty}
+                            onClick={handleButtonClick}
                             sx={{ my: 1 }}
+
+
                         >
                             Sign in
                         </Button>
-                        {/* Divider */}
                         <Divider sx={{
                             my: 1,
                             '&::before, &::after': {
@@ -117,7 +173,6 @@ const Login = () => {
                         }}>
                             <Typography sx={{ color: '#999999', }}>or</Typography>
                         </Divider>
-                        {/* Button Cognizant SSO */}
                         <Button
                             type="submit"
                             fullWidth
@@ -126,11 +181,12 @@ const Login = () => {
                         >
                             Sign in with Cognizant SSO
                         </Button>
+                        {Object.keys(errors).length > 0 && (<Typography color="error" align="center" >Incorrect email or password.</Typography>)}
                     </Box>
                 </Box>
             </Stack>
         </Box>
-
     );
 }
+
 export default Login;
