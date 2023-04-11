@@ -8,14 +8,15 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
 import ProjectForm from '../projectForm/ProjectForm';
+import { ProjectStatus } from '../enums/ProjectStatus';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import {ProjectStatus} from '../enums/ProjectStatus';
 
 type ProjectProfilesResultsProps = {
   results: Project[];
@@ -192,36 +193,36 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         let counter = 0;
         let additionalEmployees = 0;
 
-        const filteredEmployeesList = employees.filter((employee) => {
-            if (employee.status === 'ACTIVE') {
-                if (counter < avatarsNeed) {
-                    counter++;
-                    return employee;
-                } else {
-                    additionalEmployees++;
-                }
-            }
-        })
+    const filteredEmployeesList = employees.filter((employee) => {
+      if (employee.status === 'ACTIVE') {
+        if (counter < avatarsNeed) {
+          counter++;
+          return employee;
+        } else {
+          additionalEmployees++;
+        }
+      }
+    });
 
-        return (
-            <>
-                <AvatarGroup>
-                    {filteredEmployeesList.map((employee) => (renderEmployeeAvatar(employee)))}
-                </AvatarGroup>
-                <Typography sx={{
-                    color: '#666666',
-                    fontSize: 14,
-                    pt: 2,
-                    position: 'relative',
-                    left: 10,
-                    top: -13,
-                    display: additionalEmployees === 0 ? 'none' : 'inline',
-                }}>
-                    +{additionalEmployees} {additionalEmployees === 1 ? 'employee' : 'employees'}
-                </Typography>
-            </>
-        );
-    }
+    return (
+      <>
+        <AvatarGroup>{filteredEmployeesList.map((employee) => renderEmployeeAvatar(employee))}</AvatarGroup>
+        <Typography
+          sx={{
+            color: '#666666',
+            fontSize: 14,
+            pt: 2,
+            position: 'relative',
+            left: 10,
+            top: -13,
+            display: additionalEmployees === 0 ? 'none' : 'inline',
+          }}
+        >
+          +{additionalEmployees} {additionalEmployees === 1 ? 'employee' : 'employees'}
+        </Typography>
+      </>
+    );
+  }
 
     function renderEmployeeAvatar(employee: Employee) {
         return (
@@ -235,41 +236,43 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     }
   };
 
-    function setStatusColors(projectStatus: string) {
-        let statusColor;
-        let fontColor;
+  function setStatusColors(projectStatus: string) {
+    let statusColor;
+    let fontColor;
 
-        if (projectStatus === ProjectStatus.FUTURE) {
-            statusColor = 'rgba(113, 175, 251, 0.31)';
-            fontColor = 'rgba(0, 114, 255, 1)';
-        } else if (projectStatus === ProjectStatus.ONGOING) {
-            statusColor = 'rgba(59, 248, 100, 0.24)';
-            fontColor = 'rgba(26, 175, 85, 1)';
-        } else if (projectStatus === ProjectStatus.FINISHED) {
-            statusColor = 'rgba(92, 92, 92, 0.23)';
-            fontColor = 'rgba(50, 50, 50, 1)';
-        }
-
-        return (
-            <>
-                <Box display='flex'
-                     sx={{
-                         justifyContent: 'center',
-                         alignItems: 'center',
-                         width: 90,
-                         height: 28,
-                         position: 'relative',
-                         left: 0,
-                         borderRadius: 1,
-                         background: statusColor,
-                         color: fontColor,
-                         fontSize: 14,
-                     }}>
-                    {projectStatus}
-                </Box>
-            </>
-        );
+    if (projectStatus === ProjectStatus.FUTURE) {
+      statusColor = 'rgba(113, 175, 251, 0.31)';
+      fontColor = 'rgba(0, 114, 255, 1)';
+    } else if (projectStatus === ProjectStatus.ONGOING) {
+      statusColor = 'rgba(59, 248, 100, 0.24)';
+      fontColor = 'rgba(26, 175, 85, 1)';
+    } else if (projectStatus === ProjectStatus.FINISHED) {
+      statusColor = 'rgba(92, 92, 92, 0.23)';
+      fontColor = 'rgba(50, 50, 50, 1)';
     }
+
+    return (
+      <>
+        <Box
+          display="flex"
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 90,
+            height: 28,
+            position: 'relative',
+            left: 0,
+            borderRadius: 1,
+            background: statusColor,
+            color: fontColor,
+            fontSize: 14,
+          }}
+        >
+          {projectStatus}
+        </Box>
+      </>
+    );
+  }
 
     if (!results.length) {
         return (

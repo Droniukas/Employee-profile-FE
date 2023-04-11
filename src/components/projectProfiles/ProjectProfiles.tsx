@@ -2,11 +2,14 @@ import './ProjectProfiles.scss';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import { ProjectsService } from '../../services/projects.service';
+import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
+import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
 
 const ProjectProfiles = () => {
@@ -41,37 +44,37 @@ const ProjectProfiles = () => {
     setResults(results.filter((project) => project.id !== id));
   };
 
-    const filteredProjectsList = results.filter((project) => {
-        if (filterTextValue === ProjectStatus.ONGOING) {
-            return project.status === ProjectStatus.ONGOING;
-        } else if (filterTextValue === ProjectStatus.FINISHED) {
-            return project.status === ProjectStatus.FINISHED;
-        } else if (filterTextValue === ProjectStatus.FUTURE) {
-            return project.status === ProjectStatus.FUTURE;
-        } else {
-            return project;
-        }
-    })
+  const filteredProjectsList = results.filter((project) => {
+    if (filterTextValue === ProjectStatus.ONGOING) {
+      return project.status === ProjectStatus.ONGOING;
+    } else if (filterTextValue === ProjectStatus.FINISHED) {
+      return project.status === ProjectStatus.FINISHED;
+    } else if (filterTextValue === ProjectStatus.FUTURE) {
+      return project.status === ProjectStatus.FUTURE;
+    } else {
+      return project;
+    }
+  });
 
     function onFilterValueSelection(filterValue: string) {
         setFilterTextValue(filterValue);
     }
 
-    function setProjectStatus(project: Project) {
-        const today = new Date();
-        const startDateFormatted = new Date(project.startDate);
-        const endDateFormatted = new Date(project.endDate);
+  function setProjectStatus(project: Project) {
+    const today = new Date();
+    const startDateFormatted = new Date(project.startDate);
+    const endDateFormatted = new Date(project.endDate);
 
-        if (startDateFormatted > today) {
-            project.status = ProjectStatus.FUTURE;
-        } else {
-            if (project.endDate === null || endDateFormatted > today) {
-                project.status = ProjectStatus.ONGOING;
-            } else {
-                project.status = ProjectStatus.FINISHED;
-            }
-        }
+    if (startDateFormatted > today) {
+      project.status = ProjectStatus.FUTURE;
+    } else {
+      if (project.endDate === null || endDateFormatted > today) {
+        project.status = ProjectStatus.ONGOING;
+      } else {
+        project.status = ProjectStatus.FINISHED;
+      }
     }
+  }
 
     return (
         <div className='project-profiles-container'>
