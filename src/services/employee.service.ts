@@ -16,4 +16,9 @@ export class EmployeeService {
     const response = await axios.get(`/employee/get/${id}`, {});
     return response.data;
   }
+
+  public async getAll() {
+    const response = await axios.get(`/employee/get/all`, {});
+    return response.data;
+  }
 }

@@ -1,29 +1,31 @@
 import { Box, Dialog, Typography } from '@mui/material';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Project from '../../models/Project.interface';
-import { ProjectsService } from '../../services/projects.service';
-import { EmployeeService } from '../../services/employee.service';
 import SearchInput from '../inputs/SearchInput';
 import Employee from '../../models/Employee.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import FindEmployeeResults from '../findEmployee/FindEmployeeResults';
+import { EmployeeService } from '../../services/employee.service';
+import { ProjectsService } from '../../services/projects.service';
 
 type Props = {
-  project: Project;
+  project?: Project;
 };
 
 const AddMemberForm: React.FC<Props> = ({ project }) => {
-  const [inputValue, _setInputValue] = useState('');
-  const [allEmployees, setAllEmployees] = useState<Employee[]>([]);
-  const [filteredEmployees, setfilteredEmployees] = useState<Employee[]>([]);
-  const inputValueRef = useRef(inputValue);
+  const [searchValue, setSearchValue] = useState('');
+  const [allNonAddedEmployees, setAllNonAddedEmployees] = useState<Employee[]>([]);
+  const [filteredNonAddedEmployees, setfilteredNonAddedEmployees] = useState<Employee[]>([]);
 
-  const projectsService = new ProjectsService();
   const employeeService = new EmployeeService();
+  const projectService = new ProjectsService();
 
   useEffect(() => {
+    getAllNonAddedEmployees();
+
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        getEmployees();
+        getFilteredNonAddedEmployees();
         event.preventDefault();
       }
     };
@@ -34,21 +36,35 @@ const AddMemberForm: React.FC<Props> = ({ project }) => {
     };
   }, []);
 
-  function setInputValue(val: string) {
-    inputValueRef.current = val;
-    _setInputValue(val);
-  }
+  const getAllNonAddedEmployees = async () => {
+    const allEmployees = await employeeService.getAll();
 
-  const getEmployees = async () => {
-    const result = await employeeService.searchByName(inputValueRef.current, 0, 10);
-    setfilteredEmployees(result.employees);
+    if (project) {
+      const allProjectEmployees = await projectService.getProjectRelationshipsByProjectId(
+        project.id,
+      );
+
+      setAllNonAddedEmployees(
+        allEmployees.filter((employee: Employee) => {
+          return !allProjectEmployees.some(
+            (projectEmployee: ProjectEmployee) => projectEmployee.employeeId === employee.id,
+          );
+        }),
+      );
+    } else {
+      setAllNonAddedEmployees(allEmployees);
+    }
+  };
+
+  const getFilteredNonAddedEmployees = () => {
+    // Needs to be implemented
   };
 
   return (
-    <Dialog open={true} maxWidth="sm">
-      <Box component="form" sx={{ marginX: 5, marginY: 3 }}>
+    <Dialog open={true} maxWidth='sm'>
+      <Box component='form' sx={{ marginX: 5, marginY: 3 }}>
         <Typography
-          variant="h1"
+          variant='h1'
           sx={{
             mb: 2,
             fontWeight: 400,
@@ -60,13 +76,13 @@ const AddMemberForm: React.FC<Props> = ({ project }) => {
           Add team members
         </Typography>
         <SearchInput
-          placeholder="Search employees by name, skills projects or achievements..."
-          onChange={(value) => setInputValue(value)}
+          placeholder='Search employees by name, skills projects or achievements...'
+          onChange={(value) => setSearchValue(value)}
         />
-        {filteredEmployees.length > 0 ? (
-          <FindEmployeeResults results={filteredEmployees} />
+        {filteredNonAddedEmployees.length > 0 ? (
+          <FindEmployeeResults results={allNonAddedEmployees} />
         ) : (
-          <FindEmployeeResults results={allEmployees} />
+          <FindEmployeeResults results={allNonAddedEmployees} />
         )}
       </Box>
     </Dialog>

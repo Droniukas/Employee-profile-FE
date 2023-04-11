@@ -279,7 +279,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           </Button>
         </Box>
       </Box>
-      {showAddMemberForm && project && <AddMemberForm project={project} />}
+      {showAddMemberForm && <AddMemberForm project={project} />}
     </Dialog>   
   );
 };

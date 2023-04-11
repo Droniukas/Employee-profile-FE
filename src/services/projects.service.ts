@@ -21,7 +21,13 @@ export class ProjectsService {
     });
     return response.data;
   }
+
   public async deleteProjectById(id: string) {
     await axios.patch(`/project/delete/${id}`, {});
+  }
+
+  public async getProjectRelationshipsByProjectId(projectId: string) {
+    const response = await axios.get(`/project/relationships/byProject/${projectId}`);
+    return response.data;
   }
 }
