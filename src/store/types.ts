@@ -1,5 +1,5 @@
 import { ViewState } from '../components/skillsTab/models/enums/ViewState';
-import { SavedSkills } from '../components/skillsTab/models/interfaces/SavedSkillData.interface';
+import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
 
 export interface onCancelRoot {
   onCancel: {
@@ -9,7 +9,7 @@ export interface onCancelRoot {
 
 export interface SavedSkillsDataRoot {
   savedSkills: {
-    value: SavedSkills[];
+    value: ChangedSkill[];
   };
 }
 

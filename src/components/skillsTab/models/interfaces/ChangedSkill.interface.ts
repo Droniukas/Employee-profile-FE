@@ -1,8 +1,8 @@
 import { SkillLevel } from '../enums/SkillLevel';
 
-export interface SavedSkills {
+export interface ChangedSkill {
   id: string;
   checked: boolean;
   skillLevel: SkillLevel;
-  skill: string;
+  skillName: string;
 }

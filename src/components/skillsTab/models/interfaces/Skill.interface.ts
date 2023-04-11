@@ -1,8 +1,8 @@
 import { SkillLevel } from '../enums/SkillLevel';
 
-export interface SkillData {
+export interface Skill {
   id: string;
-  skill: string;
+  skillName: string;
   checked: boolean;
   skillLevel: SkillLevel | null;
   subItemsAreSkills: boolean;

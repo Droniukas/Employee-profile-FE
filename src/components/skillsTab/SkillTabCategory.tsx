@@ -3,17 +3,17 @@ import { Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/mat
 import React, { ReactNode, useState } from 'react';
 
 import SkillListItem from './ListComponents/SkillListItem';
-import { SkillData } from './models/interfaces/SkillData.interface';
+import { Skill } from './models/interfaces/Skill.interface';
 
 type Props = {
-  currentObj: SkillData;
-  skillDataArray: SkillData[];
-  mapData: (skillDataArray: SkillData[]) => ReactNode; // rename param
+  currentObj: Skill;
+  skillDataArray: Skill[];
+  mapData: (skillDataArray: Skill[]) => ReactNode;
 };
 
-const sortBySkill = (a: SkillData, b: SkillData) => {
-  const fa = a.skill.toLowerCase(),
-    fb = b.skill.toLowerCase();
+const sortBySkill = (a: Skill, b: Skill) => {
+  const fa = a.skillName.toLowerCase(),
+    fb = b.skillName.toLowerCase();
   if (fa < fb) {
     return -1;
   }
@@ -26,8 +26,8 @@ const sortBySkill = (a: SkillData, b: SkillData) => {
 function SkillTabCategory({ currentObj, skillDataArray, mapData }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  function mapSkills(arr: SkillData[]) {
-    return arr.map((obj: SkillData) => <SkillListItem skillObj={obj} key={obj.id} />);
+  function mapSkills(arr: Skill[]) {
+    return arr.map((obj: Skill) => <SkillListItem skillObj={obj} key={obj.id} />);
   }
 
   return (
@@ -56,19 +56,19 @@ function SkillTabCategory({ currentObj, skillDataArray, mapData }: Props) {
               setIsCollapsed(!isCollapsed);
             }}
           >
-            <ListItemText primary={currentObj.skill} />
+            <ListItemText primary={currentObj.skillName} />
             {isCollapsed ? <ExpandLess /> : <ExpandMore sx={{ transform: 'rotate(-90deg)' }} />}
           </ListItemButton>
         </ListItem>
         <Collapse in={isCollapsed}>
           {currentObj.subItemsAreSkills
-            ? mapSkills(skillDataArray.filter((obj: SkillData) => currentObj.id === obj.parentId).sort(sortBySkill))
+            ? mapSkills(skillDataArray.filter((obj: Skill) => currentObj.id === obj.parentId).sort(sortBySkill))
             : null}
         </Collapse>
       </List>
       <Collapse in={isCollapsed}>
         {!currentObj.subItemsAreSkills
-          ? mapData(skillDataArray.filter((obj: SkillData) => obj.parentId === currentObj.id).sort(sortBySkill))
+          ? mapData(skillDataArray.filter((obj: Skill) => obj.parentId === currentObj.id).sort(sortBySkill))
           : null}
       </Collapse>
     </>

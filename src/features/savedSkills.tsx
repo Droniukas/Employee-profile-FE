@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { SavedSkills } from '../components/skillsTab/models/interfaces/SavedSkillData.interface';
+import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
 
-const initStateValue: SavedSkills[] = [];
+const initStateValue: ChangedSkill[] = [];
 
 export const savedSkillsSlice = createSlice({
   name: 'savedSkills',

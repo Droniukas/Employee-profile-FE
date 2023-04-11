@@ -4,11 +4,11 @@ import theme from '../../../config/theme';
 import { SkillLevel } from '../models/enums/SkillLevel';
 
 type Props = {
-  primaryText: SkillLevel | null;
+  name: SkillLevel | null;
   tooltipText: string;
 };
 
-function SkillListItemLevel({ primaryText, tooltipText }: Props) {
+function SkillLevelWithTooltip({ name, tooltipText }: Props) {
   return (
     <ThemeProvider theme={theme}>
       <Tooltip title={tooltipText} disableInteractive>
@@ -27,11 +27,11 @@ function SkillListItemLevel({ primaryText, tooltipText }: Props) {
             transition: 'background-color 0.2s',
           }}
         >
-          {primaryText}
+          {name}
         </Typography>
       </Tooltip>
     </ThemeProvider>
   );
 }
 
-export default SkillListItemLevel;
+export default SkillLevelWithTooltip;

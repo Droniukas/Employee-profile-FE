@@ -12,7 +12,7 @@ type Props = {
   cancelFunction: () => void;
 };
 
-function ViewButtons({ saveFunction, cancelFunction }: Props) {
+function SkillsTabStateButtons({ saveFunction, cancelFunction }: Props) {
   const dispatch = useDispatch();
   function changeView(dispatch: Dispatch<AnyAction>) {
     dispatch(setViewState({}));
@@ -52,4 +52,4 @@ function ViewButtons({ saveFunction, cancelFunction }: Props) {
   );
 }
 
-export default ViewButtons;
+export default SkillsTabStateButtons;

@@ -1,20 +1,20 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { SkillData } from './models/interfaces/SkillData.interface';
+import { Skill } from './models/interfaces/Skill.interface';
 import SkillTabCategory from './SkillTabCategory';
-import ViewButtons from './ViewButtons';
+import SkillsTabStateButtons from './ViewButtons';
 
 type Props = {
-  skillDataArray: SkillData[];
+  skillDataArray: Skill[];
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
 function SkillsTab({ skillDataArray, saveFunction, cancelFunction }: Props) {
-  function mapData(dataArr: SkillData[]): ReactNode {
+  function mapData(dataArr: Skill[]): ReactNode {
     {
-      return dataArr.map((currentObj: SkillData) => {
+      return dataArr.map((currentObj: Skill) => {
         return (
           <SkillTabCategory
             key={currentObj.id}
@@ -30,10 +30,10 @@ function SkillsTab({ skillDataArray, saveFunction, cancelFunction }: Props) {
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-        <ViewButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
+        <SkillsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
       </Box>
       <Box sx={{ width: '1176px', marginTop: '100px' }}>
-        {mapData(skillDataArray.filter((obj: SkillData) => obj.parentId === null))}
+        {mapData(skillDataArray.filter((obj: Skill) => obj.parentId === null))}
       </Box>
     </>
   );

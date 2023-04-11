@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSavedSkills } from '../../../features/savedSkills';
 import { SavedSkillsDataRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
-import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip';
-import { SkillData } from '../models/interfaces/SkillData.interface';
+import { Skill } from '../models/interfaces/Skill.interface';
 import LevelDropdownFieldItem from './LevelDropdownFieldItem';
+import SkillLevelTooltipMapper from './SkillLevelTooltipMapper';
 
 type Props = {
   skillLevel: SkillLevel | null;
   setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>;
-  skillObj: SkillData;
+  skillObj: Skill;
   tooltipText: string;
 };
 
@@ -31,7 +31,7 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
     dispatch(
       setSavedSkills([
         ...savedSkills.filter((item) => item.id !== skillObj.id),
-        { id: skillObj.id, skill: skillObj.skill, checked: true, skillLevel: selectedSkill },
+        { id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: selectedSkill },
       ]),
     );
   }
@@ -40,22 +40,17 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
     <>
       <List
         sx={{
+          maxWidth: 150,
+          marginRight: 5,
+          marginBottom: 0,
+          border: 1,
+          width: '50%',
           ...(skillObj.hasError
             ? {
-                maxWidth: 150,
-                marginRight: 5,
-                marginBottom: 0,
-                border: 1,
-                width: '50%',
                 backgroundColor: '#ffefef',
                 color: '#ef4349',
               }
             : {
-                maxWidth: 150,
-                marginRight: 5,
-                marginBottom: 0,
-                border: 1,
-                width: '50%',
                 borderColor: 'primary.main',
                 color: 'primary.main',
               }),
@@ -71,20 +66,8 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ margin: 0 }}>
             {[SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT].map((skillLevelName) => {
-              let tooltipText: string;
-              switch (skillLevelName) {
-                case SkillLevel.BASIC:
-                  tooltipText = SkillLevelTooltip.BASIC;
-                  break;
-                case SkillLevel.INTERMEDIATE:
-                  tooltipText = SkillLevelTooltip.INTERMEDIATE;
-                  break;
-                case SkillLevel.EXPERT:
-                  tooltipText = SkillLevelTooltip.EXPERT;
-                  break;
-                default:
-                  tooltipText = '';
-              }
+              const tooltipText: string = SkillLevelTooltipMapper(skillLevelName);
+
               function handleSkillSelection() {
                 setSkillLevel(skillLevelName);
                 setOpen(!open);
@@ -94,7 +77,7 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
               return (
                 <LevelDropdownFieldItem
                   onSelection={handleSkillSelection}
-                  primaryText={skillLevelName}
+                  name={skillLevelName}
                   key={skillLevelName}
                   tooltipTitle={tooltipText}
                 />

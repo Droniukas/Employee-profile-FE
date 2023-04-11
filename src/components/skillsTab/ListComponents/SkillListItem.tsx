@@ -5,16 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSavedSkills } from '../../../features/savedSkills';
 import { onCancelRoot, SavedSkillsDataRoot, ViewStateRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
-import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip';
 import { ViewState } from '../models/enums/ViewState';
-import { SkillData } from '../models/interfaces/SkillData.interface';
-import LevelDropdownField from './LevelDropdownField';
+import { Skill } from '../models/interfaces/Skill.interface';
+import LevelDropdownField from './SkillLevelDropdownField';
+import SkillLevelTooltipMapper from './SkillLevelTooltipMapper';
+import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillCheckbox from './SkillListCheckbox';
 import SkillListItemErrorText from './SkillListItemErrorText';
-import SkillListItemLevel from './SkillListItemViewLevel';
 
 type Props = {
-  skillObj: SkillData;
+  skillObj: Skill;
 };
 
 function SkillListItem({ skillObj }: Props) {
@@ -37,31 +37,18 @@ function SkillListItem({ skillObj }: Props) {
       ? dispatch(
           setSavedSkills([
             ...savedSkills,
-            { id: skillObj.id, skill: skillObj.skill, checked: true, skillLevel: skillLevel },
+            { id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: skillLevel },
           ]),
         )
       : dispatch(
           setSavedSkills([
             ...savedSkills.filter((item) => item.id !== skillObj.id),
-            { id: skillObj.id, skill: skillObj.skill, checked: false, skillLevel: null },
+            { id: skillObj.id, skill: skillObj.skillName, checked: false, skillLevel: null },
           ]),
         );
   }
 
-  let tooltipText: string;
-  switch (skillLevel) {
-    case SkillLevel.BASIC:
-      tooltipText = SkillLevelTooltip.BASIC;
-      break;
-    case SkillLevel.INTERMEDIATE:
-      tooltipText = SkillLevelTooltip.INTERMEDIATE;
-      break;
-    case SkillLevel.EXPERT:
-      tooltipText = SkillLevelTooltip.EXPERT;
-      break;
-    default:
-      tooltipText = '';
-  }
+  const tooltipText: string = SkillLevelTooltipMapper(skillLevel);
 
   return (
     <>
@@ -78,12 +65,12 @@ function SkillListItem({ skillObj }: Props) {
             label=""
           />
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
-            {skillObj.skill}
+            {skillObj.skillName}
             {skillObj.hasError ? <SkillListItemErrorText /> : null}
           </ListItemText>
           {viewState === ViewState.VIEW_STATE ? (
             isChecked ? (
-              <SkillListItemLevel primaryText={skillLevel} tooltipText={tooltipText} />
+              <SkillLevelWithTooltip name={skillLevel} tooltipText={tooltipText} />
             ) : null
           ) : null}
           {viewState === ViewState.EDIT_STATE ? (

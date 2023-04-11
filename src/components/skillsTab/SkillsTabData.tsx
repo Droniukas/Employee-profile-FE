@@ -8,13 +8,13 @@ import { setViewState } from '../../features/viewState';
 import { SkillsService } from '../../services/skills.service';
 import { SavedSkillsDataRoot } from '../../store/types';
 import { SkillLevel } from './models/enums/SkillLevel';
-import { SavedSkills } from './models/interfaces/SavedSkillData.interface';
-import { SkillData } from './models/interfaces/SkillData.interface';
+import { ChangedSkill } from './models/interfaces/ChangedSkill.interface';
+import { Skill } from './models/interfaces/Skill.interface';
 import SkillsTab from './SkillsTab';
 
 function SkillsTabData() {
-  const [skillDataArr, setSkillDataArr] = useState<Array<SkillData>>([]);
-  const savedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value);
+  const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
+  const changedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value);
 
   const skillsService = new SkillsService();
 
@@ -26,11 +26,13 @@ function SkillsTabData() {
   async function fetchData() {
     dispatch(setLoading(true));
     const response = await skillsService.fetchSkillData();
+    console.log(response);
     setSkillDataArr(response);
+    console.log(skillDataArr);
     dispatch(setLoading(false));
   }
 
-  function setErrorForSkills(childObj: SavedSkills | SkillData) {
+  function setErrorForSkills(childObj: ChangedSkill | Skill) {
     const skillWithError = skillDataArr.find((obj) => obj.id === childObj.id);
     if (skillWithError === undefined) throw new Error('undefined object...');
     skillWithError.hasError = true;
@@ -42,7 +44,7 @@ function SkillsTabData() {
 
   function errorCheck() {
     skillDataArr.forEach((obj) => (obj.hasError = false));
-    const unselectedLevelSkills = savedSkills.filter((obj) => obj.skillLevel === SkillLevel.NONE);
+    const unselectedLevelSkills = changedSkills.filter((obj) => obj.skillLevel === SkillLevel.NONE);
     if (unselectedLevelSkills.length > 0) {
       unselectedLevelSkills.forEach((objWithError) => {
         setErrorForSkills(objWithError);
@@ -54,12 +56,12 @@ function SkillsTabData() {
 
   async function handleSave() {
     if (errorCheck()) return;
-    savedSkills.forEach(async (obj) => {
+    changedSkills.forEach(async (obj) => {
       await skillsService.updateEmployeeSkill(obj);
     });
+    await fetchData();
     dispatch(setViewState({}));
     dispatch(setSavedSkills([]));
-    await fetchData();
   }
 
   async function handleCancel() {

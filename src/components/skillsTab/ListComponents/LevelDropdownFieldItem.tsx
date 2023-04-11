@@ -3,17 +3,17 @@ import { ListItemButton, ListItemText, Tooltip } from '@mui/material';
 import { SkillLevel } from '../models/enums/SkillLevel';
 
 type Props = {
-  primaryText: SkillLevel;
+  name: SkillLevel;
   onSelection: () => void;
   tooltipTitle: string;
 };
 
-function LevelDropdownFieldItem({ primaryText, onSelection, tooltipTitle }: Props) {
+function LevelDropdownFieldItem({ name, onSelection, tooltipTitle }: Props) {
   return (
     <>
       <Tooltip title={tooltipTitle} disableInteractive>
         <ListItemButton sx={{ height: 1 }} onClick={onSelection}>
-          <ListItemText primary={primaryText} sx={{ marginTop: 0, marginBottom: 0 }} />
+          <ListItemText primary={name} sx={{ marginTop: 0, marginBottom: 0 }} />
         </ListItemButton>
       </Tooltip>
     </>

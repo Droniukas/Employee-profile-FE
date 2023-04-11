@@ -20,9 +20,7 @@ function SkillCheckbox({ isDisabled, isChecked, onChange }: Props) {
     <>
       <Checkbox
         disabled={isDisabled}
-        onChange={() => {
-          onChange();
-        }}
+        onChange={onChange}
         checked={isChecked}
         sx={{
           color: checkboxColor,
