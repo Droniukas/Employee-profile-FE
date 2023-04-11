@@ -17,7 +17,6 @@ import Project from '../../models/Project.interface';
 import ProjectForm from '../projectForm/ProjectForm';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import {ProjectStatus} from '../enums/ProjectStatus';
 
 type ProjectProfilesResultsProps = {
   results: Project[];

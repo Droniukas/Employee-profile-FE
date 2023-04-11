@@ -66,6 +66,50 @@ const { setAppState } = props;
 }
 ---
 
+---
+
+// This is bad
+
+function TabPanel(props: TabPanelProps) { ... }
+
+function setInputValue(val: string) {
+
+...
+
+}
+
+// This is good
+
+const TabPanel = (props: TabPanelProps) => { ... };
+
+const setInputValue = (value: string) => {
+
+...
+
+};
+
+---
+
+// This is bad
+
+const Login: React.FC<LoginProps> = ({ setAppState }) => {
+
+....
+
+}
+
+// This is good
+
+const Login: React.FC<LoginProps> = (props: LoginProps) => {
+
+const { setAppState } = props;
+
+...
+
+}
+
+---
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
