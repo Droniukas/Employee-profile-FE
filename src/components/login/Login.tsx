@@ -70,14 +70,14 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
     >
       <Stack spacing={{ xs: 1, sm: 2, md: 4 }}>
         <Box
-          component='div'
+          component="div"
           sx={{
             my: 10,
             mb: 2,
           }}
         >
           <Typography
-            variant='h1'
+            variant="h1"
             sx={{
               mt: 10,
               height: '72px',
@@ -92,8 +92,8 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
             Welcome to Employee Profile
           </Typography>
         </Box>
-        <Box component='form' onSubmit={handleSubmit(formSubmithandler)}>
-          <Box component='div' sx={{ my: 2 }}>
+        <Box component="form" onSubmit={handleSubmit(formSubmithandler)}>
+          <Box component="div" sx={{ my: 2 }}>
             <InputLabel
               sx={{
                 pb: 1,
@@ -104,12 +104,12 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
             </InputLabel>
             <TextField
               fullWidth
-              size='small'
-              variant='outlined'
-              placeholder='e.g., name@cognizant.com'
+              size="small"
+              variant="outlined"
+              placeholder="e.g., name@cognizant.com"
               required
-              id='email'
-              autoComplete='email'
+              id="email"
+              autoComplete="email"
               {...register('email', emailValidationRules)}
               error={!!errors.email}
               helperText={
@@ -127,7 +127,7 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
               }}
             />
           </Box>
-          <Box component='div' sx={{ my: 2 }}>
+          <Box component="div" sx={{ my: 2 }}>
             <InputLabel
               sx={{
                 pb: 1,
@@ -138,29 +138,27 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
             </InputLabel>
             <TextField
               fullWidth
-              size='small'
-              variant='outlined'
+              size="small"
+              variant="outlined"
               required
-              id='password'
-              type='password'
-              autoComplete='current-password'
+              id="password"
+              type="password"
+              autoComplete="current-password"
               {...register('password', passwordValidationRules)}
               error={!!errors?.password}
               helperText={errors.password ? errors.password.message : ''}
               onChange={handlePasswordChange}
               sx={{ '& fieldset': { borderRadius: 2 } }}
             />
-            <Link href='#'>
-              <Typography sx={{ fontSize: 14, fontWeight: 400, mt: 1 }}>
-                Forgot password?
-              </Typography>
+            <Link href="#">
+              <Typography sx={{ fontSize: 14, fontWeight: 400, mt: 1 }}>Forgot password?</Typography>
             </Link>
           </Box>
           <Box sx={{ my: 4 }}>
             <Button
-              type='submit'
+              type="submit"
               fullWidth
-              variant='contained'
+              variant="contained"
               disabled={isEmailEmpty || isPasswordEmpty}
               onClick={handleButtonClick}
               sx={{ my: 1 }}
@@ -177,16 +175,11 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
             >
               <Typography sx={{ color: '#999999' }}>or</Typography>
             </Divider>
-            <Button
-              type='submit'
-              fullWidth
-              variant='text'
-              sx={{ bgcolor: 'secondary.main', my: 1 }}
-            >
+            <Button type="submit" fullWidth variant="text" sx={{ bgcolor: 'secondary.main', my: 1 }}>
               Sign in with Cognizant SSO
             </Button>
             {Object.keys(errors).length > 0 && (
-              <Typography color='error' align='center'>
+              <Typography color="error" align="center">
                 Incorrect email or password.
               </Typography>
             )}

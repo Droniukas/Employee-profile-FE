@@ -40,10 +40,10 @@ const ProjectProfiles = () => {
   };
 
   return (
-    <div className='project-profiles-container'>
+    <div className="project-profiles-container">
       <Box
-        display='flex'
-        justifyContent='flex-end'
+        display="flex"
+        justifyContent="flex-end"
         sx={{
           position: 'relative',
           my: 0.25,
@@ -52,9 +52,9 @@ const ProjectProfiles = () => {
         }}
       >
         <Button
-          type='submit'
-          variant='contained'
-          id='addNewProject'
+          type="submit"
+          variant="contained"
+          id="addNewProject"
           onClick={() => setOpenPopup(true)}
           sx={{
             my: 1,
@@ -84,6 +84,3 @@ const ProjectProfiles = () => {
 };
 
 export default ProjectProfiles;
-function forceUpdate() {
-  throw new Error('Function not implemented.');
-}

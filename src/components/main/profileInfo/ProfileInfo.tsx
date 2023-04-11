@@ -17,10 +17,10 @@ const ProfileInfo: React.FC<Props> = ({ results }) => {
           src={`data:${results?.imageType};base64,${results?.imageBytes}`}
           sx={{ position: 'absolute', width: 120, height: 120, left: '5vw', top: 200 }}
         />
-        <h1 className='name'>
+        <h1 className="name">
           {results.name} {results.middleName} {results.surname}
         </h1>
-        <h4 className='position'>{results.title}</h4>
+        <h4 className="position">{results.title}</h4>
       </Box>
     </>
   );

@@ -23,12 +23,7 @@ type Props = {
   focusProjectId?: string;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({
-  results,
-  handleProjectDelete,
-  focusProjectId,
-  rerender,
-}) => {
+const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, focusProjectId, rerender }) => {
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
@@ -64,11 +59,10 @@ const ProjectProfilesResult: React.FC<Props> = ({
   };
 
   function renderResultItem(result: Project) {
-    console.log(result.id, focusProjectId);
     return (
       <div key={result.id}>
         <ListItem
-          alignItems='flex-start'
+          alignItems="flex-start"
           sx={{
             border: 1,
             borderColor: '#DDDDDD',
@@ -77,16 +71,10 @@ const ProjectProfilesResult: React.FC<Props> = ({
             mb: 1,
           }}
         >
-          <Grid
-            container
-            direction='row'
-            justifyContent='flex-start'
-            alignItems='center'
-            spacing={0.5}
-          >
+          <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={0.5}>
             <Grid item xs={1}>
               <Box
-                display='flex'
+                display="flex"
                 sx={{
                   border: 1,
                   borderColor: '#DDDDDD',
@@ -139,15 +127,15 @@ const ProjectProfilesResult: React.FC<Props> = ({
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Box alignItems='flex-start' display='flex'>
+              <Box alignItems="flex-start" display="flex">
                 {renderEmployeesAvatarGroup(result.employees)}
               </Box>
-              <Box alignItems='flex-end' display='flex'>
+              <Box alignItems="flex-end" display="flex">
                 {setStatus(result.startDate, result.endDate)}
                 <IconButton
                   ref={focusProjectId === result.id ? buttonToFocusRef : null}
-                  className='btn-edit'
-                  aria-label='edit'
+                  className="btn-edit"
+                  aria-label="edit"
                   sx={{
                     color: '#000048',
                     position: 'relative',
@@ -160,8 +148,8 @@ const ProjectProfilesResult: React.FC<Props> = ({
                   <EditIcon />
                 </IconButton>
                 <IconButton
-                  className='btn-delete'
-                  aria-label='delete'
+                  className="btn-delete"
+                  aria-label="delete"
                   sx={{
                     color: '#000048',
                     position: 'relative',
@@ -277,7 +265,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
     return (
       <>
         <Box
-          display='flex'
+          display="flex"
           sx={{
             position: 'relative',
             left: 270,
@@ -305,7 +293,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
           width: '100%',
         }}
       >
-        <ListItem alignItems='flex-start'>
+        <ListItem alignItems="flex-start">
           <Typography
             sx={{
               color: '#000048',
@@ -320,9 +308,7 @@ const ProjectProfilesResult: React.FC<Props> = ({
   } else {
     return (
       <>
-        {openPopup && projectToEdit && (
-          <ProjectForm onClose={closeEditForm} project={projectToEdit} />
-        )}
+        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}

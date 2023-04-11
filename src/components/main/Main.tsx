@@ -45,45 +45,26 @@ const Main = () => {
 
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box
-          sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}
-        >
-          <Tabs
-            value={location.pathname}
-            onChange={handleChange}
-            indicatorColor='secondary'
-            aria-label='secondary'
-          >
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
+          <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
+            <Tab label="Skills" value={ROUTES.HOME} to={ROUTES.HOME} component={Link} {...getIndexedProps(0)} />
             <Tab
-              label='Skills'
-              value={ROUTES.HOME}
-              to={ROUTES.HOME}
-              component={Link}
-              {...getIndexedProps(0)}
-            />
-            <Tab
-              label='Achievements'
+              label="Achievements"
               value={ROUTES.ACHIEVEMENTS}
               to={ROUTES.ACHIEVEMENTS}
               component={Link}
               {...getIndexedProps(1)}
             />
             <Tab
-              label='My projects'
+              label="My projects"
               value={ROUTES.MY_PROJECTS}
               to={ROUTES.MY_PROJECTS}
               component={Link}
               {...getIndexedProps(2)}
             />
+            <Tab label="Search" value={ROUTES.SEARCH} to={ROUTES.SEARCH} component={Link} {...getIndexedProps(3)} />
             <Tab
-              label='Search'
-              value={ROUTES.SEARCH}
-              to={ROUTES.SEARCH}
-              component={Link}
-              {...getIndexedProps(3)}
-            />
-            <Tab
-              label='Project profiles'
+              label="Project profiles"
               value={ROUTES.PROJECT_PROFILES}
               to={ROUTES.PROJECT_PROFILES}
               component={Link}
@@ -92,7 +73,7 @@ const Main = () => {
           </Tabs>
         </Box>
 
-        <Box display='flex' justifyContent='left' alignItems='left' paddingLeft='230px'>
+        <Box display="flex" justifyContent="left" alignItems="left" paddingLeft="230px">
           <Routes>
             <Route
               index

@@ -57,33 +57,24 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
   };
 
   if (project) initialValues = project;
-  const {
-    values,
-    touched,
-    errors,
-    dirty,
-    handleBlur,
-    handleChange,
-    setFieldValue,
-    setFieldTouched,
-  } = useFormik({
+  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched } = useFormik({
     initialValues,
     onSubmit: handleFormSubmit,
     validationSchema: projectSchema,
   });
 
   return (
-    <Dialog open={true} maxWidth='md'>
-      <Dialog open={confirmationDialog} maxWidth='xl'>
+    <Dialog open={true} maxWidth="md">
+      <Dialog open={confirmationDialog} maxWidth="xl">
         <DialogTitle>Confirm exit</DialogTitle>
         <DialogContent>
           <Typography>Changes will be lost, are you sure you want to leave?</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmationDialog(false)} color='error' variant='contained'>
+          <Button onClick={() => setConfirmationDialog(false)} color="error" variant="contained">
             Cancel
           </Button>
-          <Button onClick={() => onClose()} sx={{ m: 1 }} variant='contained'>
+          <Button onClick={() => onClose()} sx={{ m: 1 }} variant="contained">
             confirm
           </Button>
         </DialogActions>
@@ -96,13 +87,13 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
             dirty ? setConfirmationDialog(true) : onClose();
           }}
         >
-          <CloseIcon fontSize='medium' />
+          <CloseIcon fontSize="medium" />
         </Button>
       </Box>
 
-      <Box component='form' sx={{ marginX: 5, marginY: 3 }}>
+      <Box component="form" sx={{ marginX: 5, marginY: 3 }}>
         <Typography
-          variant='h1'
+          variant="h1"
           sx={{
             mb: 2,
             fontWeight: 400,
@@ -125,8 +116,8 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
             error={touched.title && Boolean(errors.title)}
             helperText={touched.title && errors.title}
             name={'title'}
-            size='small'
-            variant='outlined'
+            size="small"
+            variant="outlined"
             inputProps={{ maxLength: 50 }}
             sx={{
               '& fieldset': {
@@ -137,7 +128,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
         </Box>
         {/* description input */}
         <Box
-          component='div'
+          component="div"
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -158,8 +149,8 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
             fullWidth
             multiline
             rows={8}
-            variant='outlined'
-            placeholder='e.g., Give a short description about project background and expected outcome.'
+            variant="outlined"
+            placeholder="e.g., Give a short description about project background and expected outcome."
             inputProps={{ maxLength: 1000 }}
             sx={{
               '& fieldset': {
@@ -177,7 +168,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 sx={{ width: 300 }}
-                format='YYYY/MM/DD'
+                format="YYYY/MM/DD"
                 value={dayjs(values.startDate)}
                 onChange={(newValue) => {
                   if (newValue === null) return;
@@ -189,14 +180,9 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
               />
             </LocalizationProvider>
           </Box>
-          <Box
-            marginX={2}
-            sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}
-          >
+          <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
             <Checkbox onChange={(e) => setEndDateExists(e.target.checked)} />
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
-              Add end date of a project
-            </Typography>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
           </Box>
         </Box>
         {endDateExists && (
@@ -207,7 +193,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 sx={{ width: 300 }}
-                format='YYYY/MM/DD'
+                format="YYYY/MM/DD"
                 minDate={dayjs(values.startDate)}
                 value={values.endDate ? dayjs(values.endDate) : null}
                 onChange={(newValue) => {
@@ -219,12 +205,12 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           </Box>
         )}
         {/* Team member box */}
-        <Box component='div' sx={{ my: 2 }}>
+        <Box component="div" sx={{ my: 2 }}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
           </InputLabel>
           <Box
-            component='div'
+            component="div"
             height={200}
             sx={{
               backgroundColor: '#ededed',
@@ -235,9 +221,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
               alignItems: 'center',
             }}
           >
-            <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>
-              No team members yet
-            </Typography>
+            <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>No team members yet</Typography>
 
             <Typography
               sx={{
@@ -248,14 +232,12 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
                 textAlign: 'center',
               }}
             >
-              Add team members to the project to track the resources and allow your colleagues to
-              follow their career within organization
+              Add team members to the project to track the resources and allow your colleagues to follow their career
+              within organization
             </Typography>
 
-            <Link sx={{ color: '#000048' }} href='#'>
-              <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>
-                Add team member
-              </Typography>
+            <Link sx={{ color: '#000048' }} href="#">
+              <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
             </Link>
           </Box>
         </Box>
@@ -263,8 +245,8 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
         <Divider />
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
-            variant='contained'
-            color='info'
+            variant="contained"
+            color="info"
             sx={{ m: 1 }}
             onClick={() => {
               dirty ? setConfirmationDialog(true) : onClose();
@@ -272,7 +254,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           >
             Cancel
           </Button>
-          <Button sx={{ m: 1 }} variant='contained' onClick={handleFormSubmit}>
+          <Button sx={{ m: 1 }} variant="contained" onClick={handleFormSubmit}>
             Save
           </Button>
         </Box>
