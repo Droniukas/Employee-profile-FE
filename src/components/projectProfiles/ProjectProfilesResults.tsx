@@ -15,6 +15,7 @@ import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import {ProjectStatus} from '../enums/ProjectStatus';
 
 type Props = {
   results: Project[];
