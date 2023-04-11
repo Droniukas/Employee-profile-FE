@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles'
-import { checkboxClasses } from '@mui/material/Checkbox'
+import { checkboxClasses } from '@mui/material/Checkbox';
+import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
@@ -46,6 +46,6 @@ const theme = createTheme({
       },
     },
   },
-})
+});
 
 export default theme;
