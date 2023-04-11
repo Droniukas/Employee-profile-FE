@@ -1,60 +1,57 @@
-import { Box, Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material'
-import { useState } from 'react'
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import ViewButtons from './ViewButtons'
-import SkillListItem from './ListComponents/SkillListItem'
-import { SkillData } from './models/interfaces/SkillData.interface'
+import { Box, Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { useState } from 'react';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import ViewButtons from './ViewButtons';
+import SkillListItem from './ListComponents/SkillListItem';
+import { SkillData } from './models/interfaces/SkillData.interface';
 
 const sortBySkill = (a: SkillData, b: SkillData) => {
   const fa = a.skill.toLowerCase(),
-    fb = b.skill.toLowerCase()
+    fb = b.skill.toLowerCase();
   if (fa < fb) {
-    return -1
+    return -1;
   }
   if (fa > fb) {
-    return 1
+    return 1;
   }
-  return 0
-}
+  return 0;
+};
 
 type Props = {
-  skillData: SkillData[]
-  saveFunction: () => void
-  cancelFunction: () => void
-}
+  skillData: SkillData[];
+  saveFunction: () => void;
+  cancelFunction: () => void;
+};
 
 function SkillsTab({ skillData, saveFunction, cancelFunction }: Props) {
   function mapData(dataArr: SkillData[]) {
     {
       return dataArr.map((currentObj: SkillData) => {
-        const [isCollapsed, setIsCollapsed] = useState(false)
+        const [isCollapsed, setIsCollapsed] = useState(false);
         return (
           <>
             <List
               key={currentObj.id}
               disablePadding
               sx={{
+                border: 1,
+                marginLeft: currentObj.indent * 6,
+                backgroundColor: 'white',
                 ...(currentObj.hasError
                   ? {
-                      border: 1,
                       borderColor: '#ef4349',
-                      backgroundColor: 'white',
                       color: '#ef4349',
-                      marginLeft: currentObj.indent * 6,
                     }
                   : {
-                      border: 1,
                       borderColor: '#DDDDDD',
-                      backgroundColor: 'white',
                       color: 'primary.main',
-                      marginLeft: currentObj.indent * 6,
                     }),
               }}
             >
               <ListItem disablePadding>
                 <ListItemButton
                   onClick={() => {
-                    setIsCollapsed(!isCollapsed)
+                    setIsCollapsed(!isCollapsed);
                   }}
                 >
                   <ListItemText primary={currentObj.skill} />
@@ -85,13 +82,13 @@ function SkillsTab({ skillData, saveFunction, cancelFunction }: Props) {
                 : null}
             </Collapse>
           </>
-        )
-      })
+        );
+      });
     }
   }
 
   function mapSkills(arr: SkillData[]) {
-    return arr.map((obj: SkillData) => <SkillListItem skillObj={obj} key={obj.id} />)
+    return arr.map((obj: SkillData) => <SkillListItem skillObj={obj} key={obj.id} />);
   }
 
   return (
@@ -103,9 +100,9 @@ function SkillsTab({ skillData, saveFunction, cancelFunction }: Props) {
         {mapData(skillData.filter((obj: SkillData) => obj.parentId === null))}
       </Box>
     </>
-  )
+  );
 }
 
-export default SkillsTab
+export default SkillsTab;
 
 // pervadint failus: skillsTabData i skillsTab, o skillsTab i skillsTabIterator ar kazkas tokio
