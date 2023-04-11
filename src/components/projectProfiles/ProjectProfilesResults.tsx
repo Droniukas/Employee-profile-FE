@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import ProjectsResult from '../../models/ProjectProfilesResult.interface';
+import Project from '../../models/Project.interface';
 import Employee from '../../models/Employee.interface';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -12,30 +11,31 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import FolderIcon from '@mui/icons-material/Folder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Stack from '@mui/material/Stack';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import {ProjectStatus} from '../enums/ProjectStatus';
 
 type Props = {
-    results: ProjectsResult[];
+    results: Project[];
     handleProjectDelete: (id: string) => void;
     filterStatus: string;
 };
 
 const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete, filterStatus}) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [projectToDelete, setProjectToDelete] = useState<ProjectsResult | null>(null);
+    const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
     const handleDeleteConfirmationClose = () => {
         setProjectToDelete(null);
         setShowDeleteConfirmation(false);
     };
 
-    const handleDeleteClick = (result: ProjectsResult) => {
+    const handleDeleteClick = (result: Project) => {
         setProjectToDelete(result);
         setShowDeleteConfirmation(true);
     };
 
-    function renderResultItem(result: ProjectsResult) {
+    function renderResultItem(result: Project) {
         return (
             <div key={result.id}>
                 <ListItem alignItems='flex-start'
@@ -46,13 +46,15 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete, f
                               backgroundColor: 'white',
                               mb: 1,
                           }}>
-                    <Grid container
-                          direction='row'
-                          justifyContent='flex-start'
-                          alignItems='center'
-                          spacing={0.5}>
-                        <Grid item
-                              xs={1}>
+                    <Stack direction='row'>
+                        <Stack direction='row'
+                               justifyContent='flex-start'
+                               alignItems='center'
+                               sx={{
+                                   position: 'relative',
+                                   width: 800,
+                                   left: 0,
+                               }}>
                             <Box display='flex'
                                  sx={{
                                      border: 1,
@@ -68,67 +70,80 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete, f
                                     fontSize: 26,
                                 }}/>
                             </Box>
-                        </Grid>
-                        <Grid item
-                              xs={5}>
-                            <Typography sx={{
-                                color: '#666666',
-                                fontSize: 14,
-                                pt: 1,
+                            <Box sx={{
+                                position: 'relative',
+                                width: 400,
+                                left: 25,
                             }}>
-                                {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
-                            </Typography>
-                            <Typography sx={{
-                                color: '#000048',
-                                fontSize: 20,
-                            }}>
-                                {result.title}
-                            </Typography>
-                            <Typography sx={{
-                                color: '#666666',
-                                fontSize: 14,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                display: '-webkit-box',
-                                WebkitLineClamp: '3',
-                                WebkitBoxOrient: 'vertical',
-                            }}>
-                                {result.description}
-                            </Typography>
-                        </Grid>
-                        <Grid item
-                              xs={6}>
+                                <Typography sx={{
+                                    color: '#666666',
+                                    fontSize: 14,
+                                    pt: 1,
+                                }}>
+                                    {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                                </Typography>
+                                <Typography sx={{
+                                    color: '#000048',
+                                    fontSize: 20,
+                                }}>
+                                    {result.title}
+                                </Typography>
+                                <Typography sx={{
+                                    color: '#666666',
+                                    fontSize: 14,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: '3',
+                                    WebkitBoxOrient: 'vertical',
+                                }}>
+                                    {result.description}
+                                </Typography>
+                            </Box>
                             <Box alignItems='flex-start'
-                                 display='flex'>
+                                 display='flex'
+                                 sx={{
+                                     position: 'relative',
+                                     left: 70,
+                                 }}>
                                 {renderEmployeesAvatarGroup(result.employees)}
                             </Box>
+                        </Stack>
+                        <Stack direction='row'
+                               justifyContent='flex-start'
+                               alignItems='center'
+                               sx={{
+                                   position: 'relative',
+                                   width: 544,
+                                   left: 0,
+                               }}>
+                            {setStatusColors(result.status)}
                             <Box alignItems='flex-end'
                                  display='flex'>
-                                {setStatusColors(result.status)}
-                                <IconButton className='btn-edit' aria-label='edit'
+                                <IconButton className='btn-edit'
+                                            aria-label='edit'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
-                                                left: 455,
-                                                top: -35,
+                                                left: 320,
                                                 backgroundColor: '#F4F4F4',
                                             }}>
                                     <EditIcon/>
                                 </IconButton>
-                                <IconButton className='btn-delete' aria-label='delete'
+                                <IconButton className='btn-delete'
+                                            aria-label='delete'
                                             sx={{
                                                 color: '#000048',
                                                 position: 'relative',
-                                                left: 470,
-                                                top: -35,
+                                                left: 335,
                                                 backgroundColor: '#F4F4F4',
                                             }}
                                             onClick={() => handleDeleteClick(result)}>
                                     <DeleteIcon/>
                                 </IconButton>
                             </Box>
-                        </Grid>
-                    </Grid>
+                        </Stack>
+                    </Stack>
                 </ListItem>
             </div>
         );
@@ -208,17 +223,16 @@ const ProjectProfilesResult: React.FC<Props> = ({results, handleProjectDelete, f
             <>
                 <Box display='flex'
                      sx={{
-                         position: 'relative',
-                         left: 270,
-                         top: -40,
-                         background: statusColor,
-                         color: fontColor,
-                         borderRadius: 1,
-                         fontSize: 14,
-                         width: 90,
-                         height: 28,
                          justifyContent: 'center',
                          alignItems: 'center',
+                         width: 90,
+                         height: 28,
+                         position: 'relative',
+                         left: 0,
+                         borderRadius: 1,
+                         background: statusColor,
+                         color: fontColor,
+                         fontSize: 14,
                      }}>
                     {projectStatus}
                 </Box>
