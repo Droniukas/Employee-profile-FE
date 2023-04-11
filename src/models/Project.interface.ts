@@ -1,6 +1,6 @@
 import Employee from './Employee.interface';
 
-interface ProjectProfilesResult {
+interface Project {
     id: string,
     title: string,
     startDate: string,
@@ -10,4 +10,4 @@ interface ProjectProfilesResult {
     status: string,
 }
 
-export default ProjectProfilesResult;
+export default Project;
