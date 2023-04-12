@@ -1,43 +1,31 @@
+import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import Project from '../../models/Project.interface';
-import SearchInput from '../inputs/SearchInput';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import useDebouncedState from '../../hooks/useDebouncedState';
 import Employee from '../../models/Employee.interface';
+import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
+import SearchInput from '../inputs/SearchInput';
 import EmployeeList from './EmployeeList';
-import CloseIcon from '@mui/icons-material/Close';
 
-type Props = {
+type AddEmployeeFormProps = {
   project?: Project;
 };
 
-const AddEmployeeForm: React.FC<Props> = ({ project }) => {
-  const [searchValue, setSearchValue] = useState('');
+const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormProps) => {
+  const { project } = props;
   const [allNonAddedEmployees, setAllNonAddedEmployees] = useState<Employee[]>([]);
-  const [filteredNonAddedEmployees, setfilteredNonAddedEmployees] = useState<Employee[]>([]);
+  const [filteredNonAddedEmployees, setFilteredNonAddedEmployees] = useState<Employee[]>([]);
+  const [searchValue, setSearchValue] = useDebouncedState('', 500);
 
-  const employeeService = new EmployeeService();
-  const projectService = new ProjectsService();
-
-  useEffect(() => {
-    getAllNonAddedEmployees();
-
-    const keyDownHandler = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        getFilteredNonAddedEmployees();
-        event.preventDefault();
-      }
-    };
-    window.addEventListener('keydown', keyDownHandler);
-
-    return () => {
-      window.removeEventListener('keydown', keyDownHandler);
-    };
-  }, []);
-
-  const getAllNonAddedEmployees = async () => {
+  // When adding a new project, return all employees.
+  // When editing a project, return all employees that are not already added to the project.
+  const allNonAddedEmployeesMemo = useMemo(async () => {
+    const employeeService = new EmployeeService();
+    const projectService = new ProjectsService();
     const allEmployees = await employeeService.getAll();
 
     if (project) {
@@ -45,21 +33,28 @@ const AddEmployeeForm: React.FC<Props> = ({ project }) => {
         project.id,
       );
 
-      setAllNonAddedEmployees(
-        allEmployees.filter((employee: Employee) => {
-          return !allProjectEmployees.some(
-            (projectEmployee: ProjectEmployee) => projectEmployee.employeeId === employee.id,
-          );
+      return allEmployees.filter((employee: Employee) => {
+        return !allProjectEmployees.some(
+          (projectEmployee: ProjectEmployee) => projectEmployee.employeeId === employee.id,
+        );
+      });
+    } else {
+      return allEmployees;
+    }
+  }, [project]);
+
+  // Filter employees that are not added to the project by search value.
+  useEffect(() => {
+    allNonAddedEmployeesMemo.then((employees: Employee[]) => setAllNonAddedEmployees(employees));
+    const getFilteredEmployees = () => {
+      setFilteredNonAddedEmployees(
+        allNonAddedEmployees.filter((employee: Employee) => {
+          return employee.name.toLowerCase().includes(searchValue.toLowerCase());
         }),
       );
-    } else {
-      setAllNonAddedEmployees(allEmployees);
-    }
-  };
-
-  const getFilteredNonAddedEmployees = () => {
-    // Needs to be implemented
-  };
+    };
+    getFilteredEmployees();
+  }, [searchValue, allNonAddedEmployees, allNonAddedEmployeesMemo]);
 
   return (
     <Dialog open={true} fullWidth maxWidth='md'>
@@ -82,14 +77,12 @@ const AddEmployeeForm: React.FC<Props> = ({ project }) => {
           Add team members
         </Typography>
         <SearchInput
-          placeholder='Search employees by name, skills projects or achievements...'
-          onChange={(value) => setSearchValue(value)}
+          placeholder='Search employees by name...'
+          onChange={(value) => {
+            setSearchValue(value);
+          }}
         />
-        {filteredNonAddedEmployees.length > 0 ? (
-          <EmployeeList employees={allNonAddedEmployees} />
-        ) : (
-          <EmployeeList employees={allNonAddedEmployees} />
-        )}
+        <EmployeeList employees={searchValue ? filteredNonAddedEmployees : allNonAddedEmployees} />
       </Box>
     </Dialog>
   );

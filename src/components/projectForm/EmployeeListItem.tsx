@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
-import Employee from '../../models/Employee.interface';
 import {
-  ListItem,
+  Avatar,
   Box,
   Checkbox,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-  InputLabel,
-  Typography,
   Grid,
+  InputLabel,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
 } from '@mui/material';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import React, { useState } from 'react';
+
+import Employee from '../../models/Employee.interface';
 
 type EmployeeListItemProps = {
   employee: Employee;
 };
 
-const EmployeeListItem: React.FC<EmployeeListItemProps> = ({ employee }) => {
+const EmployeeListItem: React.FC<EmployeeListItemProps> = (props: EmployeeListItemProps) => {
+  const { employee } = props;
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(false);
 
@@ -75,7 +77,7 @@ const EmployeeListItem: React.FC<EmployeeListItemProps> = ({ employee }) => {
                   <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                     <Checkbox disableRipple onChange={(e) => setEndDateExists(e.target.checked)} />
                     <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
-                      Add end date of a member
+                      Add member end date
                     </Typography>
                   </Box>
                 </Box>
