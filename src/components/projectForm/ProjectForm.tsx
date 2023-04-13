@@ -23,12 +23,13 @@ import Project from '../../models/Project.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 
-type Props = {
+type ProjectFormProps = {
   onClose: (projectId?: string) => void;
   project?: Project;
 };
 
-const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
+const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
+  const { onClose, project } = props;
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
 

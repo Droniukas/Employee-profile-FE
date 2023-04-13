@@ -16,14 +16,15 @@ import Project from '../../models/Project.interface';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
-type Props = {
+type ProjectProfilesResultsProps = {
   results: Project[];
   rerender: () => void;
   handleProjectDelete: (id: string) => void;
   focusProjectId?: string;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, focusProjectId, rerender }) => {
+const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
+  const { results, rerender, handleProjectDelete, focusProjectId } = props;
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
