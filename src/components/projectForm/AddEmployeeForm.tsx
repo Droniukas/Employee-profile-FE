@@ -54,7 +54,7 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
   }, [searchValue, allNonAddedEmployees, allNonAddedEmployeesMemo]);
 
   return (
-    <Dialog open={true} fullWidth maxWidth='sm'>
+    <Dialog open={true} fullWidth maxWidth='md'>
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
         <Button sx={{ width: 15, height: 30 }} onClick={onClose}>
           <CloseIcon fontSize='medium' />
