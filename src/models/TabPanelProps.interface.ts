@@ -1,7 +1,7 @@
 interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-  }
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
-  export default TabPanelProps
+export default TabPanelProps;
