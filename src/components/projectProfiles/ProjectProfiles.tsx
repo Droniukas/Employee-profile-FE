@@ -44,9 +44,9 @@ const ProjectProfiles = () => {
     }
   });
 
-  function onFilterValueSelection(filterValue: string) {
+  const onFilterValueSelection = (filterValue: string) => {
     setFilterTextValue(filterValue);
-  }
+  };
 
   return (
     <div className="project-profiles-container">

@@ -8,17 +8,19 @@ import React from 'react';
 
 import { ProjectStatus } from '../enums/ProjectStatus';
 
-type Props = {
+type ProjectFilterProps = {
   onFilterValueSelection: (filterValue: string) => void;
 };
 
-const ProjectFilter: React.FC<Props> = ({ onFilterValueSelection }) => {
+const ProjectFilter: React.FC<ProjectFilterProps> = (props: ProjectFilterProps) => {
+  const { onFilterValueSelection } = props;
+
   const [status, setStatus] = React.useState('All');
 
-  function onFilterValueChange(event: SelectChangeEvent) {
+  const onFilterValueChange = (event: SelectChangeEvent) => {
     onFilterValueSelection(event.target.value);
     setStatus(event.target.value as string);
-  }
+  };
 
   return (
     <Stack

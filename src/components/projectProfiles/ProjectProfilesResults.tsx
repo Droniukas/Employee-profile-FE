@@ -16,13 +16,15 @@ import Project from '../../models/Project.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
-type Props = {
+type ProjectProfilesResultProps = {
   results: Project[];
   handleProjectDelete: (id: string) => void;
   filterStatus: string;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, filterStatus }) => {
+const ProjectProfilesResult: React.FC<ProjectProfilesResultProps> = (props: ProjectProfilesResultProps) => {
+  const { results, handleProjectDelete, filterStatus } = props;
+
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
@@ -36,7 +38,7 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, 
     setShowDeleteConfirmation(true);
   };
 
-  function renderResultItem(result: Project) {
+  const renderResultItem = (result: Project) => {
     return (
       <div key={result.id}>
         <ListItem
@@ -172,17 +174,17 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, 
         </ListItem>
       </div>
     );
-  }
+  };
 
-  function correctDateFormat(date: string) {
+  const correctDateFormat = (date: string) => {
     if (date === null) {
       return null;
     } else {
       return new Date(date).toDateString();
     }
-  }
+  };
 
-  function renderEmployeesAvatarGroup(employees: Employee[]) {
+  const renderEmployeesAvatarGroup = (employees: Employee[]) => {
     const avatarsNeed = 3;
     let counter = 0;
     let additionalEmployees = 0;
@@ -216,9 +218,9 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, 
         </Typography>
       </>
     );
-  }
+  };
 
-  function renderEmployeeAvatar(employee: Employee) {
+  const renderEmployeeAvatar = (employee: Employee) => {
     return (
       <Avatar
         key={employee.id}
@@ -229,9 +231,9 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, 
         }}
       />
     );
-  }
+  };
 
-  function setStatusColors(projectStatus: string) {
+  const setStatusColors = (projectStatus: string) => {
     let statusColor;
     let fontColor;
 
@@ -267,7 +269,7 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete, 
         </Box>
       </>
     );
-  }
+  };
 
   if (!results.length) {
     return (

@@ -1,11 +1,13 @@
 import Box from '@mui/material/Box';
 import React from 'react';
 
-type Props = {
+type StatusChipProps = {
   status: string;
 };
 
-const StatusChip: React.FC<Props> = ({ status }) => {
+const StatusChip: React.FC<StatusChipProps> = (props: StatusChipProps) => {
+  const { status } = props;
+
   let color;
 
   switch (status) {

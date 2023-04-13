@@ -17,7 +17,7 @@ export enum AppState {
   LOGIN_PAGE = 'LoginPage',
 }
 
-function App() {
+const App = () => {
   const [appState, setAppState] = useState<AppState>(AppState.LOGIN_PAGE);
   const handleAppStateChange = (newState: AppState) => {
     setAppState(newState);
@@ -56,6 +56,6 @@ function App() {
       )}
     </>
   );
-}
+};
 
 export default App;
