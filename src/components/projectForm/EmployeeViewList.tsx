@@ -1,3 +1,5 @@
+import './ProjectForm.scss';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Avatar,
@@ -5,21 +7,61 @@ import {
   Divider,
   Grid,
   IconButton,
+  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import Employee from '../../models/Employee.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import { ProjectsService } from '../../services/projects.service';
 import StatusChip from '../findEmployee/StatusChip';
 
-type ViewEmployeeItemProps = {
+type EmployeeViewListProps = {
+  employees: Employee[];
+  projectId?: string;
+};
+
+const EmployeeViewList: React.FC<EmployeeViewListProps> = (props: EmployeeViewListProps) => {
+  const { employees, projectId } = props;
+  const [projectEmployees, setProjectEmployees] = useState<ProjectEmployee[]>([]);
+
+  useEffect(() => {
+    const projectsService = new ProjectsService();
+    const mapProjectEmployees = async (projectId: string) => {
+      const projectEmployeesRelationships =
+        await projectsService.getProjectRelationshipsByProjectId(projectId);
+      setProjectEmployees(
+        projectEmployeesRelationships.map((projectEmployee: ProjectEmployee) => {
+          const employee = employees.find((employee) => employee.id === projectEmployee.employeeId);
+          return { ...projectEmployee, employee: employee };
+        }),
+      );
+    };
+    if (projectId) {
+      mapProjectEmployees(projectId);
+    }
+  }, [projectId, employees]);
+
+  return (
+    <List>
+      {projectEmployees.map((projectEmployee) => (
+        <EmployeeItemView key={projectEmployee.employeeId} projectEmployee={projectEmployee} />
+      ))}
+    </List>
+  );
+};
+
+export default EmployeeViewList;
+
+type EmployeeItemViewProps = {
   projectEmployee: ProjectEmployee;
 };
 
-const ViewEmployeeItem: React.FC<ViewEmployeeItemProps> = (props: ViewEmployeeItemProps) => {
+const EmployeeItemView: React.FC<EmployeeItemViewProps> = (props: EmployeeItemViewProps) => {
   const { projectEmployee } = props;
   if (!projectEmployee.employee) return null;
 
@@ -103,5 +145,3 @@ const ViewEmployeeItem: React.FC<ViewEmployeeItemProps> = (props: ViewEmployeeIt
     </>
   );
 };
-
-export default ViewEmployeeItem;

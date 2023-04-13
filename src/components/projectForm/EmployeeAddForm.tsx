@@ -7,14 +7,14 @@ import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
 import { EmployeeService } from '../../services/employee.service';
 import SearchInput from '../inputs/SearchInput';
-import EmployeeList from './EmployeeList';
+import EmployeeAddList from './EmployeeAddList';
 
-type AddEmployeeFormProps = {
+type EmployeeAddFormProps = {
   project?: Project;
   onClose: () => void;
 };
 
-const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormProps) => {
+const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormProps) => {
   const { project, onClose } = props;
   const [allNonAddedEmployees, setAllNonAddedEmployees] = useState<Employee[]>([]);
   const [filteredNonAddedEmployees, setFilteredNonAddedEmployees] = useState<Employee[]>([]);
@@ -79,9 +79,8 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
             setSearchValue(value);
           }}
         />
-        <EmployeeList
+        <EmployeeAddList
           employees={searchValue ? filteredNonAddedEmployees : allNonAddedEmployees}
-          viewType={'addEmployeeView'}
         />
         <Divider variant='fullWidth' />
         <Box display={'flex'} justifyContent={'flex-end'}>
@@ -96,4 +95,4 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
     </Dialog>
   );
 };
-export default AddEmployeeForm;
+export default EmployeeAddForm;

@@ -1,3 +1,5 @@
+import './ProjectForm.scss';
+
 import {
   Avatar,
   Box,
@@ -9,21 +11,59 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
+import List from '@mui/material/List';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import EmployeeItemState from '../../models/EmployeeItemState.interface';
 
-type AddEmployeeItemProps = {
+type EmployeeAddListProps = {
+  employees: Employee[];
+};
+
+const EmployeeAddList: React.FC<EmployeeAddListProps> = (props: EmployeeAddListProps) => {
+  const { employees } = props;
+  const [employeeItemState, setEmployeeItemState] = useState<EmployeeItemState[]>([]);
+
+  const handleEmployeeItemStateChange = (
+    index: number,
+    newEmployeeItemState: EmployeeItemState,
+  ) => {
+    setEmployeeItemState((prevState) => {
+      const newState = [...prevState];
+      newState[index] = newEmployeeItemState;
+      return newState;
+    });
+  };
+
+  return (
+    <List className='member-list' sx={{ marginTop: '24px' }}>
+      {employees.map((employee, index) => (
+        <EmployeeAddItem
+          key={employee.id}
+          employee={employee}
+          state={employeeItemState[index]}
+          onStateChange={(newEmployeeItemState: EmployeeItemState) =>
+            handleEmployeeItemStateChange(index, newEmployeeItemState)
+          }
+        />
+      ))}
+    </List>
+  );
+};
+
+export default EmployeeAddList;
+
+type EmployeeAddItemProps = {
   employee: Employee;
   state: EmployeeItemState;
   onStateChange: (newEmployeeItemState: EmployeeItemState) => void;
 };
 
-const AddEmployeeItem: React.FC<AddEmployeeItemProps> = (props: AddEmployeeItemProps) => {
+const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemProps) => {
   const { employee, state, onStateChange } = props;
 
   if (!state) {
@@ -152,5 +192,3 @@ const AddEmployeeItem: React.FC<AddEmployeeItemProps> = (props: AddEmployeeItemP
     </>
   );
 };
-
-export default AddEmployeeItem;

@@ -22,8 +22,8 @@ import React, { useState } from 'react';
 import Project from '../../models/Project.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
-import AddEmployeeForm from './AddEmployeeForm';
-import EmployeeList from './EmployeeList';
+import EmployeeAddForm from './EmployeeAddForm';
+import EmployeeViewList from './EmployeeViewList';
 
 type Props = {
   onClose: (projectId?: string) => void;
@@ -244,11 +244,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           </Box>
 
           {project && project.employees.length > 0 ? (
-            <EmployeeList
-              employees={project.employees}
-              projectId={project.id}
-              viewType={'projectView'}
-            />
+            <EmployeeViewList employees={project.employees} projectId={project.id} />
           ) : (
             <Box
               component='div'
@@ -306,7 +302,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
         </Box>
       </Box>
       {showAddEmployeeForm && (
-        <AddEmployeeForm project={project} onClose={handleAddEmployeeFormClose} />
+        <EmployeeAddForm project={project} onClose={handleAddEmployeeFormClose} />
       )}
     </Dialog>
   );
