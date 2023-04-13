@@ -7,7 +7,6 @@ interface Employee {
   hiringDate: string;
   exitDate: string;
   status: string;
-  inProject: boolean;
   imageName: string;
   imageType: string;
   imageBytes: string;
