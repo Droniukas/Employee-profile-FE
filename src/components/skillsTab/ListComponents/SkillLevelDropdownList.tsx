@@ -3,8 +3,8 @@ import { Collapse, List, ListItemButton, ListItemText, Tooltip } from '@mui/mate
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setSavedSkills } from '../../../features/savedSkills';
-import { SavedSkillsDataRoot } from '../../../store/types';
+import { setChangedSkills } from '../../../features/changedSkills';
+import { ChangedSkillsDataRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { Skill } from '../models/interfaces/Skill.interface';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
@@ -23,13 +23,13 @@ function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipTe
     setOpen(!open);
   };
 
-  const savedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value);
+  const savedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
 
   function onDropdownChange(selectedSkill: SkillLevel) {
     setSkillLevel(selectedSkill);
     dispatch(
-      setSavedSkills([
+      setChangedSkills([
         ...savedSkills.filter((item) => item.id !== skillObj.id),
         { id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: selectedSkill },
       ]),

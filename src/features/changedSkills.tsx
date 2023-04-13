@@ -4,16 +4,16 @@ import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedS
 
 const initStateValue: ChangedSkill[] = [];
 
-export const savedSkillsSlice = createSlice({
-  name: 'savedSkills',
+export const changedSkillsSlice = createSlice({
+  name: 'changedSkills',
   initialState: { value: initStateValue },
   reducers: {
-    setSavedSkills: (state, action) => {
+    setChangedSkills: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
-export const { setSavedSkills } = savedSkillsSlice.actions;
+export const { setChangedSkills } = changedSkillsSlice.actions;
 
-export default savedSkillsSlice.reducer;
+export default changedSkillsSlice.reducer;

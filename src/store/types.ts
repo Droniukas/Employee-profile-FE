@@ -7,8 +7,8 @@ export interface onCancelRoot {
   };
 }
 
-export interface SavedSkillsDataRoot {
-  savedSkills: {
+export interface ChangedSkillsDataRoot {
+  changedSkills: {
     value: ChangedSkill[];
   };
 }

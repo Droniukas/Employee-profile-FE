@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setLoading } from '../../features/loading';
-import { triggerOnCancel } from '../../features/onCancel';
-import { setSavedSkills } from '../../features/savedSkills';
+import { setChangedSkills } from '../../features/changedSkills';
 import { setViewState } from '../../features/viewState';
 import { SkillsService } from '../../services/skills.service';
-import { SavedSkillsDataRoot } from '../../store/types';
+import { ChangedSkillsDataRoot } from '../../store/types';
 import { SkillLevel } from './models/enums/SkillLevel';
 import { ChangedSkill } from './models/interfaces/ChangedSkill.interface';
 import { Skill } from './models/interfaces/Skill.interface';
@@ -14,7 +13,7 @@ import SkillsTab from './SkillsTab';
 
 function SkillsTabData() {
   const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
-  const changedSkills = useSelector((state: SavedSkillsDataRoot) => state.savedSkills.value);
+  const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
 
   const skillsService = new SkillsService();
 
@@ -26,9 +25,7 @@ function SkillsTabData() {
   async function fetchData() {
     dispatch(setLoading(true));
     const response = await skillsService.fetchSkillData();
-    console.log(response);
     setSkillDataArr(response);
-    console.log(skillDataArr);
     dispatch(setLoading(false));
   }
 
@@ -61,15 +58,14 @@ function SkillsTabData() {
     });
     await fetchData();
     dispatch(setViewState({}));
-    dispatch(setSavedSkills([]));
+    dispatch(setChangedSkills([]));
   }
 
   async function handleCancel() {
     skillDataArr.forEach((obj) => (obj.hasError = false));
+    dispatch(setChangedSkills([]));
     await fetchData();
-    dispatch(setSavedSkills([]));
     dispatch(setViewState({}));
-    dispatch(triggerOnCancel({}));
   }
 
   return (
