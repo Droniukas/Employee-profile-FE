@@ -1,16 +1,16 @@
-import { Avatar, Box, checkboxClasses, createTheme, CssBaseline, ThemeProvider, Typography } from '@mui/material'
+import { Avatar, Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
-import { WidthFull } from '@mui/icons-material';
+
 import './Header.scss';
 import { EmployeeService } from '../../services/employee.service';
-import EmployeeResult from '../../models/EmployeeResult.interface';
+import Employee from '../../models/Employee.interface';
 
 
 const Header = () => {
-    const [results, setResults] = useState<EmployeeResult>();
+    const [results, setResults] = useState<Employee>();
     const employeeService = new EmployeeService();
 
     const getResults = async (id: string) => {
@@ -28,10 +28,10 @@ const Header = () => {
             <img src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png' alt='' className='image'></img>
             <div className='profile'>
                 <div className='roundBox'></div>
-                <PersonIcon sx={{width:50, 
-                                height: 50, 
-                                marginLeft: 1.9, 
-                                marginTop: 1.9, 
+                <PersonIcon sx={{width:50,
+                                height: 50,
+                                marginLeft: 1.9,
+                                marginTop: 1.9,
                                 color: 'linear-gradient(90deg, #3D54CE 0.02%, #35CACF 100.04%), #000048'}}/>
                 <h4 className='profileText'>My profile</h4>
             </div>
@@ -45,7 +45,7 @@ const Header = () => {
         <Box sx={{ position: 'fixed', zIndex: 4, backgroundColor:'#FFFFFF', borderBottom: 2, borderColor: 'divider', height:100, width: '100%', display:'flex', justifyContent:'right', alignItems:'right'}}>
             <div className='topHeader'>
             <NotificationsIcon sx={{width: 40, height: 40, marginRight:4, marginBottom: 1.1}}/>
-                <Avatar 
+                <Avatar
                 src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                 sx={{ width: 65, height: 65, marginTop: 1, display:'inline-block'}}/>
             </div>

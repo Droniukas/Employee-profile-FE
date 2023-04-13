@@ -1,4 +1,4 @@
-interface EmployeeResult {
+interface Employee {
     id: string,
     name: string,
     surname: string,
@@ -6,9 +6,10 @@ interface EmployeeResult {
     title: string,
     hiringDate: string,
     exitDate: string,
+    status: string,
     imageName: string,
     imageType: string,
     imageBytes: string,
 }
 
-export default EmployeeResult;
+export default Employee;

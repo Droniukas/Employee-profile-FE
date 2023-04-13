@@ -1,10 +1,9 @@
 import { Avatar, Box } from '@mui/material'
-import React, { useState } from 'react'
-import EmployeeResult from '../../../models/EmployeeResult.interface';
-import { EmployeeService } from '../../../services/employee.service';
+import React from 'react'
+import Employee from '../../../models/Employee.interface';
 
 type Props = {
-  results: EmployeeResult;
+  results: Employee;
 };
 
 const ProfileInfo: React.FC<Props> = ({results}) => {
@@ -13,7 +12,7 @@ const ProfileInfo: React.FC<Props> = ({results}) => {
   return (
     <>
         <Box sx={{position:'relative', padding:'150px', marginLeft: 20, paddingRight:100}}>
-            <Avatar 
+            <Avatar
                 src={`data:${results?.imageType};base64,${results?.imageBytes}`}
                 sx={{ position: 'absolute',
                     width: 120,
