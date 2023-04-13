@@ -15,6 +15,7 @@ import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import { Button } from '@mui/material';
 
 type ProjectProfilesResultsProps = {
   results: Project[];
@@ -60,6 +61,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (result: Project) => {
+    const isTextOverflow = result.description.length > 170;
+    console.log(result.description.length, isTextOverflow);
     return (
       <div key={result.id}>
         <ListItem
@@ -124,8 +127,35 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   WebkitBoxOrient: 'vertical',
                 }}
               >
-                {result.description}
+                {isTextOverflow && result.description}
+                {!isTextOverflow && (
+                  <Button
+                    onClick={() => setProject(result)}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: '#000048',
+                      fontSize: 14,
+                      height: 15,
+                    }}
+                  >
+                    Show more
+                  </Button>
+                )}
               </Typography>
+              {/* {isTextOverflow && (
+                <Button
+                  onClick={() => setProject(result)}
+                  sx={{
+                    textDecoration: 'underline',
+                    color: '#000048',
+                    fontSize: 14,
+                    height: 15,
+                    left: -10,
+                  }}
+                >
+                  Show more
+                </Button>
+              )} */}
             </Grid>
             <Grid item xs={6}>
               <Box alignItems="flex-start" display="flex">
