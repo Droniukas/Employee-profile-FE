@@ -38,13 +38,9 @@ const Header = () => {
           alignItems: '',
         }}
       >
-        <img
-          src='https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png'
-          alt=''
-          className='image'
-        ></img>
-        <div className='profile'>
-          <div className='roundBox'></div>
+        <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="image"></img>
+        <div className="profile">
+          <div className="roundBox"></div>
           <PersonIcon
             sx={{
               width: 50,
@@ -54,11 +50,11 @@ const Header = () => {
               color: 'linear-gradient(90deg, #3D54CE 0.02%, #35CACF 100.04%), #000048',
             }}
           />
-          <h4 className='profileText'>My profile</h4>
+          <h4 className="profileText">My profile</h4>
         </div>
-        <div className='search-div'>
+        <div className="search-div">
           <SearchIcon sx={{ width: 40, height: 40, marginLeft: 2.9 }} />
-          <h4 className='searchText'>Search</h4>
+          <h4 className="searchText">Search</h4>
         </div>
       </Box>
 
@@ -77,7 +73,7 @@ const Header = () => {
           alignItems: 'right',
         }}
       >
-        <div className='topHeader'>
+        <div className="topHeader">
           <NotificationsIcon sx={{ width: 40, height: 40, marginRight: 4, marginBottom: 1.1 }} />
           <Avatar
             src={`data:${results?.imageType};base64,${results?.imageBytes}`}

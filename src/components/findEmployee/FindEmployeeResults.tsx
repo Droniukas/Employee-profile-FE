@@ -51,7 +51,7 @@ const FindEmployeeResults: React.FC<Props> = ({ results }) => {
             }}
           />
         </ListItem>
-        <Divider variant='fullWidth' component='li' />
+        <Divider variant="fullWidth" component="li" />
       </>
     );
   };

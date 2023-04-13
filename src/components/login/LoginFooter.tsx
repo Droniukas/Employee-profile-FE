@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 const Footer = () => {
   return (
     <Box
-      component='footer'
+      component="footer"
       sx={{
         width: '100%',
         position: 'fixed',
@@ -29,15 +29,13 @@ const Footer = () => {
         <Grid item>
           <Typography sx={{ align: 'center', p: 2 }}>Terms of Service</Typography>
         </Grid>
-        <Divider orientation='vertical' variant='middle' flexItem />
+        <Divider orientation="vertical" variant="middle" flexItem />
         <Grid item>
           <Typography sx={{ align: 'center', p: 2 }}>Support</Typography>
         </Grid>
-        <Divider orientation='vertical' variant='middle' flexItem />
+        <Divider orientation="vertical" variant="middle" flexItem />
         <Grid item>
-          <Typography sx={{ align: 'center', p: 2 }}>
-            {new Date().getFullYear()} Cognizant
-          </Typography>
+          <Typography sx={{ align: 'center', p: 2 }}>{new Date().getFullYear()} Cognizant</Typography>
         </Grid>
       </Grid>
     </Box>

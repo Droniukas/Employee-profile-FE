@@ -14,11 +14,7 @@ type DeleteConfirmationDialogProps = {
   onDelete: (id: string) => void;
 };
 
-const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
-  project,
-  onClose,
-  onDelete,
-}) => {
+const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({ project, onClose, onDelete }) => {
   const handleDeleteClick = () => {
     onDelete(project.id);
     onClose();
@@ -29,12 +25,12 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
   };
 
   return (
-    <Dialog open={true} maxWidth='xl'>
+    <Dialog open={true} maxWidth="xl">
       <DialogTitle>Confirm Deletion</DialogTitle>
       <DialogContent>
         <Typography>
           Are you sure project{' '}
-          <Typography component='span' fontWeight='bold'>
+          <Typography component="span" fontWeight="bold">
             {project.title}
           </Typography>{' '}
           should be deleted?
@@ -43,7 +39,7 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancelClick}>Cancel</Button>
-        <Button onClick={handleDeleteClick} color='error'>
+        <Button onClick={handleDeleteClick} color="error">
           Delete
         </Button>
       </DialogActions>

@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react';
 
 type UseDebouncedStateReturnValue = [string, (value: string) => void];
 
-const useDebouncedState = (
-  initialValue: string,
-  debouncedTime: number,
-): UseDebouncedStateReturnValue => {
+const useDebouncedState = (initialValue: string, debouncedTime: number): UseDebouncedStateReturnValue => {
   const [value, setValue] = useState(initialValue);
   const [debouncedValue, setDebouncedValue] = useState(initialValue);
 

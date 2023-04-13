@@ -12,7 +12,7 @@ type Props = {
 const SearchInput: React.FC<Props> = ({ placeholder, onChange }) => {
   return (
     <Box
-      component='form'
+      component="form"
       sx={{
         width: '100%',
         maxWidth: '60vw',
@@ -33,16 +33,16 @@ const SearchInput: React.FC<Props> = ({ placeholder, onChange }) => {
           backgroundColor: 'white',
         }}
         fullWidth
-        id='input-with-icon-textfield'
+        id="input-with-icon-textfield"
         placeholder={placeholder}
         InputProps={{
           startAdornment: (
-            <InputAdornment position='start'>
+            <InputAdornment position="start">
               <SearchIcon />
             </InputAdornment>
           ),
         }}
-        variant='outlined'
+        variant="outlined"
         onChange={(event) => onChange(event.target.value)}
       />
     </Box>

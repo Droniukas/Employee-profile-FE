@@ -19,8 +19,8 @@ const Footer = () => {
           display: 'flex',
         }}
       >
-        <p className='footer copyright'>Copyright © 2023 Cognizant</p>
-        <p className='footer policy'>Privacy policy</p>
+        <p className="footer copyright">Copyright © 2023 Cognizant</p>
+        <p className="footer policy">Privacy policy</p>
       </Box>
     </>
   );

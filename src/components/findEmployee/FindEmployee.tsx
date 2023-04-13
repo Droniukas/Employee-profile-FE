@@ -41,11 +41,7 @@ const FindEmployee = () => {
   }
 
   const getResults = async () => {
-    const result = await employeeService.searchByName(
-      inputValueRef.current,
-      pageRef.current,
-      rowsPerPageRef.current,
-    );
+    const result = await employeeService.searchByName(inputValueRef.current, pageRef.current, rowsPerPageRef.current);
     setResults(result.employees);
     setResultCount(result.count);
   };
@@ -70,9 +66,7 @@ const FindEmployee = () => {
     getResults();
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     getResults();
@@ -80,10 +74,10 @@ const FindEmployee = () => {
 
   return (
     <>
-      <div className='find-employee-container'>
+      <div className="find-employee-container">
         <Box
-          display='flex'
-          justifyContent='flex-start'
+          display="flex"
+          justifyContent="flex-start"
           sx={{
             position: 'relative',
             my: 0.25,
@@ -91,17 +85,14 @@ const FindEmployee = () => {
             left: 0,
           }}
         >
-          <SearchInput
-            placeholder='Search employees by name...'
-            onChange={(value) => setInputValue(value)}
-          />
+          <SearchInput placeholder="Search employees by name..." onChange={(value) => setInputValue(value)} />
         </Box>
       </div>
       {results.length > 0 && (
         <>
           <FindEmployeeResults results={results} />
           <TablePagination
-            component='div'
+            component="div"
             count={totalResultCount}
             page={!totalResultCount || totalResultCount <= 0 ? 0 : pageRef.current}
             onPageChange={handleChangePage}
