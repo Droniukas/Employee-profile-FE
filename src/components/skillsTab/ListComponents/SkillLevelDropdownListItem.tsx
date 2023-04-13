@@ -8,7 +8,7 @@ type Props = {
   tooltipTitle: string;
 };
 
-function LevelDropdownFieldItem({ name, onSelection, tooltipTitle }: Props) {
+function SkillLevelDropdownListItem({ name, onSelection, tooltipTitle }: Props) {
   return (
     <>
       <Tooltip title={tooltipTitle} disableInteractive>
@@ -20,4 +20,4 @@ function LevelDropdownFieldItem({ name, onSelection, tooltipTitle }: Props) {
   );
 }
 
-export default LevelDropdownFieldItem;
+export default SkillLevelDropdownListItem;

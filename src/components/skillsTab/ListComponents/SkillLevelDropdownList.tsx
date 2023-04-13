@@ -7,8 +7,8 @@ import { setSavedSkills } from '../../../features/savedSkills';
 import { SavedSkillsDataRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { Skill } from '../models/interfaces/Skill.interface';
-import LevelDropdownFieldItem from './LevelDropdownFieldItem';
-import SkillLevelTooltipMapper from './SkillLevelTooltipMapper';
+import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
+import SkillLevelTooltipMapper from './utils';
 
 type Props = {
   skillLevel: SkillLevel | null;
@@ -17,7 +17,7 @@ type Props = {
   tooltipText: string;
 };
 
-function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }: Props) {
+function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipText }: Props) {
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -75,7 +75,7 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
               }
               if (skillLevelName === skillLevel) return null;
               return (
-                <LevelDropdownFieldItem
+                <SkillLevelDropdownListItem
                   onSelection={handleSkillSelection}
                   name={skillLevelName}
                   key={skillLevelName}
@@ -90,4 +90,4 @@ function LevelDropdownField({ skillLevel, setSkillLevel, skillObj, tooltipText }
   );
 }
 
-export default LevelDropdownField;
+export default SkillLevelDropdownList;

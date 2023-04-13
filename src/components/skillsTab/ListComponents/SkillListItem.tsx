@@ -7,10 +7,10 @@ import { onCancelRoot, SavedSkillsDataRoot, ViewStateRoot } from '../../../store
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { ViewState } from '../models/enums/ViewState';
 import { Skill } from '../models/interfaces/Skill.interface';
-import LevelDropdownField from './SkillLevelDropdownField';
-import SkillLevelTooltipMapper from './SkillLevelTooltipMapper';
+import SkillLevelDropdownList from './SkillLevelDropdownList';
+import SkillLevelTooltipMapper from './utils';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
-import SkillCheckbox from './SkillListCheckbox';
+import SkillListCheckbox from './SkillListCheckbox';
 import SkillListItemErrorText from './SkillListItemErrorText';
 
 type Props = {
@@ -56,7 +56,7 @@ function SkillListItem({ skillObj }: Props) {
         <ListItem disablePadding sx={{ marginLeft: '27px' }}>
           <FormControlLabel
             control={
-              <SkillCheckbox
+              <SkillListCheckbox
                 isDisabled={viewState === ViewState.VIEW_STATE}
                 isChecked={isChecked}
                 onChange={onCheckboxChange}
@@ -75,7 +75,7 @@ function SkillListItem({ skillObj }: Props) {
           ) : null}
           {viewState === ViewState.EDIT_STATE ? (
             isChecked ? (
-              <LevelDropdownField
+              <SkillLevelDropdownList
                 skillLevel={skillLevel}
                 setSkillLevel={setSkillLevel}
                 skillObj={skillObj}
