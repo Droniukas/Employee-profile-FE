@@ -2,7 +2,7 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setViewState } from '../../features/viewState';
+import { setViewState } from '../../state/viewState';
 import { ViewStateRoot } from '../../store/types';
 import { ViewState } from './models/enums/ViewState';
 import ViewButton, { StyleVariants } from './ViewButton';

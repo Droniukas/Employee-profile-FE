@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setLoading } from '../../features/loading';
-import { setChangedSkills } from '../../features/changedSkills';
-import { setViewState } from '../../features/viewState';
+import { setLoading } from '../../state/loading';
+import { setChangedSkills } from '../../state/changedSkills';
+import { setViewState } from '../../state/viewState';
 import { SkillsService } from '../../services/skills.service';
 import { ChangedSkillsDataRoot } from '../../store/types';
 import { SkillLevel } from './models/enums/SkillLevel';
@@ -39,7 +39,7 @@ function SkillsTabData() {
     });
   }
 
-  function errorCheck() {
+  function hasErrors() {
     skillDataArr.forEach((obj) => (obj.hasError = false));
     const unselectedLevelSkills = changedSkills.filter((obj) => obj.skillLevel === SkillLevel.NONE);
     if (unselectedLevelSkills.length > 0) {
@@ -52,7 +52,7 @@ function SkillsTabData() {
   }
 
   async function handleSave() {
-    if (errorCheck()) return;
+    if (hasErrors()) return;
     changedSkills.forEach(async (obj) => {
       await skillsService.updateEmployeeSkill(obj);
     });

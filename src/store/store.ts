@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import loadingReducer from '../features/loading';
-import skillNamesReducer from '../features/changedSkills';
-import viewStateReducer from '../features/viewState';
+import loadingReducer from '../state/loading';
+import skillNamesReducer from '../state/changedSkills';
+import viewStateReducer from '../state/viewState';
 
 const store = configureStore({
   reducer: {

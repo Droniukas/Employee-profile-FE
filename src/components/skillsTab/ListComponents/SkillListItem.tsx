@@ -2,7 +2,7 @@ import { Box, FormControlLabel, ListItem, ListItemText } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setChangedSkills } from '../../../features/changedSkills';
+import { setChangedSkills } from '../../../state/changedSkills';
 import { ChangedSkillsDataRoot, ViewStateRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { ViewState } from '../models/enums/ViewState';

@@ -12,9 +12,7 @@ type Props = {
 
 function SkillListCheckbox({ isDisabled, isChecked, onChange }: Props) {
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
-  let checkboxColor;
-  if (viewState == ViewState.VIEW_STATE) checkboxColor = 'adaec3';
-  if (viewState == ViewState.EDIT_STATE) checkboxColor = 'primary.main';
+  const checkboxColor = viewState == ViewState.VIEW_STATE ? 'adaec3' : 'primary.main';
 
   return (
     <>
