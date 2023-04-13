@@ -1,3 +1,5 @@
+import { ProjectStatus } from '../components/enums/ProjectStatus';
+import Project from '../models/Project.interface';
 import axios from './axios';
 
 export class ProjectsService {
@@ -8,5 +10,21 @@ export class ProjectsService {
 
   public async deleteProjectById(id: string) {
     await axios.patch(`/project/delete/${id}`, {});
+  }
+
+  public setProjectStatus(project: Project) {
+    const today = new Date();
+    const startDateFormatted = new Date(project.startDate);
+    const endDateFormatted = new Date(project.endDate);
+
+    if (startDateFormatted > today) {
+      project.status = ProjectStatus.FUTURE;
+    } else {
+      if (project.endDate === null || endDateFormatted > today) {
+        project.status = ProjectStatus.ONGOING;
+      } else {
+        project.status = ProjectStatus.FINISHED;
+      }
+    }
   }
 }

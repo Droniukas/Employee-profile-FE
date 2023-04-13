@@ -13,7 +13,7 @@ import ProjectProfilesResult from './ProjectProfilesResults';
 
 const ProjectProfiles = () => {
   const [results, setResults] = useState<Project[]>([]);
-  const [filterTextValue, updateFilterTextValue] = useState('All');
+  const [filterTextValue, setFilterTextValue] = useState('All');
 
   const projectsService = new ProjectsService();
 
@@ -23,7 +23,7 @@ const ProjectProfiles = () => {
 
   const getResults = async () => {
     const result = await projectsService.getAllProjects();
-    result.map((project: Project) => setProjectStatus(project));
+    result.map((project: Project) => projectsService.setProjectStatus(project));
     setResults(result);
   };
 
@@ -45,23 +45,7 @@ const ProjectProfiles = () => {
   });
 
   function onFilterValueSelection(filterValue: string) {
-    updateFilterTextValue(filterValue);
-  }
-
-  function setProjectStatus(project: Project) {
-    const today = new Date();
-    const startDateFormatted = new Date(project.startDate);
-    const endDateFormatted = new Date(project.endDate);
-
-    if (startDateFormatted > today) {
-      project.status = ProjectStatus.FUTURE;
-    } else {
-      if (project.endDate === null || endDateFormatted > today) {
-        project.status = ProjectStatus.ONGOING;
-      } else {
-        project.status = ProjectStatus.FINISHED;
-      }
-    }
+    setFilterTextValue(filterValue);
   }
 
   return (
@@ -83,7 +67,7 @@ const ProjectProfiles = () => {
               left: 0,
             }}
           >
-            <ProjectFilter filterValueSelected={onFilterValueSelection} />
+            <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
           </Box>
         </Stack>
         <Stack
