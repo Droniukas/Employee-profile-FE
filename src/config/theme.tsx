@@ -1,5 +1,5 @@
-import { createTheme } from '@mui/material/styles'
-import { checkboxClasses } from '@mui/material/Checkbox'
+import { checkboxClasses } from '@mui/material/Checkbox';
+import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
@@ -18,6 +18,10 @@ const theme = createTheme({
     secondary: {
       main: '#78ECE8',
     },
+    info: {
+      main: '#F4F4F4',
+      contrastText: '#000048',
+    },
   },
   components: {
     MuiButton: {
@@ -32,7 +36,7 @@ const theme = createTheme({
         root: {
           color: '#adaec3',
           [`&.${checkboxClasses.checked}`]: {
-            color: '#adaec3',
+            color: '#000048',
           },
         },
         checked: {},
@@ -46,6 +50,6 @@ const theme = createTheme({
       },
     },
   },
-})
+});
 
 export default theme;
