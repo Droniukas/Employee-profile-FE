@@ -6,7 +6,7 @@ interface ProjectEmployee {
   employeeId: string;
   startDate: string;
   endDate: string;
-  employee?: Employee;
+  employee: Employee;
 }
 
 export default ProjectEmployee;

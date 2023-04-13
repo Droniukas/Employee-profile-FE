@@ -28,9 +28,7 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
 
     if (project) {
       return allEmployees.filter((employee: Employee) => {
-        return !project.employees.some(
-          (addedEmployee: Employee) => addedEmployee.id === employee.id,
-        );
+        return !project.employees.some((addedEmployee: Employee) => addedEmployee.id === employee.id);
       });
     } else {
       return allEmployees;
@@ -43,9 +41,9 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
     const getFilteredEmployees = () => {
       setFilteredNonAddedEmployees(
         allNonAddedEmployees.filter((employee: Employee) => {
-          const fullName = `${employee.name}${
-            employee.middleName ? ` ${employee.middleName}` : ''
-          } ${employee.surname}`.toLowerCase();
+          const fullName = `${employee.name}${employee.middleName ? ` ${employee.middleName}` : ''} ${
+            employee.surname
+          }`.toLowerCase();
           return fullName.includes(searchValue.toLowerCase());
         }),
       );
@@ -54,15 +52,15 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
   }, [searchValue, allNonAddedEmployees, allNonAddedEmployeesMemo]);
 
   return (
-    <Dialog open={true} fullWidth maxWidth='md'>
+    <Dialog open={true} fullWidth maxWidth="md">
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
         <Button sx={{ width: 15, height: 30 }} onClick={onClose}>
-          <CloseIcon fontSize='medium' />
+          <CloseIcon fontSize="medium" />
         </Button>
       </Box>
-      <Box component='form' sx={{ marginX: 10, marginY: 3 }}>
+      <Box component="form" sx={{ marginX: 10, marginY: 3 }}>
         <Typography
-          variant='h1'
+          variant="h1"
           sx={{
             mb: 3,
             fontWeight: 400,
@@ -74,20 +72,18 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
           Add team members
         </Typography>
         <SearchInput
-          placeholder='Search employees by name...'
+          placeholder="Search employees by name..."
           onChange={(value) => {
             setSearchValue(value);
           }}
         />
-        <EmployeeAddList
-          employees={searchValue ? filteredNonAddedEmployees : allNonAddedEmployees}
-        />
-        <Divider variant='fullWidth' />
+        <EmployeeAddList employees={searchValue ? filteredNonAddedEmployees : allNonAddedEmployees} />
+        <Divider variant="fullWidth" />
         <Box display={'flex'} justifyContent={'flex-end'}>
-          <Button variant='contained' color='info' sx={{ m: 1 }} onClick={onClose}>
+          <Button variant="contained" color="info" sx={{ m: 1 }} onClick={onClose}>
             Cancel
           </Button>
-          <Button sx={{ m: 1 }} variant='contained'>
+          <Button sx={{ m: 1 }} variant="contained">
             Add
           </Button>
         </Box>

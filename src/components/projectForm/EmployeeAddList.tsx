@@ -28,10 +28,7 @@ const EmployeeAddList: React.FC<EmployeeAddListProps> = (props: EmployeeAddListP
   const { employees } = props;
   const [employeeItemState, setEmployeeItemState] = useState<EmployeeItemState[]>([]);
 
-  const handleEmployeeItemStateChange = (
-    index: number,
-    newEmployeeItemState: EmployeeItemState,
-  ) => {
+  const handleEmployeeItemStateChange = (index: number, newEmployeeItemState: EmployeeItemState) => {
     setEmployeeItemState((prevState) => {
       const newState = [...prevState];
       newState[index] = newEmployeeItemState;
@@ -40,7 +37,7 @@ const EmployeeAddList: React.FC<EmployeeAddListProps> = (props: EmployeeAddListP
   };
 
   return (
-    <List className='member-list' sx={{ marginTop: '24px' }}>
+    <List className="member-list" sx={{ marginTop: '24px' }}>
       {employees.map((employee, index) => (
         <EmployeeAddItem
           key={employee.id}
@@ -128,7 +125,7 @@ const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemP
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       sx={{ width: 190, pb: '14px' }}
-                      format='YYYY/MM/DD'
+                      format="YYYY/MM/DD"
                       value={dayjs(state.startDate)}
                       onChange={(newValue) => {
                         if (newValue === null) return;
@@ -152,9 +149,7 @@ const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemP
                         })
                       }
                     />
-                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>
-                      Add member end date
-                    </Typography>
+                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add member end date</Typography>
                   </Box>
                 </Box>
               </Box>
@@ -172,7 +167,7 @@ const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemP
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       sx={{ width: 190, mb: 6 }}
-                      format='YYYY/MM/DD'
+                      format="YYYY/MM/DD"
                       minDate={dayjs(state.startDate)}
                       value={state.endDate ? dayjs(state.endDate) : null}
                       onChange={(newValue) => {

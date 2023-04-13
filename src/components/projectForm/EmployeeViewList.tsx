@@ -19,33 +19,39 @@ import Employee from '../../models/Employee.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { ProjectsService } from '../../services/projects.service';
 import StatusChip from '../findEmployee/StatusChip';
-
 type EmployeeViewListProps = {
   employees: Employee[];
   projectId?: string;
 };
-
 const EmployeeViewList: React.FC<EmployeeViewListProps> = (props: EmployeeViewListProps) => {
   const { employees, projectId } = props;
   const [projectEmployees, setProjectEmployees] = useState<ProjectEmployee[]>([]);
-
   useEffect(() => {
     const projectsService = new ProjectsService();
     const mapProjectEmployees = async (projectId: string) => {
-      const projectEmployeesRelationships =
-        await projectsService.getProjectRelationshipsByProjectId(projectId);
+      const projectEmployeesRelationships = await projectsService.getProjectRelationshipsByProjectId(projectId);
       setProjectEmployees(
-        projectEmployeesRelationships.map((projectEmployee: ProjectEmployee) => {
-          const employee = employees.find((employee) => employee.id === projectEmployee.employeeId);
-          return { ...projectEmployee, employee: employee };
-        }),
+        projectEmployeesRelationships
+          .map((projectEmployee: ProjectEmployee) => {
+            const employee = employees.find((employee) => employee.id === projectEmployee.employeeId);
+            return { ...projectEmployee, employee: employee };
+          })
+          .sort((a: ProjectEmployee, b: ProjectEmployee) => {
+            const aName = a.employee?.name || '';
+            const bName = b.employee?.name || '';
+            const aSurname = a.employee?.surname || '';
+            const bSurname = b.employee?.surname || '';
+            if (aName !== bName) {
+              return aName.localeCompare(bName);
+            }
+            return aSurname.localeCompare(bSurname);
+          }),
       );
     };
     if (projectId) {
       mapProjectEmployees(projectId);
     }
   }, [projectId, employees]);
-
   return (
     <List>
       {projectEmployees.map((projectEmployee) => (
@@ -54,13 +60,10 @@ const EmployeeViewList: React.FC<EmployeeViewListProps> = (props: EmployeeViewLi
     </List>
   );
 };
-
 export default EmployeeViewList;
-
 type EmployeeItemViewProps = {
   projectEmployee: ProjectEmployee;
 };
-
 const EmployeeItemView: React.FC<EmployeeItemViewProps> = (props: EmployeeItemViewProps) => {
   const { projectEmployee } = props;
   if (!projectEmployee.employee) return null;
@@ -83,9 +86,7 @@ const EmployeeItemView: React.FC<EmployeeItemViewProps> = (props: EmployeeItemVi
       day: 'numeric',
     });
   }
-
   const dateRange = `${startDate} - ${endDate}`;
-
   return (
     <>
       <ListItem sx={{ paddingX: 0 }}>
@@ -115,9 +116,7 @@ const EmployeeItemView: React.FC<EmployeeItemViewProps> = (props: EmployeeItemVi
                   </>
                 }
                 sx={{
-                  color: isInactiveOrDismissed(projectEmployee.employee.status)
-                    ? '#666666'
-                    : '#000048',
+                  color: isInactiveOrDismissed(projectEmployee.employee.status) ? '#666666' : '#000048',
                 }}
               />
             </Box>
@@ -129,8 +128,8 @@ const EmployeeItemView: React.FC<EmployeeItemViewProps> = (props: EmployeeItemVi
           </Grid>
           <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <IconButton
-              className='btn-delete'
-              aria-label='delete'
+              className="btn-delete"
+              aria-label="delete"
               sx={{
                 color: '#000048',
                 backgroundColor: '#F4F4F4',
@@ -141,7 +140,7 @@ const EmployeeItemView: React.FC<EmployeeItemViewProps> = (props: EmployeeItemVi
           </Grid>
         </Grid>
       </ListItem>
-      <Divider variant='fullWidth' component='li' />
+      <Divider variant="fullWidth" component="li" />
     </>
   );
 };
