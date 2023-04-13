@@ -64,7 +64,6 @@ const ProjectProfilesResult: React.FC<Props> = ({
   };
 
   function renderResultItem(result: Project) {
-    console.log(result.id, focusProjectId);
     return (
       <div key={result.id}>
         <ListItem

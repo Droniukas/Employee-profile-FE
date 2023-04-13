@@ -23,6 +23,7 @@ import Project from '../../models/Project.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import AddEmployeeForm from './AddEmployeeForm';
+import EmployeeList from './EmployeeList';
 
 type Props = {
   onClose: (projectId?: string) => void;
@@ -32,7 +33,7 @@ type Props = {
 const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
-  const [showAddMemberForm, setShowAddMemberForm] = useState<boolean>(false);
+  const [showAddEmployeeForm, setShowAddMemberForm] = useState<boolean>(false);
 
   const [endDateExists, setEndDateExists] = useState<boolean>(false);
   let initialValues: Project = {
@@ -58,6 +59,10 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
     }
   };
 
+  const handleAddEmployeeFormClose = () => {
+    setShowAddMemberForm(false);
+  };
+
   if (project) initialValues = project;
   const {
     values,
@@ -75,7 +80,7 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
   });
 
   return (
-    <Dialog open={true} maxWidth='lg'>
+    <Dialog open={true} fullWidth maxWidth='lg'>
       <Dialog open={confirmationDialog} maxWidth='xl'>
         <DialogTitle>Confirm exit</DialogTitle>
         <DialogContent>
@@ -222,44 +227,65 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
         )}
         {/* Team member box */}
         <Box component='div' sx={{ my: 2 }}>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
-          </InputLabel>
-          <Box
-            component='div'
-            height={200}
-            sx={{
-              backgroundColor: '#ededed',
-              borderRadius: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>
-              No team members yet
-            </Typography>
+          <Box sx={{ display: 'flex' }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
+            </InputLabel>
+            {project && project.employees.length > 0 && (
+              <Link
+                sx={{ marginLeft: 'auto', color: '#000048' }}
+                onClick={() => setShowAddMemberForm(true)}
+              >
+                <Typography sx={{ fontSize: 14, fontWeight: 400, color: '#000048' }}>
+                  Add team member
+                </Typography>
+              </Link>
+            )}
+          </Box>
 
-            <Typography
+          {project && project.employees.length > 0 ? (
+            <EmployeeList
+              employees={project.employees}
+              projectId={project.id}
+              viewType={'projectView'}
+            />
+          ) : (
+            <Box
+              component='div'
+              height={200}
               sx={{
-                marginX: 10,
-                fontSize: 14,
-                fontWeight: 400,
-                color: '#4f4f4f',
-                textAlign: 'center',
+                backgroundColor: '#ededed',
+                borderRadius: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              Add team members to the project to track the resources and allow your colleagues to
-              follow their career within organization
-            </Typography>
-
-            <Link sx={{ color: '#000048' }} onClick={() => setShowAddMemberForm(true)}>
-              <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>
-                Add team member
+              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>
+                No team members yet
               </Typography>
-            </Link>
-          </Box>
+
+              <Typography
+                sx={{
+                  marginX: 10,
+                  fontSize: 14,
+                  fontWeight: 400,
+                  color: '#4f4f4f',
+                  textAlign: 'center',
+                }}
+              >
+                Add team members to the project to track the resources and allow your colleagues to
+                follow their career within organization
+              </Typography>
+
+              <Link sx={{ color: '#000048' }} onClick={() => setShowAddMemberForm(true)}>
+                <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>
+                  Add team member
+                </Typography>
+              </Link>
+            </Box>
+          )}
         </Box>
         {/* Cancel/save Buttons */}
         <Divider />
@@ -279,7 +305,9 @@ const ProjectForm: React.FC<Props> = ({ onClose, project }) => {
           </Button>
         </Box>
       </Box>
-      {showAddMemberForm && <AddEmployeeForm project={project} />}
+      {showAddEmployeeForm && (
+        <AddEmployeeForm project={project} onClose={handleAddEmployeeFormClose} />
+      )}
     </Dialog>
   );
 };

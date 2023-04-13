@@ -1,22 +1,21 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, Dialog, Typography } from '@mui/material';
+import { Box, Button, Dialog, Divider, Typography } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import useDebouncedState from '../../hooks/useDebouncedState';
 import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
-import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeService } from '../../services/employee.service';
-import { ProjectsService } from '../../services/projects.service';
 import SearchInput from '../inputs/SearchInput';
 import EmployeeList from './EmployeeList';
 
 type AddEmployeeFormProps = {
   project?: Project;
+  onClose: () => void;
 };
 
 const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormProps) => {
-  const { project } = props;
+  const { project, onClose } = props;
   const [allNonAddedEmployees, setAllNonAddedEmployees] = useState<Employee[]>([]);
   const [filteredNonAddedEmployees, setFilteredNonAddedEmployees] = useState<Employee[]>([]);
   const [searchValue, setSearchValue] = useDebouncedState('', 500);
@@ -25,17 +24,12 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
   // When editing a project, return all employees that are not already added to the project.
   const allNonAddedEmployeesMemo = useMemo(async () => {
     const employeeService = new EmployeeService();
-    const projectService = new ProjectsService();
     const allEmployees = await employeeService.getAll();
 
     if (project) {
-      const allProjectEmployees = await projectService.getProjectRelationshipsByProjectId(
-        project.id,
-      );
-
       return allEmployees.filter((employee: Employee) => {
-        return !allProjectEmployees.some(
-          (projectEmployee: ProjectEmployee) => projectEmployee.employeeId === employee.id,
+        return !project.employees.some(
+          (addedEmployee: Employee) => addedEmployee.id === employee.id,
         );
       });
     } else {
@@ -49,7 +43,10 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
     const getFilteredEmployees = () => {
       setFilteredNonAddedEmployees(
         allNonAddedEmployees.filter((employee: Employee) => {
-          return employee.name.toLowerCase().includes(searchValue.toLowerCase());
+          const fullName = `${employee.name}${
+            employee.middleName ? ` ${employee.middleName}` : ''
+          } ${employee.surname}`.toLowerCase();
+          return fullName.includes(searchValue.toLowerCase());
         }),
       );
     };
@@ -57,9 +54,9 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
   }, [searchValue, allNonAddedEmployees, allNonAddedEmployeesMemo]);
 
   return (
-    <Dialog open={true} fullWidth maxWidth='md'>
+    <Dialog open={true} fullWidth maxWidth='sm'>
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
-        <Button sx={{ width: 15, height: 30 }}>
+        <Button sx={{ width: 15, height: 30 }} onClick={onClose}>
           <CloseIcon fontSize='medium' />
         </Button>
       </Box>
@@ -82,7 +79,19 @@ const AddEmployeeForm: React.FC<AddEmployeeFormProps> = (props: AddEmployeeFormP
             setSearchValue(value);
           }}
         />
-        <EmployeeList employees={searchValue ? filteredNonAddedEmployees : allNonAddedEmployees} />
+        <EmployeeList
+          employees={searchValue ? filteredNonAddedEmployees : allNonAddedEmployees}
+          viewType={'addEmployeeView'}
+        />
+        <Divider variant='fullWidth' />
+        <Box display={'flex'} justifyContent={'flex-end'}>
+          <Button variant='contained' color='info' sx={{ m: 1 }} onClick={onClose}>
+            Cancel
+          </Button>
+          <Button sx={{ m: 1 }} variant='contained'>
+            Add
+          </Button>
+        </Box>
       </Box>
     </Dialog>
   );
