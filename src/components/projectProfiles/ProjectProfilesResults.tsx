@@ -62,123 +62,144 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     setShowDeleteConfirmation(true);
   };
 
-    const renderResultItem = (result: Project) => {
-        return (
-            <div key={result.id}>
-                <ListItem alignItems='flex-start'
-                          sx={{
-                              border: 1,
-                              borderColor: '#DDDDDD',
-                              borderRadius: 2,
-                              backgroundColor: 'white',
-                              mb: 1,
-                          }}>
-                    <Stack direction='row'>
-                        <Stack direction='row'
-                               justifyContent='flex-start'
-                               alignItems='center'
-                               sx={{
-                                   position: 'relative',
-                                   width: 800,
-                                   left: 0,
-                               }}>
-                            <Box display='flex'
-                                 sx={{
-                                     border: 1,
-                                     borderColor: '#DDDDDD',
-                                     borderRadius: '50%',
-                                     width: 56,
-                                     height: 56,
-                                     justifyContent: 'center',
-                                     alignItems: 'center',
-                                 }}>
-                                <FolderIcon sx={{
-                                    color: '#000048',
-                                    fontSize: 26,
-                                }}/>
-                            </Box>
-                            <Box sx={{
-                                position: 'relative',
-                                width: 400,
-                                left: 25,
-                            }}>
-                                <Typography sx={{
-                                    color: '#666666',
-                                    fontSize: 14,
-                                    pt: 1,
-                                }}>
-                                    {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
-                                </Typography>
-                                <Typography sx={{
-                                    color: '#000048',
-                                    fontSize: 20,
-                                }}>
-                                    {result.title}
-                                </Typography>
-                                <Typography sx={{
-                                    color: '#666666',
-                                    fontSize: 14,
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                    display: '-webkit-box',
-                                    WebkitLineClamp: '3',
-                                    WebkitBoxOrient: 'vertical',
-                                }}>
-                                    {result.description}
-                                </Typography>
-                            </Box>
-                            <Box alignItems='flex-start'
-                                 display='flex'
-                                 sx={{
-                                     position: 'relative',
-                                     left: 70,
-                                 }}>
-                                {renderEmployeesAvatarGroup(result.employees)}
-                            </Box>
-                        </Stack>
-                        <Stack direction='row'
-                               justifyContent='flex-start'
-                               alignItems='center'
-                               sx={{
-                                   position: 'relative',
-                                   width: 544,
-                                   left: 0,
-                               }}>
-                            {setStatusColors(result.status)}
-                            <Box alignItems='flex-end'
-                                 display='flex'>
-                                <IconButton
-                                            ref={focusProjectId === result.id ? buttonToFocusRef : null}
-                                            className='btn-edit'
-                                            aria-label='edit'
-                                            sx={{
-                                                color: '#000048',
-                                                position: 'relative',
-                                                left: 320,
-                                                backgroundColor: '#F4F4F4',
-                                            }}
-                                            onClick={() => setProject(result)}
-                                            >
-                                    <EditIcon/>
-                                </IconButton>
-                                <IconButton className='btn-delete'
-                                            aria-label='delete'
-                                            sx={{
-                                                color: '#000048',
-                                                position: 'relative',
-                                                left: 335,
-                                                backgroundColor: '#F4F4F4',
-                                            }}
-                                            onClick={() => handleDeleteClick(result)}>
-                                    <DeleteIcon/>
-                                </IconButton>
-                            </Box>
-                        </Stack>
-                    </Stack>
-                </ListItem>
-            </div>
-        );
-    }
+  const renderResultItem = (result: Project) => {
+    return (
+      <div key={result.id}>
+        <ListItem
+          alignItems="flex-start"
+          sx={{
+            border: 1,
+            borderColor: '#DDDDDD',
+            borderRadius: 2,
+            backgroundColor: 'white',
+            mb: 1,
+          }}
+        >
+          <Stack direction="row">
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              sx={{
+                position: 'relative',
+                width: 800,
+                left: 0,
+              }}
+            >
+              <Box
+                display="flex"
+                sx={{
+                  border: 1,
+                  borderColor: '#DDDDDD',
+                  borderRadius: '50%',
+                  width: 56,
+                  height: 56,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <FolderIcon
+                  sx={{
+                    color: '#000048',
+                    fontSize: 26,
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  position: 'relative',
+                  width: 400,
+                  left: 25,
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: '#666666',
+                    fontSize: 14,
+                    pt: 1,
+                  }}
+                >
+                  {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: '#000048',
+                    fontSize: 20,
+                  }}
+                >
+                  {result.title}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: '#666666',
+                    fontSize: 14,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: '3',
+                    WebkitBoxOrient: 'vertical',
+                  }}
+                >
+                  {result.description}
+                </Typography>
+              </Box>
+              <Box
+                alignItems="flex-start"
+                display="flex"
+                sx={{
+                  position: 'relative',
+                  left: 70,
+                }}
+              >
+                {renderEmployeesAvatarGroup(result.employees)}
+              </Box>
+            </Stack>
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              sx={{
+                position: 'relative',
+                width: 544,
+                left: 0,
+              }}
+            >
+              {setStatusColors(result.status)}
+              <Box alignItems="flex-end" display="flex">
+                <IconButton
+                ref={focusProjectId === result.id ? buttonToFocusRef : null}
+                  className="btn-edit"
+                  aria-label="edit"
+                  sx={{
+                    color: '#000048',
+                    position: 'relative',
+                    left: 320,
+                    backgroundColor: '#F4F4F4',
+                  }}
+                  onClick={() => setProject(result)}
+                >
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  className="btn-delete"
+                  aria-label="delete"
+                  sx={{
+                    color: '#000048',
+                    position: 'relative',
+                    left: 335,
+                    backgroundColor: '#F4F4F4',
+                  }}
+                  onClick={() => handleDeleteClick(result)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Stack>
+          </Stack>
+        </ListItem>
+      </div>
+    );
+  };
 
   const correctDateFormat = (date: string) => {
     if (date === null) {
@@ -188,10 +209,10 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     }
   };
 
-    const renderEmployeesAvatarGroup = (employees: Employee[]) => {
-        const avatarsNeed = 3;
-        let counter = 0;
-        let additionalEmployees = 0;
+  const renderEmployeesAvatarGroup = (employees: Employee[]) => {
+    const avatarsNeed = 3;
+    let counter = 0;
+    let additionalEmployees = 0;
 
     const filteredEmployeesList = employees.filter((employee) => {
       if (employee.status === 'ACTIVE') {
@@ -222,21 +243,22 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </Typography>
       </>
     );
-  }
-
-    function renderEmployeeAvatar(employee: Employee) {
-        return (
-            <Avatar key={employee.id}
-                    src={`data:${employee.imageType};base64,${employee.imageBytes}`}
-                    sx={{
-                        width: 24,
-                        height: 24,
-                    }}/>
-        );
-    }
   };
 
-  function setStatusColors(projectStatus: string) {
+  const renderEmployeeAvatar = (employee: Employee) => {
+    return (
+      <Avatar
+        key={employee.id}
+        src={`data:${employee.imageType};base64,${employee.imageBytes}`}
+        sx={{
+          width: 24,
+          height: 24,
+        }}
+      />
+    );
+  };
+
+  const setStatusColors = (projectStatus: string) => {
     let statusColor;
     let fontColor;
 
@@ -272,7 +294,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </Box>
       </>
     );
-  }
+  };
 
     if (!results.length) {
         return (

@@ -56,9 +56,9 @@ const ProjectProfiles = () => {
     }
   });
 
-    function onFilterValueSelection(filterValue: string) {
-        setFilterTextValue(filterValue);
-    }
+  const onFilterValueSelection = (filterValue: string) => {
+    setFilterTextValue(filterValue);
+  };
 
   function setProjectStatus(project: Project) {
     const today = new Date();

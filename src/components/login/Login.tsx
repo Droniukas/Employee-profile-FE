@@ -21,6 +21,7 @@ type LoginProps = {
 
 const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const { setAppState } = props;
+
   const {
     register,
     handleSubmit,
