@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
+import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
@@ -10,12 +11,12 @@ import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
+
 import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import { Button } from '@mui/material';
 
 type ProjectProfilesResultsProps = {
   results: Project[];
@@ -63,7 +64,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (result: Project) => {
-    const isTextOverflow = result.description.length > 180;
+    const isTextOverflow = result.description.length > 135;
     return (
       <div key={result.id}>
         <ListItem
@@ -142,18 +143,18 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                {!isTextOverflow ? result.description : result.description.substring(0, 180) + '...'}
-                <Button
-                  onClick={() => setProject(result)}
-                  sx={{
-                    textDecoration: 'underline',
-                    color: '#000048',
-                    fontSize: 14,
-                    height: 15,
-                  }}
-                >
-                  Show more
-                </Button>
+                  {!isTextOverflow ? result.description : result.description.substring(0, 135) + '...'}
+                  <Button
+                    onClick={() => setProject(result)}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: '#000048',
+                      fontSize: 14,
+                      height: 15,
+                    }}
+                  >
+                    Show more
+                  </Button>
                 </Typography>
               </Box>
               <Box
