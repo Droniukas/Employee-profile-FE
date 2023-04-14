@@ -30,10 +30,12 @@ type ProjectFormProps = {
 
 const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const { onClose, project } = props;
-  const projectsService = new ProjectsService();
-  const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
 
+  const projectsService = new ProjectsService();
+
+  const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(false);
+
   let initialValues: Project = {
     id: '',
     title: '',
