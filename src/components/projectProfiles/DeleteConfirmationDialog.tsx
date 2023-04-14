@@ -6,15 +6,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-import ProjectsResult from '../../models/ProjectProfilesResult.interface';
+import Project from '../../models/Project.interface';
 
 type DeleteConfirmationDialogProps = {
-  project: ProjectsResult;
+  project: Project;
   onClose: () => void;
   onDelete: (id: string) => void;
 };
 
-const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({ project, onClose, onDelete }) => {
+const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = (props: DeleteConfirmationDialogProps) => {
+  const { project, onClose, onDelete } = props;
+
   const handleDeleteClick = () => {
     onDelete(project.id);
     onClose();

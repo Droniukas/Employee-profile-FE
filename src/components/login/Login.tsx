@@ -19,7 +19,9 @@ type LoginProps = {
   setAppState: (newState: AppState) => void;
 };
 
-const Login: React.FC<LoginProps> = ({ setAppState }) => {
+const Login: React.FC<LoginProps> = (props: LoginProps) => {
+  const { setAppState } = props;
+
   const {
     register,
     handleSubmit,

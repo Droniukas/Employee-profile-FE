@@ -14,12 +14,21 @@ import SkillTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
 
-function getIndexedProps(index: number) {
+import theme from '../../config/theme';
+import Employee from '../../models/Employee.interface';
+import { EmployeeService } from '../../services/employee.service';
+import FindEmployee from '../findEmployee/FindEmployee';
+import ProjectProfiles from '../projectProfiles/ProjectProfiles';
+import { ROUTES } from '../routes/routes';
+import ProfileInfo from './profileInfo/ProfileInfo';
+import TabPanel from './TabPanel';
+
+const getIndexedProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
   };
-}
+};
 
 const Main = () => {
   const [results, setResults] = useState<Employee>();
@@ -44,7 +53,7 @@ const Main = () => {
     <>
       {results && <ProfileInfo results={results} />}
 
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
           <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">

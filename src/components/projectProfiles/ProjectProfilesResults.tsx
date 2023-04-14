@@ -1,40 +1,70 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
+import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
-import ProjectsResult from '../../models/ProjectProfilesResult.interface';
+import Project from '../../models/Project.interface';
+import { ProjectStatus } from '../enums/ProjectStatus';
+import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
-type Props = {
-  results: ProjectsResult[];
+type ProjectProfilesResultsProps = {
+  results: Project[];
+  rerender: () => void;
   handleProjectDelete: (id: string) => void;
+  focusProjectId?: string;
+  filterStatus: string;
 };
 
-const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }) => {
+const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
+  const { results, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
+
+  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [projectToDelete, setProjectToDelete] = useState<ProjectsResult | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
+
+  const buttonToFocusRef = useRef<HTMLButtonElement>(null);
+
+  const closeEditForm = () => {
+    setOpenPopup(false);
+    setProjectToEdit(null);
+    rerender();
+  };
+
+  useEffect(() => {
+    if (buttonToFocusRef.current) {
+      buttonToFocusRef.current.focus();
+    }
+  }, [buttonToFocusRef.current]);
+
+  const setProject = (project: Project) => {
+    setProjectToEdit(project);
+    setOpenPopup(true);
+  };
 
   const handleDeleteConfirmationClose = () => {
     setProjectToDelete(null);
     setShowDeleteConfirmation(false);
   };
 
-  const handleDeleteClick = (result: ProjectsResult) => {
+  const handleDeleteClick = (result: Project) => {
     setProjectToDelete(result);
     setShowDeleteConfirmation(true);
   };
 
-  function renderResultItem(result: ProjectsResult) {
+  const renderResultItem = (result: Project) => {
+    const isTextOverflow = result.description.length > 135;
     return (
       <div key={result.id}>
         <ListItem
@@ -47,8 +77,17 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
             mb: 1,
           }}
         >
-          <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={0.5}>
-            <Grid item xs={1}>
+          <Stack direction="row">
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              sx={{
+                position: 'relative',
+                width: 800,
+                left: 0,
+              }}
+            >
               <Box
                 display="flex"
                 sx={{
@@ -68,55 +107,90 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
                   }}
                 />
               </Box>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography
+              <Box
                 sx={{
-                  color: '#666666',
-                  fontSize: 14,
-                  pt: 1,
+                  position: 'relative',
+                  width: 400,
+                  left: 25,
                 }}
               >
-                {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
-              </Typography>
-              <Typography
+                <Typography
+                  sx={{
+                    color: '#666666',
+                    fontSize: 14,
+                    pt: 1,
+                  }}
+                >
+                  {correctDateFormat(result.startDate)} -{' '}
+                  {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: '#000048',
+                    fontSize: 20,
+                  }}
+                >
+                  {result.title}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: '#666666',
+                    fontSize: 14,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: '3',
+                    WebkitBoxOrient: 'vertical',
+                  }}
+                >
+                  {!isTextOverflow ? result.description : result.description.substring(0, 135) + '...'}
+                  <Button
+                    onClick={() => setProject(result)}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: '#000048',
+                      fontSize: 14,
+                      height: 15,
+                    }}
+                  >
+                    Show more
+                  </Button>
+                </Typography>
+              </Box>
+              <Box
+                alignItems="flex-start"
+                display="flex"
                 sx={{
-                  color: '#000048',
-                  fontSize: 20,
+                  position: 'relative',
+                  left: 70,
                 }}
               >
-                {result.title}
-              </Typography>
-              <Typography
-                sx={{
-                  color: '#666666',
-                  fontSize: 14,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  display: '-webkit-box',
-                  WebkitLineClamp: '3',
-                  WebkitBoxOrient: 'vertical',
-                }}
-              >
-                {result.description}
-              </Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <Box alignItems="flex-start" display="flex">
                 {renderEmployeesAvatarGroup(result.employees)}
               </Box>
+            </Stack>
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              sx={{
+                position: 'relative',
+                width: 544,
+                left: 0,
+              }}
+            >
+              {setStatusColors(result.status)}
               <Box alignItems="flex-end" display="flex">
-                {setStatus(result.startDate, result.endDate)}
                 <IconButton
+                  ref={focusProjectId === result.id ? buttonToFocusRef : null}
                   className="btn-edit"
                   aria-label="edit"
                   sx={{
                     color: '#000048',
                     position: 'relative',
-                    left: 455,
-                    top: -35,
+                    left: 320,
                     backgroundColor: '#F4F4F4',
                   }}
+                  onClick={() => setProject(result)}
                 >
                   <EditIcon />
                 </IconButton>
@@ -126,8 +200,7 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
                   sx={{
                     color: '#000048',
                     position: 'relative',
-                    left: 470,
-                    top: -35,
+                    left: 335,
                     backgroundColor: '#F4F4F4',
                   }}
                   onClick={() => handleDeleteClick(result)}
@@ -135,50 +208,58 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
                   <DeleteIcon />
                 </IconButton>
               </Box>
-            </Grid>
-          </Grid>
+            </Stack>
+          </Stack>
         </ListItem>
       </div>
     );
-  }
+  };
 
-  function correctDateFormat(date: string) {
+  const correctDateFormat = (date: string) => {
     if (date === null) {
       return null;
     } else {
       return new Date(date).toDateString();
     }
-  }
+  };
 
-  function renderEmployeesAvatarGroup(employees: Employee[]) {
-    const employeeAmount = employees.length;
-    const avatarsNeed = Math.min(3, employeeAmount);
-    const employeesForAvatars = [];
+  const renderEmployeesAvatarGroup = (employees: Employee[]) => {
+    const avatarsNeed = 3;
+    let counter = 0;
+    let additionalEmployees = 0;
 
-    for (let i = 0; i < avatarsNeed; i++) {
-      employeesForAvatars[i] = employees[i];
-    }
+    const filteredEmployeesList = employees.filter((employee) => {
+      if (employee.status === 'ACTIVE') {
+        if (counter < avatarsNeed) {
+          counter++;
+          return employee;
+        } else {
+          additionalEmployees++;
+        }
+      }
+    });
 
     return (
       <>
-        <AvatarGroup>
-          <Avatar
-            sx={{
-              width: 24,
-              height: 24,
-              display: {
-                xs: 'none',
-              },
-            }}
-          />
-          {employeesForAvatars.map((employee) => renderEmployeeAvatar(employee))}
-        </AvatarGroup>
-        {calculateAdditionalEmployees(employeeAmount)}
+        <AvatarGroup>{filteredEmployeesList.map((employee) => renderEmployeeAvatar(employee))}</AvatarGroup>
+        <Typography
+          sx={{
+            color: '#666666',
+            fontSize: 14,
+            pt: 2,
+            position: 'relative',
+            left: 10,
+            top: -13,
+            display: additionalEmployees === 0 ? 'none' : 'inline',
+          }}
+        >
+          +{additionalEmployees} {additionalEmployees === 1 ? 'employee' : 'employees'}
+        </Typography>
       </>
     );
-  }
+  };
 
-  function renderEmployeeAvatar(employee: Employee) {
+  const renderEmployeeAvatar = (employee: Employee) => {
     return (
       <Avatar
         key={employee.id}
@@ -189,50 +270,21 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
         }}
       />
     );
-  }
+  };
 
-  function calculateAdditionalEmployees(avatarsUsed: number) {
-    if (avatarsUsed > 3) {
-      const additionalemployees = avatarsUsed - 3;
-      return (
-        <Typography
-          sx={{
-            color: '#666666',
-            fontSize: 14,
-            pt: 2,
-            position: 'relative',
-            left: 10,
-            top: -13,
-          }}
-        >
-          +{additionalemployees} {additionalemployees === 1 ? 'employee' : 'employees'}
-        </Typography>
-      );
-    }
-  }
-
-  function setStatus(startDate: string, endDate: string) {
+  const setStatusColors = (projectStatus: string) => {
     let statusColor;
     let fontColor;
-    let projectStatus;
-    const today = new Date();
-    const startDateFormatted = new Date(startDate);
-    const endDateFormatted = new Date(endDate);
 
-    if (startDateFormatted > today) {
-      projectStatus = 'Future';
+    if (projectStatus === ProjectStatus.FUTURE) {
       statusColor = 'rgba(113, 175, 251, 0.31)';
       fontColor = 'rgba(0, 114, 255, 1)';
-    } else {
-      if (endDate === null || endDateFormatted > today) {
-        projectStatus = 'Ongoing';
-        statusColor = 'rgba(59, 248, 100, 0.24)';
-        fontColor = 'rgba(26, 175, 85, 1)';
-      } else {
-        projectStatus = 'Finished';
-        statusColor = 'rgba(92, 92, 92, 0.23)';
-        fontColor = 'rgba(50, 50, 50, 1)';
-      }
+    } else if (projectStatus === ProjectStatus.ONGOING) {
+      statusColor = 'rgba(59, 248, 100, 0.24)';
+      fontColor = 'rgba(26, 175, 85, 1)';
+    } else if (projectStatus === ProjectStatus.FINISHED) {
+      statusColor = 'rgba(92, 92, 92, 0.23)';
+      fontColor = 'rgba(50, 50, 50, 1)';
     }
 
     return (
@@ -240,24 +292,23 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
         <Box
           display="flex"
           sx={{
-            position: 'relative',
-            left: 270,
-            top: -40,
-            background: statusColor,
-            color: fontColor,
-            borderRadius: 1,
-            fontSize: 14,
-            width: 90,
-            height: 28,
             justifyContent: 'center',
             alignItems: 'center',
+            width: 90,
+            height: 28,
+            position: 'relative',
+            left: 0,
+            borderRadius: 1,
+            background: statusColor,
+            color: fontColor,
+            fontSize: 14,
           }}
         >
           {projectStatus}
         </Box>
       </>
     );
-  }
+  };
 
   if (!results.length) {
     return (
@@ -273,7 +324,9 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
               fontSize: 20,
             }}
           >
-            No projects added.
+            {filterStatus === 'All'
+              ? 'No projects added.'
+              : "No '" + filterStatus + "' products found. Check the filter settings."}
           </Typography>
         </ListItem>
       </List>
@@ -281,13 +334,7 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
   } else {
     return (
       <>
-        <List
-          sx={{
-            width: '100%',
-          }}
-        >
-          {results.map((result) => renderResultItem(result))}
-        </List>
+        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}
@@ -295,6 +342,13 @@ const ProjectProfilesResult: React.FC<Props> = ({ results, handleProjectDelete }
             onDelete={handleProjectDelete}
           />
         )}
+        <List
+          sx={{
+            width: '100%',
+          }}
+        >
+          {results.map((result) => renderResultItem(result))}
+        </List>
       </>
     );
   }
