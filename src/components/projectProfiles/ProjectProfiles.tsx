@@ -23,7 +23,6 @@ const ProjectProfiles = () => {
 
   const getResults = async () => {
     const result = await projectsService.getAllProjects();
-    result.map((project: Project) => projectsService.setProjectStatus(project));
     setResults(result);
   };
 
