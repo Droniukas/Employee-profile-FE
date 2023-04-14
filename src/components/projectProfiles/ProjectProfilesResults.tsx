@@ -59,7 +59,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     setShowDeleteConfirmation(true);
   };
 
-  function renderResultItem(result: Project) {
+  const renderResultItem = (result: Project) => {
     return (
       <div key={result.id}>
         <ListItem
@@ -168,17 +168,17 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </ListItem>
       </div>
     );
-  }
+  };
 
-  function correctDateFormat(date: string) {
+  const correctDateFormat = (date: string) => {
     if (date === null) {
       return null;
     } else {
       return new Date(date).toDateString();
     }
-  }
+  };
 
-  function renderEmployeesAvatarGroup(employees: Employee[]) {
+  const renderEmployeesAvatarGroup = (employees: Employee[]) => {
     const employeeAmount = employees.length;
     const avatarsNeed = Math.min(3, employeeAmount);
     const employeesForAvatars = [];
@@ -204,9 +204,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         {calculateAdditionalEmployees(employeeAmount)}
       </>
     );
-  }
+  };
 
-  function renderEmployeeAvatar(employee: Employee) {
+  const renderEmployeeAvatar = (employee: Employee) => {
     return (
       <Avatar
         key={employee.id}
@@ -217,9 +217,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         }}
       />
     );
-  }
+  };
 
-  function calculateAdditionalEmployees(avatarsUsed: number) {
+  const calculateAdditionalEmployees = (avatarsUsed: number) => {
     if (avatarsUsed > 3) {
       const additionalemployees = avatarsUsed - 3;
       return (
@@ -237,9 +237,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </Typography>
       );
     }
-  }
+  };
 
-  function setStatus(startDate: string, endDate: string) {
+  const setStatus = (startDate: string, endDate: string) => {
     let statusColor;
     let fontColor;
     let projectStatus;
@@ -285,7 +285,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </Box>
       </>
     );
-  }
+  };
 
   if (!results.length) {
     return (

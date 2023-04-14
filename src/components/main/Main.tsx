@@ -13,12 +13,12 @@ import { ROUTES } from '../routes/routes';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
 
-function getIndexedProps(index: number) {
+const getIndexedProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
   };
-}
+};
 
 const Main = () => {
   const [results, setResults] = useState<Employee>();

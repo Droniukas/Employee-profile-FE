@@ -9,7 +9,8 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-const SearchInput: React.FC<Props> = ({ placeholder, onChange }) => {
+const SearchInput: React.FC<Props> = (props: Props) => {
+  const { placeholder, onChange } = props;
   return (
     <Box
       component="form"

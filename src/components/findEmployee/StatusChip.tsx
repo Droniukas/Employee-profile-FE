@@ -5,7 +5,8 @@ type Props = {
   status: string;
 };
 
-const StatusChip: React.FC<Props> = ({ status }) => {
+const StatusChip: React.FC<Props> = (props: Props) => {
+  const { status } = props;
   let color;
 
   switch (status) {

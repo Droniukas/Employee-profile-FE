@@ -13,7 +13,8 @@ type Props = {
   results: Employee[];
 };
 
-const FindEmployeeResults: React.FC<Props> = ({ results }) => {
+const FindEmployeeResults: React.FC<Props> = (props: Props) => {
+  const { results } = props;
   if (!results) return null;
 
   const isInactiveOrDismissed = (status: string): boolean => {
@@ -58,13 +59,7 @@ const FindEmployeeResults: React.FC<Props> = ({ results }) => {
 
   return (
     <>
-      <List
-        sx={{
-          width: '100%',
-        }}
-      >
-        {results.map((result) => renderResultItem(result))}
-      </List>
+      <List sx={{ width: '100%' }}>{results.map((result) => renderResultItem(result))}</List>
     </>
   );
 };
