@@ -9,12 +9,13 @@ import React from 'react';
 import Employee from '../../models/Employee.interface';
 import StatusChip from './StatusChip';
 
-type Props = {
+type FindEmployeeResultsProps = {
   results: Employee[];
 };
 
-const FindEmployeeResults: React.FC<Props> = (props: Props) => {
+const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmployeeResultsProps) => {
   const { results } = props;
+
   if (!results) return null;
 
   const isInactiveOrDismissed = (status: string): boolean => {

@@ -4,7 +4,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import { Avatar, Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
