@@ -4,7 +4,6 @@ import FolderIcon from '@mui/icons-material/Folder';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -14,8 +13,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
-import ProjectForm from '../projectForm/ProjectForm';
 import { ProjectStatus } from '../enums/ProjectStatus';
+import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 type ProjectProfilesResultsProps = {
@@ -119,7 +118,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     pt: 1,
                   }}
                 >
-                  {correctDateFormat(result.startDate)} - {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                  {correctDateFormat(result.startDate)} -{' '}
+                  {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
                 </Typography>
                 <Typography
                   sx={{
@@ -167,7 +167,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               {setStatusColors(result.status)}
               <Box alignItems="flex-end" display="flex">
                 <IconButton
-                ref={focusProjectId === result.id ? buttonToFocusRef : null}
+                  ref={focusProjectId === result.id ? buttonToFocusRef : null}
                   className="btn-edit"
                   aria-label="edit"
                   sx={{
@@ -296,44 +296,48 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     );
   };
 
-    if (!results.length) {
-        return (
-            <List sx={{
-                width: '100%',
-            }}>
-                <ListItem alignItems='flex-start'>
-                    <Typography sx={{
-                        color: '#000048',
-                        fontSize: 20,
-                    }}>
-                        {filterStatus === 'All'
-                            ? 'No projects added.'
-                            : 'No \'' + filterStatus + '\' products found. Check the filter settings.'}
-                    </Typography>
-                </ListItem>
-            </List>
-        );
-    } else {
-        return (
-            <>
-               {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
-                       {showDeleteConfirmation && projectToDelete && (
-                         <DeleteConfirmationDialog
-                           project={projectToDelete}
-                           onClose={handleDeleteConfirmationClose}
-                           onDelete={handleProjectDelete}
-                         />
-                       )}
-                       <List
-                         sx={{
-                           width: '100%',
-                         }}
-                       >
-                         {results.map((result) => renderResultItem(result))}
-                       </List>
-            </>
-        );
-    }
+  if (!results.length) {
+    return (
+      <List
+        sx={{
+          width: '100%',
+        }}
+      >
+        <ListItem alignItems="flex-start">
+          <Typography
+            sx={{
+              color: '#000048',
+              fontSize: 20,
+            }}
+          >
+            {filterStatus === 'All'
+              ? 'No projects added.'
+              : "No '" + filterStatus + "' products found. Check the filter settings."}
+          </Typography>
+        </ListItem>
+      </List>
+    );
+  } else {
+    return (
+      <>
+        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {showDeleteConfirmation && projectToDelete && (
+          <DeleteConfirmationDialog
+            project={projectToDelete}
+            onClose={handleDeleteConfirmationClose}
+            onDelete={handleProjectDelete}
+          />
+        )}
+        <List
+          sx={{
+            width: '100%',
+          }}
+        >
+          {results.map((result) => renderResultItem(result))}
+        </List>
+      </>
+    );
+  }
 };
 
 export default ProjectProfilesResult;
