@@ -4,13 +4,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import React from 'react';
 
-type Props = {
+type SearchInputProps = {
   placeholder: string;
   onChange: (value: string) => void;
 };
 
-const SearchInput: React.FC<Props> = (props: Props) => {
+const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
   const { placeholder, onChange } = props;
+
   return (
     <Box
       component="form"

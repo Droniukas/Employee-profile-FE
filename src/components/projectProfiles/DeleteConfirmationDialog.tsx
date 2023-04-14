@@ -16,6 +16,7 @@ type DeleteConfirmationDialogProps = {
 
 const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = (props: DeleteConfirmationDialogProps) => {
   const { project, onClose, onDelete } = props;
+
   const handleDeleteClick = () => {
     onDelete(project.id);
     onClose();

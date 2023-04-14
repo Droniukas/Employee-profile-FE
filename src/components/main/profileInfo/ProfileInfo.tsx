@@ -3,12 +3,13 @@ import React from 'react';
 
 import Employee from '../../../models/Employee.interface';
 
-type Props = {
+type ProfileInfoProps = {
   results: Employee;
 };
 
-const ProfileInfo: React.FC<Props> = (props) => {
+const ProfileInfo: React.FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
   const { results } = props;
+
   if (!results) return null;
 
   return (
