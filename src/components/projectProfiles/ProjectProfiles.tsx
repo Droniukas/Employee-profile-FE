@@ -79,7 +79,7 @@ const ProjectProfiles = () => {
               left: 0,
             }}
           >
-            <ProjectFilter filterValueSelected={onFilterValueSelection} />
+            <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
           </Box>
         </Stack>
         <Stack
