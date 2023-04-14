@@ -2,7 +2,7 @@ import { Checkbox, checkboxClasses } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 import { ViewStateRoot } from '../../../store/types';
-import { ViewState } from '../models/enums/ViewState';
+import { SkillsTabState } from '../models/enums/SkillsTabState';
 
 type Props = {
   isDisabled: boolean;
@@ -12,7 +12,7 @@ type Props = {
 
 function SkillListCheckbox({ isDisabled, isChecked, onChange }: Props) {
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
-  const checkboxColor = viewState == ViewState.VIEW_STATE ? 'adaec3' : 'primary.main';
+  const checkboxColor = viewState == SkillsTabState.VIEW_STATE ? 'adaec3' : 'primary.main';
 
   return (
     <>

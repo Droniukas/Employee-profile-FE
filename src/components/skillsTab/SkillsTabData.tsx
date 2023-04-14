@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setLoading } from '../../state/loading';
-import { setChangedSkills } from '../../state/changedSkills';
-import { setViewState } from '../../state/viewState';
 import { SkillsService } from '../../services/skills.service';
+import { setChangedSkills } from '../../state/changedSkills';
+import { setLoading } from '../../state/loading';
+import { setSkillsTabState } from '../../state/skillsTabState';
 import { ChangedSkillsDataRoot } from '../../store/types';
 import { SkillLevel } from './models/enums/SkillLevel';
 import { ChangedSkill } from './models/interfaces/ChangedSkill.interface';
 import { Skill } from './models/interfaces/Skill.interface';
 import SkillsTab from './SkillsTab';
+import { triggerOnCancel } from '../../state/onCancel';
 
 function SkillsTabData() {
   const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
@@ -24,7 +25,7 @@ function SkillsTabData() {
 
   async function fetchData() {
     dispatch(setLoading(true));
-    const response = await skillsService.fetchSkillData();
+    const response: Array<Skill> = await skillsService.fetchSkillData();
     setSkillDataArr(response);
     dispatch(setLoading(false));
   }
@@ -57,7 +58,7 @@ function SkillsTabData() {
       await skillsService.updateEmployeeSkill(obj);
     });
     await fetchData();
-    dispatch(setViewState({}));
+    dispatch(setSkillsTabState({}));
     dispatch(setChangedSkills([]));
   }
 
@@ -65,7 +66,8 @@ function SkillsTabData() {
     skillDataArr.forEach((obj) => (obj.hasError = false));
     dispatch(setChangedSkills([]));
     await fetchData();
-    dispatch(setViewState({}));
+    dispatch(setSkillsTabState({}));
+    dispatch(triggerOnCancel({}));
   }
 
   return (

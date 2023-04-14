@@ -1,4 +1,4 @@
-import { ViewState } from '../components/skillsTab/models/enums/ViewState';
+import { SkillsTabState } from '../components/skillsTab/models/enums/SkillsTabState';
 import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
 
 export interface onCancelRoot {
@@ -15,12 +15,18 @@ export interface ChangedSkillsDataRoot {
 
 export interface ViewStateRoot {
   viewState: {
-    value: ViewState;
+    value: SkillsTabState;
   };
 }
 
 export interface LoadingRoot {
   loading: {
+    value: boolean;
+  };
+}
+
+export interface OnCancelRoot {
+  onCancel: {
     value: boolean;
   };
 }

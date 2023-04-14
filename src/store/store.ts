@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import loadingReducer from '../state/loading';
 import skillNamesReducer from '../state/changedSkills';
-import viewStateReducer from '../state/viewState';
+import loadingReducer from '../state/loading';
+import onCancelReducer from '../state/onCancel';
+import viewStateReducer from '../state/skillsTabState';
 
 const store = configureStore({
   reducer: {
     changedSkills: skillNamesReducer,
     viewState: viewStateReducer,
     loading: loadingReducer,
+    onCancel: onCancelReducer,
   },
 });
 

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setChangedSkills } from '../../../state/changedSkills';
-import { ChangedSkillsDataRoot, ViewStateRoot } from '../../../store/types';
+import { ChangedSkillsDataRoot, OnCancelRoot, ViewStateRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
-import { ViewState } from '../models/enums/ViewState';
+import { SkillsTabState } from '../models/enums/SkillsTabState';
 import { Skill } from '../models/interfaces/Skill.interface';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
@@ -25,7 +25,13 @@ function SkillListItem({ skillObj }: Props) {
   useEffect(() => {
     setChecked(skillObj.checked);
     skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);
-  }, []);
+  }, [skillObj.checked, skillObj.skillLevel]);
+
+  const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
+  useEffect(() => {
+    setChecked(skillObj.checked);
+    skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);
+  }, [onCancel]);
 
   const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
@@ -56,7 +62,7 @@ function SkillListItem({ skillObj }: Props) {
           <FormControlLabel
             control={
               <SkillListCheckbox
-                isDisabled={viewState === ViewState.VIEW_STATE}
+                isDisabled={viewState === SkillsTabState.VIEW_STATE}
                 isChecked={isChecked}
                 onChange={onCheckboxChange}
               />
@@ -67,12 +73,12 @@ function SkillListItem({ skillObj }: Props) {
             {skillObj.skillName}
             {skillObj.hasError ? <SkillListItemErrorText /> : null}
           </ListItemText>
-          {viewState === ViewState.VIEW_STATE ? (
+          {viewState === SkillsTabState.VIEW_STATE ? (
             isChecked ? (
               <SkillLevelWithTooltip name={skillLevel} tooltipText={tooltipText} />
             ) : null
           ) : null}
-          {viewState === ViewState.EDIT_STATE ? (
+          {viewState === SkillsTabState.EDIT_STATE ? (
             isChecked ? (
               <SkillLevelDropdownList
                 skillLevel={skillLevel}

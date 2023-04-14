@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initStateValue = true;
 
 export const loadingSlice = createSlice({
-  name: 'loading',
+  name: 'onCancel',
   initialState: { value: initStateValue },
   reducers: {
     setLoading: (state, action) => {

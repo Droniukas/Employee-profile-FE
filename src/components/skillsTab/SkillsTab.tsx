@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { Skill } from './models/interfaces/Skill.interface';
+import SkillsTabStateButtons from './SkillsTabStateButtons';
 import SkillTabCategory from './SkillTabCategory';
-import SkillsTabStateButtons from './ViewButtons';
 
 type Props = {
   skillDataArray: Skill[];
