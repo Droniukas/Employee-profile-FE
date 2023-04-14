@@ -10,7 +10,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
-
 import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
 import ProjectForm from '../projectForm/ProjectForm';
@@ -127,22 +126,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   WebkitBoxOrient: 'vertical',
                 }}
               >
-                {isTextOverflow && result.description}
-                {!isTextOverflow && (
-                  <Button
-                    onClick={() => setProject(result)}
-                    sx={{
-                      textDecoration: 'underline',
-                      color: '#000048',
-                      fontSize: 14,
-                      height: 15,
-                    }}
-                  >
-                    Show more
-                  </Button>
-                )}
-              </Typography>
-              {/* {isTextOverflow && (
+                {!isTextOverflow ? result.description : result.description.substring(0, 180) + '...'}
                 <Button
                   onClick={() => setProject(result)}
                   sx={{
@@ -150,12 +134,11 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     color: '#000048',
                     fontSize: 14,
                     height: 15,
-                    left: -10,
                   }}
                 >
                   Show more
                 </Button>
-              )} */}
+              </Typography>
             </Grid>
             <Grid item xs={6}>
               <Box alignItems="flex-start" display="flex">
