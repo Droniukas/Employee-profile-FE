@@ -15,35 +15,60 @@ import List from '@mui/material/List';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
-import EmployeeItemState from '../../models/EmployeeItemState.interface';
+import ProjectEmployeeState from '../../models/ProjectEmployeeState.interface';
 
 type EmployeeAddListProps = {
   employees: Employee[];
+  onSelect: (employees: Employee[]) => void;
 };
 
 const EmployeeAddList: React.FC<EmployeeAddListProps> = (props: EmployeeAddListProps) => {
-  const { employees } = props;
-  const [employeeItemState, setEmployeeItemState] = useState<EmployeeItemState[]>([]);
+  const { employees, onSelect } = props;
+  const [employeeState, setEmployeeState] = useState<ProjectEmployeeState[]>([]);
+  const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
 
-  const handleEmployeeItemStateChange = (index: number, newEmployeeItemState: EmployeeItemState) => {
-    setEmployeeItemState((prevState) => {
+  useEffect(() => {
+    onSelect(selectedEmployees);
+  }, [onSelect, selectedEmployees]);
+
+  const handleEmployeeItemStateChange = (index: number, state: ProjectEmployeeState) => {
+    setEmployeeState((prevState) => {
       const newState = [...prevState];
-      newState[index] = newEmployeeItemState;
+      if (state.endDate < state.startDate) {
+        state.endDate = state.startDate;
+      }
+      newState[index] = state;
       return newState;
     });
+
+    const employeeToUpdate = { ...employees[index] };
+    employeeToUpdate.projectAssignmentStartDate = state.startDate;
+    employeeToUpdate.projectAssignmentEndDate = state.endDateExists ? state.endDate : '';
+    const updateSelectedEmployees = selectedEmployees.filter((employee) => employee.id !== employeeToUpdate.id);
+    if (state.selected && (!state.endDateExists || dayjs().isBefore(state.endDate))) {
+      updateSelectedEmployees.push(employeeToUpdate);
+    }
+    setSelectedEmployees(updateSelectedEmployees);
+  };
+
+  const initialState: ProjectEmployeeState = {
+    selected: false,
+    endDateExists: false,
+    startDate: dayjs().toISOString(),
+    endDate: '',
   };
 
   return (
-    <List className="member-list" sx={{ marginTop: '24px' }}>
+    <List className="member-list" sx={{ paddingTop: '24px' }}>
       {employees.map((employee, index) => (
         <EmployeeAddItem
-          key={employee.id}
+          key={index}
           employee={employee}
-          state={employeeItemState[index]}
-          onStateChange={(newEmployeeItemState: EmployeeItemState) =>
+          state={employeeState[index] ? employeeState[index] : initialState}
+          onStateChange={(newEmployeeItemState: ProjectEmployeeState) =>
             handleEmployeeItemStateChange(index, newEmployeeItemState)
           }
         />
@@ -56,42 +81,31 @@ export default EmployeeAddList;
 
 type EmployeeAddItemProps = {
   employee: Employee;
-  state: EmployeeItemState;
-  onStateChange: (newEmployeeItemState: EmployeeItemState) => void;
+  state: ProjectEmployeeState;
+  onStateChange: (newEmployeeItemState: ProjectEmployeeState) => void;
 };
 
 const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemProps) => {
   const { employee, state, onStateChange } = props;
 
-  if (!state) {
-    const initialState: EmployeeItemState = {
-      showDatePicker: false,
-      endDateExists: false,
-      startDate: dayjs().toISOString(),
-      endDate: '',
-    };
-    onStateChange(initialState);
-  }
-
-  const handleMemberCheckboxChange = () => {
+  const handleSelectCheckboxChange = () => {
     onStateChange({
       ...state,
-      showDatePicker: !state.showDatePicker,
+      selected: !state.selected,
       endDateExists: false,
     });
   };
 
   return (
     <>
-      <ListItem sx={{ paddingY: 0 }}>
+      <ListItem sx={{ padding: 0 }}>
         <Grid container alignItems={'center'}>
-          <Grid item xs={5}>
+          <Grid item xs={5.5}>
             <Box display={'flex'} sx={{ alignItems: 'center' }}>
               <Checkbox
-                sx={{ alignSelf: 'center', ml: -3 }}
-                disableRipple
-                checked={state.showDatePicker}
-                onChange={handleMemberCheckboxChange}
+                sx={{ alignSelf: 'center', mr: 0.5 }}
+                checked={state.selected}
+                onChange={handleSelectCheckboxChange}
               />
               <ListItemAvatar>
                 <Avatar
@@ -110,13 +124,12 @@ const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemP
                 secondary={employee.title}
                 sx={{
                   color: '#000048',
-                  whiteSpace: 'nowrap',
                 }}
               />
             </Box>
           </Grid>
-          {state.showDatePicker && (
-            <Grid item xs={7}>
+          {state.selected && (
+            <Grid item xs={6.5}>
               <Box display={'flex'}>
                 <Box>
                   <InputLabel>
@@ -132,13 +145,12 @@ const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemP
                         onStateChange({
                           ...state,
                           startDate: dayjs(newValue).toISOString(),
-                          endDate: dayjs(newValue).toISOString(),
                         });
                       }}
                     />
                   </LocalizationProvider>
                 </Box>
-                <Box display={'flex'} sx={{ alignItems: 'center', ml: 2 }}>
+                <Box display={'flex'} sx={{ alignItems: 'center', ml: 'auto' }}>
                   <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                     <Checkbox
                       checked={state.endDateExists}
@@ -158,15 +170,15 @@ const EmployeeAddItem: React.FC<EmployeeAddItemProps> = (props: EmployeeAddItemP
 
           {state.endDateExists && (
             <>
-              <Grid item xs={5}></Grid>
-              <Grid item xs={7}>
+              <Grid item xs={5.5}></Grid>
+              <Grid item xs={6.5}>
                 <Box>
                   <InputLabel>
                     <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
                   </InputLabel>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      sx={{ width: 190, mb: 6 }}
+                      sx={{ width: 190, mb: 4 }}
                       format="YYYY/MM/DD"
                       minDate={dayjs(state.startDate)}
                       value={state.endDate ? dayjs(state.endDate) : null}
