@@ -219,7 +219,11 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     if (date === null) {
       return null;
     } else {
-      return new Date(date).toDateString();
+      const formattedDate = new Date(date);
+      const day = formattedDate.getDate();
+      const month = formattedDate.getMonth() + 1;
+      const year = formattedDate.getFullYear();
+      return year + '/' + month + '/' + day;
     }
   };
 
@@ -326,7 +330,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' products found. Check the filter settings."}
+              : "No '" + filterStatus + "' projects found. Check the filter settings."}
           </Typography>
         </ListItem>
       </List>
