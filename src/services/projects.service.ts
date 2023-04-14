@@ -7,6 +7,9 @@ import axios from './axios';
 export class ProjectsService {
   public async getAllProjects() {
     const response = await axios.get('/project/all', {});
+    response.data.map((project: Project) => {
+      this.mapProjectStatus(project);
+    });
     return response.data;
   }
 
@@ -27,7 +30,7 @@ export class ProjectsService {
     await axios.patch(`/project/delete/${id}`, {});
   }
 
-  public setProjectStatus(project: Project) {
+  private mapProjectStatus(project: Project) {
     const today = new Date();
     const startDateFormatted = new Date(project.startDate);
     const endDateFormatted = new Date(project.endDate);
