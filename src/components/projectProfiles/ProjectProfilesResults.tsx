@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
+import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
@@ -63,6 +64,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (result: Project) => {
+    const isTextOverflow = result.description.length > 135;
     return (
       <div key={result.id}>
         <ListItem
@@ -141,7 +143,18 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {result.description}
+                  {!isTextOverflow ? result.description : result.description.substring(0, 135) + '...'}
+                  <Button
+                    onClick={() => setProject(result)}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: '#000048',
+                      fontSize: 14,
+                      height: 15,
+                    }}
+                  >
+                    Show more
+                  </Button>
                 </Typography>
               </Box>
               <Box
