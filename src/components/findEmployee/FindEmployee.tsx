@@ -19,26 +19,26 @@ const FindEmployee = () => {
   const [inputValue, _setInputValue] = useState('');
   const inputValueRef = useRef(inputValue);
 
-  function setInputValue(val: string) {
+  const setInputValue = (val: string) => {
     inputValueRef.current = val;
     _setInputValue(val);
-  }
+  };
 
   const [rowsPerPage, _setRowsPerPage] = useState<number>(10);
   const rowsPerPageRef = useRef(rowsPerPage);
 
-  function setRowsPerPage(val: number) {
+  const setRowsPerPage = (val: number) => {
     rowsPerPageRef.current = val;
     _setRowsPerPage(val);
-  }
+  };
 
   const [page, _setPage] = useState<number>(0);
   const pageRef = useRef(page);
 
-  function setPage(val: number) {
+  const setPage = (val: number) => {
     pageRef.current = val;
     _setPage(val);
-  }
+  };
 
   const getResults = async () => {
     const result = await employeeService.searchByName(inputValueRef.current, pageRef.current, rowsPerPageRef.current);

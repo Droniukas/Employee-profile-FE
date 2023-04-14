@@ -19,7 +19,9 @@ type LoginProps = {
   setAppState: (newState: AppState) => void;
 };
 
-const Login: React.FC<LoginProps> = ({ setAppState }) => {
+const Login: React.FC<LoginProps> = (props: LoginProps) => {
+  const { setAppState } = props;
+
   const {
     register,
     handleSubmit,
@@ -47,7 +49,7 @@ const Login: React.FC<LoginProps> = ({ setAppState }) => {
     setIsPasswordEmpty(event.target.value === '');
   };
 
-  const handleButtonClick = handleSubmit(async (data: LoginInterface) => {
+  const handleButtonClick = handleSubmit(async (data) => {
     try {
       const loginService = new LoginService();
       const responseData = await loginService.checkCredentials(data);

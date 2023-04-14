@@ -45,6 +45,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     startDate: dayjs().toISOString(),
     endDate: '',
     employees: [],
+    status: '',
   };
   if (project) initialValues = project;
 
