@@ -11,8 +11,10 @@ type Props = {
   cancelFunction: () => void;
 };
 
-function SkillsTab({ skillDataArray, saveFunction, cancelFunction }: Props) {
-  function mapData(dataArr: Skill[]): ReactNode {
+const SkillsTab: React.FunctionComponent<Props> = (props) => {
+  const { cancelFunction, saveFunction, skillDataArray } = props;
+
+  const mapData = (dataArr: Skill[]): ReactNode => {
     {
       return dataArr.map((currentObj: Skill) => {
         return (
@@ -25,18 +27,18 @@ function SkillsTab({ skillDataArray, saveFunction, cancelFunction }: Props) {
         );
       });
     }
-  }
+  };
 
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'right' }}>
         <SkillsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
       </Box>
-      <Box sx={{ width: '1176px', marginTop: '100px' }}>
+      <Box sx={{ width: '1176px', marginTop: '20px' }}>
         {mapData(skillDataArray.filter((obj: Skill) => obj.parentId === null))}
       </Box>
     </>
   );
-}
+};
 
 export default SkillsTab;

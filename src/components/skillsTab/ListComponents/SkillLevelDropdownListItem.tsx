@@ -8,7 +8,8 @@ type Props = {
   tooltipTitle: string;
 };
 
-function SkillLevelDropdownListItem({ name, onSelection, tooltipTitle }: Props) {
+const SkillLevelDropdownListItem: React.FunctionComponent<Props> = (props) => {
+  const { name, onSelection, tooltipTitle } = props;
   return (
     <>
       <Tooltip title={tooltipTitle} disableInteractive>
@@ -18,6 +19,6 @@ function SkillLevelDropdownListItem({ name, onSelection, tooltipTitle }: Props) 
       </Tooltip>
     </>
   );
-}
+};
 
 export default SkillLevelDropdownListItem;

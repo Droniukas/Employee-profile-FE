@@ -17,7 +17,8 @@ type Props = {
   tooltipText: string;
 };
 
-function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipText }: Props) {
+const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
+  const { setSkillLevel, skillLevel, skillObj, tooltipText } = props;
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -26,7 +27,7 @@ function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipTe
   const savedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
 
-  function onDropdownChange(selectedSkill: SkillLevel) {
+  const onDropdownChange = (selectedSkill: SkillLevel) => {
     setSkillLevel(selectedSkill);
     dispatch(
       setChangedSkills([
@@ -34,7 +35,7 @@ function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipTe
         { id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: selectedSkill },
       ]),
     );
-  }
+  };
 
   return (
     <>
@@ -68,11 +69,12 @@ function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipTe
             {[SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT].map((skillLevelName) => {
               const tooltipText: string = SkillLevelTooltipMapper(skillLevelName);
 
-              function handleSkillSelection() {
+              const handleSkillSelection = () => {
                 setSkillLevel(skillLevelName);
                 setOpen(!open);
                 onDropdownChange(skillLevelName);
-              }
+              };
+
               if (skillLevelName === skillLevel) return null;
               return (
                 <SkillLevelDropdownListItem
@@ -88,6 +90,6 @@ function SkillLevelDropdownList({ skillLevel, setSkillLevel, skillObj, tooltipTe
       </List>
     </>
   );
-}
+};
 
 export default SkillLevelDropdownList;

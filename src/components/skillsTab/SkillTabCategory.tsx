@@ -23,12 +23,13 @@ const sortBySkill = (a: Skill, b: Skill) => {
   return 0;
 };
 
-function SkillTabCategory({ currentObj, skillDataArray, mapData }: Props) {
+const SkillTabCategory: React.FunctionComponent<Props> = (props) => {
+  const { currentObj, mapData, skillDataArray } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  function mapSkills(arr: Skill[]) {
+  const mapSkills = (arr: Skill[]) => {
     return arr.map((obj: Skill) => <SkillListItem skillObj={obj} key={obj.id} />);
-  }
+  };
 
   return (
     <>
@@ -73,6 +74,6 @@ function SkillTabCategory({ currentObj, skillDataArray, mapData }: Props) {
       </Collapse>
     </>
   );
-}
+};
 
 export default SkillTabCategory;

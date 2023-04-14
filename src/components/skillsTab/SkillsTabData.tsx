@@ -4,15 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SkillsService } from '../../services/skills.service';
 import { setChangedSkills } from '../../state/changedSkills';
 import { setLoading } from '../../state/loading';
+import { triggerOnCancel } from '../../state/onCancel';
 import { setSkillsTabState } from '../../state/skillsTabState';
 import { ChangedSkillsDataRoot } from '../../store/types';
 import { SkillLevel } from './models/enums/SkillLevel';
 import { ChangedSkill } from './models/interfaces/ChangedSkill.interface';
 import { Skill } from './models/interfaces/Skill.interface';
 import SkillsTab from './SkillsTab';
-import { triggerOnCancel } from '../../state/onCancel';
 
-function SkillsTabData() {
+const SkillsTabData = () => {
   const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
   const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
 
@@ -23,14 +23,14 @@ function SkillsTabData() {
     fetchData();
   }, []);
 
-  async function fetchData() {
+  const fetchData = async () => {
     dispatch(setLoading(true));
     const response: Array<Skill> = await skillsService.fetchSkillData();
     setSkillDataArr(response);
     dispatch(setLoading(false));
-  }
+  };
 
-  function setErrorForSkills(childObj: ChangedSkill | Skill) {
+  const setErrorForSkills = (childObj: ChangedSkill | Skill) => {
     const skillWithError = skillDataArr.find((obj) => obj.id === childObj.id);
     if (skillWithError === undefined) throw new Error('undefined object...');
     skillWithError.hasError = true;
@@ -38,9 +38,9 @@ function SkillsTabData() {
     parentObjs.forEach((obj) => {
       setErrorForSkills(obj);
     });
-  }
+  };
 
-  function hasErrors() {
+  const hasErrors = () => {
     skillDataArr.forEach((obj) => (obj.hasError = false));
     const unselectedLevelSkills = changedSkills.filter((obj) => obj.skillLevel === SkillLevel.NONE);
     if (unselectedLevelSkills.length > 0) {
@@ -50,9 +50,9 @@ function SkillsTabData() {
       setSkillDataArr([...skillDataArr]);
       return true;
     }
-  }
+  };
 
-  async function handleSave() {
+  const handleSave = async () => {
     if (hasErrors()) return;
     changedSkills.forEach(async (obj) => {
       await skillsService.updateEmployeeSkill(obj);
@@ -60,15 +60,15 @@ function SkillsTabData() {
     await fetchData();
     dispatch(setSkillsTabState({}));
     dispatch(setChangedSkills([]));
-  }
+  };
 
-  async function handleCancel() {
+  const handleCancel = async () => {
     skillDataArr.forEach((obj) => (obj.hasError = false));
     dispatch(setChangedSkills([]));
     await fetchData();
     dispatch(setSkillsTabState({}));
     dispatch(triggerOnCancel({}));
-  }
+  };
 
   return (
     <>
@@ -77,6 +77,6 @@ function SkillsTabData() {
       ) : null}
     </>
   );
-}
+};
 
 export default SkillsTabData;

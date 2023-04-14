@@ -3,7 +3,7 @@ import axios from './axios';
 
 export class LoginService {
   public async checkCredentials(data: LoginInterface) {
-    const response = await axios
+    await axios
       .post('/user/get', data)
       .then((response) => {
         if (response.status === 200) {

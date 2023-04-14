@@ -1,7 +1,7 @@
 import { ListItemText } from '@mui/material';
 import React from 'react';
 
-function SkillListItemErrorText() {
+const SkillListItemErrorText = () => {
   return (
     <ListItemText
       disableTypography
@@ -9,6 +9,6 @@ function SkillListItemErrorText() {
       primary="Skill level should be defined for the selected skill"
     />
   );
-}
+};
 
 export default SkillListItemErrorText;

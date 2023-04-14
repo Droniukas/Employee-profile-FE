@@ -8,7 +8,8 @@ type Props = {
   tooltipText: string;
 };
 
-function SkillLevelWithTooltip({ name, tooltipText }: Props) {
+const SkillLevelWithTooltip: React.FunctionComponent<Props> = (props) => {
+  const { name, tooltipText } = props;
   return (
     <ThemeProvider theme={theme}>
       <Tooltip title={tooltipText} disableInteractive>
@@ -32,6 +33,6 @@ function SkillLevelWithTooltip({ name, tooltipText }: Props) {
       </Tooltip>
     </ThemeProvider>
   );
-}
+};
 
 export default SkillLevelWithTooltip;

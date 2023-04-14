@@ -1,4 +1,3 @@
-import { checkboxClasses } from '@mui/material/Checkbox';
 import { createTheme } from '@mui/material/styles';
 
 declare module '@mui/material/Button' {
@@ -46,17 +45,6 @@ const theme = createTheme({
         root: {
           borderRadius: '100px',
         },
-      },
-    },
-    MuiCheckbox: {
-      styleOverrides: {
-        root: {
-          color: '#adaec3',
-          [`&.${checkboxClasses.checked}`]: {
-            color: '#000048',
-          },
-        },
-        checked: {},
       },
     },
     MuiList: {

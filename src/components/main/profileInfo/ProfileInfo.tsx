@@ -7,7 +7,8 @@ type ProfileInfoProps = {
   results: Employee;
 };
 
-const ProfileInfo: React.FC<Props> = ({results}) => {
+const ProfileInfo: React.FC<ProfileInfoProps> = (props) => {
+  const { results } = props;
   if (!results) return null;
 
   return (

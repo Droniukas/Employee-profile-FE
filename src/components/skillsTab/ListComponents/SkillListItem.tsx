@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, ListItem, ListItemText } from '@mui/material';
+import { Box, Checkbox, FormControlLabel, ListItem, ListItemText, checkboxClasses } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,7 +9,6 @@ import { SkillsTabState } from '../models/enums/SkillsTabState';
 import { Skill } from '../models/interfaces/Skill.interface';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
-import SkillListCheckbox from './SkillListCheckbox';
 import SkillListItemErrorText from './SkillListItemErrorText';
 import SkillLevelTooltipMapper from './utils';
 
@@ -17,7 +16,8 @@ type Props = {
   skillObj: Skill;
 };
 
-function SkillListItem({ skillObj }: Props) {
+const SkillListItem: React.FunctionComponent<Props> = (props) => {
+  const { skillObj } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
@@ -33,10 +33,12 @@ function SkillListItem({ skillObj }: Props) {
     skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);
   }, [onCancel]);
 
+  const checkboxColor = viewState == SkillsTabState.VIEW_STATE ? 'adaec3' : 'primary.main';
+
   const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
 
-  function onCheckboxChange() {
+  const onCheckboxChange = () => {
     setChecked(!isChecked);
     !isChecked
       ? dispatch(
@@ -51,7 +53,7 @@ function SkillListItem({ skillObj }: Props) {
             { id: skillObj.id, skill: skillObj.skillName, checked: false, skillLevel: null },
           ]),
         );
-  }
+  };
 
   const tooltipText: string = SkillLevelTooltipMapper(skillLevel);
 
@@ -61,11 +63,19 @@ function SkillListItem({ skillObj }: Props) {
         <ListItem disablePadding sx={{ marginLeft: '27px' }}>
           <FormControlLabel
             control={
-              <SkillListCheckbox
-                isDisabled={viewState === SkillsTabState.VIEW_STATE}
-                isChecked={isChecked}
-                onChange={onCheckboxChange}
-              />
+              <>
+                <Checkbox
+                  disabled={viewState === SkillsTabState.VIEW_STATE}
+                  checked={isChecked}
+                  onChange={onCheckboxChange}
+                  sx={{
+                    color: checkboxColor,
+                    [`&.${checkboxClasses.checked}`]: {
+                      color: checkboxColor,
+                    },
+                  }}
+                />
+              </>
             }
             label=""
           />
@@ -92,6 +102,6 @@ function SkillListItem({ skillObj }: Props) {
       </Box>
     </>
   );
-}
+};
 
 export default SkillListItem;

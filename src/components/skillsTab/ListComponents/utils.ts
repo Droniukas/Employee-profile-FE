@@ -1,7 +1,7 @@
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip';
 
-function SkillLevelTooltipMapper(skillLevel: SkillLevel) {
+const SkillLevelTooltipMapper = (skillLevel: SkillLevel) => {
   let tooltipText: string;
   switch (skillLevel) {
     case SkillLevel.BASIC:
@@ -17,6 +17,6 @@ function SkillLevelTooltipMapper(skillLevel: SkillLevel) {
       tooltipText = '';
   }
   return tooltipText;
-}
+};
 
 export default SkillLevelTooltipMapper;

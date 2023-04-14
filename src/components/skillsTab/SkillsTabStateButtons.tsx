@@ -13,11 +13,12 @@ type Props = {
   cancelFunction: () => void;
 };
 
-function SkillsTabStateButtons({ saveFunction, cancelFunction }: Props) {
+const SkillsTabStateButtons = (props: Props) => {
+  const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
-  function changeView(dispatch: Dispatch<AnyAction>) {
+  const changeView = (dispatch: Dispatch<AnyAction>) => {
     dispatch(setSkillsTabState({}));
-  }
+  };
 
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   return (
@@ -44,6 +45,6 @@ function SkillsTabStateButtons({ saveFunction, cancelFunction }: Props) {
       )}
     </>
   );
-}
+};
 
 export default SkillsTabStateButtons;
