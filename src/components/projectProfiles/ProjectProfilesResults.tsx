@@ -60,8 +60,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (result: Project) => {
-    const isTextOverflow = result.description.length > 170;
-    console.log(result.description.length, isTextOverflow);
+    const isTextOverflow = result.description.length > 180;
     return (
       <div key={result.id}>
         <ListItem
