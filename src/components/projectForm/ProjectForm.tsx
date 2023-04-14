@@ -43,6 +43,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     startDate: dayjs().toISOString(),
     endDate: '',
     employees: [],
+    status: '',
   };
 
   const handleFormSubmit = async () => {
