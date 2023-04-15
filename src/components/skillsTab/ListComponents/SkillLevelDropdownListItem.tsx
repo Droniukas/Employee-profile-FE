@@ -8,7 +8,7 @@ type Props = {
   tooltipTitle: string;
 };
 
-const SkillLevelDropdownListItem: React.FunctionComponent<Props> = (props) => {
+const SkillLevelDropdownListItem: React.FunctionComponent<Props> = (props: Props) => {
   const { name, onSelection, tooltipTitle } = props;
   return (
     <>

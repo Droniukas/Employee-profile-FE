@@ -13,7 +13,7 @@ type Props = {
   cancelFunction: () => void;
 };
 
-const SkillsTabStateButtons = (props: Props) => {
+const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
   const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {

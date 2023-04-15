@@ -23,7 +23,7 @@ const sortBySkill = (a: Skill, b: Skill) => {
   return 0;
 };
 
-const SkillTabCategory: React.FunctionComponent<Props> = (props) => {
+const SkillTabCategory: React.FunctionComponent<Props> = (props: Props) => {
   const { currentObj, mapData, skillDataArray } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 

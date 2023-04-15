@@ -8,7 +8,7 @@ import { ChangedSkillsDataRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { Skill } from '../models/interfaces/Skill.interface';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
-import SkillLevelTooltipMapper from './utils';
+import mapSkillLevelToTooltip from './utils';
 
 type Props = {
   skillLevel: SkillLevel | null;
@@ -17,7 +17,7 @@ type Props = {
   tooltipText: string;
 };
 
-const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
+const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) => {
   const { setSkillLevel, skillLevel, skillObj, tooltipText } = props;
   const [open, setOpen] = useState(false);
   const handleClick = () => {
@@ -40,7 +40,6 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
   const levelArr = skillObj.language
     ? [SkillLevel.A1, SkillLevel.A2, SkillLevel.B1, SkillLevel.B2, SkillLevel.C1, SkillLevel.C2, SkillLevel.NATIVE]
     : [SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT];
-  console.log(skillObj);
 
   return (
     <>
@@ -72,7 +71,7 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ margin: 0 }}>
             {levelArr.map((skillLevelName) => {
-              const tooltipText: string = SkillLevelTooltipMapper(skillLevelName);
+              const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
 
               const handleSkillSelection = () => {
                 setSkillLevel(skillLevelName);
@@ -90,7 +89,6 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
                 />
               );
             })}
-            {/* cia jau languages darom */}
           </List>
         </Collapse>
       </List>

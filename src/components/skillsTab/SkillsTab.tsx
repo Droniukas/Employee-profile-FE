@@ -11,7 +11,7 @@ type Props = {
   cancelFunction: () => void;
 };
 
-const SkillsTab: React.FunctionComponent<Props> = (props) => {
+const SkillsTab: React.FunctionComponent<Props> = (props: Props) => {
   const { cancelFunction, saveFunction, skillDataArray } = props;
 
   const mapData = (dataArr: Skill[]): ReactNode => {

@@ -8,7 +8,7 @@ type Props = {
   tooltipText: string;
 };
 
-const SkillLevelWithTooltip: React.FunctionComponent<Props> = (props) => {
+const SkillLevelWithTooltip: React.FunctionComponent<Props> = (props: Props) => {
   const { name, tooltipText } = props;
   return (
     <ThemeProvider theme={theme}>

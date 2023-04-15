@@ -10,13 +10,13 @@ import { Skill } from '../models/interfaces/Skill.interface';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
-import SkillLevelTooltipMapper from './utils';
+import mapSkillLevelToTooltip from './utils';
 
 type Props = {
   skillObj: Skill;
 };
 
-const SkillListItem: React.FunctionComponent<Props> = (props) => {
+const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
   const { skillObj } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
@@ -55,7 +55,7 @@ const SkillListItem: React.FunctionComponent<Props> = (props) => {
         );
   };
 
-  const tooltipText: string = SkillLevelTooltipMapper(skillLevel);
+  const tooltipText: string = mapSkillLevelToTooltip(skillLevel);
 
   return (
     <>
