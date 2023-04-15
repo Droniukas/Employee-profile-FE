@@ -19,12 +19,12 @@ import dayjs from 'dayjs';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 
-import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
+import TeamMember from '../../models/TeamMember.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
-import EmployeeAddForm from './EmployeeAddForm';
-import EmployeeViewList from './EmployeeViewList';
+import TeamMemberAddForm from './TeamMemberAddForm';
+import TeamMemberEditList from './TeamMemberEditList';
 
 type ProjectFormProps = {
   onClose: (projectId?: string) => void;
@@ -44,17 +44,18 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     description: '',
     startDate: dayjs().toISOString(),
     endDate: '',
-    employees: [],
+    teamMembers: [],
     status: '',
   };
   if (project) initialValues = project;
 
-  const [projectMembers, setProjectMembers] = useState<Employee[]>(initialValues.employees);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(initialValues.teamMembers);
 
   const handleFormSubmit = async () => {
     let result;
     values.title.trim();
     values.description.trim();
+    values.teamMembers = teamMembers;
 
     if (project) {
       result = await projectsService.updateProject(values);
@@ -69,8 +70,16 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     setShowAddEmployeesForm(false);
   };
 
-  const handleAddClick = (newProjectMembers: Employee[]) => {
-    setProjectMembers([...projectMembers, ...newProjectMembers]);
+  const handleAddClick = (newTeamMembers: TeamMember[]) => {
+    setTeamMembers([...teamMembers, ...newTeamMembers]);
+  };
+
+  const updateTeamMember = (updatedTeamMember: TeamMember) => {
+    setTeamMembers((prevTeamMembers) =>
+      prevTeamMembers.map((teamMember: TeamMember) =>
+        teamMember.id === updatedTeamMember.id ? updatedTeamMember : teamMember,
+      ),
+    );
   };
 
   const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched } = useFormik({
@@ -80,7 +89,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   });
 
   return (
-    <Dialog open={true} fullWidth maxWidth="lg">
+    <Dialog open={true} fullWidth maxWidth="md">
       <Dialog open={confirmationDialog} maxWidth="xl">
         <DialogTitle>Confirm exit</DialogTitle>
         <DialogContent>
@@ -226,7 +235,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
             </InputLabel>
-            {project && project.employees.length > 0 && (
+            {teamMembers.length > 0 && (
               <Link
                 component="button"
                 sx={{ marginLeft: 'auto', color: '#000048' }}
@@ -240,8 +249,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             )}
           </Box>
 
-          {projectMembers.length > 0 ? (
-            <EmployeeViewList employees={projectMembers} />
+          {teamMembers.length > 0 ? (
+            <TeamMemberEditList teamMembers={teamMembers} updateTeamMember={updateTeamMember} />
           ) : (
             <Box
               component="div"
@@ -287,11 +296,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         </Box>
       </Box>
       {showAddEmployeesForm && (
-        <EmployeeAddForm
-          projectEmployees={projectMembers}
-          onClose={handleAddEmployeesFormClose}
-          onAdd={handleAddClick}
-        />
+        <TeamMemberAddForm teamMembers={teamMembers} onClose={handleAddEmployeesFormClose} onAdd={handleAddClick} />
       )}
       {/* Cancel/save Buttons */}
       <Divider />

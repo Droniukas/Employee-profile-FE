@@ -25,7 +25,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
   const renderResultItem = (result: Employee) => {
     return (
       <>
-        <ListItem key={result.id} alignItems='flex-start'>
+        <ListItem key={result.id} alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
               src={`data:${result.imageType};base64,${result.imageBytes}`}

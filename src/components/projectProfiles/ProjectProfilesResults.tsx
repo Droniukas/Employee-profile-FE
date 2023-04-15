@@ -152,7 +152,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   left: 70,
                 }}
               >
-                {renderEmployeesAvatarGroup(result.employees)}
+                {renderEmployeesAvatarGroup(result.teamMembers)}
               </Box>
             </Stack>
             <Stack

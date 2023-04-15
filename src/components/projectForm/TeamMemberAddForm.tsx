@@ -2,31 +2,37 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Dialog, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import useDebouncedState from '../../hooks/useDebouncedState';
 import Employee from '../../models/Employee.interface';
+import TeamMember from '../../models/TeamMember.interface';
 import { EmployeeService } from '../../services/employee.service';
 import SearchInput from '../inputs/SearchInput';
-import EmployeeAddList from './EmployeeAddList';
+import TeamMemberAddList from './TeamMemberAddList';
 
-type EmployeeAddFormProps = {
-  projectEmployees: Employee[];
-  onAdd: (newEmployees: Employee[]) => void;
+type TeamMemberAddFormProps = {
+  teamMembers: TeamMember[];
+  onAdd: (newTeamMembers: TeamMember[]) => void;
   onClose: () => void;
 };
 
-const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormProps) => {
-  const { projectEmployees, onAdd, onClose } = props;
-  const [nonAddedEmployees, setNonAddedEmployees] = useState<Employee[]>([]);
-  const [filteredNonAddedEmployees, setFilteredNonAddedEmployees] = useState<Employee[]>([]);
-  const [newEmployees, setNewEmployees] = useState<Employee[]>([]);
-  const [searchValue, setSearchValue] = useDebouncedState('', 500);
+const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAddFormProps) => {
+  const { teamMembers, onAdd, onClose } = props;
+  const [nonTeamMembers, setNonTeamMembers] = useState<Employee[]>([]);
+  const [filterResults, setFilterResults] = useState<Employee[]>([]);
+  const [newTeamMembers, setNewTeamMembers] = useState<TeamMember[]>([]);
+  const [searchValue, setSearchValue] = useState('');
 
-  const handleSelectedEmployeesChange = (selectedEmployees: Employee[]) => {
-    setNewEmployees(selectedEmployees);
+  const handleSelectionChange = (selectedEmployees: Employee[]) => {
+    const newTeamMembers = selectedEmployees.map((employee) => ({
+      ...employee,
+      teamMemberStatus: 'ACTIVE',
+      teamMemberStartDate: '',
+      teamMemberEndDate: '',
+    }));
+    setNewTeamMembers(newTeamMembers);
   };
 
   const handleAddClick = () => {
-    onAdd(newEmployees);
+    onAdd(newTeamMembers);
     onClose();
   };
 
@@ -34,33 +40,48 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
     const findNonAddedEmployees = async () => {
       const employeeService = new EmployeeService();
       const allEmployees = await employeeService.getAll();
-      const nonAddedEmployees = allEmployees.filter((employee: Employee) => {
-        return !projectEmployees.some((projectEmployee) => projectEmployee.id === employee.id);
+      const nonTeamMembers = allEmployees.filter((employee: Employee) => {
+        return !teamMembers.some((teamMember) => teamMember.id === employee.id);
       });
-      setNonAddedEmployees(nonAddedEmployees);
+      setNonTeamMembers(nonTeamMembers);
+      setFilterResults(nonTeamMembers);
     };
 
     findNonAddedEmployees();
-  }, [projectEmployees]);
+  }, [teamMembers]);
 
-  useEffect(() => {
-    const filtered = nonAddedEmployees.filter((employee: Employee) => {
+  const getFilterResults = () => {
+    const filtered = nonTeamMembers.filter((employee: Employee) => {
       const fullName = `${employee.name}${employee.middleName ? ` ${employee.middleName}` : ''} ${
         employee.surname
       }`.toLowerCase();
       return fullName.includes(searchValue.toLowerCase());
     });
-    setFilteredNonAddedEmployees(filtered);
-  }, [searchValue, nonAddedEmployees]);
+    setFilterResults(filtered);
+  };
+
+  useEffect(() => {
+    const keyDownHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        getFilterResults();
+        event.preventDefault();
+      }
+    };
+    window.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      window.removeEventListener('keydown', keyDownHandler);
+    };
+  });
 
   return (
-    <Dialog open={true} fullWidth maxWidth="md">
+    <Dialog open={true} fullWidth maxWidth="sm">
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
         <Button sx={{ width: 15, height: 30 }} onClick={onClose}>
           <CloseIcon fontSize="medium" />
         </Button>
       </Box>
-      <Box sx={{ marginX: 10 }}>
+      <Box sx={{ marginX: 5 }}>
         <Typography
           variant="h1"
           sx={{
@@ -79,10 +100,7 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
             setSearchValue(value);
           }}
         />
-        <EmployeeAddList
-          employees={searchValue ? filteredNonAddedEmployees : nonAddedEmployees}
-          onSelect={handleSelectedEmployeesChange}
-        />
+        <TeamMemberAddList employees={filterResults} onSelect={handleSelectionChange} />
       </Box>
       <Divider variant="fullWidth" />
       <Box display={'flex'} justifyContent={'flex-end'} my={1}>
@@ -96,4 +114,4 @@ const EmployeeAddForm: React.FC<EmployeeAddFormProps> = (props: EmployeeAddFormP
     </Dialog>
   );
 };
-export default EmployeeAddForm;
+export default TeamMemberAddForm;

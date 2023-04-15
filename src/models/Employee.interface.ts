@@ -10,8 +10,6 @@ interface Employee {
   imageName: string;
   imageType: string;
   imageBytes: string;
-  projectAssignmentStartDate: string;
-  projectAssignmentEndDate: string;
 }
 
 export default Employee;
