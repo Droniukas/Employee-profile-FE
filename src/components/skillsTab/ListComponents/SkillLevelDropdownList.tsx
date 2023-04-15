@@ -37,6 +37,11 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
     );
   };
 
+  const levelArr = skillObj.language
+    ? [SkillLevel.A1, SkillLevel.A2, SkillLevel.B1, SkillLevel.B2, SkillLevel.C1, SkillLevel.C2, SkillLevel.NATIVE]
+    : [SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT];
+  console.log(skillObj);
+
   return (
     <>
       <List
@@ -66,7 +71,7 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
         </Tooltip>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ margin: 0 }}>
-            {[SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT].map((skillLevelName) => {
+            {levelArr.map((skillLevelName) => {
               const tooltipText: string = SkillLevelTooltipMapper(skillLevelName);
 
               const handleSkillSelection = () => {
@@ -85,6 +90,7 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props) => {
                 />
               );
             })}
+            {/* cia jau languages darom */}
           </List>
         </Collapse>
       </List>

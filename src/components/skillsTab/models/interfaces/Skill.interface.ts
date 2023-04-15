@@ -9,4 +9,5 @@ export interface Skill {
   indent: number;
   hasError?: boolean;
   parentId: string | null;
+  language: boolean;
 }

@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, ListItem, ListItemText, checkboxClasses } from '@mui/material';
+import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
