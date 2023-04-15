@@ -10,6 +10,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
@@ -121,8 +122,10 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     pt: 1,
                   }}
                 >
-                  {correctDateFormat(result.startDate)} -{' '}
-                  {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                  <>
+                    {correctDateFormat(result.startDate)} -{' '}
+                    {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                  </>
                 </Typography>
                 <Typography
                   sx={{
@@ -219,7 +222,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     if (date === null) {
       return null;
     } else {
-      return new Date(date).toDateString();
+      return moment(date).format('YYYY/MM/DD');
     }
   };
 
@@ -326,7 +329,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' products found. Check the filter settings."}
+              : "No '" + filterStatus + "' projects found. Check the filter settings."}
           </Typography>
         </ListItem>
       </List>
