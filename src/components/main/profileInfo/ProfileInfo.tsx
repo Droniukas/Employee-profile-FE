@@ -9,7 +9,6 @@ type ProfileInfoProps = {
 
 const ProfileInfo: React.FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
   const { results } = props;
-
   if (!results) return null;
 
   return (
