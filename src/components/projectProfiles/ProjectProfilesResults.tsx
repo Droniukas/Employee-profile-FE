@@ -29,12 +29,10 @@ type ProjectProfilesResultsProps = {
 
 const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { results, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
-
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
 
   const closeEditForm = () => {
@@ -337,7 +335,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <ProjectForm showEndDate={Boolean(projectToEdit.endDate)} onClose={closeEditForm} project={projectToEdit} />
+        )}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}
