@@ -1,14 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import achievementNamesReducer from '../state/changedAchievements';
 import skillNamesReducer from '../state/changedSkills';
 import loadingReducer from '../state/loading';
 import onCancelReducer from '../state/onCancel';
-import viewStateReducer from '../state/skillsTabState';
+import viewSkillsStateReducer from '../state/skillsTabState';
+import viewAchievementsStateReducer from '../state/achievementsTabState';
 
 const store = configureStore({
   reducer: {
     changedSkills: skillNamesReducer,
-    viewState: viewStateReducer,
+    changedAchievements: achievementNamesReducer,
+    viewSkillsState: viewSkillsStateReducer,
+    viewAchievementsState: viewAchievementsStateReducer,
     loading: loadingReducer,
     onCancel: onCancelReducer,
   },

@@ -7,6 +7,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
+import AchievementTabData from '../achievementsTab/AchievementsTabData';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import { ROUTES } from '../routes/routes';
@@ -90,7 +91,7 @@ const Main = () => {
               path={ROUTES.ACHIEVEMENTS}
               element={
                 <TabPanel value={value} index={1}>
-                  Achievements
+                  <AchievementTabData />
                 </TabPanel>
               }
             />

@@ -4,36 +4,36 @@ import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { StyleVariants } from '../../models/StyleVariants';
-import { setSkillsTabState } from '../../state/skillsTabState';
-import { ViewStateRoot } from '../../store/types';
-import { SkillsTabState } from './models/enums/SkillsTabState';
+import { setAchievementsTabState } from '../../state/achievementsTabState';
+import { ViewStateRoot } from '../../store/achievementTypes';
+import { AchievementsTabState } from './models/enums/AchievementsTabState';
 
 type Props = {
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
-const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
+const AchievementsTabStateButtons: React.FunctionComponent<Props> = (props) => {
   const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {
-    dispatch(setSkillsTabState({}));
+    dispatch(setAchievementsTabState({}));
   };
 
-  const viewState = useSelector((state: ViewStateRoot) => state.viewSkillsState.value);
+  const viewState = useSelector((state: ViewStateRoot) => state.viewAchievementsState.value);
   return (
     <>
-      {viewState === SkillsTabState.VIEW_STATE && (
+      {viewState === AchievementsTabState.VIEW_STATE && (
         <Button
           variant={StyleVariants.CONTAINED}
           onClick={() => {
             changeView(dispatch);
           }}
         >
-          Edit skills
+          Edit achievements
         </Button>
       )}
-      {viewState === SkillsTabState.EDIT_STATE && (
+      {viewState === AchievementsTabState.EDIT_STATE && (
         <>
           <Button variant={StyleVariants.GREY} onClick={cancelFunction}>
             Cancel
@@ -47,4 +47,4 @@ const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-export default SkillsTabStateButtons;
+export default AchievementsTabStateButtons;

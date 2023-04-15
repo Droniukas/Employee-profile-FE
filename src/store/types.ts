@@ -14,7 +14,7 @@ export interface ChangedSkillsDataRoot {
 }
 
 export interface ViewStateRoot {
-  viewState: {
+  viewSkillsState: {
     value: SkillsTabState;
   };
 }
