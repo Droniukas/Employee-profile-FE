@@ -2,14 +2,17 @@ import { ListItemButton, ListItemText, Tooltip } from '@mui/material';
 
 import { SkillLevel } from '../models/enums/SkillLevel';
 
-type Props = {
+type SkillLevelDropdownListItemProps = {
   name: SkillLevel;
   onSelection: () => void;
   tooltipTitle: string;
 };
 
-const SkillLevelDropdownListItem: React.FunctionComponent<Props> = (props: Props) => {
+const SkillLevelDropdownListItem: React.FunctionComponent<SkillLevelDropdownListItemProps> = (
+  props: SkillLevelDropdownListItemProps,
+) => {
   const { name, onSelection, tooltipTitle } = props;
+
   return (
     <>
       <Tooltip title={tooltipTitle} disableInteractive>

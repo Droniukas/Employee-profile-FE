@@ -12,12 +12,13 @@ import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
 import mapSkillLevelToTooltip from './utils';
 
-type Props = {
+type SkillListItemProps = {
   skillObj: Skill;
 };
 
-const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
+const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: SkillListItemProps) => {
   const { skillObj } = props;
+
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
@@ -28,6 +29,7 @@ const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
   }, [skillObj.checked, skillObj.skillLevel]);
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
+
   useEffect(() => {
     setChecked(skillObj.checked);
     skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);

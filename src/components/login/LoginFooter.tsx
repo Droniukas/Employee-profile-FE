@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
 
 const Footer = () => {
   return (
@@ -35,7 +36,7 @@ const Footer = () => {
         </Grid>
         <Divider orientation="vertical" variant="middle" flexItem />
         <Grid item>
-          <Typography sx={{ align: 'center', p: 2 }}>{new Date().getFullYear()} Cognizant</Typography>
+          <Typography sx={{ align: 'center', p: 2 }}>{moment().format('YYYY')} Cognizant</Typography>
         </Grid>
       </Grid>
     </Box>

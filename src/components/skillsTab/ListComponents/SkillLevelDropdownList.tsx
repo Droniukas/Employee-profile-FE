@@ -10,15 +10,18 @@ import { Skill } from '../models/interfaces/Skill.interface';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
 import mapSkillLevelToTooltip from './utils';
 
-type Props = {
+type SkillLevelDropdownListProps = {
   skillLevel: SkillLevel | null;
   setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>;
   skillObj: Skill;
   tooltipText: string;
 };
 
-const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) => {
+const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProps> = (
+  props: SkillLevelDropdownListProps,
+) => {
   const { setSkillLevel, skillLevel, skillObj, tooltipText } = props;
+
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -80,6 +83,7 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
               };
 
               if (skillLevelName === skillLevel) return null;
+
               return (
                 <SkillLevelDropdownListItem
                   onSelection={handleSkillSelection}

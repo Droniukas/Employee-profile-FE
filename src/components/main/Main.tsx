@@ -85,7 +85,6 @@ const Main = () => {
                 </TabPanel>
               }
             />
-
             <Route
               path={ROUTES.ACHIEVEMENTS}
               element={
@@ -94,7 +93,6 @@ const Main = () => {
                 </TabPanel>
               }
             />
-
             <Route
               path={ROUTES.MY_PROJECTS}
               element={
@@ -103,7 +101,6 @@ const Main = () => {
                 </TabPanel>
               }
             />
-
             <Route
               path={ROUTES.SEARCH}
               element={
@@ -112,7 +109,6 @@ const Main = () => {
                 </TabPanel>
               }
             />
-
             <Route
               path={ROUTES.PROJECT_PROFILES}
               element={

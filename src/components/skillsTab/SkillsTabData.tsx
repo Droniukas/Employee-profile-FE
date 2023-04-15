@@ -34,8 +34,8 @@ const SkillsTabData = () => {
     const skillWithError = skillDataArr.find((obj) => obj.id === childObj.id);
     if (skillWithError === undefined) throw new Error('undefined object...');
     skillWithError.hasError = true;
-    const parentObjs = skillDataArr.filter((parentObj) => parentObj.id === skillWithError.parentId);
-    parentObjs.forEach((obj) => {
+    const parentObjects = skillDataArr.filter((parentObject) => parentObject.id === skillWithError.parentId);
+    parentObjects.forEach((obj) => {
       setErrorForSkills(obj);
     });
   };

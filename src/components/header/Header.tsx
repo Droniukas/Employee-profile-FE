@@ -17,13 +17,13 @@ const Header = () => {
     const result = await employeeService.getById(id);
     setResults(result);
   };
+
   useEffect(() => {
     getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
   return (
     <>
-      {/* Left header: */}
       <Box
         sx={{
           position: 'fixed',
@@ -58,7 +58,6 @@ const Header = () => {
         </div>
       </Box>
 
-      {/* Top header: */}
       <Box
         sx={{
           position: 'fixed',

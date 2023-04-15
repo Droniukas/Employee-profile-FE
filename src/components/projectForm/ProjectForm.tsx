@@ -64,6 +64,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   if (project) {
     initialValues = project;
   }
+
   const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
     useFormik({
       initialValues,
@@ -112,7 +113,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         >
           {project ? 'Edit project profile' : 'Add project profile'}
         </Typography>
-        {/* Title field input */}
+
         <Box>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
@@ -134,7 +135,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-        {/* description input */}
+
         <Box
           component="div"
           sx={{
@@ -167,7 +168,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-        {/* Date input */}
+
         <Box display={'flex'} sx={{}}>
           <Box display={'inline-block'}>
             <InputLabel>
@@ -215,7 +216,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </LocalizationProvider>
           </Box>
         )}
-        {/* Team member box */}
+
         <Box component="div" sx={{ my: 2 }}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
@@ -252,7 +253,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </Link>
           </Box>
         </Box>
-        {/* Cancel/save Buttons */}
+
         <Divider />
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
