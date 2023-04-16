@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
-import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
+import TeamMember from '../../models/TeamMember.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
@@ -224,7 +224,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     }
   };
 
-  const renderEmployeesAvatarGroup = (employees: Employee[]) => {
+  const renderEmployeesAvatarGroup = (employees: TeamMember[]) => {
     const avatarsNeed = 3;
     let counter = 0;
     let additionalEmployees = 0;
@@ -260,7 +260,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     );
   };
 
-  const renderEmployeeAvatar = (employee: Employee) => {
+  const renderEmployeeAvatar = (employee: TeamMember) => {
     return (
       <Avatar
         key={employee.id}
