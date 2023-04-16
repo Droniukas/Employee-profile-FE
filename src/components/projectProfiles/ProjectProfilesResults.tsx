@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
+import { Button } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
@@ -9,6 +10,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
@@ -27,12 +29,10 @@ type ProjectProfilesResultsProps = {
 
 const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { results, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
-
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
 
   const closeEditForm = () => {
@@ -63,6 +63,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (result: Project) => {
+    const isTextOverflow = result.description.length > 135;
     return (
       <div key={result.id}>
         <ListItem
@@ -119,8 +120,10 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     pt: 1,
                   }}
                 >
-                  {correctDateFormat(result.startDate)} -{' '}
-                  {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                  <>
+                    {correctDateFormat(result.startDate)} -{' '}
+                    {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                  </>
                 </Typography>
                 <Typography
                   sx={{
@@ -141,7 +144,18 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {result.description}
+                  {!isTextOverflow ? result.description : result.description.substring(0, 135) + '...'}
+                  <Button
+                    onClick={() => setProject(result)}
+                    sx={{
+                      textDecoration: 'underline',
+                      color: '#000048',
+                      fontSize: 14,
+                      height: 15,
+                    }}
+                  >
+                    Show more
+                  </Button>
                 </Typography>
               </Box>
               <Box
@@ -206,7 +220,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     if (date === null) {
       return null;
     } else {
-      return new Date(date).toDateString();
+      return moment(date).format('YYYY/MM/DD');
     }
   };
 
@@ -313,7 +327,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' products found. Check the filter settings."}
+              : "No '" + filterStatus + "' projects found. Check the filter settings."}
           </Typography>
         </ListItem>
       </List>
@@ -321,7 +335,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <ProjectForm showEndDate={Boolean(projectToEdit.endDate)} onClose={closeEditForm} project={projectToEdit} />
+        )}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}

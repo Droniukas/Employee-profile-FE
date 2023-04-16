@@ -10,6 +10,7 @@ import { EmployeeService } from '../../services/employee.service';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import { ROUTES } from '../routes/routes';
+import SkillTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
 
@@ -80,7 +81,7 @@ const Main = () => {
               path={ROUTES.HOME}
               element={
                 <TabPanel value={value} index={0}>
-                  Skills
+                  <SkillTabData />
                 </TabPanel>
               }
             />
