@@ -66,7 +66,7 @@ type TeamMemberEditItemProps = {
 
 const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMemberEditItemProps) => {
   const { teamMember, onUpdate } = props;
-  const [endDateExists, setEndDateExists] = useState<boolean>(false);
+  const [endDateExists, setEndDateExists] = useState<boolean>(teamMember.teamMemberEndDate ? true : false);
 
   const startDate = new Date(teamMember.teamMemberStartDate).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -182,6 +182,7 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
                         setEndDateExists(e.target.checked);
                         handleEndDateChange('');
                       }}
+                      checked={endDateExists}
                     />
                     <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add member end date</Typography>
                   </Box>
