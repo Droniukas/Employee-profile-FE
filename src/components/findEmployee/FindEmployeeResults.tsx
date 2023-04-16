@@ -24,7 +24,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
 
   const renderResultItem = (result: Employee) => {
     return (
-      <>
+      <div key={result.id}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
@@ -54,7 +54,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
           />
         </ListItem>
         <Divider variant="fullWidth" component="li" />
-      </>
+      </div>
     );
   };
 
