@@ -1,6 +1,14 @@
 interface ProjectEmployee {
-  projectId: string;
-  employeeId: string;
+  id: string;
+  name: string;
+  surname: string;
+  middleName: string;
+  title: string;
+  status: string;
+  imageType: string;
+  imageBytes: string;
+  teamMemberStartDate: string;
+  teamMemberEndDate: string;
   teamMemberStatus: string;
 }
 

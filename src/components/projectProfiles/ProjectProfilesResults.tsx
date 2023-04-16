@@ -14,7 +14,7 @@ import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Project from '../../models/Project.interface';
-import TeamMember from '../../models/TeamMember.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
@@ -166,7 +166,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   left: 70,
                 }}
               >
-                {renderEmployeesAvatarGroup(result.teamMembers)}
+                {renderEmployeesAvatarGroup(result.projectEmployees)}
               </Box>
             </Stack>
             <Stack
@@ -224,7 +224,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     }
   };
 
-  const renderEmployeesAvatarGroup = (employees: TeamMember[]) => {
+  const renderEmployeesAvatarGroup = (employees: ProjectEmployee[]) => {
     const avatarsNeed = 3;
     let counter = 0;
     let additionalEmployees = 0;
@@ -260,7 +260,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     );
   };
 
-  const renderEmployeeAvatar = (employee: TeamMember) => {
+  const renderEmployeeAvatar = (employee: ProjectEmployee) => {
     return (
       <Avatar
         key={employee.id}

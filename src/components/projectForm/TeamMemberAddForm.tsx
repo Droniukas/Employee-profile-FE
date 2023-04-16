@@ -4,14 +4,14 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
-import TeamMember from '../../models/TeamMember.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeService } from '../../services/employee.service';
 import SearchInput from '../inputs/SearchInput';
 import TeamMemberAddList from './TeamMemberAddList';
 
 type TeamMemberAddFormProps = {
-  teamMembers: TeamMember[];
-  onAdd: (newTeamMembers: TeamMember[]) => void;
+  teamMembers: ProjectEmployee[];
+  onAdd: (newTeamMembers: ProjectEmployee[]) => void;
   onClose: () => void;
 };
 
@@ -19,7 +19,7 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
   const { teamMembers, onAdd, onClose } = props;
   const [nonTeamMembers, setNonTeamMembers] = useState<Employee[]>([]);
   const [filterResults, setFilterResults] = useState<Employee[]>([]);
-  const [newTeamMembers, setNewTeamMembers] = useState<TeamMember[]>([]);
+  const [newTeamMembers, setNewTeamMembers] = useState<ProjectEmployee[]>([]);
   const [searchValue, setSearchValue] = useState('');
 
   const handleSelectionChange = (selectedEmployees: Employee[]) => {
