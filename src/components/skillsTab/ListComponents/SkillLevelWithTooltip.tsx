@@ -1,7 +1,7 @@
 import { ThemeProvider, Tooltip, Typography } from '@mui/material';
 
 import theme from '../../../config/theme';
-import { SkillLevel } from '../models/enums/SkillLevel';
+import { SkillLevel } from '../../enums/SkillLevel';
 
 type SkillLevelWithTooltipProps = {
   name: SkillLevel | null;

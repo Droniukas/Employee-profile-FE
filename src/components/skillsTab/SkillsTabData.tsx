@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { ChangedSkill } from '../../models/ChangedSkill.interface';
+import { Skill } from '../../models/Skill.interface';
 import { SkillsService } from '../../services/skills.service';
-import { setChangedSkills } from '../../state/changedSkills';
-import { setLoading } from '../../state/loading';
-import { triggerOnCancel } from '../../state/onCancel';
-import { setSkillsTabState } from '../../state/skillsTabState';
+import { setChangedSkills } from '../../states/changedSkills';
+import { setLoading } from '../../states/loading';
+import { triggerOnCancel } from '../../states/onCancel';
+import { setSkillsTabState } from '../../states/skillsTabState';
 import { ChangedSkillsDataRoot } from '../../store/types';
-import { SkillLevel } from './models/enums/SkillLevel';
-import { ChangedSkill } from './models/interfaces/ChangedSkill.interface';
-import { Skill } from './models/interfaces/Skill.interface';
+import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 
 const SkillsTabData = () => {

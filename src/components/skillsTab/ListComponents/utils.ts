@@ -1,5 +1,5 @@
-import { SkillLevel } from '../models/enums/SkillLevel';
-import { SkillLevelTooltip } from '../models/enums/SkillLevelTooltip';
+import { SkillLevel } from '../../enums/SkillLevel';
+import { SkillLevelTooltip } from '../../enums/SkillLevelTooltip';
 
 const mapSkillLevelToTooltip = (skillLevel: SkillLevel) => {
   let tooltipText: string;

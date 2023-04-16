@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { Skill } from './models/interfaces/Skill.interface';
+import { Skill } from '../../models/Skill.interface';
 import SkillsTabStateButtons from './SkillsTabStateButtons';
 import SkillTabCategory from './SkillTabCategory';
 

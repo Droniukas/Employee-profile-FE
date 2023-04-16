@@ -2,11 +2,11 @@ import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemTex
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setChangedSkills } from '../../../state/changedSkills';
+import { Skill } from '../../../models/Skill.interface';
+import { setChangedSkills } from '../../../states/changedSkills';
 import { ChangedSkillsDataRoot, OnCancelRoot, ViewStateRoot } from '../../../store/types';
-import { SkillLevel } from '../models/enums/SkillLevel';
-import { SkillsTabState } from '../models/enums/SkillsTabState';
-import { Skill } from '../models/interfaces/Skill.interface';
+import { SkillLevel } from '../../enums/SkillLevel';
+import { SkillsTabState } from '../../enums/SkillsTabState';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';

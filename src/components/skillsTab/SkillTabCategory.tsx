@@ -2,8 +2,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 
+import { Skill } from '../../models/Skill.interface';
 import SkillListItem from './ListComponents/SkillListItem';
-import { Skill } from './models/interfaces/Skill.interface';
 
 type SkillTabCategoryProps = {
   currentObj: Skill;

@@ -1,6 +1,6 @@
 import { ListItemButton, ListItemText, Tooltip } from '@mui/material';
 
-import { SkillLevel } from '../models/enums/SkillLevel';
+import { SkillLevel } from '../../enums/SkillLevel';
 
 type SkillLevelDropdownListItemProps = {
   name: SkillLevel;
