@@ -49,13 +49,10 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   };
   if (project) initialValues = project;
 
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>(initialValues.teamMembers);
-
   const handleFormSubmit = async () => {
     let result;
     values.title.trim();
     values.description.trim();
-    values.teamMembers = teamMembers;
 
     if (project) {
       result = await projectsService.updateProject(values);
@@ -71,12 +68,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   };
 
   const handleAddClick = (newTeamMembers: TeamMember[]) => {
-    setTeamMembers([...teamMembers, ...newTeamMembers]);
+    setFieldValue('teamMembers', [...values.teamMembers, ...newTeamMembers]);
   };
 
   const updateTeamMember = (updatedTeamMember: TeamMember) => {
-    setTeamMembers((prevTeamMembers) =>
-      prevTeamMembers.map((teamMember: TeamMember) =>
+    setFieldValue(
+      'teamMembers',
+      values.teamMembers.map((teamMember: TeamMember) =>
         teamMember.id === updatedTeamMember.id ? updatedTeamMember : teamMember,
       ),
     );
@@ -230,12 +228,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
         )}
         {/* Team member box */}
-        <Box component="div" sx={{ my: 2 }}>
+        <Box component="div" sx={{ mt: 2 }}>
           <Box sx={{ display: 'flex' }}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
             </InputLabel>
-            {teamMembers.length > 0 && (
+            {values.teamMembers.length > 0 && (
               <Link
                 component="button"
                 sx={{ marginLeft: 'auto', color: '#000048' }}
@@ -249,8 +247,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             )}
           </Box>
 
-          {teamMembers.length > 0 ? (
-            <TeamMemberEditList teamMembers={teamMembers} updateTeamMember={updateTeamMember} />
+          {values.teamMembers.length > 0 ? (
+            <TeamMemberEditList teamMembers={values.teamMembers} updateTeamMember={updateTeamMember} />
           ) : (
             <Box
               component="div"
@@ -296,7 +294,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         </Box>
       </Box>
       {showAddEmployeesForm && (
-        <TeamMemberAddForm teamMembers={teamMembers} onClose={handleAddEmployeesFormClose} onAdd={handleAddClick} />
+        <TeamMemberAddForm
+          teamMembers={values.teamMembers}
+          onClose={handleAddEmployeesFormClose}
+          onAdd={handleAddClick}
+        />
       )}
       {/* Cancel/save Buttons */}
       <Divider />

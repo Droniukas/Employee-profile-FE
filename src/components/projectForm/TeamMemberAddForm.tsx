@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Dialog, Divider, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
@@ -25,7 +26,7 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
     const newTeamMembers = selectedEmployees.map((employee) => ({
       ...employee,
       teamMemberStatus: 'ACTIVE',
-      teamMemberStartDate: '',
+      teamMemberStartDate: dayjs().toISOString(),
       teamMemberEndDate: '',
     }));
     setNewTeamMembers(newTeamMembers);

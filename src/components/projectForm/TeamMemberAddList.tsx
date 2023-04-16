@@ -2,7 +2,7 @@ import './ProjectForm.scss';
 
 import { Avatar, Box, Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import List from '@mui/material/List';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 
@@ -15,16 +15,14 @@ const TeamMemberAddList: React.FC<TeamMemberAddListProps> = (props: TeamMemberAd
   const { employees, onSelect } = props;
   const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
 
-  useEffect(() => {
-    onSelect(selectedEmployees);
-  }, [selectedEmployees, onSelect]);
-
   const handleEmployeeItemStateChange = (index: number, selected: boolean) => {
     const employeeToUpdate = { ...employees[index] };
     const updateSelectedEmployees = selected
       ? [...selectedEmployees, employeeToUpdate]
       : selectedEmployees.filter((employee) => employee.id !== employeeToUpdate.id);
     setSelectedEmployees(updateSelectedEmployees);
+
+    onSelect(updateSelectedEmployees);
   };
 
   return (
