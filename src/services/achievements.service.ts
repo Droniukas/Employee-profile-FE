@@ -12,7 +12,8 @@ export class AchievementsService {
   public async updateEmployeeAchievement(obj: ChangedAchievement) {
     const response = await axios.put(`${process.env.REACT_APP_API_URL}/achievements/update`, {
       checked: obj.checked,
-      achievementLevel: obj.achievementLevel,
+      achievementStartDate: obj.achievementStartDate,
+      achievementEndDate: obj.achievementEndDate,
       achievementId: obj.id,
       employeeId: process.env.REACT_APP_TEMP_USER_ID,
     });

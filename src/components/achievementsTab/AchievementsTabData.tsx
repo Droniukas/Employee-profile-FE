@@ -8,7 +8,7 @@ import { setLoading } from '../../state/loading';
 import { triggerOnCancel } from '../../state/onCancel';
 import { ChangedAchievementsDataRoot } from '../../store/achievementTypes';
 import AchievementsTab from './AchievementsTab';
-import { AchievementLevel } from './models/enums/AchievementLevel';
+// import { AchievementLevel } from './models/enums/AchievementLevel';
 import { Achievement } from './models/interfaces/Achievement.interface';
 import { ChangedAchievement } from './models/interfaces/ChangedAchievement.interface';
 
@@ -42,11 +42,9 @@ const AchievementsTabData = () => {
 
   const hasErrors = () => {
     achievementDataArr.forEach((obj) => (obj.hasError = false));
-    const unselectedLevelAchievements = changedAchievements.filter(
-      (obj) => obj.achievementLevel === AchievementLevel.NONE,
-    );
-    if (unselectedLevelAchievements.length > 0) {
-      unselectedLevelAchievements.forEach((objWithError) => {
+    const unselectedStartDateAchievements = changedAchievements.filter((obj) => obj.achievementStartDate === null);
+    if (unselectedStartDateAchievements.length > 0) {
+      unselectedStartDateAchievements.forEach((objWithError) => {
         setErrorForAchievements(objWithError);
       });
       setAchievementDataArr([...achievementDataArr]);
@@ -55,7 +53,7 @@ const AchievementsTabData = () => {
   };
 
   const handleSave = async () => {
-    if (hasErrors()) return;
+    // if (hasErrors()) return;
     changedAchievements.forEach(async (obj) => {
       await achievementsService.updateEmployeeAchievement(obj);
     });

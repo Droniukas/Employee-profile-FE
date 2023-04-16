@@ -1,4 +1,5 @@
 import { styled, Switch } from '@mui/material';
+
 import { AchievementsTabState } from '../models/enums/AchievementsTabState';
 // import theme from '../../../config/theme';
 export const StyledSwitch = styled(Switch)(() => ({
