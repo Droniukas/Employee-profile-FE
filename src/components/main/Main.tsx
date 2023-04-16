@@ -46,7 +46,7 @@ const Main = () => {
 
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: 1344, margin: '150px 250px 0px' }}>
           <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
             <Tab label="Skills" value={ROUTES.HOME} to={ROUTES.HOME} component={Link} {...getIndexedProps(0)} />
             <Tab
