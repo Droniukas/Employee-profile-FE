@@ -65,7 +65,7 @@ const Main = () => {
                   component={Link}
                   {...getIndexedProps(2)}
                 />
-                {results?.isManager === true && (
+                {results?.isManager && (
                   <Tab
                     label="Search"
                     value={ROUTES.SEARCH}
@@ -74,7 +74,7 @@ const Main = () => {
                     {...getIndexedProps(3)}
                   />
                 )}
-                {results?.isManager === true && (
+                {results?.isManager && (
                   <Tab
                     label="Project profiles"
                     value={ROUTES.PROJECT_PROFILES}
@@ -113,7 +113,7 @@ const Main = () => {
                     </TabPanel>
                   }
                 />
-                {results?.isManager === true && (
+                {results?.isManager && (
                   <Route
                     path={ROUTES.SEARCH}
                     element={
@@ -123,7 +123,7 @@ const Main = () => {
                     }
                   />
                 )}
-                {results?.isManager === true && (
+                {results?.isManager && (
                   <Route
                     path={ROUTES.PROJECT_PROFILES}
                     element={
