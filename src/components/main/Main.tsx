@@ -22,18 +22,18 @@ const getIndexedProps = (index: number) => {
 };
 
 const Main = () => {
-  const [results, setResults] = useState<Employee>();
+  const [result, setResult] = useState<Employee>();
   const [value, setValue] = React.useState(0);
 
   const employeeService = new EmployeeService();
 
-  const getResults = async (id: string) => {
-    const result = await employeeService.getById(id);
-    setResults(result);
+  const getResult = async (id: string) => {
+    const employee = await employeeService.getById(id);
+    setResult(employee);
   };
 
   useEffect(() => {
-    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    getResult(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -42,9 +42,9 @@ const Main = () => {
 
   return (
     <>
-      {results && (
+      {result && (
         <>
-          <ProfileInfo results={results} />
+          <ProfileInfo employee={result} />
 
           <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -65,7 +65,7 @@ const Main = () => {
                   component={Link}
                   {...getIndexedProps(2)}
                 />
-                {results?.isManager && (
+                {result?.isManager && (
                   <Tab
                     label="Search"
                     value={ROUTES.SEARCH}
@@ -74,7 +74,7 @@ const Main = () => {
                     {...getIndexedProps(3)}
                   />
                 )}
-                {results?.isManager && (
+                {result?.isManager && (
                   <Tab
                     label="Project profiles"
                     value={ROUTES.PROJECT_PROFILES}
@@ -113,7 +113,7 @@ const Main = () => {
                     </TabPanel>
                   }
                 />
-                {results?.isManager && (
+                {result?.isManager && (
                   <Route
                     path={ROUTES.SEARCH}
                     element={
@@ -123,7 +123,7 @@ const Main = () => {
                     }
                   />
                 )}
-                {results?.isManager && (
+                {result?.isManager && (
                   <Route
                     path={ROUTES.PROJECT_PROFILES}
                     element={
