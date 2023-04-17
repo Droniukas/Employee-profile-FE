@@ -4,7 +4,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Avatar,
   Box,
-  Checkbox,
   Divider,
   Grid,
   IconButton,
@@ -66,31 +65,15 @@ type TeamMemberEditItemProps = {
 
 const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMemberEditItemProps) => {
   const { teamMember, onUpdate } = props;
-  const [endDateExists, setEndDateExists] = useState<boolean>(teamMember.teamMemberEndDate ? true : false);
-
-  const startDate = new Date(teamMember.teamMemberStartDate).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-
-  let endDate = 'Recent';
-  if (teamMember.teamMemberEndDate) {
-    endDate = new Date(teamMember.teamMemberEndDate).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  }
-
-  const dateRange = `${startDate} - ${endDate}`;
+  const [startDateError, setStartDateError] = useState<string | null>(null);
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
   };
 
   const handleStartDateChange = (teamMemberStartDate: string) => {
-    if (endDateExists && teamMemberStartDate > teamMember.teamMemberEndDate) {
+    setStartDateError(null);
+    if (teamMemberStartDate > teamMember.teamMemberEndDate) {
       onUpdate({
         ...teamMember,
         teamMemberStartDate,
@@ -111,12 +94,16 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
     });
   };
 
+  useEffect(() => {
+    teamMember.teamMemberStartDate ? setStartDateError(null) : setStartDateError('Field is required');
+  }, [teamMember.teamMemberStartDate]);
+
   return (
     <>
       <ListItem sx={{ paddingX: 0 }}>
-        <Grid container alignItems={'center'}>
+        <Grid container alignItems={'center'} mb={1}>
           <Grid item xs={5.5}>
-            <Box display={'flex'} alignItems={'center'}>
+            <Box display={'flex'} alignItems={'center'} mt={2.5}>
               <ListItemAvatar>
                 <Avatar
                   src={`data:${teamMember.imageType};base64,${teamMember.imageBytes}`}
@@ -145,14 +132,42 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
               />
             </Box>
           </Grid>
-          <Grid item xs={4.5}>
-            {teamMember.teamMemberStartDate && (
-              <Typography sx={{ fontSize: '12px', fontWeight: '400' }}>
-                {dateRange.replace(/(\d+ \w{3}), (\d+)/g, '$1 $2,')}
-              </Typography>
-            )}
+          <Grid item xs={5.5} display={'flex'}>
+            <Box mr={2}>
+              <InputLabel>
+                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
+              </InputLabel>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  sx={{ width: 170 }}
+                  format="YYYY/MM/DD"
+                  value={dayjs(teamMember.teamMemberStartDate)}
+                  onChange={(newValue) => {
+                    if (newValue === null) return;
+                    handleStartDateChange(dayjs(newValue).toISOString());
+                  }}
+                />
+                {startDateError && (
+                  <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 0.5, ml: 1.5 }}>{startDateError}</Typography>
+                )}
+              </LocalizationProvider>
+            </Box>
+            <Box>
+              <InputLabel>
+                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
+              </InputLabel>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  sx={{ width: 170 }}
+                  format="YYYY/MM/DD"
+                  minDate={dayjs(teamMember.teamMemberStartDate)}
+                  value={teamMember.teamMemberEndDate ? dayjs(teamMember.teamMemberEndDate) : null}
+                  onChange={(newValue) => handleEndDateChange(dayjs(newValue).toISOString())}
+                />
+              </LocalizationProvider>
+            </Box>
           </Grid>
-          <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2.5 }}>
             <IconButton
               className="btn-delete"
               aria-label="delete"
@@ -163,57 +178,6 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
             >
               <DeleteIcon />
             </IconButton>
-          </Grid>
-          <Grid container alignItems={'center'}>
-            <Grid item xs={5.5}></Grid>
-            <Grid item xs={6.5}>
-              <Box display={'flex'}>
-                <Box>
-                  <InputLabel>
-                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
-                  </InputLabel>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={{ width: 240, mb: 2 }}
-                      format="YYYY/MM/DD"
-                      value={dayjs(teamMember.teamMemberStartDate)}
-                      onChange={(newValue) => {
-                        if (newValue === null) return;
-                        handleStartDateChange(dayjs(newValue).toISOString());
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Box>
-                <Box display={'flex'} sx={{ alignItems: 'center', ml: 'auto' }}>
-                  <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                    <Checkbox
-                      onChange={(e) => {
-                        setEndDateExists(e.target.checked);
-                        handleEndDateChange('');
-                      }}
-                      checked={endDateExists}
-                    />
-                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add member end date</Typography>
-                  </Box>
-                </Box>
-              </Box>
-              {endDateExists && (
-                <Box>
-                  <InputLabel>
-                    <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
-                  </InputLabel>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={{ width: 240, mb: 2 }}
-                      format="YYYY/MM/DD"
-                      minDate={dayjs(teamMember.teamMemberStartDate)}
-                      value={teamMember.teamMemberEndDate ? dayjs(teamMember.teamMemberEndDate) : null}
-                      onChange={(newValue) => handleEndDateChange(dayjs(newValue).toISOString())}
-                    />
-                  </LocalizationProvider>
-                </Box>
-              )}
-            </Grid>
           </Grid>
         </Grid>
       </ListItem>
