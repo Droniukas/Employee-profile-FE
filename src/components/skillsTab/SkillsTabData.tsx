@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { useDispatch } from 'react-redux';
 import { SkillsService } from '../../services/skills.service';
 import { setChangedSkills } from '../../state/changedSkills';
 import { setLoading } from '../../state/loading';
 import { triggerOnCancel } from '../../state/onCancel';
 import { setSkillsTabState } from '../../state/skillsTabState';
-import { ChangedSkillsDataRoot } from '../../store/types';
-import { SkillLevel } from './models/enums/SkillLevel';
-import { ChangedSkill } from './models/interfaces/ChangedSkill.interface';
-import { Skill } from './models/interfaces/Skill.interface';
+import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import SkillsTab from './SkillsTab';
+import { Skill } from '../../models/Skill.interface';
+import { SkillLevel } from '../enums/SkillLevel';
+import store from '../../store/store';
 
 const SkillsTabData = () => {
   const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
-  const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
-
   const skillsService = new SkillsService();
 
+  // const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -41,6 +40,7 @@ const SkillsTabData = () => {
   };
 
   const hasErrors = () => {
+    const changedSkills = store.getState().changedSkills.value;
     skillDataArr.forEach((obj) => (obj.hasError = false));
     const unselectedLevelSkills = changedSkills.filter((obj) => obj.skillLevel === SkillLevel.NONE);
     if (unselectedLevelSkills.length > 0) {
@@ -53,6 +53,8 @@ const SkillsTabData = () => {
   };
 
   const handleSave = async () => {
+    const changedSkills = store.getState().changedSkills.value;
+    console.log(changedSkills);
     if (hasErrors()) return;
     changedSkills.forEach(async (obj) => {
       await skillsService.updateEmployeeSkill(obj);
@@ -64,8 +66,8 @@ const SkillsTabData = () => {
 
   const handleCancel = async () => {
     skillDataArr.forEach((obj) => (obj.hasError = false));
-    dispatch(setChangedSkills([]));
     await fetchData();
+    dispatch(setChangedSkills([]));
     dispatch(setSkillsTabState({}));
     dispatch(triggerOnCancel({}));
   };
@@ -80,3 +82,7 @@ const SkillsTabData = () => {
 };
 
 export default SkillsTabData;
+
+// base64 error
+// lag because of redux
+// not being redirected to the login page every time (access tokens or something)

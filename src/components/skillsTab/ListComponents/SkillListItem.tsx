@@ -2,15 +2,16 @@ import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemTex
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setChangedSkills } from '../../../state/changedSkills';
-import { ChangedSkillsDataRoot, OnCancelRoot, ViewStateRoot } from '../../../store/types';
-import { SkillLevel } from '../models/enums/SkillLevel';
-import { SkillsTabState } from '../models/enums/SkillsTabState';
-import { Skill } from '../models/interfaces/Skill.interface';
+import { Skill } from '../../../models/Skill.interface';
+import { updateChangedSkill } from '../../../state/changedSkills';
+import { OnCancelRoot, ViewStateRoot } from '../../../store/types';
+import { SkillLevel } from '../../enums/SkillLevel';
+import { SkillsTabState } from '../../enums/SkillsTabState';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
 import mapSkillLevelToTooltip from './utils';
+import store from '../../../store/store';
 
 type Props = {
   skillObj: Skill;
@@ -35,24 +36,16 @@ const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
 
   const checkboxColor = viewState == SkillsTabState.VIEW_STATE ? 'adaec3' : 'primary.main';
 
-  const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
 
   const onCheckboxChange = () => {
     setChecked(!isChecked);
     !isChecked
       ? dispatch(
-          setChangedSkills([
-            ...changedSkills,
-            { id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: skillLevel },
-          ]),
+          updateChangedSkill({ id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: skillLevel }),
         )
-      : dispatch(
-          setChangedSkills([
-            ...changedSkills.filter((item) => item.id !== skillObj.id),
-            { id: skillObj.id, skill: skillObj.skillName, checked: false, skillLevel: null },
-          ]),
-        );
+      : dispatch(updateChangedSkill({ id: skillObj.id, skill: skillObj.skillName, checked: false, skillLevel: null }));
+    console.log(store.getState().changedSkills.value);
   };
 
   const tooltipText: string = mapSkillLevelToTooltip(skillLevel);

@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <>
-      {/* Left header: */}
+      {/* SideBar */}
       <Box
         sx={{
           position: 'fixed',

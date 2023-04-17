@@ -10,9 +10,9 @@ import { EmployeeService } from '../../services/employee.service';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import { ROUTES } from '../routes/routes';
-import SkillTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
+import SkillsTabData from '../skillsTab/SkillsTabData';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -23,7 +23,7 @@ const getIndexedProps = (index: number) => {
 
 const Main = () => {
   const [results, setResults] = useState<Employee>();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState<ROUTES | number>(0);
 
   const employeeService = new EmployeeService();
 
@@ -36,7 +36,7 @@ const Main = () => {
     getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: ROUTES | number) => {
     setValue(newValue);
   };
 
@@ -48,7 +48,7 @@ const Main = () => {
         <CssBaseline />
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
           <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
-            <Tab label="Skills" value={ROUTES.HOME} to={ROUTES.HOME} component={Link} {...getIndexedProps(0)} />
+            <Tab label="Skills" value={ROUTES.SKILLS} to={ROUTES.SKILLS} component={Link} {...getIndexedProps(0)} />
             <Tab
               label="Achievements"
               value={ROUTES.ACHIEVEMENTS}
@@ -77,11 +77,10 @@ const Main = () => {
         <Box display="flex" justifyContent="left" alignItems="left" paddingLeft="230px">
           <Routes>
             <Route
-              index
-              path={ROUTES.HOME}
+              path={ROUTES.SKILLS}
               element={
                 <TabPanel value={value} index={0}>
-                  <SkillTabData />
+                  <SkillsTabData />
                 </TabPanel>
               }
             />

@@ -1,4 +1,4 @@
-import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
+import { ChangedSkill } from '../models/ChangedSkill.interface';
 import axios from './axios';
 
 export class SkillsService {
@@ -18,4 +18,11 @@ export class SkillsService {
     });
     return response.data;
   }
+
+  // public async updateAllSkills() {
+  //   const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
+  //   changedSkills.forEach(async (obj) => {
+  //     await this.updateEmployeeSkill(obj);
+  //   });
+  // }
 }

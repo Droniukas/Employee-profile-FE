@@ -1,7 +1,7 @@
-import { ThemeProvider, Tooltip, Typography } from '@mui/material';
+import { Box, ThemeProvider, Tooltip } from '@mui/material';
 
 import theme from '../../../config/theme';
-import { SkillLevel } from '../models/enums/SkillLevel';
+import { SkillLevel } from '../../enums/SkillLevel';
 
 type Props = {
   name: SkillLevel | null;
@@ -13,7 +13,7 @@ const SkillLevelWithTooltip: React.FunctionComponent<Props> = (props: Props) => 
   return (
     <ThemeProvider theme={theme}>
       <Tooltip title={tooltipText} disableInteractive>
-        <Typography
+        <Box
           sx={{
             color: '#666666',
             float: 'right',
@@ -29,7 +29,7 @@ const SkillLevelWithTooltip: React.FunctionComponent<Props> = (props: Props) => 
           }}
         >
           {name}
-        </Typography>
+        </Box>
       </Tooltip>
     </ThemeProvider>
   );

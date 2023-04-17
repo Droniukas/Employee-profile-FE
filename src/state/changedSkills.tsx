@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
+import { ChangedSkill } from '../models/ChangedSkill.interface';
 
 const initStateValue: ChangedSkill[] = [];
 
@@ -11,9 +11,12 @@ export const changedSkillsSlice = createSlice({
     setChangedSkills: (state, action) => {
       state.value = action.payload;
     },
+    updateChangedSkill: (state, action) => {
+      state.value = [...state.value.filter((item) => item.id !== action.payload.id), action.payload];
+    },
   },
 });
 
-export const { setChangedSkills } = changedSkillsSlice.actions;
+export const { setChangedSkills, updateChangedSkill } = changedSkillsSlice.actions;
 
 export default changedSkillsSlice.reducer;

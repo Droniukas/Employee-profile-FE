@@ -2,27 +2,15 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 
+import { Skill } from '../../models/Skill.interface';
 import SkillListItem from './ListComponents/SkillListItem';
-import { Skill } from './models/interfaces/Skill.interface';
+import { sortBySkill } from './ListComponents/utils';
 
 type Props = {
   currentObj: Skill;
   skillDataArray: Skill[];
   mapData: (skillDataArray: Skill[]) => ReactNode;
 };
-
-const sortBySkill = (a: Skill, b: Skill) => {
-  const fa = a.skillName.toLowerCase(),
-    fb = b.skillName.toLowerCase();
-  if (fa < fb) {
-    return -1;
-  }
-  if (fa > fb) {
-    return 1;
-  }
-  return 0;
-};
-
 const SkillTabCategory: React.FunctionComponent<Props> = (props: Props) => {
   const { currentObj, mapData, skillDataArray } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,6 +22,7 @@ const SkillTabCategory: React.FunctionComponent<Props> = (props: Props) => {
   return (
     <>
       <List
+        component="ul"
         key={currentObj.id}
         disablePadding
         sx={{

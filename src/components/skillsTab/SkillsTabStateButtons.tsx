@@ -3,10 +3,10 @@ import { AnyAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { StyleVariants } from '../../models/StyleVariants';
 import { setSkillsTabState } from '../../state/skillsTabState';
 import { ViewStateRoot } from '../../store/types';
-import { SkillsTabState } from './models/enums/SkillsTabState';
+import { SkillsTabState } from '../enums/SkillsTabState';
+import { StyleVariants } from '../enums/StyleVariants';
 
 type Props = {
   saveFunction: () => void;

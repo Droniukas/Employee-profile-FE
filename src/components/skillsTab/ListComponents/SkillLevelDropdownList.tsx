@@ -1,14 +1,14 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, List, ListItemButton, ListItemText, Tooltip } from '@mui/material';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { setChangedSkills } from '../../../state/changedSkills';
-import { ChangedSkillsDataRoot } from '../../../store/types';
-import { SkillLevel } from '../models/enums/SkillLevel';
-import { Skill } from '../models/interfaces/Skill.interface';
+import { Skill } from '../../../models/Skill.interface';
+import { SkillLevel } from '../../enums/SkillLevel';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
 import mapSkillLevelToTooltip from './utils';
+import { updateChangedSkill } from '../../../state/changedSkills';
+import store from '../../../store/store';
 
 type Props = {
   skillLevel: SkillLevel | null;
@@ -24,17 +24,14 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
     setOpen(!open);
   };
 
-  const savedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
 
   const onDropdownChange = (selectedSkill: SkillLevel) => {
     setSkillLevel(selectedSkill);
     dispatch(
-      setChangedSkills([
-        ...savedSkills.filter((item) => item.id !== skillObj.id),
-        { id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: selectedSkill },
-      ]),
+      updateChangedSkill({ id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: selectedSkill }),
     );
+    console.log(store.getState().changedSkills.value);
   };
 
   const levelArr = skillObj.language

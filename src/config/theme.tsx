@@ -36,8 +36,6 @@ const theme = createTheme({
           style: {
             backgroundColor: '#F4F4F4',
             color: 'primary.main',
-            marginLeft: '7px',
-            marginRight: '7px',
           },
         },
       ],
