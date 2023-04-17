@@ -54,6 +54,7 @@ const AchievementsTabData = () => {
 
   const handleSave = async () => {
     // if (hasErrors()) return;
+    console.log(changedAchievements, 'SAAAVING');
     changedAchievements.forEach(async (obj) => {
       await achievementsService.updateEmployeeAchievement(obj);
     });
