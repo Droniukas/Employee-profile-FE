@@ -1,6 +1,5 @@
 import { styled, Switch } from '@mui/material';
-
-import { AchievementsTabState } from '../models/enums/AchievementsTabState';
+// import { AchievementsTabState } from '../models/enums/AchievementsTabState';
 // import theme from '../../../config/theme';
 export const StyledSwitch = styled(Switch)(() => ({
   width: 53,
@@ -26,8 +25,7 @@ export const StyledSwitch = styled(Switch)(() => ({
     },
   },
   '& .MuiSwitch-thumb': {
-    // const checkboxColor = viewState == AchievementsTabState.VIEW_STATE ? 'adaec3' : 'primary.main';
-    backgroundColor: AchievementsTabState.VIEW_STATE ? 'white' : 'black',
+    backgroundColor: 'white',
     width: 20,
     height: 20,
     '&:before': {

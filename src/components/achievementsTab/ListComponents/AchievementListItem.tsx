@@ -23,8 +23,8 @@ type AchievementListItemProps = {
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
   const { achievementObj, showEndDate } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewAchievementsState.value);
-  const [achievementStartDate, setAchievementStartDate] = useState<string>();
-  const [achievementEndDate, setAchievementEndDate] = useState<string>();
+  const [achievementStartDate, setAchievementStartDate] = useState<string | null>(achievementObj.achievementStartDate);
+  const [achievementEndDate, setAchievementEndDate] = useState<string | null>(achievementObj.achievementEndDate);
   const [isChecked, setChecked] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(showEndDate);
 
@@ -32,8 +32,12 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     setChecked(achievementObj.checked);
     achievementObj.achievementStartDate !== null
       ? setAchievementStartDate(achievementObj.achievementStartDate)
-      : setAchievementStartDate(dayjs().toISOString);
-    achievementObj.achievementEndDate !== null ? setAchievementEndDate(achievementObj.achievementEndDate) : null;
+      : achievementStartDate;
+    achievementObj.achievementEndDate !== null
+      ? setAchievementEndDate(achievementObj.achievementEndDate)
+      : achievementEndDate;
+    console.log('end objekto Date: ' + achievementObj.achievementEndDate);
+    console.log('start objekto Date: ' + achievementObj.achievementStartDate);
   }, [achievementObj.checked, achievementObj.achievementStartDate, achievementObj.achievementEndDate]);
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
@@ -41,8 +45,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     setChecked(achievementObj.checked);
     achievementObj.achievementStartDate !== null
       ? setAchievementStartDate(achievementObj.achievementStartDate)
-      : setAchievementStartDate(dayjs().toISOString);
-    achievementObj.achievementEndDate !== null ? setAchievementEndDate(achievementObj.achievementEndDate) : null;
+      : achievementStartDate;
+    achievementObj.achievementEndDate !== null
+      ? setAchievementEndDate(achievementObj.achievementEndDate)
+      : achievementEndDate;
   }, [onCancel]);
 
   const changedAchievements = useSelector((state: ChangedAchievementsDataRoot) => state.changedAchievements.value);
@@ -144,8 +150,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     value={dayjs(achievementStartDate)}
                     onChange={(newValue) => {
                       if (newValue === null) return;
-                      setAchievementStartDate(dayjs(newValue).toISOString());
+                      setAchievementStartDate(dayjs(newValue).format('YYYY-MM-DD'));
                       console.log('start date:' + achievementStartDate);
+                      // achievementObj.achievementStartDate = achievementStartDate;
+                      console.log('end Date: ' + achievementObj.achievementEndDate);
                     }}
                   />
                   <Checkbox
@@ -167,8 +175,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           // minDate={dayjs(achievementObj.achievementStartDate)}
                           value={achievementEndDate ? dayjs(achievementEndDate) : null}
                           onChange={(newValue) => {
-                            setAchievementEndDate(dayjs(newValue).toISOString());
+                            setAchievementEndDate(dayjs(newValue).format('YYYY-MM-DD'));
                             console.log('end Date: ' + achievementEndDate);
+                            // achievementObj.achievementEndDate = achievementEndDate;
+                            console.log('end Date: ' + achievementObj.achievementEndDate);
                           }}
                         />
                       </LocalizationProvider>
