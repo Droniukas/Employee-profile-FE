@@ -16,14 +16,14 @@ const SkillTabCategory: React.FunctionComponent<Props> = (props: Props) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const mapSkills = (arr: Skill[]) => {
-    return arr.map((obj: Skill) => <SkillListItem skillObj={obj} key={obj.id} />);
+    return arr.map((obj: Skill) => <SkillListItem skillObj={obj} key={obj.skillId} />);
   };
 
   return (
     <>
       <List
         component="ul"
-        key={currentObj.id}
+        key={currentObj.skillId}
         disablePadding
         sx={{
           border: 1,
@@ -52,13 +52,15 @@ const SkillTabCategory: React.FunctionComponent<Props> = (props: Props) => {
         </ListItem>
         <Collapse in={isCollapsed}>
           {currentObj.subItemsAreSkills
-            ? mapSkills(skillDataArray.filter((obj: Skill) => currentObj.id === obj.parentId).sort(sortBySkill))
+            ? mapSkills(
+                skillDataArray.filter((obj: Skill) => currentObj.skillId === obj.parentSkillId).sort(sortBySkill),
+              )
             : null}
         </Collapse>
       </List>
       <Collapse in={isCollapsed}>
         {!currentObj.subItemsAreSkills
-          ? mapData(skillDataArray.filter((obj: Skill) => obj.parentId === currentObj.id).sort(sortBySkill))
+          ? mapData(skillDataArray.filter((obj: Skill) => obj.parentSkillId === currentObj.skillId).sort(sortBySkill))
           : null}
       </Collapse>
     </>

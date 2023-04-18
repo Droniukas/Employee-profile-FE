@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+
+import { ChangedSkill } from '../../models/ChangedSkill.interface';
+import { Skill } from '../../models/Skill.interface';
 import { SkillsService } from '../../services/skills.service';
 import { setChangedSkills } from '../../state/changedSkills';
 import { setLoading } from '../../state/loading';
 import { triggerOnCancel } from '../../state/onCancel';
 import { setSkillsTabState } from '../../state/skillsTabState';
-import { ChangedSkill } from '../../models/ChangedSkill.interface';
-import SkillsTab from './SkillsTab';
-import { Skill } from '../../models/Skill.interface';
-import { SkillLevel } from '../enums/SkillLevel';
 import store from '../../store/store';
+import { SkillLevel } from '../enums/SkillLevel';
+import SkillsTab from './SkillsTab';
 
 const SkillsTabData = () => {
   const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
   const skillsService = new SkillsService();
 
-  // const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,15 +25,19 @@ const SkillsTabData = () => {
   const fetchData = async () => {
     dispatch(setLoading(true));
     const response: Array<Skill> = await skillsService.fetchSkillData();
+    console.log(
+      response.filter((obj) => obj.skillName === 'User Journey Map'),
+      'from fetch',
+    );
     setSkillDataArr(response);
     dispatch(setLoading(false));
   };
 
   const setErrorForSkills = (childObj: ChangedSkill | Skill) => {
-    const skillWithError = skillDataArr.find((obj) => obj.id === childObj.id);
+    const skillWithError = skillDataArr.find((obj) => obj.skillId === childObj.skillId);
     if (skillWithError === undefined) throw new Error('undefined object...');
     skillWithError.hasError = true;
-    const parentObjs = skillDataArr.filter((parentObj) => parentObj.id === skillWithError.parentId);
+    const parentObjs = skillDataArr.filter((parentObj) => parentObj.skillId === skillWithError.parentSkillId);
     parentObjs.forEach((obj) => {
       setErrorForSkills(obj);
     });
@@ -54,11 +58,8 @@ const SkillsTabData = () => {
 
   const handleSave = async () => {
     const changedSkills = store.getState().changedSkills.value;
-    console.log(changedSkills);
     if (hasErrors()) return;
-    changedSkills.forEach(async (obj) => {
-      await skillsService.updateEmployeeSkill(obj);
-    });
+    await skillsService.updateEmployeeSkill(changedSkills);
     await fetchData();
     dispatch(setSkillsTabState({}));
     dispatch(setChangedSkills([]));
@@ -86,3 +87,5 @@ export default SkillsTabData;
 // base64 error
 // lag because of redux
 // not being redirected to the login page every time (access tokens or something)
+// kai save paspauzdiu nereikia, kai cancel pasapudziu reikia
+// after making sure that you can use store.getState() remove the unneccesary rerendering while changing the SkillsTabState state

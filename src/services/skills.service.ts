@@ -9,20 +9,10 @@ export class SkillsService {
     return response.data;
   }
 
-  public async updateEmployeeSkill(obj: ChangedSkill) {
-    const response = await axios.put(`${process.env.REACT_APP_API_URL}/skills/update`, {
-      checked: obj.checked,
-      skillLevel: obj.skillLevel,
-      skillId: obj.id,
-      employeeId: process.env.REACT_APP_TEMP_USER_ID,
+  public async updateEmployeeSkill(changedSkillsItem: ChangedSkill[]) {
+    const response = await axios.put(`${process.env.REACT_APP_API_URL}/skills/newUpdate`, {
+      changedSkills: changedSkillsItem,
     });
     return response.data;
   }
-
-  // public async updateAllSkills() {
-  //   const changedSkills = useSelector((state: ChangedSkillsDataRoot) => state.changedSkills.value);
-  //   changedSkills.forEach(async (obj) => {
-  //     await this.updateEmployeeSkill(obj);
-  //   });
-  // }
 }

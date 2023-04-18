@@ -12,7 +12,7 @@ export const changedSkillsSlice = createSlice({
       state.value = action.payload;
     },
     updateChangedSkill: (state, action) => {
-      state.value = [...state.value.filter((item) => item.id !== action.payload.id), action.payload];
+      state.value = [...state.value.filter((item) => item.skillId !== action.payload.skillId), action.payload];
     },
   },
 });

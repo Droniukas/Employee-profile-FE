@@ -4,11 +4,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
+import { updateChangedSkill } from '../../../state/changedSkills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
 import mapSkillLevelToTooltip from './utils';
-import { updateChangedSkill } from '../../../state/changedSkills';
-import store from '../../../store/store';
 
 type Props = {
   skillLevel: SkillLevel | null;
@@ -29,9 +28,14 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
   const onDropdownChange = (selectedSkill: SkillLevel) => {
     setSkillLevel(selectedSkill);
     dispatch(
-      updateChangedSkill({ id: skillObj.id, skill: skillObj.skillName, checked: true, skillLevel: selectedSkill }),
+      updateChangedSkill({
+        skillId: skillObj.skillId,
+        skillName: skillObj.skillName,
+        checked: true,
+        skillLevel: selectedSkill,
+        employeeId: process.env.REACT_APP_TEMP_USER_ID,
+      }),
     );
-    console.log(store.getState().changedSkills.value);
   };
 
   const levelArr = skillObj.language

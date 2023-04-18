@@ -20,7 +20,7 @@ const SkillsTab: React.FunctionComponent<Props> = (props: Props) => {
       return dataArr.map((currentObj: Skill) => {
         return (
           <SkillTabCategory
-            key={currentObj.id}
+            key={currentObj.skillId}
             currentObj={currentObj}
             skillDataArray={skillDataArray}
             mapData={mapData}
@@ -32,11 +32,11 @@ const SkillsTab: React.FunctionComponent<Props> = (props: Props) => {
 
   return (
     <>
-      <Box component="span" sx={{ width: '1176px', display: 'inline-block' }}>
+      <Box component="span" sx={{ width: '1344px', display: 'inline-block' }}>
         <Box component="span" sx={{ display: 'flex', justifyContent: 'right', marginBottom: '20px' }}>
           <SkillsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
         </Box>
-        {mapData(skillDataArray.filter((obj: Skill) => obj.parentId === null).sort(sortBySkill))}
+        {mapData(skillDataArray.filter((obj: Skill) => obj.parentSkillId === null).sort(sortBySkill))}
       </Box>
     </>
   );
