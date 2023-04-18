@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { SkillsTabState } from '../components/skillsTab/models/enums/SkillsTabState';
+import { SkillsTabState } from '../components/enums/SkillsTabState';
 
 const initStateValue: SkillsTabState = SkillsTabState.VIEW_STATE;
 

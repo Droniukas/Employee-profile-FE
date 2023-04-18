@@ -1,15 +1,18 @@
 import { ThemeProvider, Tooltip, Typography } from '@mui/material';
 
 import theme from '../../../config/theme';
-import { SkillLevel } from '../models/enums/SkillLevel';
+import { SkillLevel } from '../../enums/SkillLevel';
 
-type Props = {
+type SkillLevelWithTooltipProps = {
   name: SkillLevel | null;
   tooltipText: string;
 };
 
-const SkillLevelWithTooltip: React.FunctionComponent<Props> = (props: Props) => {
+const SkillLevelWithTooltip: React.FunctionComponent<SkillLevelWithTooltipProps> = (
+  props: SkillLevelWithTooltipProps,
+) => {
   const { name, tooltipText } = props;
+
   return (
     <ThemeProvider theme={theme}>
       <Tooltip title={tooltipText} disableInteractive>
