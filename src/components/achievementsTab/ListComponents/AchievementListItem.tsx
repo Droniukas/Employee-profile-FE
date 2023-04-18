@@ -23,30 +23,28 @@ type AchievementListItemProps = {
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
   const { achievementObj, showEndDate } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewAchievementsState.value);
-  const [achievementStartDate, setAchievementStartDate] = useState<string | null>(achievementObj.achievementStartDate);
-  const [achievementEndDate, setAchievementEndDate] = useState<string | null>(achievementObj.achievementEndDate);
+  const [achievementStartDate, setAchievementStartDate] = useState<string | null>();
+  const [achievementEndDate, setAchievementEndDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
-  const [endDateExists, setEndDateExists] = useState<boolean>(showEndDate);
+  const [endDateExists, setEndDateExists] = useState<boolean>(achievementObj.checked);
 
   useEffect(() => {
     setChecked(achievementObj.checked);
-    achievementObj.achievementStartDate !== null
+    achievementObj.achievementStartDate !== undefined
       ? setAchievementStartDate(achievementObj.achievementStartDate)
-      : achievementStartDate;
-    achievementObj.achievementEndDate !== null
-      ? setAchievementEndDate(achievementObj.achievementEndDate)
-      : achievementEndDate;
-    // console.log('end objekto Date: ' + achievementObj.achievementEndDate);
-    // console.log('start objekto Date: ' + achievementObj.achievementStartDate);
+      : null;
+    achievementObj.achievementEndDate !== undefined ? setAchievementEndDate(achievementObj.achievementEndDate) : null;
+    console.log('end objekto Date: ' + achievementObj.achievementEndDate);
+    console.log('start objekto Date: ' + achievementObj.achievementStartDate);
   }, [achievementObj.checked, achievementObj.achievementStartDate, achievementObj.achievementEndDate]);
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
   useEffect(() => {
     setChecked(achievementObj.checked);
-    achievementObj.achievementStartDate !== null
+    achievementObj.achievementStartDate !== undefined
       ? setAchievementStartDate(achievementObj.achievementStartDate)
       : achievementStartDate;
-    achievementObj.achievementEndDate !== null
+    achievementObj.achievementEndDate !== undefined
       ? setAchievementEndDate(achievementObj.achievementEndDate)
       : achievementEndDate;
   }, [onCancel]);
@@ -131,13 +129,31 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
             isChecked ? (
               <>
                 {/* <AchievementLevelWithTooltip name={achievementLevel} tooltipText={tooltipText} /> */}
-                <ListItemText sx={{ fontWeight: '200', paddingLeft: '300px', marginLeft: '0px', color: '#666666' }}>
-                  {dayjs(achievementStartDate).format('MMM, YYYY')}
-                  {/* {achievementObj.hasError ? <AchievementListItemErrorText /> : null} */}
-                </ListItemText>
-                <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: '#666666' }}>
-                  Certificate: {dayjs(achievementEndDate).format('MMM YYYY')}
-                </ListItemText>
+                <Box sx={{ marginRight: '0px', width: '400px', display: 'inline-block' }}>
+                  <ListItemText
+                    sx={{
+                      fontWeight: '200',
+                      color: '#666666',
+                      display: 'inline-block',
+                      marginRight: '50px',
+                    }}
+                  >
+                    {dayjs(achievementStartDate).format('MMM, YYYY')}
+                    {/* {achievementObj.hasError ? <AchievementListItemErrorText /> : null} */}
+                  </ListItemText>
+                  {endDateExists && achievementEndDate !== null && achievementEndDate !== undefined && (
+                    <ListItemText
+                      sx={{
+                        fontWeight: '400',
+                        marginRight: '50px',
+                        color: '#666666',
+                        display: 'inline-block',
+                      }}
+                    >
+                      Certificate: {dayjs(achievementEndDate).format('MMM YYYY')}
+                    </ListItemText>
+                  )}
+                </Box>
               </>
             ) : null
           ) : null}
@@ -161,9 +177,12 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     label={'MON, YYYY'}
                     views={['month', 'year']}
                     sx={{ width: 200, marginRight: 7 }}
-                    value={dayjs(null)}
+                    // disableFuture
+                    // maxDate={dayjs().format('YYYY-MM-DD')}
+                    // value={achievementStartDate !== undefined ? achievementStartDate : null}
+                    value={dayjs(achievementStartDate)}
                     onChange={(newValue) => {
-                      if (newValue === null) return;
+                      console.log('start date', achievementStartDate);
                       setAchievementStartDate(dayjs(newValue).format('YYYY-MM-DD'));
                       // console.log('start date:' + achievementStartDate);
                       // achievementObj.achievementStartDate = achievementStartDate;
@@ -177,6 +196,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     checked={endDateExists}
                     onChange={(e) => {
                       setEndDateExists(e.target.checked);
+                      e.preventDefault();
                       // setFieldValue('endDate', '');
                     }}
                     sx={{ paddingRight: 1 }}
@@ -190,12 +210,14 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           label={'MON, YYYY'}
                           views={['month', 'year']}
                           // minDate={dayjs(achievementObj.achievementStartDate)}
-                          value={achievementEndDate ? dayjs(achievementEndDate) : null}
+                          // value={endDateExists ? dayjs(achievementEndDate) : null}
+                          // disablePast
+                          value={endDateExists ? dayjs(achievementEndDate) : dayjs(achievementStartDate)}
                           onChange={(newValue) => {
                             setAchievementEndDate(dayjs(newValue).format('YYYY-MM-DD'));
-                            // console.log('end Date: ' + achievementEndDate);
+                            // console.log('end Date:        ' + achievementEndDate);
                             // achievementObj.achievementEndDate = achievementEndDate;
-                            // console.log('end Date: ' + achievementObj.achievementEndDate);
+                            // console.log('object end Date: ' + achievementObj.achievementEndDate);
                             onDatePickerChange();
                             console.log(achievementEndDate);
                             const dayJSFormated = dayjs(newValue).format('YYYY-MM-DD');
@@ -206,12 +228,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     </Box>
                   )}
                 </Box>
-                {/* <AchievementLevelDropdownList
-                  achievementLevel={achievementLevel}
-                  setAchievementLevel={setAchievementLevel}
-                  achievementObj={achievementObj}
-                  tooltipText={tooltipText}
-                /> */}
               </LocalizationProvider>
             </>
           ) : null
