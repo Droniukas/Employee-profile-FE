@@ -23,7 +23,7 @@ echo "PR_STATUS=$PR_STATUS" >> build-status.env
 
 function status() {
     STATUS=$1
-    echo "{\"state\":\"$STATUS\",\"key\":\"$PR_TITLE\",\"name\":\"PR $PR_ID: $SOURCE_BRANCH_NAME → $TARGET_BRANCH_NAME\",\"url\":\"$CI_PIPELINE_URL\",\"description\":\"description\"}" > build.json
+    echo "{\"state\":\"$STATUS\",\"key\":\"$PR_ID\",\"name\":\"PR $PR_ID: $SOURCE_BRANCH_NAME → $TARGET_BRANCH_NAME\",\"url\":\"$CI_PIPELINE_URL\",\"description\":\"description\"}" > build.json
 
     curl -u $BITBUCKET_USER:$BITBUCKET_TOKEN \
         -H "Content-Type:application/json" \
