@@ -336,9 +336,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   } else {
     return (
       <>
-        {openPopup && projectToEdit && (
-          <ProjectForm showEndDate={Boolean(projectToEdit.endDate)} onClose={closeEditForm} project={projectToEdit} />
-        )}
+        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}
