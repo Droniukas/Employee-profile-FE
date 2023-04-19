@@ -32,7 +32,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(true);
   const navigate = useNavigate();
 
-  const formSubmithandler: SubmitHandler<LoginInterface> = async (data: LoginInterface) => {
+  const formSubmitHandler: SubmitHandler<LoginInterface> = async (data: LoginInterface) => {
     try {
       const loginService = new LoginService();
       const responseData = await loginService.checkCredentials(data);
@@ -95,7 +95,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
             Welcome to Employee Profile
           </Typography>
         </Box>
-        <Box component="form" onSubmit={handleSubmit(formSubmithandler)}>
+        <Box component="form" onSubmit={handleSubmit(formSubmitHandler)}>
           <Box component="div" sx={{ my: 2 }}>
             <InputLabel
               sx={{

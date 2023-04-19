@@ -9,7 +9,7 @@ import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
 
-type Props = {
+type SkillLevelDropdownListProps = {
   skillLevel: SkillLevel | null;
   setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>;
   currentSkill: Skill;

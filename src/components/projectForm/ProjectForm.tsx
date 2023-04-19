@@ -26,15 +26,16 @@ import { ProjectsService } from '../../services/projects.service';
 type ProjectFormProps = {
   onClose: (projectId?: string) => void;
   project?: Project;
+  showEndDate: boolean;
 };
 
 const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
-  const { onClose, project } = props;
+  const { onClose, project, showEndDate } = props;
 
   const projectsService = new ProjectsService();
 
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
-  const [endDateExists, setEndDateExists] = useState<boolean>(false);
+  const [endDateExists, setEndDateExists] = useState<boolean>(showEndDate);
 
   let initialValues: Project = {
     id: '',
@@ -60,12 +61,16 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     }
   };
 
-  if (project) initialValues = project;
-  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched } = useFormik({
-    initialValues,
-    onSubmit: handleFormSubmit,
-    validationSchema: projectSchema,
-  });
+  if (project) {
+    initialValues = project;
+  }
+
+  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
+    useFormik({
+      initialValues,
+      onSubmit: handleFormSubmit,
+      validationSchema: projectSchema,
+    });
 
   return (
     <Dialog open={true} maxWidth="md">
@@ -79,7 +84,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             Cancel
           </Button>
           <Button onClick={() => onClose()} sx={{ m: 1 }} variant="contained">
-            confirm
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
@@ -108,7 +113,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         >
           {project ? 'Edit project profile' : 'Add project profile'}
         </Typography>
-        {/* Title field input */}
+
         <Box>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
@@ -130,7 +135,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-        {/* description input */}
+
         <Box
           component="div"
           sx={{
@@ -163,7 +168,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-        {/* Date input */}
+
         <Box display={'flex'} sx={{}}>
           <Box display={'inline-block'}>
             <InputLabel>
@@ -178,14 +183,20 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                   if (newValue === null) return;
                   setFieldValue('startDate', dayjs(newValue).toISOString());
                   setFieldTouched('startDate', true);
-                  setFieldValue('endDate', dayjs(newValue).toISOString());
+                  setFieldValue('endDate', '');
                   setFieldTouched('endDate', true);
                 }}
               />
             </LocalizationProvider>
           </Box>
           <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
-            <Checkbox onChange={(e) => setEndDateExists(e.target.checked)} />
+            <Checkbox
+              checked={endDateExists}
+              onChange={(e) => {
+                setEndDateExists(e.target.checked);
+                setFieldValue('endDate', '');
+              }}
+            />
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
           </Box>
         </Box>
@@ -200,15 +211,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                 format="YYYY/MM/DD"
                 minDate={dayjs(values.startDate)}
                 value={values.endDate ? dayjs(values.endDate) : null}
-                onChange={(newValue) => {
-                  setFieldValue('endDate', dayjs(newValue).toISOString());
-                  setFieldTouched('endDate', true);
-                }}
+                onChange={(newValue) => setFieldValue('endDate', dayjs(newValue).toISOString())}
               />
             </LocalizationProvider>
           </Box>
         )}
-        {/* Team member box */}
+
         <Box component="div" sx={{ my: 2 }}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
@@ -245,7 +253,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </Link>
           </Box>
         </Box>
-        {/* Cancel/save Buttons */}
+
         <Divider />
         <Box display={'flex'} justifyContent={'flex-end'}>
           <Button
@@ -258,7 +266,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           >
             Cancel
           </Button>
-          <Button sx={{ m: 1 }} variant="contained" onClick={handleFormSubmit}>
+          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
             Save
           </Button>
         </Box>

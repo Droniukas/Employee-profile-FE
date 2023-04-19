@@ -10,6 +10,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
@@ -19,7 +20,7 @@ import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 
 type ProjectProfilesResultsProps = {
-  results: Project[];
+  projects: Project[];
   rerender: () => void;
   handleProjectDelete: (id: string) => void;
   focusProjectId?: string;
@@ -27,13 +28,12 @@ type ProjectProfilesResultsProps = {
 };
 
 const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { results, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
+  const { projects, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
 
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
 
   const closeEditForm = () => {
@@ -58,15 +58,15 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     setShowDeleteConfirmation(false);
   };
 
-  const handleDeleteClick = (result: Project) => {
-    setProjectToDelete(result);
+  const handleDeleteClick = (project: Project) => {
+    setProjectToDelete(project);
     setShowDeleteConfirmation(true);
   };
 
-  const renderResultItem = (result: Project) => {
-    const isTextOverflow = result.description.length > 135;
+  const renderResultItem = (project: Project) => {
+    const isTextOverflow = project.description.length > 135;
     return (
-      <div key={result.id}>
+      <div key={project.id}>
         <ListItem
           alignItems="flex-start"
           sx={{
@@ -121,8 +121,10 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     pt: 1,
                   }}
                 >
-                  {correctDateFormat(result.startDate)} -{' '}
-                  {result.endDate ? correctDateFormat(result.endDate) : 'Present'}
+                  <>
+                    {correctDateFormat(project.startDate)} -{' '}
+                    {project.endDate ? correctDateFormat(project.endDate) : 'Present'}
+                  </>
                 </Typography>
                 <Typography
                   sx={{
@@ -130,7 +132,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     fontSize: 20,
                   }}
                 >
-                  {result.title}
+                  {project.title}
                 </Typography>
                 <Typography
                   sx={{
@@ -143,9 +145,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow ? result.description : result.description.substring(0, 135) + '...'}
+                  {!isTextOverflow ? project.description : project.description.substring(0, 135) + '...'}
                   <Button
-                    onClick={() => setProject(result)}
+                    onClick={() => setProject(project)}
                     sx={{
                       textDecoration: 'underline',
                       color: '#000048',
@@ -165,7 +167,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   left: 70,
                 }}
               >
-                {renderEmployeesAvatarGroup(result.employees)}
+                {renderEmployeesAvatarGroup(project.employees)}
               </Box>
             </Stack>
             <Stack
@@ -178,10 +180,10 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                 left: 0,
               }}
             >
-              {setStatusColors(result.status)}
+              {setStatusColors(project.status)}
               <Box alignItems="flex-end" display="flex">
                 <IconButton
-                  ref={focusProjectId === result.id ? buttonToFocusRef : null}
+                  ref={focusProjectId === project.id ? buttonToFocusRef : null}
                   className="btn-edit"
                   aria-label="edit"
                   sx={{
@@ -190,7 +192,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     left: 320,
                     backgroundColor: '#F4F4F4',
                   }}
-                  onClick={() => setProject(result)}
+                  onClick={() => setProject(project)}
                 >
                   <EditIcon />
                 </IconButton>
@@ -203,7 +205,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     left: 335,
                     backgroundColor: '#F4F4F4',
                   }}
-                  onClick={() => handleDeleteClick(result)}
+                  onClick={() => handleDeleteClick(project)}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -219,7 +221,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     if (date === null) {
       return null;
     } else {
-      return new Date(date).toDateString();
+      return moment(date).format('YYYY/MM/DD');
     }
   };
 
@@ -310,7 +312,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     );
   };
 
-  if (!results.length) {
+  if (!projects.length) {
     return (
       <List
         sx={{
@@ -326,7 +328,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' products found. Check the filter settings."}
+              : "No '" + filterStatus + "' projects found. Check the filter settings."}
           </Typography>
         </ListItem>
       </List>
@@ -334,7 +336,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <ProjectForm showEndDate={Boolean(projectToEdit.endDate)} onClose={closeEditForm} project={projectToEdit} />
+        )}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}
@@ -347,7 +351,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
             width: '100%',
           }}
         >
-          {results.map((result) => renderResultItem(result))}
+          {projects.map((project) => renderResultItem(project))}
         </List>
       </>
     );

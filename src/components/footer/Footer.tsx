@@ -1,6 +1,7 @@
 import './Footer.scss';
 
 import { Box } from '@mui/material';
+import moment from 'moment';
 import React from 'react';
 
 const Footer = () => {
@@ -19,7 +20,7 @@ const Footer = () => {
           display: 'flex',
         }}
       >
-        <p className="footer copyright">Copyright © 2023 Cognizant</p>
+        <p className="footer copyright">Copyright © {moment().format('YYYY')} Cognizant</p>
         <p className="footer policy">Privacy policy</p>
       </Box>
     </>
