@@ -1,12 +1,13 @@
 import axios from './axios';
 
 export class EmployeeService {
-  public async searchByName(searchValue: string, page: number, size: number) {
+  public async searchByName(searchValue: string, page: number, size: number, isLimited: boolean) {
     const response = await axios.get('/employee/search', {
       params: {
         name: searchValue,
         page: page,
         size: size,
+        isLimited: isLimited,
       },
     });
     return response.data;
@@ -14,11 +15,6 @@ export class EmployeeService {
 
   public async getById(id: string) {
     const response = await axios.get(`/employee/get/${id}`, {});
-    return response.data;
-  }
-
-  public async getAll() {
-    const response = await axios.get(`/employee/get/all`, {});
     return response.data;
   }
 }

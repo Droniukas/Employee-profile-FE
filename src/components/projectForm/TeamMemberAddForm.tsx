@@ -16,10 +16,20 @@ type TeamMemberAddFormProps = {
 
 const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAddFormProps) => {
   const { teamMembers, onAdd, onClose } = props;
-  const [nonTeamMembers, setNonTeamMembers] = useState<Employee[]>([]);
-  const [filterResults, setFilterResults] = useState<Employee[]>([]);
   const [newTeamMembers, setNewTeamMembers] = useState<ProjectEmployee[]>([]);
+
   const [searchValue, setSearchValue] = useState('');
+  const [searchResult, setSearchResult] = useState<Employee[]>([]);
+
+  const employeeService = new EmployeeService();
+
+  const getNonAddedEmployees = async () => {
+    const searchResult = await employeeService.searchByName(searchValue, 0, 0, false);
+    const filteredResult = searchResult.employees.filter((employee: Employee) => {
+      return !teamMembers.some((teamMember) => teamMember.id === employee.id);
+    });
+    setSearchResult(filteredResult);
+  };
 
   const handleSelectionChange = (selectedEmployees: Employee[]) => {
     const newTeamMembers = selectedEmployees.map((employee) => ({
@@ -37,33 +47,13 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
   };
 
   useEffect(() => {
-    const findNonAddedEmployees = async () => {
-      const employeeService = new EmployeeService();
-      const allEmployees = await employeeService.getAll();
-      const nonTeamMembers = allEmployees.filter((employee: Employee) => {
-        return !teamMembers.some((teamMember) => teamMember.id === employee.id);
-      });
-      setNonTeamMembers(nonTeamMembers);
-      setFilterResults(nonTeamMembers);
-    };
-
-    findNonAddedEmployees();
-  }, [teamMembers]);
-
-  const getFilterResults = () => {
-    const filtered = nonTeamMembers.filter((employee: Employee) => {
-      const fullName = `${employee.name}${employee.middleName ? ` ${employee.middleName}` : ''} ${
-        employee.surname
-      }`.toLowerCase();
-      return fullName.includes(searchValue.toLowerCase());
-    });
-    setFilterResults(filtered);
-  };
+    getNonAddedEmployees();
+  }, []);
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        getFilterResults();
+        getNonAddedEmployees();
         event.preventDefault();
       }
     };
@@ -100,7 +90,7 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
             setSearchValue(value);
           }}
         />
-        <TeamMemberAddList employees={filterResults} onSelect={handleSelectionChange} />
+        <TeamMemberAddList employees={searchResult} onSelect={handleSelectionChange} />
       </Box>
       <Divider variant="fullWidth" />
       <Box display={'flex'} justifyContent={'flex-end'} my={1}>

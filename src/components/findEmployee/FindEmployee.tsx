@@ -41,7 +41,12 @@ const FindEmployee = () => {
   };
 
   const getResults = async () => {
-    const result = await employeeService.searchByName(inputValueRef.current, pageRef.current, rowsPerPageRef.current);
+    const result = await employeeService.searchByName(
+      inputValueRef.current,
+      pageRef.current,
+      rowsPerPageRef.current,
+      true,
+    );
     setResults(result.employees);
     setResultCount(result.count);
   };
