@@ -5,7 +5,6 @@ interface Employee {
   middleName: string;
   title: string;
   status: string;
-  imageName: string;
   imageType: string;
   imageBytes: string;
   isManager: boolean;
