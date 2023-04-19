@@ -1,11 +1,11 @@
 variables:
-    # Change
-    TEAM_NAME: "employee-profile"
-    HOST: "employee-profile.devbstaging.com"
-    DEPLOYMENT_BRANCH: "master"
-    
-    # DO NOT CHANGE
-    IMAGE_URL: $ACR_URL/$TEAM_NAME/frontend
+  # Change
+  TEAM_NAME: "employee-profile"
+  HOST: "employee-profile.devbstaging.com"
+  DEPLOYMENT_BRANCH: "master"
+
+  # DO NOT CHANGE
+  IMAGE_URL: $ACR_URL/$TEAM_NAME/frontend
 
 image: docker:latest
 services:
@@ -38,11 +38,12 @@ clone:
 
 build_app:
   stage: build_app
-  image: node:14
+  image: node:18-alpine
   script:
     - cd git-clone
     - npm ci
     - npm run pre-commit
+    - unset CI
     - npm run build
   artifacts:
     paths:
