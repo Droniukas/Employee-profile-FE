@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import skillNamesReducer from '../state/changedSkills';
-import onCancelReducer from '../state/onCancel';
-import viewStateReducer from '../state/skillsTabState';
+import skillNamesReducer from '../states/changedSkills';
+import onCancelReducer from '../states/onCancel';
+import viewStateReducer from '../states/skillsTabState';
 
 const store = configureStore({
   reducer: {

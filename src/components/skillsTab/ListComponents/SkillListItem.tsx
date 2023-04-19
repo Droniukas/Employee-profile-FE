@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
-import { updateChangedSkill } from '../../../state/changedSkills';
+import { updateChangedSkill } from '../../../states/changedSkills';
 import { OnCancelRoot, ViewStateRoot } from '../../../store/types';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';

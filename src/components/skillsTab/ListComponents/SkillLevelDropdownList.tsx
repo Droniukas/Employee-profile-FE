@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
-import { updateChangedSkill } from '../../../state/changedSkills';
+import { updateChangedSkill } from '../../../states/changedSkills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
@@ -16,7 +16,9 @@ type SkillLevelDropdownListProps = {
   tooltipText: string;
 };
 
-const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) => {
+const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProps> = (
+  props: SkillLevelDropdownListProps,
+) => {
   const { setSkillLevel, skillLevel, currentSkill, tooltipText } = props;
   const [open, setOpen] = useState(false);
   const handleClick = () => {
