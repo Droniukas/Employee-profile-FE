@@ -3,20 +3,20 @@ import { Box, Button, Dialog, Divider, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
-import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import TeamMember from '../../models/TeamMember.interface';
 import { EmployeeService } from '../../services/employee.service';
 import SearchInput from '../inputs/SearchInput';
 import TeamMemberAddList from './TeamMemberAddList';
 
 type TeamMemberAddFormProps = {
-  teamMembers: ProjectEmployee[];
-  onAdd: (newTeamMembers: ProjectEmployee[]) => void;
+  teamMembers: TeamMember[];
+  onAdd: (newTeamMembers: TeamMember[]) => void;
   onClose: () => void;
 };
 
 const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAddFormProps) => {
   const { teamMembers, onAdd, onClose } = props;
-  const [newTeamMembers, setNewTeamMembers] = useState<ProjectEmployee[]>([]);
+  const [newTeamMembers, setNewTeamMembers] = useState<TeamMember[]>([]);
 
   const [searchValue, setSearchValue] = useState('');
   const [searchResult, setSearchResult] = useState<Employee[]>([]);
@@ -34,9 +34,9 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
   const handleSelectionChange = (selectedEmployees: Employee[]) => {
     const newTeamMembers = selectedEmployees.map((employee) => ({
       ...employee,
-      teamMemberStatus: 'ACTIVE',
-      teamMemberStartDate: '',
-      teamMemberEndDate: '',
+      status: 'ACTIVE',
+      startDate: '',
+      endDate: '',
     }));
     setNewTeamMembers(newTeamMembers);
   };

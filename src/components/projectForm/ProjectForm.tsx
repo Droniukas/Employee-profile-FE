@@ -20,7 +20,7 @@ import { useFormik } from 'formik';
 import React, { useState } from 'react';
 
 import Project from '../../models/Project.interface';
-import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import TeamMember from '../../models/TeamMember.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import TeamMemberAddForm from './TeamMemberAddForm';
@@ -46,7 +46,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     description: '',
     startDate: dayjs().toISOString(),
     endDate: '',
-    projectEmployees: [],
+    teamMembers: [],
     status: '',
   };
   if (project) initialValues = project;
@@ -69,14 +69,14 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     setShowAddEmployeesForm(false);
   };
 
-  const handleAddClick = (newTeamMembers: ProjectEmployee[]) => {
-    setFieldValue('projectEmployees', [...values.projectEmployees, ...newTeamMembers]);
+  const handleAddClick = (newTeamMembers: TeamMember[]) => {
+    setFieldValue('teamMembers', [...values.teamMembers, ...newTeamMembers]);
   };
 
-  const updateTeamMember = (updatedTeamMember: ProjectEmployee) => {
+  const updateTeamMember = (updatedTeamMember: TeamMember) => {
     setFieldValue(
-      'projectEmployees',
-      values.projectEmployees.map((teamMember: ProjectEmployee) =>
+      'teamMembers',
+      values.teamMembers.map((teamMember: TeamMember) =>
         teamMember.id === updatedTeamMember.id ? updatedTeamMember : teamMember,
       ),
     );
@@ -239,7 +239,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
             </InputLabel>
-            {values.projectEmployees.length > 0 && (
+            {values.teamMembers.length > 0 && (
               <Link
                 component="button"
                 sx={{ marginLeft: 'auto', color: '#000048' }}
@@ -253,8 +253,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             )}
           </Box>
 
-          {values.projectEmployees.length > 0 ? (
-            <TeamMemberEditList teamMembers={values.projectEmployees} updateTeamMember={updateTeamMember} />
+          {values.teamMembers.length > 0 ? (
+            <TeamMemberEditList teamMembers={values.teamMembers} updateTeamMember={updateTeamMember} />
           ) : (
             <Box
               component="div"
@@ -301,7 +301,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       </Box>
       {showAddEmployeesForm && (
         <TeamMemberAddForm
-          teamMembers={values.projectEmployees}
+          teamMembers={values.teamMembers}
           onClose={handleAddEmployeesFormClose}
           onAdd={handleAddClick}
         />

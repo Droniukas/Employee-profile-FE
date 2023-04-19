@@ -1,4 +1,4 @@
-interface ProjectEmployee {
+interface TeamMember {
   id: string;
   name: string;
   surname: string;
@@ -7,9 +7,8 @@ interface ProjectEmployee {
   status: string;
   imageType: string;
   imageBytes: string;
-  teamMemberStartDate: string;
-  teamMemberEndDate: string;
-  teamMemberStatus: string;
+  startDate: string;
+  endDate: string;
 }
 
-export default ProjectEmployee;
+export default TeamMember;

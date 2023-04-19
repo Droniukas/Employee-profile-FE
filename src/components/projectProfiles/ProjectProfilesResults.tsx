@@ -14,7 +14,7 @@ import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Project from '../../models/Project.interface';
-import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import TeamMember from '../../models/TeamMember.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
@@ -167,7 +167,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   left: 70,
                 }}
               >
-                {renderEmployeesAvatarGroup(project.projectEmployees)}
+                {renderTeamMembersAvatarGroup(project.teamMembers)}
               </Box>
             </Stack>
             <Stack
@@ -225,25 +225,25 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     }
   };
 
-  const renderEmployeesAvatarGroup = (employees: ProjectEmployee[]) => {
+  const renderTeamMembersAvatarGroup = (teamMembers: TeamMember[]) => {
     const avatarsNeed = 3;
     let counter = 0;
-    let additionalEmployees = 0;
+    let additionalTeamMembers = 0;
 
-    const filteredEmployeesList = employees.filter((employee) => {
-      if (employee.status === 'ACTIVE') {
+    const filteredTeamMembersList = teamMembers.filter((teamMember) => {
+      if (teamMember.status === 'ACTIVE') {
         if (counter < avatarsNeed) {
           counter++;
-          return employee;
+          return teamMember;
         } else {
-          additionalEmployees++;
+          additionalTeamMembers++;
         }
       }
     });
 
     return (
       <>
-        <AvatarGroup>{filteredEmployeesList.map((employee) => renderEmployeeAvatar(employee))}</AvatarGroup>
+        <AvatarGroup>{filteredTeamMembersList.map((teamMember) => renderTeamMemberAvatar(teamMember))}</AvatarGroup>
         <Typography
           sx={{
             color: '#666666',
@@ -252,20 +252,20 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
             position: 'relative',
             left: 10,
             top: -13,
-            display: additionalEmployees === 0 ? 'none' : 'inline',
+            display: additionalTeamMembers === 0 ? 'none' : 'inline',
           }}
         >
-          +{additionalEmployees} {additionalEmployees === 1 ? 'employee' : 'employees'}
+          +{additionalTeamMembers} {additionalTeamMembers === 1 ? 'employee' : 'employees'}
         </Typography>
       </>
     );
   };
 
-  const renderEmployeeAvatar = (employee: ProjectEmployee) => {
+  const renderTeamMemberAvatar = (teamMember: TeamMember) => {
     return (
       <Avatar
-        key={employee.id}
-        src={`data:${employee.imageType};base64,${employee.imageBytes}`}
+        key={teamMember.id}
+        src={`data:${teamMember.imageType};base64,${teamMember.imageBytes}`}
         sx={{
           width: 24,
           height: 24,
