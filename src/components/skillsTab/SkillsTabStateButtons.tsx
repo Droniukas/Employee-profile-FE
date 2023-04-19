@@ -4,23 +4,27 @@ import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { StyleVariants } from '../../models/StyleVariants';
-import { setSkillsTabState } from '../../state/skillsTabState';
+import { setSkillsTabState } from '../../states/skillsTabState';
 import { ViewStateRoot } from '../../store/types';
-import { SkillsTabState } from './models/enums/SkillsTabState';
+import { SkillsTabState } from '../enums/SkillsTabState';
 
-type Props = {
+type SkillsTabStateButtonsProps = {
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
-const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
+const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps> = (
+  props: SkillsTabStateButtonsProps,
+) => {
   const { saveFunction, cancelFunction } = props;
+
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {
     dispatch(setSkillsTabState({}));
   };
 
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
+
   return (
     <>
       {viewState === SkillsTabState.VIEW_STATE && (

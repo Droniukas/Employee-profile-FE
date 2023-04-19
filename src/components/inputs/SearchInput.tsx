@@ -17,7 +17,7 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
       component="form"
       sx={{
         width: '100%',
-        maxWidth: '60vw',
+        maxWidth: '40vw',
         justifyContent: 'flex-start',
         direction: 'column',
         alignSelf: 'flex-start',

@@ -10,20 +10,20 @@ import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
 
 const Header = () => {
-  const [results, setResults] = useState<Employee>();
+  const [result, setResult] = useState<Employee>();
   const employeeService = new EmployeeService();
 
-  const getResults = async (id: string) => {
-    const result = await employeeService.getById(id);
-    setResults(result);
+  const getResult = async (id: string) => {
+    const employee = await employeeService.getById(id);
+    setResult(employee);
   };
+
   useEffect(() => {
-    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    getResult(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
   return (
     <>
-      {/* Left header: */}
       <Box
         sx={{
           position: 'fixed',
@@ -58,7 +58,6 @@ const Header = () => {
         </div>
       </Box>
 
-      {/* Top header: */}
       <Box
         sx={{
           position: 'fixed',
@@ -76,7 +75,7 @@ const Header = () => {
         <div className="top-header">
           <NotificationsIcon sx={{ width: 40, height: 40, marginRight: 4, marginBottom: 1.1 }} />
           <Avatar
-            src={`data:${results?.imageType};base64,${results?.imageBytes}`}
+            src={`data:${result?.imageType};base64,${result?.imageBytes}`}
             sx={{ width: 65, height: 65, marginTop: 1, display: 'inline-block' }}
           />
         </div>

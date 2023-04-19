@@ -1,4 +1,4 @@
-import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
+import { ChangedSkill } from '../models/ChangedSkill.interface';
 import axios from './axios';
 
 export class SkillsService {

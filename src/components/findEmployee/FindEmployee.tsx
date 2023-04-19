@@ -10,8 +10,8 @@ import SearchInput from '../inputs/SearchInput';
 import FindEmployeeResults from './FindEmployeeResults';
 
 const FindEmployee = () => {
-  const [results, setResults] = useState<Employee[]>([]);
-  const [totalResultCount, setResultCount] = useState<number>(0);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [totalEmployeesCount, setEmployeesCount] = useState<number>(0);
   const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
 
   const employeeService = new EmployeeService();
@@ -40,22 +40,22 @@ const FindEmployee = () => {
     _setPage(val);
   };
 
-  const getResults = async () => {
-    const result = await employeeService.searchByName(
+  const getEmployees = async () => {
+    const results = await employeeService.searchByName(
       inputValueRef.current,
       pageRef.current,
       rowsPerPageRef.current,
       true,
     );
-    setResults(result.employees);
-    setResultCount(result.count);
+    setEmployees(results.employees);
+    setEmployeesCount(results.count);
   };
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
         setPage(0);
-        getResults();
+        getEmployees();
         event.preventDefault();
       }
     };
@@ -68,13 +68,13 @@ const FindEmployee = () => {
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
-    getResults();
+    getEmployees();
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-    getResults();
+    getEmployees();
   };
 
   return (
@@ -93,13 +93,13 @@ const FindEmployee = () => {
           <SearchInput placeholder="Search employees by name..." onChange={(value) => setInputValue(value)} />
         </Box>
       </div>
-      {results.length > 0 && (
+      {employees.length > 0 && (
         <>
-          <FindEmployeeResults results={results} />
+          <FindEmployeeResults employees={employees} />
           <TablePagination
             component="div"
-            count={totalResultCount}
-            page={!totalResultCount || totalResultCount <= 0 ? 0 : pageRef.current}
+            count={totalEmployeesCount}
+            page={!totalEmployeesCount || totalEmployeesCount <= 0 ? 0 : pageRef.current}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPageRef.current}
             rowsPerPageOptions={rowSizeOptions}

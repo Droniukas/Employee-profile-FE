@@ -26,7 +26,7 @@ const TeamMemberAddList: React.FC<TeamMemberAddListProps> = (props: TeamMemberAd
   };
 
   return (
-    <List className="member-list" sx={{ paddingTop: '24px' }}>
+    <List className="member-list" sx={{ paddingTop: '16px', marginTop: 0 }}>
       {employees.map((employee, index) => (
         <TeamMemberAddItem
           key={index}
