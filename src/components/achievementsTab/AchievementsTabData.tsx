@@ -42,7 +42,9 @@ const AchievementsTabData = () => {
 
   const hasErrors = () => {
     achievementDataArr.forEach((obj) => (obj.hasError = false));
-    const unselectedStartDateAchievements = changedAchievements.filter((obj) => obj.achievementStartDate === null);
+    const unselectedStartDateAchievements = changedAchievements.filter(
+      (obj) => (obj.achievementStartDate === null || obj.achievementStartDate === undefined) && obj.checked === true,
+    );
     if (unselectedStartDateAchievements.length > 0) {
       unselectedStartDateAchievements.forEach((objWithError) => {
         setErrorForAchievements(objWithError);
@@ -53,7 +55,7 @@ const AchievementsTabData = () => {
   };
 
   const handleSave = async () => {
-    // if (hasErrors()) return;
+    if (hasErrors()) return;
     console.log(changedAchievements, 'SAAAVING');
     changedAchievements.forEach(async (obj) => {
       await achievementsService.updateEmployeeAchievement(obj);

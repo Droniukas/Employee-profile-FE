@@ -12,13 +12,21 @@ import { AchievementsTabState } from '../models/enums/AchievementsTabState';
 import { Achievement } from '../models/interfaces/Achievement.interface';
 // import AchievementLevelDropdownList from './AchievementLevelDropdownList';
 // import AchievementLevelWithTooltip from './AchievementLevelWithTooltip';
-// import AchievementListItemErrorText from './AchievementListItemErrorText';
+import AchievementListItemErrorText from './AchievementListItemErrorText';
 import { StyledSwitch } from './StyledSwitch';
+// import * as yup from 'yup';
 
 type AchievementListItemProps = {
   achievementObj: Achievement;
   showEndDate: boolean;
 };
+
+// const DisplayingErrorMessagesSchema = yup.object().shape({
+//   startDate: yup
+//     .date().nullable()
+//     .typeError('Start date is required')
+//     .required('Start Date is required'),
+// });
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
   const { achievementObj, showEndDate } = props;
@@ -34,8 +42,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
       ? setAchievementStartDate(achievementObj.achievementStartDate)
       : null;
     achievementObj.achievementEndDate !== undefined ? setAchievementEndDate(achievementObj.achievementEndDate) : null;
-    console.log('end objekto Date: ' + achievementObj.achievementEndDate);
-    console.log('start objekto Date: ' + achievementObj.achievementStartDate);
+    // console.log('end objekto Date: ' + achievementObj.achievementEndDate);
+    // console.log('start objekto Date: ' + achievementObj.achievementStartDate);
   }, [achievementObj.checked, achievementObj.achievementStartDate, achievementObj.achievementEndDate]);
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
@@ -51,6 +59,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
 
   const changedAchievements = useSelector((state: ChangedAchievementsDataRoot) => state.changedAchievements.value);
   const dispatch = useDispatch();
+  const currentChangedAchievement = changedAchievements.filter((item) => item.id !== achievementObj.id);
 
   const onSwitchChange = () => {
     setChecked(!isChecked);
@@ -69,7 +78,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
         )
       : dispatch(
           setChangedAchievements([
-            ...changedAchievements.filter((item) => item.id !== achievementObj.id),
+            ...currentChangedAchievement,
             {
               id: achievementObj.id,
               achievement: achievementObj.achievementName,
@@ -83,7 +92,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const onDatePickerChange = () => {
     dispatch(
       setChangedAchievements([
-        ...changedAchievements.filter((item) => item.id !== achievementObj.id),
+        ...currentChangedAchievement,
         {
           id: achievementObj.id,
           achievement: achievementObj.achievementName,
@@ -94,9 +103,16 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
       ]),
     );
   };
-
   // const tooltipText: string = mapAchievementLevelToTooltip(achievementLevel);
-
+  // console.log(changedAchievements.filter((item) => item.id !== achievementObj.id));
+  // console.log(achievementObj.checked, achievementStartDate, achievementObj.achievementStartDate);
+  // if (achievementObj.checked) {
+  //   console.log(achievementObj);
+  // }
+  // if (changedAchievements !== null) {
+  //   console.log('changed', changedAchievements[0].achievementStartDate);
+  // }
+  // console.log('changed', currentChangedAchievement[0].achievementStartDate);
   return (
     <>
       <Box>
@@ -122,9 +138,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           />
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
             {achievementObj.achievementName}
-            {/* {achievementObj.hasError ? <AchievementListItemErrorText /> : null} */}
+            {achievementObj.hasError ? <AchievementListItemErrorText /> : null}
           </ListItemText>
-
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (
               <>
@@ -138,7 +153,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       marginRight: '50px',
                     }}
                   >
-                    {dayjs(achievementStartDate).format('MMM, YYYY')}
+                    {achievementObj.achievementStartDate !== undefined
+                      ? dayjs(achievementObj.achievementStartDate).format('MMM, YYYY')
+                      : achievementStartDate !== undefined || achievementStartDate !== null
+                      ? dayjs(achievementStartDate).format('MMM, YYYY') + { achievementObj }
+                      : 'abu netiko'}
                     {/* {achievementObj.hasError ? <AchievementListItemErrorText /> : null} */}
                   </ListItemText>
                   {endDateExists && achievementEndDate !== null && achievementEndDate !== undefined && (
@@ -180,10 +199,18 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     // disableFuture
                     // maxDate={dayjs().format('YYYY-MM-DD')}
                     // value={achievementStartDate !== undefined ? achievementStartDate : null}
+                    // ?? not nullish (null or undefined)
+                    // value={
+                    //   achievementObj !== undefined || achievementObj !== null
+                    //     ? dayjs(achievementObj.achievementStartDate)
+                    //     : dayjs(achievementStartDate)
+                    // }
                     value={dayjs(achievementStartDate)}
+                    // renderInput={(params) => <TextField {...params} sx={{ width: 240 }}/>}
                     onChange={(newValue) => {
                       console.log('start date', achievementStartDate);
                       setAchievementStartDate(dayjs(newValue).format('YYYY-MM-DD'));
+                      // achievementObj.achievementStartDate = dayjs(newValue).format('YYYY-MM-DD');
                       // console.log('start date:' + achievementStartDate);
                       // achievementObj.achievementStartDate = achievementStartDate;
                       // console.log('end Date: ' + achievementObj.achievementEndDate);

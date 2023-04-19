@@ -6,7 +6,7 @@ const AchievementListItemErrorText = () => {
     <ListItemText
       disableTypography
       sx={{ fontSize: 15, color: '#ef4349' }}
-      primary="Achievement level should be defined for the selected achievement"
+      primary="The input for the start date is required"
     />
   );
 };

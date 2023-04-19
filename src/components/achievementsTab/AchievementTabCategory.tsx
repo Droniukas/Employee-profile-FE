@@ -46,8 +46,8 @@ const AchievementTabCategory: React.FunctionComponent<Props> = (props: Props) =>
                 color: '#ef4349',
               }
             : {
-                borderColor: '#DDDDDD',
-                color: 'primary.main',
+                // borderColor: '#DDDDDD',
+                // color: 'primary.main',
               }),
         }}
       >
