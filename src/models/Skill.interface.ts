@@ -8,6 +8,9 @@ export interface Skill {
   subItemsAreSkills: boolean;
   indent: number;
   hasError?: boolean;
+  showOnFilter?: boolean;
+  selectedCount?: number;
   parentSkillId: string | null;
   language: boolean;
+  category: boolean;
 }

@@ -1,57 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import { Skill } from '../../models/Skill.interface';
 import { SkillsService } from '../../services/skills.service';
 import { setChangedSkills } from '../../state/changedSkills';
-import { setLoading } from '../../state/loading';
 import { triggerOnCancel } from '../../state/onCancel';
 import { setSkillsTabState } from '../../state/skillsTabState';
 import store from '../../store/store';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
+import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
 
 const SkillsTabData = () => {
-  const [skillDataArr, setSkillDataArr] = useState<Array<Skill>>([]);
+  const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
   const skillsService = new SkillsService();
+  const { filter } = useParams();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchAndFilterSkillsData();
+  }, [filter]);
 
-  const fetchData = async () => {
-    dispatch(setLoading(true));
-    const response: Array<Skill> = await skillsService.fetchSkillData();
-    console.log(
-      response.filter((obj) => obj.skillName === 'User Journey Map'),
-      'from fetch',
-    );
-    setSkillDataArr(response);
-    dispatch(setLoading(false));
+  const fetchAndFilterSkillsData = async () => {
+    const response: Skill[] = await skillsService.fetchSkillsData();
+    setSkillsData([...getFilteredSkillsData(getSkillsDataWithCount(response), filter)]);
   };
 
-  const setErrorForSkills = (childObj: ChangedSkill | Skill) => {
-    const skillWithError = skillDataArr.find((obj) => obj.skillId === childObj.skillId);
+  const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {
+    const skillWithError = skillsData.find((skill) => skill.skillId === childSkill.skillId);
     if (skillWithError === undefined) throw new Error('undefined object...');
     skillWithError.hasError = true;
-    const parentObjs = skillDataArr.filter((parentObj) => parentObj.skillId === skillWithError.parentSkillId);
-    parentObjs.forEach((obj) => {
-      setErrorForSkills(obj);
+    const parentSkills = skillsData.filter((parentSkill) => parentSkill.skillId === skillWithError.parentSkillId);
+    parentSkills.forEach((skill) => {
+      setErrorForSkills(skill);
     });
   };
 
   const hasErrors = () => {
     const changedSkills = store.getState().changedSkills.value;
-    skillDataArr.forEach((obj) => (obj.hasError = false));
-    const unselectedLevelSkills = changedSkills.filter((obj) => obj.skillLevel === SkillLevel.NONE);
+    skillsData.forEach((skill) => (skill.hasError = false));
+    const unselectedLevelSkills = changedSkills.filter((changedSkill) => changedSkill.skillLevel === SkillLevel.NONE);
     if (unselectedLevelSkills.length > 0) {
-      unselectedLevelSkills.forEach((objWithError) => {
-        setErrorForSkills(objWithError);
+      unselectedLevelSkills.forEach((changedSkillWithError) => {
+        setErrorForSkills(changedSkillWithError);
       });
-      setSkillDataArr([...skillDataArr]);
+      setSkillsData([...skillsData]);
       return true;
     }
   };
@@ -59,15 +55,15 @@ const SkillsTabData = () => {
   const handleSave = async () => {
     const changedSkills = store.getState().changedSkills.value;
     if (hasErrors()) return;
-    await skillsService.updateEmployeeSkill(changedSkills);
-    await fetchData();
+    await skillsService.updateEmployeeSkills(changedSkills);
+    await fetchAndFilterSkillsData();
     dispatch(setSkillsTabState({}));
     dispatch(setChangedSkills([]));
   };
 
   const handleCancel = async () => {
-    skillDataArr.forEach((obj) => (obj.hasError = false));
-    await fetchData();
+    skillsData.forEach((skill) => (skill.hasError = false));
+    await fetchAndFilterSkillsData();
     dispatch(setChangedSkills([]));
     dispatch(setSkillsTabState({}));
     dispatch(triggerOnCancel({}));
@@ -75,17 +71,11 @@ const SkillsTabData = () => {
 
   return (
     <>
-      {skillDataArr ? (
-        <SkillsTab skillDataArray={skillDataArr} saveFunction={handleSave} cancelFunction={handleCancel} />
+      {skillsData ? (
+        <SkillsTab skillsData={skillsData} saveFunction={handleSave} cancelFunction={handleCancel} />
       ) : null}
     </>
   );
 };
 
 export default SkillsTabData;
-
-// base64 error
-// lag because of redux
-// not being redirected to the login page every time (access tokens or something)
-// kai save paspauzdiu nereikia, kai cancel pasapudziu reikia
-// after making sure that you can use store.getState() remove the unneccesary rerendering while changing the SkillsTabState state

@@ -7,30 +7,30 @@ import { updateChangedSkill } from '../../../state/changedSkills';
 import { OnCancelRoot, ViewStateRoot } from '../../../store/types';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';
+import { mapSkillLevelToTooltip } from '../utils';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
-import mapSkillLevelToTooltip from './utils';
 
 type Props = {
-  skillObj: Skill;
+  skill: Skill;
 };
 
 const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
-  const { skillObj } = props;
+  const { skill } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
 
   useEffect(() => {
-    setChecked(skillObj.checked);
-    skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);
-  }, [skillObj.checked, skillObj.skillLevel]);
+    setChecked(skill.checked);
+    skill.skillLevel !== null ? setSkillLevel(skill.skillLevel) : setSkillLevel(SkillLevel.NONE);
+  }, [skill.checked, skill.skillLevel]);
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
   useEffect(() => {
-    setChecked(skillObj.checked);
-    skillObj.skillLevel !== null ? setSkillLevel(skillObj.skillLevel) : setSkillLevel(SkillLevel.NONE);
+    setChecked(skill.checked);
+    skill.skillLevel !== null ? setSkillLevel(skill.skillLevel) : setSkillLevel(SkillLevel.NONE);
   }, [onCancel]);
 
   const checkboxColor = viewState == SkillsTabState.VIEW_STATE ? 'adaec3' : 'primary.main';
@@ -42,8 +42,8 @@ const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
     !isChecked
       ? dispatch(
           updateChangedSkill({
-            skillId: skillObj.skillId,
-            skillName: skillObj.skillName,
+            skillId: skill.skillId,
+            skillName: skill.skillName,
             checked: true,
             skillLevel: skillLevel,
             employeeId: process.env.REACT_APP_TEMP_USER_ID,
@@ -51,8 +51,8 @@ const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
         )
       : dispatch(
           updateChangedSkill({
-            skillId: skillObj.skillId,
-            skillName: skillObj.skillName,
+            skillId: skill.skillId,
+            skillName: skill.skillName,
             checked: false,
             skillLevel: null,
             employeeId: process.env.REACT_APP_TEMP_USER_ID,
@@ -84,9 +84,11 @@ const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
             }
             label=""
           />
-          <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
-            {skillObj.skillName}
-            {skillObj.hasError ? <SkillListItemErrorText /> : null}
+          <ListItemText
+            sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main', float: 'top' }}
+          >
+            {skill.skillName}
+            {skill.hasError ? <SkillListItemErrorText /> : null}
           </ListItemText>
           {viewState === SkillsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -98,7 +100,7 @@ const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
               <SkillLevelDropdownList
                 skillLevel={skillLevel}
                 setSkillLevel={setSkillLevel}
-                skillObj={skillObj}
+                currentSkill={skill}
                 tooltipText={tooltipText}
               />
             ) : null

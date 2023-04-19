@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { setSkillsTabState } from '../../state/skillsTabState';
 import { ViewStateRoot } from '../../store/types';
@@ -21,12 +22,14 @@ const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
   };
 
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
+  const navigate = useNavigate();
   return (
     <>
       {viewState === SkillsTabState.VIEW_STATE && (
         <Button
           variant={StyleVariants.CONTAINED}
           onClick={() => {
+            navigate('/skills/all');
             changeView(dispatch);
           }}
         >
@@ -38,7 +41,7 @@ const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
           <Button variant={StyleVariants.GREY} onClick={cancelFunction}>
             Cancel
           </Button>
-          <Button variant={StyleVariants.CONTAINED} onClick={saveFunction}>
+          <Button sx={{ marginLeft: '10px' }} variant={StyleVariants.CONTAINED} onClick={saveFunction}>
             Save
           </Button>
         </>

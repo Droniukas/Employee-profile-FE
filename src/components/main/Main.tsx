@@ -7,6 +7,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
+import { SkillsTabFilter } from '../enums/SkillsTabFilter';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import { ROUTES } from '../routes/routes';
@@ -40,6 +41,8 @@ const Main = () => {
     setValue(newValue);
   };
 
+  const [skillsTabFilterURL, setSkillsTabFilterURL] = useState<SkillsTabFilter>(SkillsTabFilter.MY_SKILLS_URL);
+
   return (
     <>
       {results && <ProfileInfo results={results} />}
@@ -47,43 +50,30 @@ const Main = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
-          <Tabs value={location.pathname} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
-            <Tab label="Skills" value={ROUTES.SKILLS} to={ROUTES.SKILLS} component={Link} {...getIndexedProps(0)} />
+          <Tabs value={value} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
             <Tab
-              label="Achievements"
-              value={ROUTES.ACHIEVEMENTS}
-              to={ROUTES.ACHIEVEMENTS}
+              label="Skills"
+              to={ROUTES.SKILLS + '/' + skillsTabFilterURL}
               component={Link}
-              {...getIndexedProps(1)}
+              {...getIndexedProps(0)}
             />
-            <Tab
-              label="My projects"
-              value={ROUTES.MY_PROJECTS}
-              to={ROUTES.MY_PROJECTS}
-              component={Link}
-              {...getIndexedProps(2)}
-            />
+            <Tab label="Achievements" to={ROUTES.ACHIEVEMENTS} component={Link} {...getIndexedProps(1)} />
+            <Tab label="My projects" to={ROUTES.MY_PROJECTS} component={Link} {...getIndexedProps(2)} />
             <Tab label="Search" value={ROUTES.SEARCH} to={ROUTES.SEARCH} component={Link} {...getIndexedProps(3)} />
-            <Tab
-              label="Project profiles"
-              value={ROUTES.PROJECT_PROFILES}
-              to={ROUTES.PROJECT_PROFILES}
-              component={Link}
-              {...getIndexedProps(4)}
-            />
+            <Tab label="Project profiles" to={ROUTES.PROJECT_PROFILES} component={Link} {...getIndexedProps(4)} />
           </Tabs>
         </Box>
 
         <Box display="flex" justifyContent="left" alignItems="left" paddingLeft="230px">
           <Routes>
             <Route
-              path={ROUTES.SKILLS}
+              path={ROUTES.SKILLS_FILTER}
               element={
                 <TabPanel value={value} index={0}>
                   <SkillsTabData />
                 </TabPanel>
               }
-            />
+            ></Route>
 
             <Route
               path={ROUTES.ACHIEVEMENTS}

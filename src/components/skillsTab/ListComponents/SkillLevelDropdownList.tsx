@@ -6,18 +6,18 @@ import { useDispatch } from 'react-redux';
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../state/changedSkills';
 import { SkillLevel } from '../../enums/SkillLevel';
+import { mapSkillLevelToTooltip } from '../utils';
 import SkillLevelDropdownListItem from './SkillLevelDropdownListItem';
-import mapSkillLevelToTooltip from './utils';
 
 type Props = {
   skillLevel: SkillLevel | null;
   setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>;
-  skillObj: Skill;
+  currentSkill: Skill;
   tooltipText: string;
 };
 
 const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) => {
-  const { setSkillLevel, skillLevel, skillObj, tooltipText } = props;
+  const { setSkillLevel, skillLevel, currentSkill, tooltipText } = props;
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -29,8 +29,8 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
     setSkillLevel(selectedSkill);
     dispatch(
       updateChangedSkill({
-        skillId: skillObj.skillId,
-        skillName: skillObj.skillName,
+        skillId: currentSkill.skillId,
+        skillName: currentSkill.skillName,
         checked: true,
         skillLevel: selectedSkill,
         employeeId: process.env.REACT_APP_TEMP_USER_ID,
@@ -38,7 +38,7 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
     );
   };
 
-  const levelArr = skillObj.language
+  const currentSkillLevels = currentSkill.language
     ? [SkillLevel.A1, SkillLevel.A2, SkillLevel.B1, SkillLevel.B2, SkillLevel.C1, SkillLevel.C2, SkillLevel.NATIVE]
     : [SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT];
 
@@ -48,10 +48,11 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
         sx={{
           maxWidth: 150,
           marginRight: 5,
-          marginBottom: 0,
+          marginBottom: '10px',
+          marginTop: '10px',
           border: 1,
           width: '50%',
-          ...(skillObj.hasError
+          ...(currentSkill.hasError
             ? {
                 backgroundColor: '#ffefef',
                 color: '#ef4349',
@@ -71,7 +72,7 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
         </Tooltip>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding sx={{ margin: 0 }}>
-            {levelArr.map((skillLevelName) => {
+            {currentSkillLevels.map((skillLevelName) => {
               const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
 
               const handleSkillSelection = () => {
@@ -80,7 +81,6 @@ const SkillLevelDropdownList: React.FunctionComponent<Props> = (props: Props) =>
                 onDropdownChange(skillLevelName);
               };
 
-              if (skillLevelName === skillLevel) return null;
               return (
                 <SkillLevelDropdownListItem
                   onSelection={handleSkillSelection}
