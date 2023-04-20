@@ -2,8 +2,8 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 
-import AchievementListItem from './ListComponents/AchievementListItem';
 import { Achievement } from '../../models/Achievement.interface';
+import AchievementListItem from './ListComponents/AchievementListItem';
 
 type Props = {
   currentObj: Achievement;

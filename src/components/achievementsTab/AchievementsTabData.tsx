@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { Achievement } from '../../models/Achievement.interface';
+import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 import { AchievementsService } from '../../services/achievements.service';
 import { setAchievementsTabState } from '../../states/achievementsTabState';
 import { setChangedAchievements } from '../../states/changedAchievements';
@@ -8,8 +10,6 @@ import { setLoading } from '../../states/loading';
 import { triggerOnCancel } from '../../states/onCancel';
 import { ChangedAchievementsDataRoot } from '../../store/achievementTypes';
 import AchievementsTab from './AchievementsTab';
-import { Achievement } from '../../models/Achievement.interface';
-import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 
 const AchievementsTabData = () => {
   const [achievementDataArr, setAchievementDataArr] = useState<Array<Achievement>>([]);

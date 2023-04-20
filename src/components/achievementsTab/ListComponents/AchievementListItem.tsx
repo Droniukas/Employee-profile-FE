@@ -5,10 +5,10 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { Achievement } from '../../../models/Achievement.interface';
 import { setChangedAchievements } from '../../../states/changedAchievements';
 import { ChangedAchievementsDataRoot, OnCancelRoot, ViewStateRoot } from '../../../store/achievementTypes';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
-import { Achievement } from '../../../models/Achievement.interface';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
 import { StyledSwitch } from './StyledSwitch';
 

@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
+import { Achievement } from '../../models/Achievement.interface';
 import AchievementsTabStateButtons from './AchievementsTabStateButtons';
 import AchievementTabCategory from './AchievementTabCategory';
-import { Achievement } from '../../models/Achievement.interface';
 
 type AchievementsTabProps = {
   achievementDataArray: Achievement[];
