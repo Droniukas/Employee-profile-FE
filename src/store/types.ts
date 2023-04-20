@@ -19,12 +19,6 @@ export interface ViewStateRoot {
   };
 }
 
-export interface LoadingRoot {
-  loading: {
-    value: boolean;
-  };
-}
-
 export interface OnCancelRoot {
   onCancel: {
     value: boolean;
