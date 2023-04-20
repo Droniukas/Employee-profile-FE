@@ -27,6 +27,7 @@ type AchievementListItemProps = {
 //     .typeError('Start date is required')
 //     .required('Start Date is required'),
 // });
+let wasChange = false;
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
   const { achievementObj, showEndDate } = props;
@@ -103,6 +104,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
       ]),
     );
   };
+
+  if (wasChange) {
+    onDatePickerChange();
+    wasChange = false;
+  }
   // const tooltipText: string = mapAchievementLevelToTooltip(achievementLevel);
   // console.log(changedAchievements.filter((item) => item.id !== achievementObj.id));
   // console.log(achievementObj.checked, achievementStartDate, achievementObj.achievementStartDate);
@@ -219,9 +225,14 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       // achievementObj.achievementStartDate = achievementStartDate;
                       // console.log('end Date: ' + achievementObj.achievementEndDate);
                       // achievementObj.achievementStartDate = dayjs(newValue).format('YYYY-MM-DD');
-                      onDatePickerChange();
+                      // onDatePickerChange();
                       // console.log(achievementStartDate, 'achievementStartDate');
                       // console.log(newValue, 'newValue');
+                      wasChange = true;
+                      console.log('newValue:', dayjs(newValue).format('YYYY-MM-DD'));
+                      console.log('achievementStartDate:', dayjs(achievementStartDate).format('YYYY-MM-DD'));
+                      console.log('obj.startDate:', dayjs(achievementObj.achievementStartDate).format('YYYY-MM-DD'));
+                      console.log('changedObj.StartDate:', currentChangedAchievement[0]);
                     }}
                   />
                   <Checkbox
@@ -250,9 +261,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                             // console.log('end Date:        ' + achievementEndDate);
                             // achievementObj.achievementEndDate = achievementEndDate;
                             // console.log('object end Date: ' + achievementObj.achievementEndDate);
-                            onDatePickerChange();
-                            // console.log(achievementEndDate);
+                            // onDatePickerChange();
+                            //console.log(achievementEndDate);
                             const dayJSFormated = dayjs(newValue).format('YYYY-MM-DD');
+                            wasChange = true;
                             // console.log(dayJSFormated, 'dayJsFormated');
                           }}
                         />
