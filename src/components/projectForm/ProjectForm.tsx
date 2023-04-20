@@ -26,16 +26,15 @@ import { ProjectsService } from '../../services/projects.service';
 type ProjectFormProps = {
   onClose: (projectId?: string) => void;
   project?: Project;
-  showEndDate: boolean;
 };
 
 const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
-  const { onClose, project, showEndDate } = props;
+  const { onClose, project } = props;
 
   const projectsService = new ProjectsService();
 
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
-  const [endDateExists, setEndDateExists] = useState<boolean>(showEndDate);
+  const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
 
   let initialValues: Project = {
     id: '',
