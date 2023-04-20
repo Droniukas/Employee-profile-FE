@@ -34,7 +34,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const [achievementStartDate, setAchievementStartDate] = useState<string | null>();
   const [achievementEndDate, setAchievementEndDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
-  const [endDateExists, setEndDateExists] = useState<boolean>(achievementObj.checked);
+  const [endDateExists, setEndDateExists] = useState<boolean>(achievementObj.achievementEndDate !== null);
 
   useEffect(() => {
     setChecked(achievementObj.checked);
@@ -153,10 +153,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       marginRight: '50px',
                     }}
                   >
-                    {achievementObj.achievementStartDate !== undefined
+                    {achievementObj.achievementStartDate !== undefined && achievementObj.achievementStartDate !== null
                       ? dayjs(achievementObj.achievementStartDate).format('MMM, YYYY')
-                      : achievementStartDate !== undefined || achievementStartDate !== null
-                      ? dayjs(achievementStartDate).format('MMM, YYYY') + { achievementObj }
+                      : achievementStartDate !== undefined && achievementStartDate !== null
+                      ? dayjs(achievementStartDate).format('MMM, YYYY')
                       : 'abu netiko'}
                     {/* {achievementObj.hasError ? <AchievementListItemErrorText /> : null} */}
                   </ListItemText>
@@ -205,18 +205,23 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     //     ? dayjs(achievementObj.achievementStartDate)
                     //     : dayjs(achievementStartDate)
                     // }
-                    value={dayjs(achievementStartDate)}
+                    value={
+                      achievementObj.achievementStartDate !== null && achievementObj.achievementStartDate !== undefined
+                        ? dayjs(achievementObj.achievementStartDate)
+                        : dayjs(achievementStartDate)
+                    }
                     // renderInput={(params) => <TextField {...params} sx={{ width: 240 }}/>}
                     onChange={(newValue) => {
-                      console.log('start date', achievementStartDate);
+                      // console.log('start date', achievementStartDate);
                       setAchievementStartDate(dayjs(newValue).format('YYYY-MM-DD'));
                       // achievementObj.achievementStartDate = dayjs(newValue).format('YYYY-MM-DD');
                       // console.log('start date:' + achievementStartDate);
                       // achievementObj.achievementStartDate = achievementStartDate;
                       // console.log('end Date: ' + achievementObj.achievementEndDate);
+                      // achievementObj.achievementStartDate = dayjs(newValue).format('YYYY-MM-DD');
                       onDatePickerChange();
-                      console.log(achievementStartDate, 'achievementStartDate');
-                      console.log(newValue, 'newValue');
+                      // console.log(achievementStartDate, 'achievementStartDate');
+                      // console.log(newValue, 'newValue');
                     }}
                   />
                   <Checkbox
@@ -246,9 +251,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                             // achievementObj.achievementEndDate = achievementEndDate;
                             // console.log('object end Date: ' + achievementObj.achievementEndDate);
                             onDatePickerChange();
-                            console.log(achievementEndDate);
+                            // console.log(achievementEndDate);
                             const dayJSFormated = dayjs(newValue).format('YYYY-MM-DD');
-                            console.log(dayJSFormated, 'dayJsFormated');
+                            // console.log(dayJSFormated, 'dayJsFormated');
                           }}
                         />
                       </LocalizationProvider>
