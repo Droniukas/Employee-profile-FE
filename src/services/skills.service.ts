@@ -10,7 +10,7 @@ export class SkillsService {
   }
 
   public async updateEmployeeSkills(changedSkillsItem: ChangedSkill[]) {
-    const response = await axios.put(`${process.env.REACT_APP_API_URL}/skills/newUpdate`, {
+    const response = await axios.put(`${process.env.REACT_APP_API_URL}/skills/update`, {
       changedSkills: changedSkillsItem,
     });
     return response.data;

@@ -14,6 +14,6 @@ export class EmployeeService {
 
   public async getById(id: string) {
     const response = await axios.get(`/employee/get/${id}`, {});
-    return await response.data;
+    return response.data;
   }
 }

@@ -8,13 +8,13 @@ import SkillsTabFilterDropdown from './SkillsTabFilterDropdown';
 import SkillsTabStateButtons from './SkillsTabStateButtons';
 import { sortBySkill } from './utils';
 
-type Props = {
+type SkillsTabProps = {
   skillsData: Skill[];
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
-const SkillsTab: React.FunctionComponent<Props> = (props: Props) => {
+const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProps) => {
   const { cancelFunction, saveFunction, skillsData } = props;
   const mapData = (skills: Skill[]): ReactNode => {
     {

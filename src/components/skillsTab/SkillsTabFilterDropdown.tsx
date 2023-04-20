@@ -1,25 +1,29 @@
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { SkillsTabFilter } from '../enums/SkillsTabFilter';
 
 const SkillsTabFilterDropdown = () => {
-  const { filter } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [status, setStatus] = useState<SkillsTabFilter>(
-    filter === SkillsTabFilter.ALL_SKILLS_URL ? SkillsTabFilter.ALL_SKILLS : SkillsTabFilter.MY_SKILLS,
+    searchParams.get('filter') === SkillsTabFilter.ALL_SKILLS_URL
+      ? SkillsTabFilter.ALL_SKILLS
+      : SkillsTabFilter.MY_SKILLS,
   );
 
   useEffect(() => {
-    setStatus(filter === SkillsTabFilter.ALL_SKILLS_URL ? SkillsTabFilter.ALL_SKILLS : SkillsTabFilter.MY_SKILLS);
-  }, [filter]);
-
-  const navigate = useNavigate();
+    setStatus(
+      searchParams.get('filter') === SkillsTabFilter.ALL_SKILLS_URL
+        ? SkillsTabFilter.ALL_SKILLS
+        : SkillsTabFilter.MY_SKILLS,
+    );
+  }, [location.href]);
 
   const onFilterValueChange = (event: SelectChangeEvent) => {
     const selectedFilter = event.target.value;
-    navigate(selectedFilter === SkillsTabFilter.ALL_SKILLS ? '/skills/all' : '/skills/my');
+    setSearchParams(selectedFilter === SkillsTabFilter.ALL_SKILLS ? { filter: 'all' } : { filter: 'my' });
     setStatus(event.target.value as SkillsTabFilter);
   };
 

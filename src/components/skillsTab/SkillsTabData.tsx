@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import { Skill } from '../../models/Skill.interface';
@@ -16,17 +16,17 @@ import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
 const SkillsTabData = () => {
   const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
   const skillsService = new SkillsService();
-  const { filter } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     fetchAndFilterSkillsData();
-  }, [filter]);
+  }, [location.href]);
 
   const fetchAndFilterSkillsData = async () => {
     const response: Skill[] = await skillsService.fetchSkillsData();
-    setSkillsData([...getFilteredSkillsData(getSkillsDataWithCount(response), filter)]);
+    setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
   };
 
   const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {

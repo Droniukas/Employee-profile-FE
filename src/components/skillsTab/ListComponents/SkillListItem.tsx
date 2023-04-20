@@ -12,11 +12,11 @@ import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
 
-type Props = {
+type SkillListItemProps = {
   skill: Skill;
 };
 
-const SkillListItem: React.FunctionComponent<Props> = (props: Props) => {
+const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: SkillListItemProps) => {
   const { skill } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);

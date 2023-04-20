@@ -33,7 +33,7 @@ export const sortBySkill = (a: Skill, b: Skill) => {
   return 0;
 };
 
-export const getFilteredSkillsData = (skillsData: Skill[], filter: string | undefined) => {
+export const getFilteredSkillsData = (skillsData: Skill[], filter: string | undefined | null) => {
   if (filter === SkillsTabFilter.MY_SKILLS_URL) {
     skillsData.forEach((skill) => {
       if (!skill.category) {

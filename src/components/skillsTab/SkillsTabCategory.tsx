@@ -6,12 +6,12 @@ import { Skill } from '../../models/Skill.interface';
 import SkillListItem from './ListComponents/SkillListItem';
 import { sortBySkill } from './utils';
 
-type Props = {
+type SkillsTabCategoryProps = {
   currentSkill: Skill;
   skillsData: Skill[];
   mapData: (skillsData: Skill[]) => ReactNode;
 };
-const SkillsTabCategory: React.FunctionComponent<Props> = (props: Props) => {
+const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (props: SkillsTabCategoryProps) => {
   const { currentSkill, mapData, skillsData } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 

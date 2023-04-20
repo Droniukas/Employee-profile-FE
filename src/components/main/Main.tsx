@@ -2,12 +2,11 @@ import './Main.scss';
 
 import { Box, CssBaseline, Tab, Tabs, ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
-import { SkillsTabFilter } from '../enums/SkillsTabFilter';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import { ROUTES } from '../routes/routes';
@@ -41,7 +40,7 @@ const Main = () => {
     setValue(newValue);
   };
 
-  const [skillsTabFilterURL, setSkillsTabFilterURL] = useState<SkillsTabFilter>(SkillsTabFilter.MY_SKILLS_URL);
+  const [filterSearchParams, setFilterSearchParams] = useSearchParams();
 
   return (
     <>
@@ -55,7 +54,10 @@ const Main = () => {
               <Tabs value={value} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
                 <Tab
                   label="Skills"
-                  to={ROUTES.SKILLS + '/' + skillsTabFilterURL}
+                  to={
+                    ROUTES.SKILLS +
+                    `?filter=${filterSearchParams.get('filter') ? filterSearchParams.get('filter') : 'my'}`
+                  }
                   component={Link}
                   {...getIndexedProps(0)}
                 />
@@ -80,7 +82,7 @@ const Main = () => {
               <Routes>
                 <Route
                   index
-                  path={ROUTES.SKILLS_FILTER}
+                  path={ROUTES.SKILLS}
                   element={
                     <TabPanel value={value} index={0}>
                       <SkillsTabData />

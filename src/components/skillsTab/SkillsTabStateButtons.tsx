@@ -2,19 +2,19 @@ import { Button } from '@mui/material';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { setSkillsTabState } from '../../states/skillsTabState';
 import { ViewStateRoot } from '../../store/types';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 
-type Props = {
+type SkillsTabStateButtonsProps = {
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
-const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
+const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps> = (props) => {
   const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {
@@ -23,13 +23,15 @@ const SkillsTabStateButtons: React.FunctionComponent<Props> = (props) => {
 
   const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   return (
     <>
       {viewState === SkillsTabState.VIEW_STATE && (
         <Button
           variant={StyleVariants.CONTAINED}
           onClick={() => {
-            navigate('/skills/all');
+            navigate('/skills');
+            setSearchParams({ filter: 'all' });
             changeView(dispatch);
           }}
         >
