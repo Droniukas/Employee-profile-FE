@@ -35,7 +35,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const [achievementStartDate, setAchievementStartDate] = useState<string | null>();
   const [achievementEndDate, setAchievementEndDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
-  const [endDateExists, setEndDateExists] = useState<boolean>(achievementObj.achievementEndDate !== null);
 
   useEffect(() => {
     setChecked(achievementObj.checked);
@@ -46,6 +45,17 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     // console.log('end objekto Date: ' + achievementObj.achievementEndDate);
     // console.log('start objekto Date: ' + achievementObj.achievementStartDate);
   }, [achievementObj.checked, achievementObj.achievementStartDate, achievementObj.achievementEndDate]);
+
+  // if (achievementObj.checked) {
+  //   console.log(dayjs(achievementEndDate).format('MMM, YYYY'));
+  // }
+  const [endDateExists, setEndDateExists] = useState<boolean>(
+    (achievementEndDate !== undefined && achievementEndDate !== null) ||
+      (achievementObj.achievementStartDate !== null && achievementObj.achievementStartDate !== undefined),
+  );
+  // if (!endDateExists) {
+  //   setAchievementEndDate(null);
+  // }
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
   useEffect(() => {
@@ -129,7 +139,16 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                 <StyledSwitch
                   disabled={viewState === AchievementsTabState.VIEW_STATE}
                   checked={isChecked}
-                  onChange={onSwitchChange}
+                  onChange={() => {
+                    onSwitchChange();
+                    // endDateExists ? setEndDateExists(false) : setEndDateExists(true);
+                    if (achievementStartDate !== null) {
+                      setAchievementStartDate(null);
+                    }
+                    if (achievementEndDate !== null) {
+                      setAchievementEndDate(null);
+                    }
+                  }}
                   sx={{
                     m: 1,
                     '& .MuiSwitch-track': {
@@ -166,7 +185,20 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       : 'abu netiko'}
                     {/* {achievementObj.hasError ? <AchievementListItemErrorText /> : null} */}
                   </ListItemText>
-                  {endDateExists && achievementEndDate !== null && achievementEndDate !== undefined && (
+                  {endDateExists &&
+                  achievementObj.achievementEndDate !== null &&
+                  achievementObj.achievementEndDate !== undefined ? (
+                    <ListItemText
+                      sx={{
+                        fontWeight: '400',
+                        marginRight: '50px',
+                        color: '#666666',
+                        display: 'inline-block',
+                      }}
+                    >
+                      Certificate: {dayjs(achievementObj.achievementEndDate).format('MMM YYYY')}
+                    </ListItemText>
+                  ) : endDateExists && achievementEndDate !== null && achievementEndDate !== undefined ? (
                     <ListItemText
                       sx={{
                         fontWeight: '400',
@@ -177,6 +209,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     >
                       Certificate: {dayjs(achievementEndDate).format('MMM YYYY')}
                     </ListItemText>
+                  ) : (
+                    ''
                   )}
                 </Box>
               </>
@@ -238,8 +272,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                   <Checkbox
                     checked={endDateExists}
                     onChange={(e) => {
+                      endDateExists ? setAchievementEndDate(null) : {};
+                      // endDateExists ? setEndDateExists(false) : setEndDateExists(true);
                       setEndDateExists(e.target.checked);
-                      e.preventDefault();
+                      wasChange = true;
+                      // e.preventDefault();
                       // setFieldValue('endDate', '');
                     }}
                     sx={{ paddingRight: 1 }}
@@ -255,6 +292,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           // minDate={dayjs(achievementObj.achievementStartDate)}
                           // value={endDateExists ? dayjs(achievementEndDate) : null}
                           // disablePast
+                          minDate={dayjs(achievementStartDate)}
+                          maxDate={dayjs(achievementStartDate).add(1, 'year')}
                           value={endDateExists ? dayjs(achievementEndDate) : dayjs(achievementStartDate)}
                           onChange={(newValue) => {
                             setAchievementEndDate(dayjs(newValue).format('YYYY-MM-DD'));
@@ -262,9 +301,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                             // achievementObj.achievementEndDate = achievementEndDate;
                             // console.log('object end Date: ' + achievementObj.achievementEndDate);
                             // onDatePickerChange();
-                            //console.log(achievementEndDate);
-                            const dayJSFormated = dayjs(newValue).format('YYYY-MM-DD');
+                            // console.log(achievementEndDate);
+                            // const dayJSFormated = dayjs(newValue).format('YYYY-MM-DD');
                             wasChange = true;
+                            setEndDateExists(true);
                             // console.log(dayJSFormated, 'dayJsFormated');
                           }}
                         />

@@ -43,11 +43,11 @@ const AchievementTabCategory: React.FunctionComponent<Props> = (props: Props) =>
           ...(currentObj.hasError
             ? {
                 borderColor: '#ef4349',
-                color: '#ef4349',
+                // color: '#ef4349',
               }
             : {
-                // borderColor: '#DDDDDD',
-                // color: 'primary.main',
+                borderColor: '#DDDDDD',
+                color: 'primary.main',
               }),
         }}
       >
