@@ -2,7 +2,7 @@ import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemTex
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setChangedSkills } from '../../../state/changedSkills';
+import { setChangedSkills } from '../../../states/changedSkills';
 import { ChangedSkillsDataRoot, OnCancelRoot, ViewStateRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { SkillsTabState } from '../models/enums/SkillsTabState';

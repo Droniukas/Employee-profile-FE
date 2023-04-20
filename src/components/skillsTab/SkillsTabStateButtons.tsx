@@ -4,7 +4,7 @@ import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { StyleVariants } from '../../models/StyleVariants';
-import { setSkillsTabState } from '../../state/skillsTabState';
+import { setSkillsTabState } from '../../states/skillsTabState';
 import { ViewStateRoot } from '../../store/types';
 import { SkillsTabState } from './models/enums/SkillsTabState';
 

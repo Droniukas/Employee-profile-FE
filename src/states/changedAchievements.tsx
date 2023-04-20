@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ChangedAchievement } from '../components/achievementsTab/models/interfaces/ChangedAchievement.interface';
+import { ChangedAchievement } from '../models/ChangedAchievement.interface';
 
 const initStateValue: ChangedAchievement[] = [];
 

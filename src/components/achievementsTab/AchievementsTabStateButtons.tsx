@@ -4,9 +4,9 @@ import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { StyleVariants } from '../../models/StyleVariants';
-import { setAchievementsTabState } from '../../state/achievementsTabState';
+import { setAchievementsTabState } from '../../states/achievementsTabState';
 import { ViewStateRoot } from '../../store/achievementTypes';
-import { AchievementsTabState } from './models/enums/AchievementsTabState';
+import { AchievementsTabState } from '../enums/AchievementsTabState';
 
 type Props = {
   saveFunction: () => void;

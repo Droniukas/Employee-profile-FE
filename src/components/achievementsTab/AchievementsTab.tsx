@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import AchievementsTabStateButtons from './AchievementsTabStateButtons';
 import AchievementTabCategory from './AchievementTabCategory';
-import { Achievement } from './models/interfaces/Achievement.interface';
+import { Achievement } from '../../models/Achievement.interface';
 
 type AchievementsTabProps = {
   achievementDataArray: Achievement[];

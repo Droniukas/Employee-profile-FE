@@ -3,7 +3,7 @@ import { Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/mat
 import React, { ReactNode, useState } from 'react';
 
 import AchievementListItem from './ListComponents/AchievementListItem';
-import { Achievement } from './models/interfaces/Achievement.interface';
+import { Achievement } from '../../models/Achievement.interface';
 
 type Props = {
   currentObj: Achievement;
@@ -28,7 +28,9 @@ const AchievementTabCategory: React.FunctionComponent<Props> = (props: Props) =>
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const mapAchievements = (arr: Achievement[]) => {
-    return arr.map((obj: Achievement) => <AchievementListItem achievementObj={obj} showEndDate={true} key={obj.id} />);
+    return arr.map((obj: Achievement) => (
+      <AchievementListItem achievementObject={obj} showEndDate={true} key={obj.id} />
+    ));
   };
 
   return (
@@ -43,7 +45,6 @@ const AchievementTabCategory: React.FunctionComponent<Props> = (props: Props) =>
           ...(currentObj.hasError
             ? {
                 borderColor: '#ef4349',
-                // color: '#ef4349',
               }
             : {
                 borderColor: '#DDDDDD',

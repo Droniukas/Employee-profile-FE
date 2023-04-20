@@ -1,5 +1,4 @@
 import { ListItemText } from '@mui/material';
-import React from 'react';
 
 const AchievementListItemErrorText = () => {
   return (

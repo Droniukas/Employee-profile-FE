@@ -2,8 +2,8 @@ export interface Achievement {
   id: string;
   achievementName: string;
   checked: boolean;
-  achievementStartDate: string | null;
-  achievementEndDate: string | null;
+  issueDate: string | null;
+  expiringDate: string | null;
   subItemsAreAchievements: boolean;
   indent: number;
   hasError?: boolean;

@@ -1,7 +1,7 @@
 export interface ChangedAchievement {
   id: string;
   checked: boolean;
-  achievementStartDate: string;
-  achievementEndDate: string;
+  issueDate: string;
+  expiringDate: string;
   achievementName: string;
 }

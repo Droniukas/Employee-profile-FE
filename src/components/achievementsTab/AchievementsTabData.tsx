@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AchievementsService } from '../../services/achievements.service';
-import { setAchievementsTabState } from '../../state/achievementsTabState';
-import { setChangedAchievements } from '../../state/changedAchievements';
-import { setLoading } from '../../state/loading';
-import { triggerOnCancel } from '../../state/onCancel';
+import { setAchievementsTabState } from '../../states/achievementsTabState';
+import { setChangedAchievements } from '../../states/changedAchievements';
+import { setLoading } from '../../states/loading';
+import { triggerOnCancel } from '../../states/onCancel';
 import { ChangedAchievementsDataRoot } from '../../store/achievementTypes';
 import AchievementsTab from './AchievementsTab';
-// import { AchievementLevel } from './models/enums/AchievementLevel';
-import { Achievement } from './models/interfaces/Achievement.interface';
-import { ChangedAchievement } from './models/interfaces/ChangedAchievement.interface';
+import { Achievement } from '../../models/Achievement.interface';
+import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 
 const AchievementsTabData = () => {
   const [achievementDataArr, setAchievementDataArr] = useState<Array<Achievement>>([]);
@@ -42,11 +41,11 @@ const AchievementsTabData = () => {
 
   const hasErrors = () => {
     achievementDataArr.forEach((obj) => (obj.hasError = false));
-    const unselectedStartDateAchievements = changedAchievements.filter(
-      (obj) => (obj.achievementStartDate === null || obj.achievementStartDate === undefined) && obj.checked === true,
+    const unselectedIssueDateAchievements = changedAchievements.filter(
+      (obj) => (obj.issueDate === null || obj.issueDate === undefined) && obj.checked === true,
     );
-    if (unselectedStartDateAchievements.length > 0) {
-      unselectedStartDateAchievements.forEach((objWithError) => {
+    if (unselectedIssueDateAchievements.length > 0) {
+      unselectedIssueDateAchievements.forEach((objWithError) => {
         setErrorForAchievements(objWithError);
       });
       setAchievementDataArr([...achievementDataArr]);

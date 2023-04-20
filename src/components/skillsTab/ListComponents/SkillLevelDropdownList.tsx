@@ -3,7 +3,7 @@ import { Collapse, List, ListItemButton, ListItemText, Tooltip } from '@mui/mate
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setChangedSkills } from '../../../state/changedSkills';
+import { setChangedSkills } from '../../../states/changedSkills';
 import { ChangedSkillsDataRoot } from '../../../store/types';
 import { SkillLevel } from '../models/enums/SkillLevel';
 import { Skill } from '../models/interfaces/Skill.interface';

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { AchievementsTabState } from '../components/achievementsTab/models/enums/AchievementsTabState';
+import { AchievementsTabState } from '../components/enums/AchievementsTabState';
 
 const initStateValue: AchievementsTabState = AchievementsTabState.VIEW_STATE;
 
