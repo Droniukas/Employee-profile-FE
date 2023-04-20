@@ -17,7 +17,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
@@ -64,6 +64,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     }
   };
 
+  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
+    useFormik({
+      initialValues,
+      onSubmit: handleFormSubmit,
+      validationSchema: projectSchema,
+    });
+
   const handleAddEmployeesFormClose = () => {
     setShowAddEmployeesForm(false);
   };
@@ -72,21 +79,27 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     setFieldValue('projectEmployees', [...values.projectEmployees, ...newProjectEmployees]);
   };
 
-  const updateProjectEmployee = (updatedProjectEmployee: ProjectEmployee) => {
-    setFieldValue(
-      'projectEmployees',
-      values.projectEmployees.map((projectEmployee: ProjectEmployee) =>
-        projectEmployee.id === updatedProjectEmployee.id ? updatedProjectEmployee : projectEmployee,
-      ),
-    );
-  };
+  const updateProjectEmployee = useCallback(
+    (updatedProjectEmployee: ProjectEmployee) => {
+      setFieldValue(
+        'projectEmployees',
+        values.projectEmployees.map((projectEmployee: ProjectEmployee) =>
+          projectEmployee.id === updatedProjectEmployee.id ? updatedProjectEmployee : projectEmployee,
+        ),
+      );
+    },
+    [values.projectEmployees, setFieldValue],
+  );
 
-  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: handleFormSubmit,
-      validationSchema: projectSchema,
-    });
+  const ProjectEmployeeEditListMemo = useMemo(
+    () => (
+      <ProjectEmployeeEditList
+        projectEmployees={values.projectEmployees}
+        updateProjectEmployee={updateProjectEmployee}
+      />
+    ),
+    [values.projectEmployees, updateProjectEmployee],
+  );
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
@@ -253,10 +266,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
 
           {values.projectEmployees.length > 0 ? (
-            <ProjectEmployeeEditList
-              projectEmployees={values.projectEmployees}
-              updateProjectEmployee={updateProjectEmployee}
-            />
+            ProjectEmployeeEditListMemo
           ) : (
             <Box
               component="div"
