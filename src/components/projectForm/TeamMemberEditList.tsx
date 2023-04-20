@@ -19,16 +19,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
-import TeamMember from '../../models/TeamMember.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import StatusChip from '../findEmployee/StatusChip';
 
 type TeamMemberEditListProps = {
-  teamMembers: TeamMember[];
-  updateTeamMember: (updatedTeamMember: TeamMember) => void;
+  teamMembers: ProjectEmployee[];
+  updateTeamMember: (updatedTeamMember: ProjectEmployee) => void;
 };
 const TeamMemberEditList: React.FC<TeamMemberEditListProps> = (props: TeamMemberEditListProps) => {
   const { teamMembers, updateTeamMember } = props;
-  const [sortedTeamMembers, setSortedTeamMembers] = useState<TeamMember[]>([]);
+  const [sortedTeamMembers, setSortedTeamMembers] = useState<ProjectEmployee[]>([]);
 
   useEffect(() => {
     const sortedCopy = [...teamMembers].sort((a, b) => {
@@ -41,7 +41,7 @@ const TeamMemberEditList: React.FC<TeamMemberEditListProps> = (props: TeamMember
     setSortedTeamMembers(sortedCopy);
   }, [teamMembers]);
 
-  const handleTeamMemberStateChange = (updatedTeamMember: TeamMember) => {
+  const handleTeamMemberStateChange = (updatedTeamMember: ProjectEmployee) => {
     updateTeamMember(updatedTeamMember);
   };
 
@@ -59,8 +59,8 @@ const TeamMemberEditList: React.FC<TeamMemberEditListProps> = (props: TeamMember
 export default TeamMemberEditList;
 
 type TeamMemberEditItemProps = {
-  teamMember: TeamMember;
-  onUpdate: (updatedTeamMember: TeamMember) => void;
+  teamMember: ProjectEmployee;
+  onUpdate: (updatedTeamMember: ProjectEmployee) => void;
 };
 
 const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMemberEditItemProps) => {
@@ -73,16 +73,16 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
 
   const handleStartDateChange = (teamMemberStartDate: string) => {
     setStartDateError(null);
-    if (teamMemberStartDate > teamMember.endDate) {
+    if (teamMemberStartDate > teamMember.teamMemberEndDate) {
       onUpdate({
         ...teamMember,
-        startDate: teamMemberStartDate,
-        endDate: '',
+        teamMemberStartDate,
+        teamMemberEndDate: '',
       });
     } else {
       onUpdate({
         ...teamMember,
-        startDate: teamMemberStartDate,
+        teamMemberStartDate,
       });
     }
   };
@@ -90,13 +90,13 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
   const handleEndDateChange = (teamMemberEndDate: string) => {
     onUpdate({
       ...teamMember,
-      endDate: teamMemberEndDate,
+      teamMemberEndDate,
     });
   };
 
   useEffect(() => {
-    teamMember.startDate ? setStartDateError(null) : setStartDateError('Field is required');
-  }, [teamMember.startDate]);
+    teamMember.teamMemberStartDate ? setStartDateError(null) : setStartDateError('Field is required');
+  }, [teamMember.teamMemberStartDate]);
 
   return (
     <>
@@ -141,7 +141,7 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
                 <DatePicker
                   sx={{ width: 170 }}
                   format="YYYY/MM/DD"
-                  value={dayjs(teamMember.startDate)}
+                  value={dayjs(teamMember.teamMemberStartDate)}
                   onChange={(newValue) => {
                     if (newValue === null) return;
                     handleStartDateChange(dayjs(newValue).toISOString());
@@ -160,8 +160,8 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
                 <DatePicker
                   sx={{ width: 170 }}
                   format="YYYY/MM/DD"
-                  minDate={dayjs(teamMember.startDate)}
-                  value={teamMember.endDate ? dayjs(teamMember.endDate) : null}
+                  minDate={dayjs(teamMember.teamMemberStartDate)}
+                  value={teamMember.teamMemberEndDate ? dayjs(teamMember.teamMemberEndDate) : null}
                   onChange={(newValue) => handleEndDateChange(dayjs(newValue).toISOString())}
                 />
               </LocalizationProvider>

@@ -1,4 +1,4 @@
-import TeamMember from './TeamMember.interface';
+import ProjectEmployee from './ProjectEmployee.interface';
 
 interface Project {
   id: string;
@@ -6,7 +6,7 @@ interface Project {
   startDate: string;
   endDate: string;
   description: string;
-  teamMembers: TeamMember[];
+  projectEmployees: ProjectEmployee[];
   status: string;
 }
 
