@@ -6,17 +6,17 @@ import Employee from '../../models/Employee.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeService } from '../../services/employee.service';
 import SearchInput from '../inputs/SearchInput';
-import TeamMemberAddList from './TeamMemberAddList';
+import ProjectEmployeeAddList from './ProjectEmployeeAddList';
 
-type TeamMemberAddFormProps = {
-  teamMembers: ProjectEmployee[];
-  onAdd: (newTeamMembers: ProjectEmployee[]) => void;
+type ProjectEmployeeAddFormProps = {
+  projectEmployees: ProjectEmployee[];
+  onAdd: (newProjectEmployees: ProjectEmployee[]) => void;
   onClose: () => void;
 };
 
-const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAddFormProps) => {
-  const { teamMembers, onAdd, onClose } = props;
-  const [newTeamMembers, setNewTeamMembers] = useState<ProjectEmployee[]>([]);
+const ProjectEmployeeAddForm: React.FC<ProjectEmployeeAddFormProps> = (props: ProjectEmployeeAddFormProps) => {
+  const { projectEmployees, onAdd, onClose } = props;
+  const [newProjectEmployees, setNewProjectEmployees] = useState<ProjectEmployee[]>([]);
 
   const [searchValue, setSearchValue] = useState('');
   const [searchResult, setSearchResult] = useState<Employee[]>([]);
@@ -26,23 +26,23 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
   const getNonAddedEmployees = async () => {
     const searchResult = await employeeService.searchByName(searchValue, 0, 0, false);
     const filteredResult = searchResult.employees.filter((employee: Employee) => {
-      return !teamMembers.some((teamMember) => teamMember.id === employee.id);
+      return !projectEmployees.some((projectEmployee) => projectEmployee.id === employee.id);
     });
     setSearchResult(filteredResult);
   };
 
   const handleSelectionChange = (selectedEmployees: Employee[]) => {
-    const newTeamMembers = selectedEmployees.map((employee) => ({
+    const newProjectEmployees = selectedEmployees.map((employee) => ({
       ...employee,
-      teamMemberStatus: 'ACTIVE',
-      teamMemberStartDate: '',
-      teamMemberEndDate: '',
+      projectEmployeeStatus: 'ACTIVE',
+      projectEmployeeStartDate: '',
+      projectEmployeeEndDate: '',
     }));
-    setNewTeamMembers(newTeamMembers);
+    setNewProjectEmployees(newProjectEmployees);
   };
 
   const handleAddClick = () => {
-    onAdd(newTeamMembers);
+    onAdd(newProjectEmployees);
     onClose();
   };
 
@@ -90,7 +90,7 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
             setSearchValue(value);
           }}
         />
-        <TeamMemberAddList employees={searchResult} onSelect={handleSelectionChange} />
+        <ProjectEmployeeAddList employees={searchResult} onSelect={handleSelectionChange} />
       </Box>
       <Divider variant="fullWidth" />
       <Box display={'flex'} justifyContent={'flex-end'} my={1}>
@@ -104,4 +104,4 @@ const TeamMemberAddForm: React.FC<TeamMemberAddFormProps> = (props: TeamMemberAd
     </Dialog>
   );
 };
-export default TeamMemberAddForm;
+export default ProjectEmployeeAddForm;

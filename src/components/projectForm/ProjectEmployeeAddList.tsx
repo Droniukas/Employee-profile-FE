@@ -6,12 +6,12 @@ import React, { useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 
-type TeamMemberAddListProps = {
+type ProjectEmployeeAddListProps = {
   employees: Employee[];
   onSelect: (employees: Employee[]) => void;
 };
 
-const TeamMemberAddList: React.FC<TeamMemberAddListProps> = (props: TeamMemberAddListProps) => {
+const ProjectEmployeeAddList: React.FC<ProjectEmployeeAddListProps> = (props: ProjectEmployeeAddListProps) => {
   const { employees, onSelect } = props;
   const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
 
@@ -28,7 +28,7 @@ const TeamMemberAddList: React.FC<TeamMemberAddListProps> = (props: TeamMemberAd
   return (
     <List className="member-list" sx={{ paddingTop: '16px', marginTop: 0 }}>
       {employees.map((employee, index) => (
-        <TeamMemberAddItem
+        <ProjectEmployeeAddItem
           key={index}
           employee={employee}
           selected={selectedEmployees.some((e) => e.id === employee.id)}
@@ -39,15 +39,15 @@ const TeamMemberAddList: React.FC<TeamMemberAddListProps> = (props: TeamMemberAd
   );
 };
 
-export default TeamMemberAddList;
+export default ProjectEmployeeAddList;
 
-type TeamMemberAddItemProps = {
+type ProjectEmployeeAddItemProps = {
   employee: Employee;
   selected: boolean;
   onStateChange: (selected: boolean) => void;
 };
 
-const TeamMemberAddItem: React.FC<TeamMemberAddItemProps> = (props: TeamMemberAddItemProps) => {
+const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: ProjectEmployeeAddItemProps) => {
   const { employee, selected, onStateChange } = props;
 
   return (

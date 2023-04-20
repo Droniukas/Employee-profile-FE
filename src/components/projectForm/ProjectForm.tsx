@@ -23,8 +23,8 @@ import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
-import TeamMemberAddForm from './TeamMemberAddForm';
-import TeamMemberEditList from './TeamMemberEditList';
+import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
+import ProjectEmployeeEditList from './ProjectEmployeeEditList';
 
 type ProjectFormProps = {
   onClose: (projectId?: string) => void;
@@ -69,15 +69,15 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     setShowAddEmployeesForm(false);
   };
 
-  const handleAddClick = (newTeamMembers: ProjectEmployee[]) => {
-    setFieldValue('projectEmployees', [...values.projectEmployees, ...newTeamMembers]);
+  const handleAddClick = (newProjectEmployees: ProjectEmployee[]) => {
+    setFieldValue('projectEmployees', [...values.projectEmployees, ...newProjectEmployees]);
   };
 
-  const updateTeamMember = (updatedTeamMember: ProjectEmployee) => {
+  const updateProjectEmployee = (updatedProjectEmployee: ProjectEmployee) => {
     setFieldValue(
       'projectEmployees',
-      values.projectEmployees.map((teamMember: ProjectEmployee) =>
-        teamMember.id === updatedTeamMember.id ? updatedTeamMember : teamMember,
+      values.projectEmployees.map((projectEmployee: ProjectEmployee) =>
+        projectEmployee.id === updatedProjectEmployee.id ? updatedProjectEmployee : projectEmployee,
       ),
     );
   };
@@ -254,7 +254,10 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
 
           {values.projectEmployees.length > 0 ? (
-            <TeamMemberEditList teamMembers={values.projectEmployees} updateTeamMember={updateTeamMember} />
+            <ProjectEmployeeEditList
+              projectEmployees={values.projectEmployees}
+              updateProjectEmployee={updateProjectEmployee}
+            />
           ) : (
             <Box
               component="div"
@@ -300,8 +303,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         </Box>
       </Box>
       {showAddEmployeesForm && (
-        <TeamMemberAddForm
-          teamMembers={values.projectEmployees}
+        <ProjectEmployeeAddForm
+          projectEmployees={values.projectEmployees}
           onClose={handleAddEmployeesFormClose}
           onAdd={handleAddClick}
         />

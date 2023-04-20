@@ -22,81 +22,81 @@ import React, { useEffect, useState } from 'react';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import StatusChip from '../findEmployee/StatusChip';
 
-type TeamMemberEditListProps = {
-  teamMembers: ProjectEmployee[];
-  updateTeamMember: (updatedTeamMember: ProjectEmployee) => void;
+type ProjectEmployeeEditListProps = {
+  projectEmployees: ProjectEmployee[];
+  updateProjectEmployee: (updatedProjectEmployee: ProjectEmployee) => void;
 };
-const TeamMemberEditList: React.FC<TeamMemberEditListProps> = (props: TeamMemberEditListProps) => {
-  const { teamMembers, updateTeamMember } = props;
-  const [sortedTeamMembers, setSortedTeamMembers] = useState<ProjectEmployee[]>([]);
+const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
+  const { projectEmployees, updateProjectEmployee } = props;
+  const [sortedProjectEmployees, setSortedProjectEmployees] = useState<ProjectEmployee[]>([]);
 
   useEffect(() => {
-    const sortedCopy = [...teamMembers].sort((a, b) => {
+    const sortedCopy = [...projectEmployees].sort((a, b) => {
       const nameComparison = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
       if (nameComparison !== 0) {
         return nameComparison;
       }
       return a.surname.localeCompare(b.surname, undefined, { sensitivity: 'base' });
     });
-    setSortedTeamMembers(sortedCopy);
-  }, [teamMembers]);
+    setSortedProjectEmployees(sortedCopy);
+  }, [projectEmployees]);
 
-  const handleTeamMemberStateChange = (updatedTeamMember: ProjectEmployee) => {
-    updateTeamMember(updatedTeamMember);
+  const handleProjectEmployeeStateChange = (updatedProjectEmployee: ProjectEmployee) => {
+    updateProjectEmployee(updatedProjectEmployee);
   };
 
   return (
     <List className="member-list" sx={{ marginTop: '8px' }}>
-      {sortedTeamMembers.map((teamMember, index) => (
-        <React.Fragment key={teamMember.id}>
-          <TeamMemberEditItem teamMember={teamMember} onUpdate={handleTeamMemberStateChange} />
-          {index !== sortedTeamMembers.length - 1 && <Divider variant="fullWidth" />}
+      {sortedProjectEmployees.map((projectEmployee, index) => (
+        <React.Fragment key={projectEmployee.id}>
+          <ProjectEmployeeEditItem projectEmployee={projectEmployee} onUpdate={handleProjectEmployeeStateChange} />
+          {index !== sortedProjectEmployees.length - 1 && <Divider variant="fullWidth" />}
         </React.Fragment>
       ))}
     </List>
   );
 };
-export default TeamMemberEditList;
+export default ProjectEmployeeEditList;
 
-type TeamMemberEditItemProps = {
-  teamMember: ProjectEmployee;
-  onUpdate: (updatedTeamMember: ProjectEmployee) => void;
+type ProjectEmployeeEditItemProps = {
+  projectEmployee: ProjectEmployee;
+  onUpdate: (updatedProjectEmployee: ProjectEmployee) => void;
 };
 
-const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMemberEditItemProps) => {
-  const { teamMember, onUpdate } = props;
+const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
+  const { projectEmployee, onUpdate } = props;
   const [startDateError, setStartDateError] = useState<string | null>(null);
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
   };
 
-  const handleStartDateChange = (teamMemberStartDate: string) => {
+  const handleStartDateChange = (newValue: string) => {
     setStartDateError(null);
-    if (teamMemberStartDate > teamMember.teamMemberEndDate) {
+    if (newValue > projectEmployee.projectEmployeeEndDate) {
       onUpdate({
-        ...teamMember,
-        teamMemberStartDate,
-        teamMemberEndDate: '',
+        ...projectEmployee,
+        projectEmployeeStartDate: newValue,
+        projectEmployeeEndDate: '',
       });
     } else {
       onUpdate({
-        ...teamMember,
-        teamMemberStartDate,
+        ...projectEmployee,
+        projectEmployeeStartDate: newValue,
       });
     }
   };
 
-  const handleEndDateChange = (teamMemberEndDate: string) => {
+  const handleEndDateChange = (newValue: string) => {
     onUpdate({
-      ...teamMember,
-      teamMemberEndDate,
+      ...projectEmployee,
+      projectEmployeeEndDate: newValue,
     });
   };
 
   useEffect(() => {
-    teamMember.teamMemberStartDate ? setStartDateError(null) : setStartDateError('Field is required');
-  }, [teamMember.teamMemberStartDate]);
+    projectEmployee.projectEmployeeStartDate ? setStartDateError(null) : setStartDateError('Field is required');
+  }, [projectEmployee.projectEmployeeStartDate]);
 
   return (
     <>
@@ -106,28 +106,28 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
             <Box display={'flex'} alignItems={'center'} mt={2.5}>
               <ListItemAvatar>
                 <Avatar
-                  src={`data:${teamMember.imageType};base64,${teamMember.imageBytes}`}
+                  src={`data:${projectEmployee.imageType};base64,${projectEmployee.imageBytes}`}
                   sx={{
                     border: '0.01px solid lightgrey',
-                    opacity: isInactiveOrDismissed(teamMember.status) ? 0.35 : 1,
+                    opacity: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? 0.35 : 1,
                   }}
                 />
               </ListItemAvatar>
               <ListItemText
                 primary={
-                  teamMember.middleName
-                    ? `${teamMember.name} ${teamMember.middleName} ${teamMember.surname}`
-                    : `${teamMember.name} ${teamMember.surname}`
+                  projectEmployee.middleName
+                    ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
+                    : `${projectEmployee.name} ${projectEmployee.surname}`
                 }
                 secondary={
                   <>
-                    {teamMember.title}
+                    {projectEmployee.title}
                     <span style={{ margin: '0 12px' }}>/</span>
-                    <StatusChip status={teamMember.status} />
+                    <StatusChip status={projectEmployee.projectEmployeeStatus} />
                   </>
                 }
                 sx={{
-                  color: isInactiveOrDismissed(teamMember.status) ? '#666666' : '#000048',
+                  color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : '#000048',
                 }}
               />
             </Box>
@@ -141,7 +141,7 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
                 <DatePicker
                   sx={{ width: 170 }}
                   format="YYYY/MM/DD"
-                  value={dayjs(teamMember.teamMemberStartDate)}
+                  value={dayjs(projectEmployee.projectEmployeeStartDate)}
                   onChange={(newValue) => {
                     if (newValue === null) return;
                     handleStartDateChange(dayjs(newValue).toISOString());
@@ -160,8 +160,8 @@ const TeamMemberEditItem: React.FC<TeamMemberEditItemProps> = (props: TeamMember
                 <DatePicker
                   sx={{ width: 170 }}
                   format="YYYY/MM/DD"
-                  minDate={dayjs(teamMember.teamMemberStartDate)}
-                  value={teamMember.teamMemberEndDate ? dayjs(teamMember.teamMemberEndDate) : null}
+                  minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
+                  value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
                   onChange={(newValue) => handleEndDateChange(dayjs(newValue).toISOString())}
                 />
               </LocalizationProvider>

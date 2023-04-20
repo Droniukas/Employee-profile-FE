@@ -4,12 +4,11 @@ interface ProjectEmployee {
   surname: string;
   middleName: string;
   title: string;
-  status: string;
   imageType: string;
   imageBytes: string;
-  teamMemberStartDate: string;
-  teamMemberEndDate: string;
-  teamMemberStatus: string;
+  projectEmployeeStartDate: string;
+  projectEmployeeEndDate: string;
+  projectEmployeeStatus: string;
 }
 
 export default ProjectEmployee;
