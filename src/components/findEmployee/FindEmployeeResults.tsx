@@ -10,57 +10,57 @@ import Employee from '../../models/Employee.interface';
 import StatusChip from './StatusChip';
 
 type FindEmployeeResultsProps = {
-  results: Employee[];
+  employees: Employee[];
 };
 
 const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmployeeResultsProps) => {
-  const { results } = props;
+  const { employees } = props;
 
-  if (!results) return null;
+  if (!employees) return null;
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
   };
 
-  const renderResultItem = (result: Employee) => {
+  const renderResultItem = (employee: Employee) => {
     return (
-      <>
+      <div key={employee.id}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <Avatar
-              src={`data:${result.imageType};base64,${result.imageBytes}`}
+              src={`data:${employee.imageType};base64,${employee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(result.status) ? 0.35 : 1,
+                opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
               }}
             />
           </ListItemAvatar>
           <ListItemText
             primary={
-              result.middleName
-                ? `${result.name} ${result.middleName} ${result.surname}`
-                : `${result.name} ${result.surname}`
+              employee.middleName
+                ? `${employee.name} ${employee.middleName} ${employee.surname}`
+                : `${employee.name} ${employee.surname}`
             }
             secondary={
               <>
-                {result.title}
+                {employee.title}
                 <span style={{ margin: '0 12px' }}>/</span>
-                <StatusChip status={result.status} />
+                <StatusChip status={employee.status} />
               </>
             }
             sx={{
-              color: isInactiveOrDismissed(result.status) ? '#666666' : '#000048',
+              color: isInactiveOrDismissed(employee.status) ? '#666666' : '#000048',
             }}
           />
         </ListItem>
         <Divider variant="fullWidth" component="li" />
-      </>
+      </div>
     );
   };
 
   return (
     <>
-      <List sx={{ width: '100%' }}>{results.map((result) => renderResultItem(result))}</List>
+      <List sx={{ width: '100%' }}>{employees.map((employee) => renderResultItem(employee))}</List>
     </>
   );
 };

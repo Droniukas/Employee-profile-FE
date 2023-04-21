@@ -1,17 +1,17 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { Skill } from './models/interfaces/Skill.interface';
+import { Skill } from '../../models/Skill.interface';
 import SkillsTabStateButtons from './SkillsTabStateButtons';
 import SkillTabCategory from './SkillTabCategory';
 
-type Props = {
+type SkillsTabProps = {
   skillDataArray: Skill[];
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
-const SkillsTab: React.FunctionComponent<Props> = (props: Props) => {
+const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProps) => {
   const { cancelFunction, saveFunction, skillDataArray } = props;
 
   const mapData = (dataArr: Skill[]): ReactNode => {

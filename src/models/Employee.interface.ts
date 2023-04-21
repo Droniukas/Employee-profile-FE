@@ -10,6 +10,7 @@ interface Employee {
   imageName: string;
   imageType: string;
   imageBytes: string;
+  isManager: boolean;
 }
 
 export default Employee;

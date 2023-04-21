@@ -13,7 +13,7 @@ import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
 
 const ProjectProfiles = () => {
-  const [results, setResults] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<string>('');
   const [filterTextValue, setFilterTextValue] = useState('All');
@@ -21,30 +21,30 @@ const ProjectProfiles = () => {
   const projectsService = new ProjectsService();
 
   useEffect(() => {
-    getResults();
+    getProjects();
   }, []);
 
   const rerenderProjects = () => {
-    getResults();
+    getProjects();
   };
 
-  const getResults = async () => {
-    const result = await projectsService.getAllProjects();
-    setResults(result);
+  const getProjects = async () => {
+    const projects = await projectsService.getAllProjects();
+    setProjects(projects);
   };
 
   const closeProjectForm = (projectId?: string) => {
     setOpenPopup(false);
     if (projectId) setAddedProjectId(projectId);
-    getResults();
+    getProjects();
   };
 
   const handleProjectDelete = async (id: string) => {
     await projectsService.deleteProjectById(id);
-    setResults(results.filter((project) => project.id !== id));
+    setProjects(projects.filter((project) => project.id !== id));
   };
 
-  const filteredProjectsList = results.filter((project) => {
+  const filteredProjectsList = projects.filter((project) => {
     if (filterTextValue === ProjectStatus.ONGOING) {
       return project.status === ProjectStatus.ONGOING;
     } else if (filterTextValue === ProjectStatus.FINISHED) {
@@ -145,7 +145,7 @@ const ProjectProfiles = () => {
       >
         <ProjectProfilesResult
           rerender={rerenderProjects}
-          results={filteredProjectsList}
+          projects={filteredProjectsList}
           handleProjectDelete={handleProjectDelete}
           focusProjectId={addedProjectId}
           filterStatus={filterTextValue}

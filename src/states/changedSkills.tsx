@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ChangedSkill } from '../components/skillsTab/models/interfaces/ChangedSkill.interface';
+import { ChangedSkill } from '../models/ChangedSkill.interface';
 
 const initStateValue: ChangedSkill[] = [];
 

@@ -15,7 +15,6 @@ const theme = createTheme({
       textTransform: 'none',
     },
   },
-
   palette: {
     primary: {
       main: '#000048',
