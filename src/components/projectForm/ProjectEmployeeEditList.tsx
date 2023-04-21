@@ -7,9 +7,10 @@ import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
   updateProjectEmployee: (updatedProjectEmployee: ProjectEmployee) => void;
+  deleteProjectEmployee: (projectEmployeeId: string) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const { projectEmployees, updateProjectEmployee } = props;
+  const { projectEmployees, updateProjectEmployee, deleteProjectEmployee } = props;
   const [sortedProjectEmployees, setSortedProjectEmployees] = useState<ProjectEmployee[]>([]);
 
   useEffect(() => {
@@ -31,7 +32,11 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
     <List sx={{ marginTop: '8px' }}>
       {sortedProjectEmployees.map((projectEmployee, index) => (
         <React.Fragment key={projectEmployee.id}>
-          <ProjectEmployeeEditItem projectEmployee={projectEmployee} onUpdate={handleProjectEmployeeStateChange} />
+          <ProjectEmployeeEditItem
+            projectEmployee={projectEmployee}
+            onUpdate={handleProjectEmployeeStateChange}
+            onDelete={deleteProjectEmployee}
+          />
           {index !== sortedProjectEmployees.length - 1 && <Divider variant="fullWidth" />}
         </React.Fragment>
       ))}
