@@ -2,19 +2,16 @@ import { ChangedSkill } from '../models/ChangedSkill.interface';
 import axios from './axios';
 
 export class SkillsService {
-  public async fetchSkillData() {
+  public async fetchSkillsData() {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/skills/getAllByEmployeeId/${process.env.REACT_APP_TEMP_USER_ID}`,
     );
     return response.data;
   }
 
-  public async updateEmployeeSkill(obj: ChangedSkill) {
+  public async updateEmployeeSkills(changedSkillsItem: ChangedSkill[]) {
     const response = await axios.put(`${process.env.REACT_APP_API_URL}/skills/update`, {
-      checked: obj.checked,
-      skillLevel: obj.skillLevel,
-      skillId: obj.id,
-      employeeId: process.env.REACT_APP_TEMP_USER_ID,
+      changedSkills: changedSkillsItem,
     });
     return response.data;
   }
