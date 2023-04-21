@@ -1,5 +1,3 @@
-import './ProjectForm.scss';
-
 import List from '@mui/material/List';
 import React, { useState } from 'react';
 
@@ -26,7 +24,7 @@ const ProjectEmployeeAddList: React.FC<ProjectEmployeeAddListProps> = (props: Pr
   };
 
   return (
-    <List className="member-list" sx={{ paddingTop: '16px', marginTop: 0 }}>
+    <List sx={{ paddingTop: '8px', marginTop: 1, maxHeight: '20vw', overflowY: 'auto' }}>
       {employees.map((employee, index) => (
         <ProjectEmployeeAddItem
           key={index}

@@ -1,5 +1,3 @@
-import './ProjectForm.scss';
-
 import { Divider, List } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -30,7 +28,7 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
   };
 
   return (
-    <List className="member-list" sx={{ marginTop: '8px' }}>
+    <List sx={{ marginTop: '8px' }}>
       {sortedProjectEmployees.map((projectEmployee, index) => (
         <React.Fragment key={projectEmployee.id}>
           <ProjectEmployeeEditItem projectEmployee={projectEmployee} onUpdate={handleProjectEmployeeStateChange} />
