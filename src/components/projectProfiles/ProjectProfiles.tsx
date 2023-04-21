@@ -134,7 +134,7 @@ const ProjectProfiles = () => {
           </Box>
         </Stack>
       </Stack>
-      {openPopup && <ProjectForm onClose={closeProjectForm} showEndDate={false} />}
+      {openPopup && <ProjectForm onClose={closeProjectForm} />}
       <Box
         sx={{
           position: 'relative',

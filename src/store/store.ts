@@ -3,7 +3,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import viewAchievementsStateReducer from '../states/achievementsTabState';
 import achievementNamesReducer from '../states/changedAchievements';
 import skillNamesReducer from '../states/changedSkills';
-import loadingReducer from '../states/loading';
 import onCancelReducer from '../states/onCancel';
 import viewSkillsStateReducer from '../states/skillsTabState';
 

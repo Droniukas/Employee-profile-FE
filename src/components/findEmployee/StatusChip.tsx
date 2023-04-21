@@ -24,12 +24,14 @@ const StatusChip: React.FC<StatusChipProps> = (props: StatusChipProps) => {
 
   return (
     <Box
+      component="span"
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
       }}
     >
       <Box
+        component="span"
         sx={{
           backgroundColor: color,
           borderRadius: '50%',

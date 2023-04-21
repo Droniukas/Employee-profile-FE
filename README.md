@@ -86,7 +86,6 @@ const { setAppState } = props;
 ...
 
 }
-
 ---
 
 ## Learn More
