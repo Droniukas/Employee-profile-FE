@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
-import Employee from '../../models/Employee.interface';
 import Project from '../../models/Project.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
@@ -167,7 +167,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   left: 70,
                 }}
               >
-                {renderEmployeesAvatarGroup(project.employees)}
+                {renderEmployeesAvatarGroup(project.projectEmployees)}
               </Box>
             </Stack>
             <Stack
@@ -225,13 +225,13 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     }
   };
 
-  const renderEmployeesAvatarGroup = (employees: Employee[]) => {
+  const renderEmployeesAvatarGroup = (employees: ProjectEmployee[]) => {
     const avatarsNeed = 3;
     let counter = 0;
     let additionalEmployees = 0;
 
     const filteredEmployeesList = employees.filter((employee) => {
-      if (employee.status === 'ACTIVE') {
+      if (employee.projectEmployeeStatus === 'ACTIVE') {
         if (counter < avatarsNeed) {
           counter++;
           return employee;
@@ -261,7 +261,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     );
   };
 
-  const renderEmployeeAvatar = (employee: Employee) => {
+  const renderEmployeeAvatar = (employee: ProjectEmployee) => {
     return (
       <Avatar
         key={employee.id}
