@@ -46,29 +46,23 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     achievement.expiringDate !== undefined ? setExpiringDate(achievement.expiringDate) : expiringDate;
   }, [onCancel]);
 
-  // const changedAchievements = useSelector((state: ChangedAchievementsDataRoot) => state.changedAchievements.value);
   const dispatch = useDispatch();
-  // const currentChangedAchievement = changedAchievements.filter((item) => item.achievementId !== achievement.achievementId);
 
   const onSwitchChange = () => {
     setChecked(!isChecked);
     !isChecked
       ? dispatch(
-          updateChangedAchievement(
-            // ...changedAchievements,
-            {
-              achievementId: achievement.achievementId,
-              achievementName: achievement.achievementName,
-              checked: true,
-              issueDate: issueDate,
-              expiringDate: expiringDate,
-              employeeId: process.env.REACT_APP_TEMP_USER_ID,
-            },
-          ),
+          updateChangedAchievement({
+            achievementId: achievement.achievementId,
+            achievementName: achievement.achievementName,
+            checked: true,
+            issueDate: issueDate,
+            expiringDate: expiringDate,
+            employeeId: process.env.REACT_APP_TEMP_USER_ID,
+          }),
         )
       : dispatch(
           updateChangedAchievement({
-            // ...currentChangedAchievement,
             achievementId: achievement.achievementId,
             achievementName: achievement.achievementName,
             checked: false,
@@ -81,7 +75,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const onDatePickerChange = () => {
     dispatch(
       updateChangedAchievement({
-        // ...currentChangedAchievement,
         achievementId: achievement.achievementId,
         achievementName: achievement.achievementName,
         checked: true,
@@ -181,7 +174,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     display: 'inline-flex',
                     alignItems: 'center',
                     position: 'relative',
-                    my: 1,
+                    my: 2.5,
                     paddingLeft: 9,
                   }}
                 >
@@ -221,14 +214,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           slotProps={{
-                            ...(!achievement.hasError
-                              ? {
-                                  textField: {
-                                    size: 'small',
-                                    error: false,
-                                  },
-                                }
-                              : null),
+                            textField: {
+                              size: 'small',
+                              error: false,
+                            },
                           }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
