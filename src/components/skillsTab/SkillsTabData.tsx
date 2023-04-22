@@ -55,6 +55,7 @@ const SkillsTabData = () => {
   const handleSave = async () => {
     const changedSkills = store.getState().changedSkills.value;
     if (hasErrors()) return;
+    console.log();
     await skillsService.updateEmployeeSkills(changedSkills);
     await fetchAndFilterSkillsData();
     dispatch(setSkillsTabState({}));

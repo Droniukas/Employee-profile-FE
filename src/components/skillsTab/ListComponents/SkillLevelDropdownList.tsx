@@ -62,6 +62,7 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
             : {
                 borderColor: 'primary.main',
                 color: 'primary.main',
+                backgroundColor: 'white',
               }),
         }}
         disablePadding
