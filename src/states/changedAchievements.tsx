@@ -11,9 +11,12 @@ export const changedAchievementsSlice = createSlice({
     setChangedAchievements: (state, action) => {
       state.value = action.payload;
     },
+    updateChangedAchievement: (state, action) => {
+      state.value = [...state.value.filter((item) => item.achievementId !== action.payload.achievementId), action.payload];
+    },
   },
 });
 
-export const { setChangedAchievements } = changedAchievementsSlice.actions;
+export const { setChangedAchievements, updateChangedAchievement } = changedAchievementsSlice.actions;
 
 export default changedAchievementsSlice.reducer;
