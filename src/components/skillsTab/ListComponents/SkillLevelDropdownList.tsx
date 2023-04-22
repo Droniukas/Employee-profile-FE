@@ -1,5 +1,5 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Box, FormControl, MenuItem, Select, Stack, Tooltip } from '@mui/material';
+import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -9,7 +9,7 @@ import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
 
 type SkillLevelDropdownListProps = {
-  skillLevel: SkillLevel | null;
+  skillLevel: SkillLevel;
   setSkillLevel: React.Dispatch<React.SetStateAction<SkillLevel>>;
   currentSkill: Skill;
   tooltipText: string;
@@ -66,9 +66,13 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
               onMouseEnter={() => setTooltipOpen(true)}
               onMouseLeave={() => setTooltipOpen(false)}
               onOpen={() => setTooltipOpen(false)}
-              id="status-filter"
               value={skillLevel}
-              renderValue={() => skillLevel}
+              defaultValue=""
+              onChange={(event: SelectChangeEvent) => {
+                setSkillLevel(event.target.value as SkillLevel);
+                setOpen(!open);
+                onDropdownChange(event.target.value as SkillLevel);
+              }}
               disableUnderline
               sx={{
                 border: 1,
@@ -89,11 +93,6 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
                     }),
               }}
               IconComponent={open ? ExpandLess : ExpandMore}
-              onChange={(event) => {
-                setSkillLevel(event.target.value as SkillLevel);
-                setOpen(!open);
-                onDropdownChange(event.target.value as SkillLevel);
-              }}
             >
               {currentSkillLevels.map((skillLevelName) => {
                 const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
