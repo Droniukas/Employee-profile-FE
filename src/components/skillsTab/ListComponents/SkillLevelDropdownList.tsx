@@ -121,54 +121,6 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
         </Box>
       </Stack>
     </Tooltip>
-    // <Stack
-    //   marginRight="52px"
-    //   direction="row"
-    //   justifyContent="flex-start"
-    //   alignItems="center"
-    //   sx={{
-    //     position: 'relative',
-    //     left: 0,
-    //   }}
-    // >
-    //   <Box
-    //     sx={{
-    //       position: 'relative',
-    //       left: 10,
-    //     }}
-    //   >
-    //     <FormControl variant="standard">
-    //       <Select
-    //         renderValue={() => skillLevel}
-    //         onChange={() => {
-    //           onDropdownChange;
-    //         }}
-    //         disableUnderline
-    //         sx={{
-    //           color: '#000048',
-    //           fontSize: 14,
-    //         }}
-    //       >
-    //         {currentSkillLevels.map((skillLevelName) => {
-    //           const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
-    //           return (
-    //             <Tooltip key={skillLevelName} title={tooltipText} disableInteractive>
-    //               <MenuItem
-    //                 key={skillLevelName}
-    //                 value={skillLevelName}
-    //                 sx={{
-    //                   color: 'primary.main',
-    //                 }}
-    //               >
-    //                 <b style={{ fontWeight: 'normal' }}>{skillLevelName}</b>
-    //               </MenuItem>
-    //             </Tooltip>
-    //           );
-    //         })}
-    //       </Select>
-    //     </FormControl>
-    //   </Box>
-    // </Stack>
   );
 };
 
