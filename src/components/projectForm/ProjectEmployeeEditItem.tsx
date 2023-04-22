@@ -21,10 +21,11 @@ import StatusChip from '../findEmployee/StatusChip';
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
   onUpdate: (updatedProjectEmployee: ProjectEmployee) => void;
+  onDelete: (projectEmployeeId: string) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const { projectEmployee, onUpdate } = props;
+  const { projectEmployee, onUpdate, onDelete } = props;
   const [startDateError, setStartDateError] = useState<string | null>(null);
 
   const isInactiveOrDismissed = (status: string): boolean => {
@@ -52,6 +53,10 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
       ...projectEmployee,
       projectEmployeeEndDate: newValue,
     });
+  };
+
+  const handleDelete = () => {
+    onDelete(projectEmployee.id);
   };
 
   useEffect(() => {
@@ -135,6 +140,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 color: '#000048',
                 backgroundColor: '#F4F4F4',
               }}
+              onClick={handleDelete}
             >
               <DeleteIcon />
             </IconButton>
