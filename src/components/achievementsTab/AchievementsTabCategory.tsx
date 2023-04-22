@@ -11,12 +11,13 @@ type AchievementsTabCategoryProps = {
   achievementsData: Achievement[];
   mapData: (achievementsData: Achievement[]) => ReactNode;
 };
+
 const AchievementsTabCategory: React.FunctionComponent<AchievementsTabCategoryProps> = (
   props: AchievementsTabCategoryProps,
 ) => {
   const { currentAchievement, mapData, achievementsData } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
-
+  console.log('bb');
   const mapAchievements = (achievements: Achievement[]) => {
     return achievements.map((achievement: Achievement) => {
       if (achievement.showOnFilter) {

@@ -16,10 +16,13 @@ type AchievementsTabProps = {
 
 const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: AchievementsTabProps) => {
   const { cancelFunction, saveFunction, achievementsData } = props;
+  // console.log('bb');
   const mapData = (achievements: Achievement[]): ReactNode => {
     {
       return achievements.map((achievement: Achievement) => {
+        console.log(achievement);
         if (achievement.showOnFilter) {
+          console.log('good');
           return (
             <AchievementsTabCategory
               key={achievement.achievementId}
@@ -28,10 +31,13 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
               mapData={mapData}
             />
           );
+        } else {
+          console.log('failed');
         }
       });
     }
   };
+  // console.log(achievementsData);
   return (
     <>
       {}

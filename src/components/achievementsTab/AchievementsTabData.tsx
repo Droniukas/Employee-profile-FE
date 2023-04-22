@@ -48,7 +48,8 @@ const AchievementsTabData = () => {
     const changedAchievements = store.getState().changedAchievements.value;
     achievementsData.forEach((achievement) => (achievement.hasError = false));
     const unselectedLevelAchievements = changedAchievements.filter(
-      (obj) => (obj.issueDate === null || obj.issueDate === undefined) && obj.checked === true,
+      (achievement) =>
+        (achievement.issueDate === null || achievement.issueDate === undefined) && achievement.checked === true,
     );
     if (unselectedLevelAchievements.length > 0) {
       unselectedLevelAchievements.forEach((changedAchievementWithError) => {
