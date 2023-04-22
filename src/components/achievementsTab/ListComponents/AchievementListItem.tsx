@@ -187,6 +187,16 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                 >
                   <Typography sx={{ fontSize: 14, fontWeight: 400, paddingRight: 3 }}>Completed</Typography>
                   <DatePicker
+                    slotProps={{
+                      ...(!achievement.hasError
+                        ? {
+                            textField: {
+                              size: 'small',
+                              error: false,
+                            },
+                          }
+                        : null),
+                    }}
                     label={'MON, YYYY'}
                     views={['month', 'year']}
                     sx={{ width: 200, marginRight: 7 }}
@@ -210,6 +220,16 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     <Box sx={{ my: 1 }}>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
+                          slotProps={{
+                            ...(!achievement.hasError
+                              ? {
+                                  textField: {
+                                    size: 'small',
+                                    error: false,
+                                  },
+                                }
+                              : null),
+                          }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
                           views={['month', 'year']}

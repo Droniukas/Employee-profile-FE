@@ -17,7 +17,6 @@ const AchievementsTabCategory: React.FunctionComponent<AchievementsTabCategoryPr
 ) => {
   const { currentAchievement, mapData, achievementsData } = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
-  console.log('bb');
   const mapAchievements = (achievements: Achievement[]) => {
     return achievements.map((achievement: Achievement) => {
       if (achievement.showOnFilter) {
@@ -39,7 +38,6 @@ const AchievementsTabCategory: React.FunctionComponent<AchievementsTabCategoryPr
           ...(currentAchievement.hasError
             ? {
                 borderColor: '#ef4349',
-                // color: '#ef4349',
               }
             : {
                 borderColor: '#DDDDDD',
@@ -53,7 +51,10 @@ const AchievementsTabCategory: React.FunctionComponent<AchievementsTabCategoryPr
               setIsCollapsed(!isCollapsed);
             }}
           >
-            <ListItemText primary={currentAchievement.achievementName} />
+            <ListItemText
+              sx={{ ...(currentAchievement.hasError ? { color: '#ef4349' } : {}) }}
+              primary={currentAchievement.achievementName}
+            />
             {currentAchievement.selectedCount ? (
               <Box
                 marginRight="20px"

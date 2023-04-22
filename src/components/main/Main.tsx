@@ -62,7 +62,15 @@ const Main = () => {
                   component={Link}
                   {...getIndexedProps(0)}
                 />
-                <Tab label="Achievements" to={ROUTES.ACHIEVEMENTS} component={Link} {...getIndexedProps(1)} />
+                <Tab
+                  label="Achievements"
+                  to={
+                    ROUTES.ACHIEVEMENTS +
+                    `?filter=${filterSearchParams.get('filter') ? filterSearchParams.get('filter') : 'my'}`
+                  }
+                  component={Link}
+                  {...getIndexedProps(1)}
+                />
                 <Tab label="My projects" to={ROUTES.MY_PROJECTS} component={Link} {...getIndexedProps(2)} />
                 {result?.isManager && (
                   <Tab
