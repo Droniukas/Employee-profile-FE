@@ -48,127 +48,127 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
     : [SkillLevel.BASIC, SkillLevel.INTERMEDIATE, SkillLevel.EXPERT];
 
   return (
-    // <Tooltip title={tooltipText} disableInteractive open={tooltipOpen}>
-    //   <Stack
-    //     marginRight="52px"
-    //     direction="row"
-    //     justifyContent="flex-start"
-    //     alignItems="center"
-    //     sx={{
-    //       position: 'relative',
-    //       left: 0,
-    //     }}
-    //   >
-    //     <Box
-    //       className="filter-area"
-    //       sx={{
-    //         position: 'relative',
-    //         left: 10,
-    //       }}
-    //     >
-    //       <FormControl variant="standard">
-    //         <Select
-    //           onMouseEnter={() => setTooltipOpen(true)}
-    //           onMouseLeave={() => setTooltipOpen(false)}
-    //           onOpen={() => setTooltipOpen(false)}
-    //           value={skillLevel}
-    //           defaultValue=""
-    //           onChange={(event: SelectChangeEvent) => {
-    //             setSkillLevel(event.target.value as SkillLevel);
-    //             setOpen(!open);
-    //             onDropdownChange(event.target.value as SkillLevel);
-    //           }}
-    //           disableUnderline
-    //           sx={{
-    //             border: 1,
-    //             padding: '5px',
-    //             margin: '2px',
-    //             paddingLeft: '10px',
-    //             borderRadius: '10px',
-    //             width: '150px',
-    //             ...(currentSkill.hasError
-    //               ? {
-    //                   backgroundColor: '#ffefef',
-    //                   color: '#ef4349',
-    //                 }
-    //               : {
-    //                   borderColor: '#DDDDDD',
-    //                   color: 'primary.main',
-    //                   backgroundColor: 'white',
-    //                 }),
-    //           }}
-    //           IconComponent={open ? ExpandLess : ExpandMore}
-    //         >
-    //           {currentSkillLevels.map((skillLevelName) => {
-    //             const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
-
-    //             return (
-    //               <Tooltip key={skillLevelName} title={tooltipText} disableInteractive>
-    //                 <MenuItem
-    //                   key={skillLevelName}
-    //                   value={skillLevelName}
-    //                   sx={{
-    //                     color: 'primary.main',
-    //                   }}
-    //                 >
-    //                   <b style={{ fontWeight: 'normal' }}>{skillLevelName}</b>
-    //                 </MenuItem>
-    //               </Tooltip>
-    //             );
-    //           })}
-    //         </Select>
-    //       </FormControl>
-    //     </Box>
-    //   </Stack>
-    // </Tooltip>
-    <Stack
-      marginRight="52px"
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="center"
-      sx={{
-        position: 'relative',
-        left: 0,
-      }}
-    >
-      <Box
+    <Tooltip title={tooltipText} disableInteractive open={tooltipOpen}>
+      <Stack
+        marginRight="52px"
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="center"
         sx={{
           position: 'relative',
-          left: 10,
+          left: 0,
         }}
       >
-        <FormControl variant="standard">
-          <Select
-            renderValue={() => status}
-            onChange={() => {
-              onDropdownChange;
-            }}
-            disableUnderline
-            sx={{
-              color: '#000048',
-              fontSize: 14,
-            }}
-          >
-            {currentSkillLevels.map((skillLevelName) => {
-              const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
-              return (
-                <Tooltip key={skillLevelName} title={tooltipText} disableInteractive>
-                  <MenuItem
-                    key={skillLevelName}
-                    value={skillLevelName}
-                    sx={{
+        <Box
+          className="filter-area"
+          sx={{
+            position: 'relative',
+            left: 10,
+          }}
+        >
+          <FormControl variant="standard">
+            <Select
+              onMouseEnter={() => setTooltipOpen(true)}
+              onMouseLeave={() => setTooltipOpen(false)}
+              onOpen={() => setTooltipOpen(false)}
+              value={skillLevel}
+              onChange={(event: SelectChangeEvent) => {
+                setSkillLevel(event.target.value as SkillLevel);
+                setOpen(!open);
+                onDropdownChange(event.target.value as SkillLevel);
+              }}
+              disableUnderline
+              sx={{
+                border: 1,
+                padding: '5px',
+                margin: '2px',
+                paddingLeft: '10px',
+                borderRadius: '10px',
+                width: '150px',
+                ...(currentSkill.hasError
+                  ? {
+                      backgroundColor: '#ffefef',
+                      color: '#ef4349',
+                    }
+                  : {
+                      borderColor: '#DDDDDD',
                       color: 'primary.main',
-                    }}
-                  >
-                    <b style={{ fontWeight: 'normal' }}>{skillLevelName}</b>
-                  </MenuItem>
-                </Tooltip>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Box>
-    </Stack>
+                      backgroundColor: 'white',
+                    }),
+              }}
+              IconComponent={open ? ExpandLess : ExpandMore}
+              open={open}
+            >
+              {currentSkillLevels.map((skillLevelName) => {
+                const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
+
+                return (
+                  <Tooltip key={skillLevelName} title={tooltipText} disableInteractive>
+                    <MenuItem
+                      key={skillLevelName}
+                      value={skillLevelName}
+                      sx={{
+                        color: 'primary.main',
+                      }}
+                    >
+                      <b style={{ fontWeight: 'normal' }}>{skillLevelName}</b>
+                    </MenuItem>
+                  </Tooltip>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+      </Stack>
+    </Tooltip>
+    // <Stack
+    //   marginRight="52px"
+    //   direction="row"
+    //   justifyContent="flex-start"
+    //   alignItems="center"
+    //   sx={{
+    //     position: 'relative',
+    //     left: 0,
+    //   }}
+    // >
+    //   <Box
+    //     sx={{
+    //       position: 'relative',
+    //       left: 10,
+    //     }}
+    //   >
+    //     <FormControl variant="standard">
+    //       <Select
+    //         renderValue={() => skillLevel}
+    //         onChange={() => {
+    //           onDropdownChange;
+    //         }}
+    //         disableUnderline
+    //         sx={{
+    //           color: '#000048',
+    //           fontSize: 14,
+    //         }}
+    //       >
+    //         {currentSkillLevels.map((skillLevelName) => {
+    //           const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
+    //           return (
+    //             <Tooltip key={skillLevelName} title={tooltipText} disableInteractive>
+    //               <MenuItem
+    //                 key={skillLevelName}
+    //                 value={skillLevelName}
+    //                 sx={{
+    //                   color: 'primary.main',
+    //                 }}
+    //               >
+    //                 <b style={{ fontWeight: 'normal' }}>{skillLevelName}</b>
+    //               </MenuItem>
+    //             </Tooltip>
+    //           );
+    //         })}
+    //       </Select>
+    //     </FormControl>
+    //   </Box>
+    // </Stack>
   );
 };
 
