@@ -21,7 +21,7 @@ const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps>
     dispatch(setSkillsTabState({}));
   };
 
-  const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
+  const viewState = useSelector((state: ViewStateRoot) => state.viewSkillsState.value);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   return (

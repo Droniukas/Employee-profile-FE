@@ -1,5 +1,5 @@
 export interface Achievement {
-  id: string;
+  achievementId: string;
   achievementName: string;
   checked: boolean;
   issueDate: string | null;
@@ -7,5 +7,8 @@ export interface Achievement {
   subItemsAreAchievements: boolean;
   indent: number;
   hasError?: boolean;
-  parentId: string | null;
+  showOnFilter?: boolean;
+  selectedCount?: number;
+  parentAchievementId: string | null;
+  category: boolean;
 }

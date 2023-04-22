@@ -12,7 +12,6 @@ const store = configureStore({
     changedAchievements: achievementNamesReducer,
     viewSkillsState: viewSkillsStateReducer,
     viewAchievementsState: viewAchievementsStateReducer,
-    loading: loadingReducer,
     onCancel: onCancelReducer,
   },
 });

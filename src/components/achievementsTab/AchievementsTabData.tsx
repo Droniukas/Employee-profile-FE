@@ -1,85 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 import { Achievement } from '../../models/Achievement.interface';
 import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 import { AchievementsService } from '../../services/achievements.service';
 import { setAchievementsTabState } from '../../states/achievementsTabState';
 import { setChangedAchievements } from '../../states/changedAchievements';
-import { setLoading } from '../../states/loading';
 import { triggerOnCancel } from '../../states/onCancel';
-import { ChangedAchievementsDataRoot } from '../../store/achievementTypes';
+import store from '../../store/store';
 import AchievementsTab from './AchievementsTab';
+import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
 const AchievementsTabData = () => {
-  const [achievementDataArr, setAchievementDataArr] = useState<Array<Achievement>>([]);
-  const changedAchievements = useSelector((state: ChangedAchievementsDataRoot) => state.changedAchievements.value);
-
+  const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
   const achievementsService = new AchievementsService();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
-    dispatch(setLoading(true));
-    const response: Array<Achievement> = await achievementsService.fetchAchievementData();
-    setAchievementDataArr(response);
-    dispatch(setLoading(false));
+  useEffect(() => {
+    fetchAndFilterAchievementsData();
+  }, [location.href]);
+
+  const fetchAndFilterAchievementsData = async () => {
+    const response: Achievement[] = await achievementsService.fetchAchievementsData();
+    setAchievementsData(
+      getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
+    );
   };
 
-  const setErrorForAchievements = (childObj: ChangedAchievement | Achievement) => {
-    const achievementWithError = achievementDataArr.find((obj) => obj.id === childObj.id);
+  const setErrorForAchievements = (childAchievement: ChangedAchievement | Achievement) => {
+    const achievementWithError = achievementsData.find(
+      (achievement) => achievement.achievementId === childAchievement.achievementId,
+    );
     if (achievementWithError === undefined) throw new Error('undefined object...');
     achievementWithError.hasError = true;
-    const parentObjs = achievementDataArr.filter((parentObj) => parentObj.id === achievementWithError.parentId);
-    parentObjs.forEach((obj) => {
-      setErrorForAchievements(obj);
+    const parentAchievements = achievementsData.filter(
+      (parentAchievement) => parentAchievement.achievementId === achievementWithError.parentAchievementId,
+    );
+    parentAchievements.forEach((achievement) => {
+      setErrorForAchievements(achievement);
     });
   };
 
   const hasErrors = () => {
-    achievementDataArr.forEach((obj) => (obj.hasError = false));
-    const unselectedIssueDateAchievements = changedAchievements.filter(
+    const changedAchievements = store.getState().changedAchievements.value;
+    achievementsData.forEach((achievement) => (achievement.hasError = false));
+    const unselectedLevelAchievements = changedAchievements.filter(
       (obj) => (obj.issueDate === null || obj.issueDate === undefined) && obj.checked === true,
     );
-    if (unselectedIssueDateAchievements.length > 0) {
-      unselectedIssueDateAchievements.forEach((objWithError) => {
-        setErrorForAchievements(objWithError);
+    if (unselectedLevelAchievements.length > 0) {
+      unselectedLevelAchievements.forEach((changedAchievementWithError) => {
+        setErrorForAchievements(changedAchievementWithError);
       });
-      setAchievementDataArr([...achievementDataArr]);
+      setAchievementsData([...achievementsData]);
       return true;
     }
   };
 
   const handleSave = async () => {
+    const changedAchievements = store.getState().changedAchievements.value;
     if (hasErrors()) return;
-    console.log(changedAchievements, 'SAAAVING');
-    changedAchievements.forEach(async (obj) => {
-      await achievementsService.updateEmployeeAchievement(obj);
-    });
-    await fetchData();
+    await achievementsService.updateEmployeeAchievements(changedAchievements);
+    await fetchAndFilterAchievementsData();
     dispatch(setAchievementsTabState({}));
     dispatch(setChangedAchievements([]));
   };
 
   const handleCancel = async () => {
-    achievementDataArr.forEach((obj) => (obj.hasError = false));
+    achievementsData.forEach((achievement) => (achievement.hasError = false));
+    await fetchAndFilterAchievementsData();
     dispatch(setChangedAchievements([]));
-    await fetchData();
     dispatch(setAchievementsTabState({}));
     dispatch(triggerOnCancel({}));
   };
 
   return (
     <>
-      {achievementDataArr ? (
-        <AchievementsTab
-          achievementDataArray={achievementDataArr}
-          saveFunction={handleSave}
-          cancelFunction={handleCancel}
-        />
+      {achievementsData ? (
+        <AchievementsTab achievementsData={achievementsData} saveFunction={handleSave} cancelFunction={handleCancel} />
       ) : null}
     </>
   );

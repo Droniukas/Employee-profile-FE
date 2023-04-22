@@ -12,7 +12,10 @@ export const changedAchievementsSlice = createSlice({
       state.value = action.payload;
     },
     updateChangedAchievement: (state, action) => {
-      state.value = [...state.value.filter((item) => item.achievementId !== action.payload.achievementId), action.payload];
+      state.value = [
+        ...state.value.filter((item) => item.achievementId !== action.payload.achievementId),
+        action.payload,
+      ];
     },
   },
 });

@@ -6,90 +6,89 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Achievement } from '../../../models/Achievement.interface';
-import { setChangedAchievements } from '../../../states/changedAchievements';
-import { ChangedAchievementsDataRoot, OnCancelRoot, ViewStateRoot } from '../../../store/achievementTypes';
+import { updateChangedAchievement } from '../../../states/changedAchievements';
+import { OnCancelRoot, ViewStateRoot } from '../../../store/achievementTypes';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
 import { StyledSwitch } from './StyledSwitch';
 
 type AchievementListItemProps = {
-  achievementObject: Achievement;
+  achievement: Achievement;
   showEndDate: boolean;
 };
 
 let wasChange = false;
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
-  const { achievementObject, showEndDate } = props;
+  const { achievement, showEndDate } = props;
   const viewState = useSelector((state: ViewStateRoot) => state.viewAchievementsState.value);
   const [issueDate, setIssueDate] = useState<string | null>();
   const [expiringDate, setExpiringDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
+
   const expiringDateExists: boolean = expiringDate !== undefined && expiringDate !== null;
-  const objectIssueDateExists: boolean =
-    achievementObject.issueDate !== null && achievementObject.issueDate !== undefined;
-  const objectExpiringDateExists: boolean =
-    achievementObject.expiringDate !== null && achievementObject.expiringDate !== undefined;
+  const achievementIssueDateExists: boolean = achievement.issueDate !== null && achievement.issueDate !== undefined;
+  const achievementExpiringDateExists: boolean =
+    achievement.expiringDate !== null && achievement.expiringDate !== undefined;
 
   useEffect(() => {
-    setChecked(achievementObject.checked);
-    achievementObject.issueDate !== undefined ? setIssueDate(achievementObject.issueDate) : null;
-    achievementObject.expiringDate !== undefined ? setExpiringDate(achievementObject.expiringDate) : null;
-  }, [achievementObject.checked, achievementObject.issueDate, achievementObject.expiringDate]);
+    setChecked(achievement.checked);
+    achievement.issueDate !== undefined ? setIssueDate(achievement.issueDate) : null;
+    achievement.expiringDate !== undefined ? setExpiringDate(achievement.expiringDate) : null;
+  }, [achievement.checked, achievement.issueDate, achievement.expiringDate]);
 
-  const [endDateExists, setEndDateExists] = useState<boolean>(expiringDateExists || objectIssueDateExists);
+  const [endDateExists, setEndDateExists] = useState<boolean>(expiringDateExists || achievementIssueDateExists);
 
   const onCancel = useSelector((state: OnCancelRoot) => state.onCancel.value);
   useEffect(() => {
-    setChecked(achievementObject.checked);
-    achievementObject.issueDate !== undefined ? setIssueDate(achievementObject.issueDate) : issueDate;
-    achievementObject.expiringDate !== undefined ? setExpiringDate(achievementObject.expiringDate) : expiringDate;
+    setChecked(achievement.checked);
+    achievement.issueDate !== undefined ? setIssueDate(achievement.issueDate) : issueDate;
+    achievement.expiringDate !== undefined ? setExpiringDate(achievement.expiringDate) : expiringDate;
   }, [onCancel]);
 
-  const changedAchievements = useSelector((state: ChangedAchievementsDataRoot) => state.changedAchievements.value);
+  // const changedAchievements = useSelector((state: ChangedAchievementsDataRoot) => state.changedAchievements.value);
   const dispatch = useDispatch();
-  const currentChangedAchievement = changedAchievements.filter((item) => item.id !== achievementObject.id);
+  // const currentChangedAchievement = changedAchievements.filter((item) => item.achievementId !== achievement.achievementId);
 
   const onSwitchChange = () => {
     setChecked(!isChecked);
     !isChecked
       ? dispatch(
-          setChangedAchievements([
-            ...changedAchievements,
+          updateChangedAchievement(
+            // ...changedAchievements,
             {
-              id: achievementObject.id,
-              achievement: achievementObject.achievementName,
+              achievementId: achievement.achievementId,
+              achievementName: achievement.achievementName,
               checked: true,
               issueDate: issueDate,
               expiringDate: expiringDate,
+              employeeId: process.env.REACT_APP_TEMP_USER_ID,
             },
-          ]),
+          ),
         )
       : dispatch(
-          setChangedAchievements([
-            ...currentChangedAchievement,
-            {
-              id: achievementObject.id,
-              achievement: achievementObject.achievementName,
-              checked: false,
-              issueDate: null,
-              expiringDate: null,
-            },
-          ]),
+          updateChangedAchievement({
+            // ...currentChangedAchievement,
+            achievementId: achievement.achievementId,
+            achievementName: achievement.achievementName,
+            checked: false,
+            issueDate: null,
+            expiringDate: null,
+            employeeId: process.env.REACT_APP_TEMP_USER_ID,
+          }),
         );
   };
   const onDatePickerChange = () => {
     dispatch(
-      setChangedAchievements([
-        ...currentChangedAchievement,
-        {
-          id: achievementObject.id,
-          achievement: achievementObject.achievementName,
-          checked: true,
-          issueDate: issueDate,
-          expiringDate: expiringDate,
-        },
-      ]),
+      updateChangedAchievement({
+        // ...currentChangedAchievement,
+        achievementId: achievement.achievementId,
+        achievementName: achievement.achievementName,
+        checked: true,
+        issueDate: issueDate,
+        expiringDate: expiringDate,
+        employeeId: process.env.REACT_APP_TEMP_USER_ID,
+      }),
     );
   };
 
@@ -99,8 +98,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   }
 
   const certificateMessage =
-    endDateExists && objectExpiringDateExists
-      ? 'Certificate:  ' + dayjs(achievementObject.expiringDate).format('MMM YYYY')
+    endDateExists && achievementExpiringDateExists
+      ? 'Certificate:  ' + dayjs(achievement.expiringDate).format('MMM YYYY')
       : endDateExists && expiringDateExists
       ? 'Certificate:  ' + dayjs(expiringDate).format('MMM YYYY')
       : '';
@@ -136,8 +135,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
             label=""
           />
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
-            {achievementObject.achievementName}
-            {achievementObject.hasError ? <AchievementListItemErrorText /> : null}
+            {achievement.achievementName}
+            {achievement.hasError ? <AchievementListItemErrorText /> : null}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -151,8 +150,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       marginRight: '50px',
                     }}
                   >
-                    {achievementObject.issueDate !== undefined && achievementObject.issueDate !== null
-                      ? dayjs(achievementObject.issueDate).format('MMM, YYYY')
+                    {achievement.issueDate !== undefined && achievement.issueDate !== null
+                      ? dayjs(achievement.issueDate).format('MMM, YYYY')
                       : issueDate !== undefined && issueDate !== null
                       ? dayjs(issueDate).format('MMM, YYYY')
                       : 'abu netiko'}
@@ -191,7 +190,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     label={'MON, YYYY'}
                     views={['month', 'year']}
                     sx={{ width: 200, marginRight: 7 }}
-                    value={objectIssueDateExists ? dayjs(achievementObject.issueDate) : dayjs(issueDate)}
+                    value={achievementIssueDateExists ? dayjs(achievement.issueDate) : dayjs(issueDate)}
                     onChange={(newValue) => {
                       setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
                       wasChange = true;

@@ -18,7 +18,7 @@ type SkillListItemProps = {
 
 const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: SkillListItemProps) => {
   const { skill } = props;
-  const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
+  const viewState = useSelector((state: ViewStateRoot) => state.viewSkillsState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
 

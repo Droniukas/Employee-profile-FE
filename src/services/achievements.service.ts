@@ -2,20 +2,16 @@ import { ChangedAchievement } from '../models/ChangedAchievement.interface';
 import axios from './axios';
 
 export class AchievementsService {
-  public async fetchAchievementData() {
+  public async fetchAchievementsData() {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/achievements/getAllByEmployeeId/${process.env.REACT_APP_TEMP_USER_ID}`,
     );
     return response.data;
   }
 
-  public async updateEmployeeAchievement(obj: ChangedAchievement) {
+  public async updateEmployeeAchievements(changedAchievementsItem: ChangedAchievement[]) {
     const response = await axios.put(`${process.env.REACT_APP_API_URL}/achievements/update`, {
-      checked: obj.checked,
-      issueDate: obj.issueDate,
-      expiringDate: obj.expiringDate,
-      achievementId: obj.id,
-      employeeId: process.env.REACT_APP_TEMP_USER_ID,
+      changedAchievements: changedAchievementsItem,
     });
     return response.data;
   }
