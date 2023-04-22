@@ -7,7 +7,7 @@ import { SkillsTabFilter } from '../enums/SkillsTabFilter';
 const SkillsTabFilterDropdown = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [status, setStatus] = useState<SkillsTabFilter>(
+  const [status, setStatus] = useState<string>(
     searchParams.get('filter') === SkillsTabFilter.ALL_SKILLS_URL
       ? SkillsTabFilter.ALL_SKILLS
       : SkillsTabFilter.MY_SKILLS,
