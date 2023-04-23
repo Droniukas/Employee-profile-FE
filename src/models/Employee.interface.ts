@@ -1,5 +1,5 @@
 interface Employee {
-  id: string;
+  id: number;
   name: string;
   surname: string;
   middleName: string;

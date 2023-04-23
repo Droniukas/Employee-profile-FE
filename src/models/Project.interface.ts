@@ -1,7 +1,7 @@
 import ProjectEmployee from './ProjectEmployee.interface';
 
 interface Project {
-  id: string;
+  id?: number;
   title: string;
   startDate: string;
   endDate: string;
