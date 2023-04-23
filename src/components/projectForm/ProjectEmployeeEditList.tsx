@@ -7,7 +7,7 @@ import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
   updateProjectEmployee: (updatedProjectEmployee: ProjectEmployee) => void;
-  deleteProjectEmployee: (projectEmployeeId: string) => void;
+  deleteProjectEmployee: (projectEmployeeId: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
   const { projectEmployees, updateProjectEmployee, deleteProjectEmployee } = props;

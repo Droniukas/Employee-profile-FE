@@ -91,7 +91,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   );
 
   const deleteProjectEmployee = useCallback(
-    (projectEmployeeId: string) => {
+    (projectEmployeeId: number) => {
       const updatedProjectEmployees = values.projectEmployees.filter(
         (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
       );
