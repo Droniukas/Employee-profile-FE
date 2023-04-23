@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { setAchievementsTabState } from '../../states/achievementsTabState';
-import { ViewAchievementStateRoot } from '../../store/achievementTypes';
+import { ViewAchievementStateRoot } from '../../store/types/achievements';
 import { AchievementsTabState } from '../enums/AchievementsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 

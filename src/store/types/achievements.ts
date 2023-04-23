@@ -1,5 +1,5 @@
-import { AchievementsTabState } from '../components/enums/AchievementsTabState';
-import { ChangedAchievement } from '../models/ChangedAchievement.interface';
+import { AchievementsTabState } from '../../components/enums/AchievementsTabState';
+import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 
 export interface OnCancelRoot {
   onCancel: {

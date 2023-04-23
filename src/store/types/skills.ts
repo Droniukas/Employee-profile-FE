@@ -1,5 +1,5 @@
-import { SkillsTabState } from '../components/enums/SkillsTabState';
-import { ChangedSkill } from '../models/ChangedSkill.interface';
+import { SkillsTabState } from '../../components/enums/SkillsTabState';
+import { ChangedSkill } from '../../models/ChangedSkill.interface';
 
 export interface OnCancelRoot {
   onCancel: {

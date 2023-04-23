@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Achievement } from '../../../models/Achievement.interface';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
-import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/achievementTypes';
+import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/types/achievements';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
 import { StyledSwitch } from './StyledSwitch';

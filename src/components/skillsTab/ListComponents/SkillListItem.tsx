@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
-import { OnCancelRoot, ViewSkillStateRoot } from '../../../store/types';
+import { OnCancelRoot, ViewSkillStateRoot } from '../../../store/types/skills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';
 import { mapSkillLevelToTooltip } from '../utils';

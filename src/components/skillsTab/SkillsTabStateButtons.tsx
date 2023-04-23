@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { setSkillsTabState } from '../../states/skillsTabState';
-import { ViewSkillStateRoot } from '../../store/types';
+import { ViewSkillStateRoot } from '../../store/types/skills';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 
