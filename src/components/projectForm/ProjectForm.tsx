@@ -90,14 +90,25 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     [values.projectEmployees, setFieldValue],
   );
 
+  const deleteProjectEmployee = useCallback(
+    (projectEmployeeId: string) => {
+      const updatedProjectEmployees = values.projectEmployees.filter(
+        (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
+      );
+      setFieldValue('projectEmployees', updatedProjectEmployees);
+    },
+    [values.projectEmployees, setFieldValue],
+  );
+
   const ProjectEmployeeEditListMemo = useMemo(
     () => (
       <ProjectEmployeeEditList
         projectEmployees={values.projectEmployees}
         updateProjectEmployee={updateProjectEmployee}
+        deleteProjectEmployee={deleteProjectEmployee}
       />
     ),
-    [values.projectEmployees, updateProjectEmployee],
+    [values.projectEmployees, updateProjectEmployee, deleteProjectEmployee],
   );
 
   return (
