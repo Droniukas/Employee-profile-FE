@@ -24,3 +24,9 @@ export interface OnCancelRoot {
     value: boolean;
   };
 }
+
+export interface ExpandedRoot {
+  expanded: {
+    value: boolean;
+  };
+}

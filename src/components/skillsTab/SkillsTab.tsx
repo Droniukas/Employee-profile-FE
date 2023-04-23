@@ -7,6 +7,7 @@ import SkillsTabCategory from './SkillsTabCategory';
 import SkillsTabFilterDropdown from './SkillsTabFilterDropdown';
 import SkillsTabStateButtons from './SkillsTabStateButtons';
 import { sortBySkill } from './utils';
+import SkillsTabExpandButton from './SkillsTabExpandButton';
 
 type SkillsTabProps = {
   skillsData: Skill[];
@@ -32,10 +33,11 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
       {}
       <Box component="span" sx={{ width: '1344px', display: 'inline-block' }}>
         <Box component="span" sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Box display="inline-block">
+          <Box sx={{ display: 'flex', gap: '20px' }}>
             <SkillsTabFilterDropdown />
+            <SkillsTabExpandButton />
           </Box>
-          <Box display="inline-block">
+          <Box>
             <SkillsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
           </Box>
         </Box>

@@ -1,4 +1,4 @@
-import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText } from '@mui/material';
+import { Box, Checkbox, checkboxClasses, ListItem, ListItemText } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -66,29 +66,22 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
     <>
       <Box>
         <ListItem disablePadding sx={{ marginLeft: '27px' }}>
-          <FormControlLabel
-            control={
-              <>
-                <Checkbox
-                  disabled={viewState === SkillsTabState.VIEW_STATE}
-                  checked={isChecked}
-                  onChange={onCheckboxChange}
-                  sx={{
-                    color: checkboxColor,
-                    [`&.${checkboxClasses.checked}`]: {
-                      color: checkboxColor,
-                    },
-                  }}
-                />
-              </>
-            }
-            label=""
+          <Checkbox
+            disabled={viewState === SkillsTabState.VIEW_STATE}
+            checked={isChecked}
+            onChange={onCheckboxChange}
+            sx={{
+              color: checkboxColor,
+              [`&.${checkboxClasses.checked}`]: {
+                color: checkboxColor,
+              },
+              marginLeft: -2,
+            }}
           />
           <ListItemText
             sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main', float: 'top' }}
           >
             {skill.skillName}
-            {skill.hasError ? <SkillListItemErrorText /> : null}
           </ListItemText>
           {viewState === SkillsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -106,6 +99,11 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
             ) : null
           ) : null}
         </ListItem>
+        {skill.hasError ? ( // cia checkintume reduxo store
+          <ListItem sx={{ padding: 0, margin: 0, marginLeft: '50px' }}>
+            <SkillListItemErrorText />
+          </ListItem>
+        ) : null}
       </Box>
     </>
   );

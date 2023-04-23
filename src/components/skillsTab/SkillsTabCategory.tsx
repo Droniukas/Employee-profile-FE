@@ -1,10 +1,12 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Skill } from '../../models/Skill.interface';
 import SkillListItem from './ListComponents/SkillListItem';
 import { sortBySkill } from './utils';
+import { useSelector } from 'react-redux';
+import { ExpandedRoot } from '../../store/types';
 
 type SkillsTabCategoryProps = {
   currentSkill: Skill;
@@ -13,7 +15,14 @@ type SkillsTabCategoryProps = {
 };
 const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (props: SkillsTabCategoryProps) => {
   const { currentSkill, mapData, skillsData } = props;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const expanded = useSelector((state: ExpandedRoot) => state.expanded.value);
+
+  // here we would add an object with skillId, parentId, skillName and expanded props to the redux state array
+
+  useEffect(() => {
+    setIsCollapsed(expanded);
+  }, [expanded]);
+  const [isCollapsed, setIsCollapsed] = useState(expanded);
 
   const mapSkills = (skills: Skill[]) => {
     return skills.map((skill: Skill) => {
@@ -33,7 +42,7 @@ const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (prop
           border: 1,
           marginLeft: currentSkill.indent * 6,
           backgroundColor: 'white',
-          ...(currentSkill.hasError
+          ...(currentSkill.hasError // cia checkintume reduxo store
             ? {
                 borderColor: '#ef4349',
                 color: '#ef4349',

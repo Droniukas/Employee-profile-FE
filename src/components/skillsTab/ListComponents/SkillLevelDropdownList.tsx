@@ -1,6 +1,5 @@
-/* eslint-disable */
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -8,7 +7,6 @@ import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
-import { ProjectStatus } from '../../enums/ProjectStatus';
 
 type SkillLevelDropdownListProps = {
   skillLevel: SkillLevel;
@@ -25,23 +23,20 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
-  const [status, setStatus] = useState<SkillLevel>(skillLevel);
-
-  const dispatch = useDispatch();
-
-  const onDropdownChange = (selectedSkill: SkillLevel) => {
-    setSkillLevel(selectedSkill);
-    setStatus(selectedSkill);
+  const handleChange = (event: SelectChangeEvent) => {
+    setSkillLevel(event.target.value as SkillLevel);
     dispatch(
       updateChangedSkill({
         skillId: currentSkill.skillId,
         skillName: currentSkill.skillName,
         checked: true,
-        skillLevel: selectedSkill,
+        skillLevel: event.target.value,
         employeeId: process.env.REACT_APP_TEMP_USER_ID,
       }),
     );
   };
+
+  const dispatch = useDispatch();
 
   const currentSkillLevels = currentSkill.language
     ? [SkillLevel.A1, SkillLevel.A2, SkillLevel.B1, SkillLevel.B2, SkillLevel.C1, SkillLevel.C2, SkillLevel.NATIVE]
@@ -71,11 +66,14 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
               onMouseEnter={() => setTooltipOpen(true)}
               onMouseLeave={() => setTooltipOpen(false)}
               onOpen={() => setTooltipOpen(false)}
+              renderValue={() => {
+                return skillLevel;
+              }}
               value={skillLevel}
               onChange={(event: SelectChangeEvent) => {
                 setSkillLevel(event.target.value as SkillLevel);
                 setOpen(!open);
-                onDropdownChange(event.target.value as SkillLevel);
+                handleChange(event);
               }}
               disableUnderline
               sx={{
@@ -85,7 +83,7 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
                 paddingLeft: '10px',
                 borderRadius: '10px',
                 width: '150px',
-                ...(currentSkill.hasError
+                ...(currentSkill.hasError // cia checkintume reduxo store
                   ? {
                       backgroundColor: '#ffefef',
                       color: '#ef4349',
@@ -97,25 +95,23 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
                     }),
               }}
               IconComponent={open ? ExpandLess : ExpandMore}
-              open={open}
             >
               {currentSkillLevels.map((skillLevelName) => {
-                const tooltipText: string = mapSkillLevelToTooltip(skillLevelName);
-
                 return (
-                  <Tooltip key={skillLevelName} title={tooltipText} disableInteractive>
-                    <MenuItem
-                      key={skillLevelName}
-                      value={skillLevelName}
-                      sx={{
-                        color: 'primary.main',
-                      }}
-                    >
+                  <MenuItem
+                    key={skillLevelName}
+                    value={skillLevelName}
+                    sx={{
+                      color: 'primary.main',
+                    }}
+                  >
+                    <Tooltip key={skillLevelName} title={mapSkillLevelToTooltip(skillLevelName)} disableInteractive>
                       <b style={{ fontWeight: 'normal' }}>{skillLevelName}</b>
-                    </MenuItem>
-                  </Tooltip>
+                    </Tooltip>
+                  </MenuItem>
                 );
               })}
+              <MenuItem value={SkillLevel.NONE} hidden sx={{ margin: 0, padding: 0 }} />
             </Select>
           </FormControl>
         </Box>
