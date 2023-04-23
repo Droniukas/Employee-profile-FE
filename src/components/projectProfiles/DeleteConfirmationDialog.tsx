@@ -11,14 +11,14 @@ import Project from '../../models/Project.interface';
 type DeleteConfirmationDialogProps = {
   project: Project;
   onClose: () => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 };
 
 const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = (props: DeleteConfirmationDialogProps) => {
   const { project, onClose, onDelete } = props;
 
   const handleDeleteClick = () => {
-    onDelete(project.id);
+    if (project.id) onDelete(project.id);
     onClose();
   };
 

@@ -1,9 +1,9 @@
 import { SkillLevel } from '../components/enums/SkillLevel';
 
 export interface ChangedSkill {
-  skillId: string;
+  skillId: number;
   checked: boolean;
   skillLevel: SkillLevel;
   skillName: string;
-  employeeId: string;
+  employeeId: number;
 }

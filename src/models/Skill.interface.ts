@@ -1,7 +1,7 @@
 import { SkillLevel } from '../components/enums/SkillLevel';
 
 export interface Skill {
-  skillId: string;
+  skillId: number;
   skillName: string;
   checked: boolean;
   skillLevel: SkillLevel | null;
@@ -10,7 +10,7 @@ export interface Skill {
   hasError?: boolean;
   showOnFilter?: boolean;
   selectedCount?: number;
-  parentSkillId: string | null;
+  parentSkillId: number | null;
   language: boolean;
   category: boolean;
 }

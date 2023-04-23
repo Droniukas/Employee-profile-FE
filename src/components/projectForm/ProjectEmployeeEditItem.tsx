@@ -21,7 +21,7 @@ import StatusChip from '../findEmployee/StatusChip';
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
   onUpdate: (updatedProjectEmployee: ProjectEmployee) => void;
-  onDelete: (projectEmployeeId: string) => void;
+  onDelete: (projectEmployeeId: number) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {

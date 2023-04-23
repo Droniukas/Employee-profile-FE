@@ -27,7 +27,7 @@ import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
 
 type ProjectFormProps = {
-  onClose: (projectId?: string) => void;
+  onClose: (projectId?: number) => void;
   project?: Project;
 };
 
@@ -40,7 +40,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
 
   let initialValues: Project = {
-    id: '',
     title: '',
     description: '',
     startDate: dayjs().toISOString(),
@@ -92,7 +91,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   );
 
   const deleteProjectEmployee = useCallback(
-    (projectEmployeeId: string) => {
+    (projectEmployeeId: number) => {
       const updatedProjectEmployees = values.projectEmployees.filter(
         (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
       );

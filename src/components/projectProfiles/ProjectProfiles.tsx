@@ -15,7 +15,7 @@ import ProjectProfilesResult from './ProjectProfilesResults';
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  const [addedProjectId, setAddedProjectId] = useState<string>('');
+  const [addedProjectId, setAddedProjectId] = useState<number>();
   const [filterTextValue, setFilterTextValue] = useState('All');
 
   const projectsService = new ProjectsService();
@@ -33,13 +33,13 @@ const ProjectProfiles = () => {
     setProjects(projects);
   };
 
-  const closeProjectForm = (projectId?: string) => {
+  const closeProjectForm = (projectId?: number) => {
     setOpenPopup(false);
     if (projectId) setAddedProjectId(projectId);
     getProjects();
   };
 
-  const handleProjectDelete = async (id: string) => {
+  const handleProjectDelete = async (id: number) => {
     await projectsService.deleteProjectById(id);
     setProjects(projects.filter((project) => project.id !== id));
   };

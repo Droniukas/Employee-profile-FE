@@ -22,8 +22,8 @@ import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 type ProjectProfilesResultsProps = {
   projects: Project[];
   rerender: () => void;
-  handleProjectDelete: (id: string) => void;
-  focusProjectId?: string;
+  handleProjectDelete: (id: number) => void;
+  focusProjectId?: number;
   filterStatus: string;
 };
 
