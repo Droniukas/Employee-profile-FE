@@ -1,5 +1,5 @@
 export interface Achievement {
-  achievementId: string;
+  achievementId: number;
   achievementName: string;
   checked: boolean;
   issueDate: string | null;
@@ -9,6 +9,6 @@ export interface Achievement {
   hasError?: boolean;
   showOnFilter?: boolean;
   selectedCount?: number;
-  parentAchievementId: string | null;
+  parentAchievementId: number | null;
   category: boolean;
 }
