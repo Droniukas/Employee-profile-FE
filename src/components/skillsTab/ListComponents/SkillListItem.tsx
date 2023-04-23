@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
-import { OnCancelRoot, ViewStateRoot } from '../../../store/types';
+import { OnCancelRoot, ViewSkillStateRoot } from '../../../store/types/skills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';
 import { mapSkillLevelToTooltip } from '../utils';
@@ -18,7 +18,7 @@ type SkillListItemProps = {
 
 const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: SkillListItemProps) => {
   const { skill } = props;
-  const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
+  const viewState = useSelector((state: ViewSkillStateRoot) => state.viewSkillsState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
 

@@ -1,10 +1,8 @@
 import './Header.scss';
 
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import PersonIcon from '@mui/icons-material/Person';
-import SearchIcon from '@mui/icons-material/Search';
 import { Avatar, Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
@@ -24,40 +22,6 @@ const Header = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          position: 'fixed',
-          backgroundColor: '#FFFFFF',
-          zIndex: 5,
-          borderRight: 1,
-          borderColor: 'divider',
-          width: 100,
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'normal',
-          alignItems: '',
-        }}
-      >
-        <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="image"></img>
-        <div className="profile">
-          <div className="round-box"></div>
-          <PersonIcon
-            sx={{
-              width: 50,
-              height: 50,
-              marginLeft: 1.9,
-              marginTop: 1.9,
-              color: 'linear-gradient(90deg, #3D54CE 0.02%, #35CACF 100.04%), #000048',
-            }}
-          />
-          <h4 className="profile-text">My profile</h4>
-        </div>
-        <div className="search-div">
-          <SearchIcon sx={{ width: 40, height: 40, marginLeft: 2.9 }} />
-          <h4 className="search-text">Search</h4>
-        </div>
-      </Box>
-
       <Box
         sx={{
           position: 'fixed',
