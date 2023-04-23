@@ -1,7 +1,7 @@
 import { SkillsTabState } from '../components/enums/SkillsTabState';
 import { ChangedSkill } from '../models/ChangedSkill.interface';
 
-export interface onCancelRoot {
+export interface OnCancelRoot {
   onCancel: {
     value: boolean;
   };
@@ -13,14 +13,8 @@ export interface ChangedSkillsDataRoot {
   };
 }
 
-export interface ViewStateRoot {
+export interface ViewSkillStateRoot {
   viewSkillsState: {
     value: SkillsTabState;
-  };
-}
-
-export interface OnCancelRoot {
-  onCancel: {
-    value: boolean;
   };
 }

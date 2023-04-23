@@ -1,7 +1,7 @@
 import { AchievementsTabState } from '../components/enums/AchievementsTabState';
 import { ChangedAchievement } from '../models/ChangedAchievement.interface';
 
-export interface onCancelRoot {
+export interface OnCancelRoot {
   onCancel: {
     value: boolean;
   };
@@ -13,14 +13,8 @@ export interface ChangedAchievementsDataRoot {
   };
 }
 
-export interface ViewStateRoot {
+export interface ViewAchievementStateRoot {
   viewAchievementsState: {
     value: AchievementsTabState;
-  };
-}
-
-export interface OnCancelRoot {
-  onCancel: {
-    value: boolean;
   };
 }

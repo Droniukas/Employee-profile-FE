@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Achievement } from '../../../models/Achievement.interface';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
-import { OnCancelRoot, ViewStateRoot } from '../../../store/achievementTypes';
+import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/achievementTypes';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
 import { StyledSwitch } from './StyledSwitch';
@@ -21,7 +21,7 @@ let wasChange = false;
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
   const { achievement, showEndDate } = props;
-  const viewState = useSelector((state: ViewStateRoot) => state.viewAchievementsState.value);
+  const viewState = useSelector((state: ViewAchievementStateRoot) => state.viewAchievementsState.value);
   const [issueDate, setIssueDate] = useState<string | null>();
   const [expiringDate, setExpiringDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
@@ -147,7 +147,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       ? dayjs(achievement.issueDate).format('MMM, YYYY')
                       : issueDate !== undefined && issueDate !== null
                       ? dayjs(issueDate).format('MMM, YYYY')
-                      : 'abu netiko'}
+                      : 'Both are invalid'}
                   </ListItemText>
                   <ListItemText
                     sx={{

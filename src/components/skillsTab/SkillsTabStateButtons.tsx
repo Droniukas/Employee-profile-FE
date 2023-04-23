@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { setSkillsTabState } from '../../states/skillsTabState';
-import { ViewStateRoot } from '../../store/types';
+import { ViewSkillStateRoot } from '../../store/types';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 
@@ -21,7 +21,7 @@ const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps>
     dispatch(setSkillsTabState({}));
   };
 
-  const viewState = useSelector((state: ViewStateRoot) => state.viewSkillsState.value);
+  const viewState = useSelector((state: ViewSkillStateRoot) => state.viewSkillsState.value);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   return (
