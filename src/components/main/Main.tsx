@@ -42,6 +42,16 @@ const Main = () => {
   };
 
   const [filterSearchParams, setFilterSearchParams] = useSearchParams();
+  const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
+  const [achievementsSearchParams, setAchievementsSearchParams] = useState<string | null>();
+
+  useEffect(() => {
+    if (window.location.href.includes('skills')) {
+      setSkillsSearchParams(filterSearchParams.get('filter'));
+    } else {
+      setAchievementsSearchParams(filterSearchParams.get('filter'));
+    }
+  });
 
   return (
     <>
@@ -55,19 +65,13 @@ const Main = () => {
               <Tabs value={value} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
                 <Tab
                   label="Skills"
-                  to={
-                    ROUTES.SKILLS +
-                    `?filter=${filterSearchParams.get('filter') ? filterSearchParams.get('filter') : 'my'}`
-                  }
+                  to={ROUTES.SKILLS + `?filter=${skillsSearchParams ? skillsSearchParams : 'my'}`}
                   component={Link}
                   {...getIndexedProps(0)}
                 />
                 <Tab
                   label="Achievements"
-                  to={
-                    ROUTES.ACHIEVEMENTS +
-                    `?filter=${filterSearchParams.get('filter') ? filterSearchParams.get('filter') : 'my'}`
-                  }
+                  to={ROUTES.ACHIEVEMENTS + `?filter=${achievementsSearchParams ? achievementsSearchParams : 'my'}`}
                   component={Link}
                   {...getIndexedProps(1)}
                 />
