@@ -11,6 +11,7 @@ import { mapSkillLevelToTooltip } from '../utils';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
+import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
 
 type SkillListItemProps = {
   skill: Skill;
@@ -39,25 +40,30 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
 
   const onCheckboxChange = () => {
     setChecked(!isChecked);
-    !isChecked
-      ? dispatch(
-          updateChangedSkill({
-            skillId: skill.skillId,
-            skillName: skill.skillName,
-            checked: true,
-            skillLevel: skillLevel,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        )
-      : dispatch(
-          updateChangedSkill({
-            skillId: skill.skillId,
-            skillName: skill.skillName,
-            checked: false,
-            skillLevel: null,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        );
+    if (!isChecked) {
+      dispatch(
+        updateChangedSkill({
+          skillId: skill.skillId,
+          skillName: skill.skillName,
+          checked: true,
+          skillLevel: skillLevel,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    } else {
+      if (skill.hasError) {
+        dispatch(setSkillWithErrorId({ skillId: skill.skillId }));
+      }
+      dispatch(
+        updateChangedSkill({
+          skillId: skill.skillId,
+          skillName: skill.skillName,
+          checked: false,
+          skillLevel: null,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    }
   };
 
   const tooltipText: string = mapSkillLevelToTooltip(skillLevel);

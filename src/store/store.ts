@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import skillNamesReducer from '../states/changedSkills';
+import expandedReducer from '../states/expanded';
 import onCancelReducer from '../states/onCancel';
 import viewStateReducer from '../states/skillsTabState';
-import expandedReducer from '../states/expanded';
+import skillWithErrorIdReducer from '../states/skillWithErrorId';
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     viewState: viewStateReducer,
     onCancel: onCancelReducer,
     expanded: expandedReducer,
+    skillWithErrorId: skillWithErrorIdReducer,
   },
 });
 

@@ -30,3 +30,9 @@ export interface ExpandedRoot {
     value: boolean;
   };
 }
+
+export interface SkillWithErrorIdRoot {
+  skillWithErrorId: {
+    value: { skillId: string };
+  };
+}

@@ -4,10 +4,10 @@ import React from 'react';
 
 import { Skill } from '../../models/Skill.interface';
 import SkillsTabCategory from './SkillsTabCategory';
+import SkillsTabExpandButton from './SkillsTabExpandButton';
 import SkillsTabFilterDropdown from './SkillsTabFilterDropdown';
 import SkillsTabStateButtons from './SkillsTabStateButtons';
 import { sortBySkill } from './utils';
-import SkillsTabExpandButton from './SkillsTabExpandButton';
 
 type SkillsTabProps = {
   skillsData: Skill[];

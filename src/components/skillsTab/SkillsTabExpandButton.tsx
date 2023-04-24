@@ -1,8 +1,9 @@
 import { Button } from '@mui/material';
-import { StyleVariants } from '../enums/StyleVariants';
 import { useDispatch, useSelector } from 'react-redux';
-import { ExpandedRoot } from '../../store/types';
+
 import { setExpanded } from '../../states/expanded';
+import { ExpandedRoot } from '../../store/types';
+import { StyleVariants } from '../enums/StyleVariants';
 
 const SkillsTabExpandButton = () => {
   const expanded = useSelector((state: ExpandedRoot) => state.expanded.value);

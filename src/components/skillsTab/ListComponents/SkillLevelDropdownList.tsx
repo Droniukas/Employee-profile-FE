@@ -7,6 +7,7 @@ import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
+import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
 
 type SkillLevelDropdownListProps = {
   skillLevel: SkillLevel;
@@ -23,7 +24,14 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleChange = (event: SelectChangeEvent) => {
+    if (currentSkill.hasError) {
+      dispatch(setSkillWithErrorId({ skillId: currentSkill.skillId }));
+    }
+    setSkillLevel(event.target.value as SkillLevel);
+    setOpen(!open);
     setSkillLevel(event.target.value as SkillLevel);
     dispatch(
       updateChangedSkill({
@@ -35,8 +43,6 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
       }),
     );
   };
-
-  const dispatch = useDispatch();
 
   const currentSkillLevels = currentSkill.language
     ? [SkillLevel.A1, SkillLevel.A2, SkillLevel.B1, SkillLevel.B2, SkillLevel.C1, SkillLevel.C2, SkillLevel.NATIVE]
@@ -71,8 +77,6 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
               }}
               value={skillLevel}
               onChange={(event: SelectChangeEvent) => {
-                setSkillLevel(event.target.value as SkillLevel);
-                setOpen(!open);
                 handleChange(event);
               }}
               disableUnderline

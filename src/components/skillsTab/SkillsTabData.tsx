@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
 import { ChangedSkill } from '../../models/ChangedSkill.interface';
@@ -12,6 +12,7 @@ import store from '../../store/store';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
+import { SkillWithErrorIdRoot } from '../../store/types';
 
 const SkillsTabData = () => {
   const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
@@ -19,6 +20,23 @@ const SkillsTabData = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const dispatch = useDispatch();
+
+  const skillWithErrorId = useSelector((state: SkillWithErrorIdRoot) => state.skillWithErrorId.value);
+
+  useEffect(() => {
+    setErrorForSkillById(skillWithErrorId.skillId);
+    setSkillsData([...skillsData]);
+  }, [skillWithErrorId]);
+
+  const setErrorForSkillById = (childSkillId: string) => {
+    const skillWithError: Skill | undefined = skillsData.find((skill) => skill.skillId === childSkillId);
+    if (skillWithError === undefined) return;
+    skillWithError.hasError = false;
+    const parentSkills = skillsData.filter((parentSkill) => parentSkill.skillId === skillWithError.parentSkillId);
+    parentSkills.forEach((skill) => {
+      setErrorForSkillById(skill.skillId);
+    });
+  };
 
   useEffect(() => {
     fetchAndFilterSkillsData();
@@ -50,6 +68,7 @@ const SkillsTabData = () => {
       setSkillsData([...skillsData]);
       return true;
     }
+    setSkillsData([...skillsData]);
   };
 
   const handleSave = async () => {
