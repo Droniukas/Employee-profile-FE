@@ -1,12 +1,12 @@
-import Employee from './Employee.interface';
+import ProjectEmployee from './ProjectEmployee.interface';
 
 interface Project {
-  id: string;
+  id?: number;
   title: string;
   startDate: string;
   endDate: string;
   description: string;
-  employees: Employee[];
+  projectEmployees: ProjectEmployee[];
   status: string;
 }
 

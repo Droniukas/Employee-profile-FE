@@ -1,12 +1,13 @@
 import axios from './axios';
 
 export class EmployeeService {
-  public async searchByName(searchValue: string, page: number, size: number) {
+  public async searchByName(searchValue: string, page: number, size: number, isLimited?: boolean) {
     const response = await axios.get('/employee/search', {
       params: {
         name: searchValue,
         page: page,
         size: size,
+        isLimited: isLimited,
       },
     });
     return response.data;

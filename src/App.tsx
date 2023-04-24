@@ -2,7 +2,7 @@ import './App.scss';
 
 import Grid from '@mui/material/Grid';
 import { ThemeProvider } from '@mui/material/styles';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import Footer from './components/footer/Footer';
 import Header from './components/header/Header';

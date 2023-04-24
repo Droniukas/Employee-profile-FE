@@ -17,14 +17,17 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import Project from '../../models/Project.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
+import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
+import ProjectEmployeeEditList from './ProjectEmployeeEditList';
 
 type ProjectFormProps = {
-  onClose: (projectId?: string) => void;
+  onClose: (projectId?: number) => void;
   project?: Project;
 };
 
@@ -32,19 +35,19 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const { onClose, project } = props;
 
   const projectsService = new ProjectsService();
-
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
+  const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
 
   let initialValues: Project = {
-    id: '',
     title: '',
     description: '',
     startDate: dayjs().toISOString(),
     endDate: '',
-    employees: [],
+    projectEmployees: [],
     status: '',
   };
+  if (project) initialValues = project;
 
   const handleFormSubmit = async () => {
     let result;
@@ -60,10 +63,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     }
   };
 
-  if (project) {
-    initialValues = project;
-  }
-
   const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
     useFormik({
       initialValues,
@@ -71,8 +70,49 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       validationSchema: projectSchema,
     });
 
+  const handleAddEmployeesFormClose = () => {
+    setShowAddEmployeesForm(false);
+  };
+
+  const handleAddClick = (newProjectEmployees: ProjectEmployee[]) => {
+    setFieldValue('projectEmployees', [...values.projectEmployees, ...newProjectEmployees]);
+  };
+
+  const updateProjectEmployee = useCallback(
+    (updatedProjectEmployee: ProjectEmployee) => {
+      setFieldValue(
+        'projectEmployees',
+        values.projectEmployees.map((projectEmployee: ProjectEmployee) =>
+          projectEmployee.id === updatedProjectEmployee.id ? updatedProjectEmployee : projectEmployee,
+        ),
+      );
+    },
+    [values.projectEmployees, setFieldValue],
+  );
+
+  const deleteProjectEmployee = useCallback(
+    (projectEmployeeId: number) => {
+      const updatedProjectEmployees = values.projectEmployees.filter(
+        (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
+      );
+      setFieldValue('projectEmployees', updatedProjectEmployees);
+    },
+    [values.projectEmployees, setFieldValue],
+  );
+
+  const ProjectEmployeeEditListMemo = useMemo(
+    () => (
+      <ProjectEmployeeEditList
+        projectEmployees={values.projectEmployees}
+        updateProjectEmployee={updateProjectEmployee}
+        deleteProjectEmployee={deleteProjectEmployee}
+      />
+    ),
+    [values.projectEmployees, updateProjectEmployee, deleteProjectEmployee],
+  );
+
   return (
-    <Dialog open={true} maxWidth="md">
+    <Dialog open={true} fullWidth maxWidth="md">
       <Dialog open={confirmationDialog} maxWidth="xl">
         <DialogTitle>Confirm exit</DialogTitle>
         <DialogContent>
@@ -99,7 +139,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         </Button>
       </Box>
 
-      <Box component="form" sx={{ marginX: 5, marginY: 3 }}>
+      <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
         <Typography
           variant="h1"
           sx={{
@@ -215,60 +255,95 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </LocalizationProvider>
           </Box>
         )}
+        {/* Team member box */}
+        <Box component="div" sx={{ mt: 2 }}>
+          <Box sx={{ display: 'flex' }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
+            </InputLabel>
+            {values.projectEmployees.length > 0 && (
+              <Link
+                component="button"
+                sx={{ marginLeft: 'auto', color: '#000048' }}
+                onClick={(event) => {
+                  setShowAddEmployeesForm(true);
+                  event.preventDefault();
+                }}
+              >
+                <Typography sx={{ fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
+              </Link>
+            )}
+          </Box>
 
-        <Box component="div" sx={{ my: 2 }}>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
-          </InputLabel>
-          <Box
-            component="div"
-            height={200}
-            sx={{
-              backgroundColor: '#ededed',
-              borderRadius: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>No team members yet</Typography>
-
-            <Typography
+          {values.projectEmployees.length > 0 ? (
+            ProjectEmployeeEditListMemo
+          ) : (
+            <Box
+              component="div"
+              height={200}
               sx={{
-                marginX: 10,
-                fontSize: 14,
-                fontWeight: 400,
-                color: '#4f4f4f',
-                textAlign: 'center',
+                backgroundColor: '#ededed',
+                borderRadius: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              Add team members to the project to track the resources and allow your colleagues to follow their career
-              within organization
-            </Typography>
+              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>
+                No team members yet
+              </Typography>
 
-            <Link sx={{ color: '#000048' }} href="#">
-              <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
-            </Link>
-          </Box>
-        </Box>
+              <Typography
+                sx={{
+                  marginX: 10,
+                  fontSize: 14,
+                  fontWeight: 400,
+                  color: '#4f4f4f',
+                  textAlign: 'center',
+                }}
+              >
+                Add team members to the project to track the resources and allow your colleagues to follow their career
+                within organization
+              </Typography>
 
-        <Divider />
-        <Box display={'flex'} justifyContent={'flex-end'}>
-          <Button
-            variant="contained"
-            color="info"
-            sx={{ m: 1 }}
-            onClick={() => {
-              dirty ? setConfirmationDialog(true) : onClose();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
-            Save
-          </Button>
+              <Link
+                component="button"
+                sx={{ color: '#000048' }}
+                onClick={(event) => {
+                  setShowAddEmployeesForm(true);
+                  event.preventDefault();
+                }}
+              >
+                <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
+              </Link>
+            </Box>
+          )}
         </Box>
+      </Box>
+      {showAddEmployeesForm && (
+        <ProjectEmployeeAddForm
+          projectEmployees={values.projectEmployees}
+          onClose={handleAddEmployeesFormClose}
+          onAdd={handleAddClick}
+        />
+      )}
+      {/* Cancel/save Buttons */}
+      <Divider />
+      <Box display={'flex'} justifyContent={'flex-end'}>
+        <Button
+          variant="contained"
+          color="info"
+          sx={{ m: 1 }}
+          onClick={() => {
+            dirty ? setConfirmationDialog(true) : onClose();
+          }}
+        >
+          Cancel
+        </Button>
+        <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
+          Save
+        </Button>
       </Box>
     </Dialog>
   );

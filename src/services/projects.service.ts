@@ -27,7 +27,7 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async deleteProjectById(id: string) {
+  public async deleteProjectById(id: number) {
     await axios.patch(`/project/delete/${id}`, {});
   }
 

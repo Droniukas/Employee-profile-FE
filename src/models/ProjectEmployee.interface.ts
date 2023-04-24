@@ -1,8 +1,14 @@
 interface ProjectEmployee {
-  id: string;
-  projectId: string;
-  employeeId: string;
-  teamMemberStatus: string;
+  id: number;
+  name: string;
+  surname: string;
+  middleName: string;
+  title: string;
+  imageType: string;
+  imageBytes: string;
+  projectEmployeeStartDate: string;
+  projectEmployeeEndDate: string;
+  projectEmployeeStatus: string;
 }
 
 export default ProjectEmployee;

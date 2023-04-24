@@ -4,41 +4,41 @@ import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { setSkillsTabState } from '../../states/skillsTabState';
-import { ViewSkillStateRoot } from '../../store/types/skills';
-import { SkillsTabState } from '../enums/SkillsTabState';
+import { setAchievementsTabState } from '../../states/achievementsTabState';
+import { ViewAchievementStateRoot } from '../../store/types/achievements';
+import { AchievementsTabState } from '../enums/AchievementsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 
-type SkillsTabStateButtonsProps = {
+type AchievementsTabStateButtonsProps = {
   saveFunction: () => void;
   cancelFunction: () => void;
 };
 
-const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps> = (props) => {
+const AchievementsTabStateButtons: React.FunctionComponent<AchievementsTabStateButtonsProps> = (props) => {
   const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {
-    dispatch(setSkillsTabState({}));
+    dispatch(setAchievementsTabState({}));
   };
 
-  const viewState = useSelector((state: ViewSkillStateRoot) => state.viewSkillsState.value);
+  const viewState = useSelector((state: ViewAchievementStateRoot) => state.viewAchievementsState.value);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   return (
     <>
-      {viewState === SkillsTabState.VIEW_STATE && (
+      {viewState === AchievementsTabState.VIEW_STATE && (
         <Button
           variant={StyleVariants.CONTAINED}
           onClick={() => {
-            navigate('/skills');
+            navigate('/achievements');
             setSearchParams({ filter: 'all' });
             changeView(dispatch);
           }}
         >
-          Edit skills
+          Edit achievements
         </Button>
       )}
-      {viewState === SkillsTabState.EDIT_STATE && (
+      {viewState === AchievementsTabState.EDIT_STATE && (
         <>
           <Button variant={StyleVariants.GREY} onClick={cancelFunction}>
             Cancel
@@ -52,4 +52,4 @@ const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps>
   );
 };
 
-export default SkillsTabStateButtons;
+export default AchievementsTabStateButtons;
