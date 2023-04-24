@@ -12,7 +12,7 @@ import store from '../../store/store';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
-import { SkillWithErrorIdRoot } from '../../store/types';
+import { SkillWithErrorIdRoot } from '../../store/types/skills';
 
 const SkillsTabData = () => {
   const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
@@ -28,7 +28,7 @@ const SkillsTabData = () => {
     setSkillsData([...skillsData]);
   }, [skillWithErrorId]);
 
-  const setErrorForSkillById = (childSkillId: string) => {
+  const setErrorForSkillById = (childSkillId: number) => {
     const skillWithError: Skill | undefined = skillsData.find((skill) => skill.skillId === childSkillId);
     if (skillWithError === undefined) return;
     skillWithError.hasError = false;

@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
+import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
-import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
 
 type SkillLevelDropdownListProps = {
   skillLevel: SkillLevel;

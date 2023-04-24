@@ -18,3 +18,15 @@ export interface ViewSkillStateRoot {
     value: SkillsTabState;
   };
 }
+
+export interface ExpandedRoot {
+  expanded: {
+    value: boolean;
+  };
+}
+
+export interface SkillWithErrorIdRoot {
+  skillWithErrorId: {
+    value: { skillId: number };
+  };
+}

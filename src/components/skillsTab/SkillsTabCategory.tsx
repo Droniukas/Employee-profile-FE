@@ -4,9 +4,9 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Skill } from '../../models/Skill.interface';
-import { ExpandedRoot } from '../../store/types';
 import SkillListItem from './ListComponents/SkillListItem';
 import { sortBySkill } from './utils';
+import { ExpandedRoot } from '../../store/types/skills';
 
 type SkillsTabCategoryProps = {
   currentSkill: Skill;

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
+import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
 import { OnCancelRoot, ViewSkillStateRoot } from '../../../store/types/skills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';
@@ -11,7 +12,6 @@ import { mapSkillLevelToTooltip } from '../utils';
 import SkillLevelDropdownList from './SkillLevelDropdownList';
 import SkillLevelWithTooltip from './SkillLevelWithTooltip';
 import SkillListItemErrorText from './SkillListItemErrorText';
-import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
 
 type SkillListItemProps = {
   skill: Skill;
