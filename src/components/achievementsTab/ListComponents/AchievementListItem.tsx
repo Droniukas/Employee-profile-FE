@@ -27,6 +27,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const [isChecked, setChecked] = useState<boolean>(false);
 
   const expiringDateExists: boolean = expiringDate !== undefined && expiringDate !== null;
+  const issueDateExists: boolean = issueDate !== undefined && issueDate !== null;
   const achievementIssueDateExists: boolean = achievement.issueDate !== null && achievement.issueDate !== undefined;
   const achievementExpiringDateExists: boolean =
     achievement.expiringDate !== null && achievement.expiringDate !== undefined;
@@ -129,7 +130,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           />
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
             {achievement.achievementName}
-            {achievement.hasError ? <AchievementListItemErrorText /> : null}
+            {/* {achievement.hasError && (issueDate === null || issueDate === undefined)
+              ? <AchievementListItemErrorText message={'Issue date cannot be empty!'}/>
+              : expiringDate !== null && expiringDate !== undefined && issueDate !== null && issueDate !== undefined
+                <AchievementListItemErrorText
+                message={'Expiring Date cannot be earlier than Issued Date.'}/> */}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -190,6 +195,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           }
                         : null),
                     }}
+                    disableFuture
                     label={'MON, YYYY'}
                     views={['month', 'year']}
                     sx={{ width: 200, marginRight: 7 }}
@@ -197,6 +203,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     onChange={(newValue) => {
                       setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
                       wasChange = true;
+                      if (achievement.hasError) {
+                        achievement.hasError = false;
+                      }
                     }}
                   />
                   <Checkbox
@@ -222,8 +231,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
                           views={['month', 'year']}
-                          minDate={dayjs(issueDate)}
-                          maxDate={dayjs(issueDate).add(1, 'year')}
+                          // minDate={dayjs(issueDate)}
+                          minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists ? dayjs(expiringDate) : dayjs(issueDate)}
                           onChange={(newValue) => {
                             setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
