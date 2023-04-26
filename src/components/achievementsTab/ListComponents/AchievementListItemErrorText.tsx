@@ -5,12 +5,12 @@ type AchievementListItemErrorTextProps = {
 };
 
 const AchievementListItemErrorText = (props: AchievementListItemErrorTextProps) => {
-  const {message} = props;
+  const { message } = props;
   return (
     <ListItemText
       disableTypography
       sx={{ fontSize: 15, color: '#ef4349', position: 'absolute' }}
-      primary={message}// "The input for the start date is required"
+      primary={message} // "The input for the start date is required"
     />
   );
 };

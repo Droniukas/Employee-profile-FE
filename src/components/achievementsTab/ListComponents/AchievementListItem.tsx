@@ -130,11 +130,16 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           />
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
             {achievement.achievementName}
-            {/* {achievement.hasError && (issueDate === null || issueDate === undefined)
-              ? <AchievementListItemErrorText message={'Issue date cannot be empty!'}/>
-              : expiringDate !== null && expiringDate !== undefined && issueDate !== null && issueDate !== undefined
-                <AchievementListItemErrorText
-                message={'Expiring Date cannot be earlier than Issued Date.'}/> */}
+            {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
+              <AchievementListItemErrorText message={'Issue date cannot be empty!'} />
+            ) : achievement.hasError &&
+              expiringDate !== null &&
+              expiringDate !== undefined &&
+              issueDate !== null &&
+              issueDate !== undefined &&
+              dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
+              <AchievementListItemErrorText message={'Expiring Date cannot be earlier than Issued Date.'} />
+            ) : null}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (

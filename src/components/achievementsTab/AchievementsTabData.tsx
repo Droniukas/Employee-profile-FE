@@ -11,6 +11,7 @@ import { triggerOnCancel } from '../../states/onCancel';
 import store from '../../store/store';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
+import dayjs from 'dayjs';
 
 const AchievementsTabData = () => {
   const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
@@ -49,7 +50,13 @@ const AchievementsTabData = () => {
     achievementsData.forEach((achievement) => (achievement.hasError = false));
     const unselectedLevelAchievements = changedAchievements.filter(
       (achievement) =>
-        (achievement.issueDate === null || achievement.issueDate === undefined) && achievement.checked === true,
+        ((achievement.issueDate === null || achievement.issueDate === undefined) && achievement.checked === true) ||
+        (achievement.issueDate !== null &&
+          achievement.issueDate !== undefined &&
+          achievement.checked === true &&
+          achievement.expiringDate !== null &&
+          achievement.expiringDate !== undefined &&
+          dayjs(achievement.expiringDate).isBefore(dayjs(achievement.issueDate))),
     );
     if (unselectedLevelAchievements.length > 0) {
       unselectedLevelAchievements.forEach((changedAchievementWithError) => {
