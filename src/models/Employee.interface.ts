@@ -1,3 +1,8 @@
+export interface EmploymentDate {
+  hiringDate: string;
+  exitDate: string;
+}
+
 interface Employee {
   id: number;
   name: string;
@@ -8,6 +13,7 @@ interface Employee {
   imageType: string;
   imageBytes: string;
   isManager: boolean;
+  employmentDates: EmploymentDate[];
 }
 
 export default Employee;

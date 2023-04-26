@@ -9,10 +9,10 @@ import { setChangedSkills } from '../../states/changedSkills';
 import { triggerOnCancel } from '../../states/onCancel';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
+import { SkillWithErrorIdRoot } from '../../store/types/skills';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
-import { SkillWithErrorIdRoot } from '../../store/types/skills';
 
 const SkillsTabData = () => {
   const [skillsData, setSkillsData] = useState<Array<Skill>>([]);

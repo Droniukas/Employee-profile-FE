@@ -1,3 +1,4 @@
+import { Link } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -13,14 +14,14 @@ type FindEmployeeResultsProps = {
   employees: Employee[];
 };
 
+export const isInactiveOrDismissed = (status: string): boolean => {
+  return ['INACTIVE', 'DISMISSED'].includes(status);
+};
+
 const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmployeeResultsProps) => {
   const { employees } = props;
 
   if (!employees) return null;
-
-  const isInactiveOrDismissed = (status: string): boolean => {
-    return ['INACTIVE', 'DISMISSED'].includes(status);
-  };
 
   const renderResultItem = (employee: Employee) => {
     return (
@@ -36,11 +37,6 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              employee.middleName
-                ? `${employee.name} ${employee.middleName} ${employee.surname}`
-                : `${employee.name} ${employee.surname}`
-            }
             secondary={
               <>
                 {employee.title}
@@ -51,7 +47,13 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
             sx={{
               color: isInactiveOrDismissed(employee.status) ? '#666666' : '#000048',
             }}
-          />
+          >
+            <Link href={`http://localhost:3000/skills?employeeId=${employee.id}`} underline="hover" target="_blank">
+              {employee.middleName
+                ? `${employee.name} ${employee.middleName} ${employee.surname}`
+                : `${employee.name} ${employee.surname}`}
+            </Link>
+          </ListItemText>
         </ListItem>
         <Divider variant="fullWidth" component="li" />
       </div>

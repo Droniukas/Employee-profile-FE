@@ -26,6 +26,19 @@ const Main = () => {
   const [result, setResult] = useState<Employee>();
   const [value, setValue] = React.useState<ROUTES | number>(0);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
+  const [achievementsSearchParams, setAchievementsSearchParams] = useState<string | null>();
+  const employeeIdParam = searchParams.get('employeeId');
+
+  useEffect(() => {
+    if (window.location.href.includes('skills')) {
+      setSkillsSearchParams(searchParams.get('filter'));
+    } else {
+      setAchievementsSearchParams(searchParams.get('filter'));
+    }
+  });
+
   const employeeService = new EmployeeService();
 
   const getResult = async (id: string) => {
@@ -34,14 +47,17 @@ const Main = () => {
   };
 
   useEffect(() => {
-    getResult(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    getResult(`${employeeIdParam ? employeeIdParam : process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: ROUTES | number) => {
     setValue(newValue);
   };
 
-  const [filterSearchParams, setFilterSearchParams] = useSearchParams();
+  const getEmployeeIdURLPart = (withOtherFilters?: boolean) => {
+    if (employeeIdParam) return `${withOtherFilters ? '&' : '?'}employeeId=` + employeeIdParam;
+    return '';
+  };
 
   return (
     <>
@@ -57,7 +73,8 @@ const Main = () => {
                   label="Skills"
                   to={
                     ROUTES.SKILLS +
-                    `?filter=${filterSearchParams.get('filter') ? filterSearchParams.get('filter') : 'my'}`
+                    `?filter=${skillsSearchParams ? skillsSearchParams : 'my'}` +
+                    getEmployeeIdURLPart(true)
                   }
                   component={Link}
                   {...getIndexedProps(0)}
@@ -66,13 +83,19 @@ const Main = () => {
                   label="Achievements"
                   to={
                     ROUTES.ACHIEVEMENTS +
-                    `?filter=${filterSearchParams.get('filter') ? filterSearchParams.get('filter') : 'my'}`
+                    `?filter=${achievementsSearchParams ? achievementsSearchParams : 'my'}` +
+                    getEmployeeIdURLPart(true)
                   }
                   component={Link}
                   {...getIndexedProps(1)}
                 />
-                <Tab label="My projects" to={ROUTES.MY_PROJECTS} component={Link} {...getIndexedProps(2)} />
-                {result?.isManager && (
+                <Tab
+                  label="My projects"
+                  to={ROUTES.MY_PROJECTS + getEmployeeIdURLPart()}
+                  component={Link}
+                  {...getIndexedProps(2)}
+                />
+                {(result?.isManager && employeeIdParam) ?? (
                   <Tab
                     label="Search"
                     value={ROUTES.SEARCH}
@@ -81,7 +104,7 @@ const Main = () => {
                     {...getIndexedProps(3)}
                   />
                 )}
-                {result?.isManager && (
+                {(result?.isManager && employeeIdParam) ?? (
                   <Tab label="Project profiles" to={ROUTES.PROJECT_PROFILES} component={Link} {...getIndexedProps(4)} />
                 )}
               </Tabs>
@@ -114,7 +137,10 @@ const Main = () => {
                     </TabPanel>
                   }
                 />
-                {result?.isManager && (
+                {/* {!employeeIdParam ?? 
+                
+                } */}
+                {(result?.isManager && employeeIdParam) ?? (
                   <Route
                     path={ROUTES.SEARCH}
                     element={
@@ -124,7 +150,7 @@ const Main = () => {
                     }
                   />
                 )}
-                {result?.isManager && (
+                {(result?.isManager && employeeIdParam) ?? (
                   <Route
                     path={ROUTES.PROJECT_PROFILES}
                     element={

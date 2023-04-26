@@ -53,7 +53,8 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
     try {
       const loginService = new LoginService();
       const responseData = await loginService.checkCredentials(data);
-      navigate('/skills?filter=my');
+      const currentPath = '/' + (location.pathname + location.search).substring(1);
+      currentPath === '/' ? navigate('/skills?filter=my') : navigate(currentPath);
       setAppState(AppState.LANDING_PAGE);
     } catch (error) {
       console.log(error);
