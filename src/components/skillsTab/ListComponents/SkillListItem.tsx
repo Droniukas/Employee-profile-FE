@@ -105,7 +105,7 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
             ) : null
           ) : null}
         </ListItem>
-        {skill.hasError ? ( // cia checkintume reduxo store
+        {skill.hasError ? (
           <ListItem sx={{ padding: 0, margin: 0, marginLeft: '50px' }}>
             <SkillListItemErrorText />
           </ListItem>

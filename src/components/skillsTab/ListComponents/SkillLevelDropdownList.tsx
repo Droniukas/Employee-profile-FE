@@ -30,7 +30,6 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
     if (currentSkill.hasError) {
       dispatch(setSkillWithErrorId({ skillId: currentSkill.skillId }));
     }
-    setSkillLevel(event.target.value as SkillLevel);
     setOpen(!open);
     setSkillLevel(event.target.value as SkillLevel);
     dispatch(
@@ -87,7 +86,7 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
                 paddingLeft: '10px',
                 borderRadius: '10px',
                 width: '150px',
-                ...(currentSkill.hasError // cia checkintume reduxo store
+                ...(currentSkill.hasError
                   ? {
                       backgroundColor: '#ffefef',
                       color: '#ef4349',

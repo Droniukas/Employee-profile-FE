@@ -5,6 +5,7 @@ import {
   Grid,
   IconButton,
   InputLabel,
+  Link,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -79,11 +80,6 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={
-                  projectEmployee.middleName
-                    ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
-                    : `${projectEmployee.name} ${projectEmployee.surname}`
-                }
                 secondary={
                   <>
                     {projectEmployee.title}
@@ -94,7 +90,21 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 sx={{
                   color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : '#000048',
                 }}
-              />
+              >
+                <Link
+                  href={
+                    projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                      ? `http://localhost:3000/skills?employeeId=${projectEmployee.id}`
+                      : 'http://localhost:3000/skills?filter=my'
+                  }
+                  underline="hover"
+                  target="_blank"
+                >
+                  {projectEmployee.middleName
+                    ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
+                    : `${projectEmployee.name} ${projectEmployee.surname}`}
+                </Link>
+              </ListItemText>
             </Box>
           </Grid>
           <Grid item xs={5.5} display={'flex'}>

@@ -1,4 +1,4 @@
-import { Avatar, Box, Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { Avatar, Box, Checkbox, Link, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 
 import Employee from '../../models/Employee.interface';
 
@@ -29,16 +29,25 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              employee.middleName
-                ? `${employee.name} ${employee.middleName} ${employee.surname}`
-                : `${employee.name} ${employee.surname}`
-            }
             secondary={employee.title}
             sx={{
               color: '#000048',
             }}
-          />
+          >
+            <Link
+              href={
+                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                  ? `http://localhost:3000/skills?employeeId=${employee.id}`
+                  : 'http://localhost:3000/skills?filter=my'
+              }
+              underline="hover"
+              target="_blank"
+            >
+              {employee.middleName
+                ? `${employee.name} ${employee.middleName} ${employee.surname}`
+                : `${employee.name} ${employee.surname}`}
+            </Link>
+          </ListItemText>
         </Box>
       </ListItem>
     </>

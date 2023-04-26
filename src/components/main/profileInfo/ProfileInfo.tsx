@@ -1,10 +1,11 @@
 import { Avatar, Box } from '@mui/material';
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import Employee from '../../../models/Employee.interface';
 import { isInactiveOrDismissed } from '../../findEmployee/FindEmployeeResults';
+import StatusChip from '../../findEmployee/StatusChip';
 import EmployeeDates from './EmployeeDates';
-import { useSearchParams } from 'react-router-dom';
 
 type ProfileInfoProps = {
   employee: Employee;
@@ -36,7 +37,16 @@ const ProfileInfo: React.FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
           {employee.name} {employee.middleName} {employee.surname}
         </h1>
         <h4 className="position">
-          {employee.title} {employeeIdParam ? <EmployeeDates employee={employee} /> : ''}
+          {employee.title}{' '}
+          {employeeIdParam ? (
+            <>
+              <span style={{ margin: '0 12px' }}>/</span>
+              <StatusChip status={employee.status} />
+            </>
+          ) : (
+            ''
+          )}
+          {employeeIdParam ? <EmployeeDates employee={employee} /> : ''}
         </h4>
       </Box>
     </>

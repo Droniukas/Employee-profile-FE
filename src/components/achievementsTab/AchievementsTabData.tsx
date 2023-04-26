@@ -16,6 +16,7 @@ const AchievementsTabData = () => {
   const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
   const achievementsService = new AchievementsService();
   const [searchParams, setSearchParams] = useSearchParams();
+  const employeeIdParam = searchParams.get('employeeId');
 
   const dispatch = useDispatch();
 
@@ -24,10 +25,19 @@ const AchievementsTabData = () => {
   }, [location.href]);
 
   const fetchAndFilterAchievementsData = async () => {
-    const response: Achievement[] = await achievementsService.fetchAchievementsData();
-    setAchievementsData(
-      getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
-    );
+    if (employeeIdParam) {
+      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
+        Number(employeeIdParam),
+      );
+      setAchievementsData(getFilteredAchievementsData(getAchievementsDataWithCount(response), 'my'));
+    } else {
+      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
+        Number(process.env.REACT_APP_TEMP_USER_ID),
+      );
+      setAchievementsData(
+        getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
+      );
+    }
   };
 
   const setErrorForAchievements = (childAchievement: ChangedAchievement | Achievement) => {

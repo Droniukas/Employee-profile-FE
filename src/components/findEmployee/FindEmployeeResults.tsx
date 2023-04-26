@@ -48,7 +48,15 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
               color: isInactiveOrDismissed(employee.status) ? '#666666' : '#000048',
             }}
           >
-            <Link href={`http://localhost:3000/skills?employeeId=${employee.id}`} underline="hover" target="_blank">
+            <Link
+              href={
+                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                  ? `http://localhost:3000/skills?employeeId=${employee.id}`
+                  : 'http://localhost:3000/skills?filter=my'
+              }
+              underline="hover"
+              target="_blank"
+            >
               {employee.middleName
                 ? `${employee.name} ${employee.middleName} ${employee.surname}`
                 : `${employee.name} ${employee.surname}`}

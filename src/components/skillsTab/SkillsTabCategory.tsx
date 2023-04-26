@@ -17,8 +17,6 @@ const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (prop
   const { currentSkill, mapData, skillsData } = props;
   const expanded = useSelector((state: ExpandedRoot) => state.expanded.value);
 
-  // here we would add an object with skillId, parentId, skillName and expanded props to the redux state array
-
   useEffect(() => {
     setIsCollapsed(expanded);
   }, [expanded]);
@@ -42,7 +40,7 @@ const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (prop
           border: 1,
           marginLeft: currentSkill.indent * 6,
           backgroundColor: 'white',
-          ...(currentSkill.hasError // cia checkintume reduxo store
+          ...(currentSkill.hasError
             ? {
                 borderColor: '#ef4349',
                 color: '#ef4349',

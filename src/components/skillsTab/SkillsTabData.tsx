@@ -18,6 +18,7 @@ const SkillsTabData = () => {
   const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
   const skillsService = new SkillsService();
   const [searchParams, setSearchParams] = useSearchParams();
+  const employeeIdParam = searchParams.get('employeeId');
 
   const dispatch = useDispatch();
 
@@ -43,8 +44,15 @@ const SkillsTabData = () => {
   }, [location.href]);
 
   const fetchAndFilterSkillsData = async () => {
-    const response: Skill[] = await skillsService.fetchSkillsData();
-    setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+    if (employeeIdParam) {
+      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(Number(employeeIdParam));
+      setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), 'my'));
+    } else {
+      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(
+        Number(process.env.REACT_APP_TEMP_USER_ID),
+      );
+      setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+    }
   };
 
   const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {
