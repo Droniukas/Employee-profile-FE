@@ -139,6 +139,13 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
               issueDate !== undefined &&
               dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
               <AchievementListItemErrorText message={'Expiring Date cannot be earlier than Issued Date.'} />
+            ) : achievement.hasError &&
+              expiringDate !== null &&
+              expiringDate !== undefined &&
+              issueDate !== null &&
+              issueDate !== undefined &&
+              dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
+              <AchievementListItemErrorText message={'Certificate activity period cannot be less than 1 year.'} />
             ) : null}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
@@ -236,7 +243,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
                           views={['month', 'year']}
-                          // minDate={dayjs(issueDate)}
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists ? dayjs(expiringDate) : dayjs(issueDate)}
                           onChange={(newValue) => {
