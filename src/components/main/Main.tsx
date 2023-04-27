@@ -24,7 +24,10 @@ const getIndexedProps = (index: number) => {
 
 const Main = () => {
   const [result, setResult] = useState<Employee>();
-  const [value, setValue] = React.useState<ROUTES | number>(0);
+  const [value, setValue] = React.useState<ROUTES>(ROUTES.SKILLS);
+  useEffect(() => {
+    setValue(location.pathname as ROUTES);
+  }, []);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
@@ -50,7 +53,7 @@ const Main = () => {
     getResult(`${employeeIdParam ? employeeIdParam : process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: ROUTES | number) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: ROUTES) => {
     setValue(newValue);
   };
 
@@ -71,6 +74,7 @@ const Main = () => {
               <Tabs value={value} onChange={handleChange} indicatorColor="secondary" aria-label="secondary">
                 <Tab
                   label="Skills"
+                  value={ROUTES.SKILLS}
                   to={
                     ROUTES.SKILLS +
                     `?filter=${skillsSearchParams ? skillsSearchParams : 'my'}` +
@@ -81,6 +85,7 @@ const Main = () => {
                 />
                 <Tab
                   label="Achievements"
+                  value={ROUTES.ACHIEVEMENTS}
                   to={
                     ROUTES.ACHIEVEMENTS +
                     `?filter=${achievementsSearchParams ? achievementsSearchParams : 'my'}` +
@@ -91,6 +96,7 @@ const Main = () => {
                 />
                 <Tab
                   label="My projects"
+                  value={ROUTES.MY_PROJECTS}
                   to={ROUTES.MY_PROJECTS + getEmployeeIdURLPart()}
                   component={Link}
                   {...getIndexedProps(2)}
@@ -105,7 +111,13 @@ const Main = () => {
                   />
                 )}
                 {(result?.isManager && employeeIdParam) ?? (
-                  <Tab label="Project profiles" to={ROUTES.PROJECT_PROFILES} component={Link} {...getIndexedProps(4)} />
+                  <Tab
+                    label="Project profiles"
+                    value={ROUTES.PROJECT_PROFILES}
+                    to={ROUTES.PROJECT_PROFILES}
+                    component={Link}
+                    {...getIndexedProps(4)}
+                  />
                 )}
               </Tabs>
             </Box>
