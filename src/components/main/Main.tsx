@@ -137,9 +137,6 @@ const Main = () => {
                     </TabPanel>
                   }
                 />
-                {/* {!employeeIdParam ?? 
-                
-                } */}
                 {(result?.isManager && employeeIdParam) ?? (
                   <Route
                     path={ROUTES.SEARCH}
