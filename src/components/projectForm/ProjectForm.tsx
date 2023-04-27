@@ -152,7 +152,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         >
           {project ? 'Edit project profile' : 'Add project profile'}
         </Typography>
-
         <Box>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
@@ -174,7 +173,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-
         <Box
           component="div"
           sx={{
@@ -207,7 +205,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-
         <Box display={'flex'} sx={{}}>
           <Box display={'inline-block'}>
             <InputLabel>

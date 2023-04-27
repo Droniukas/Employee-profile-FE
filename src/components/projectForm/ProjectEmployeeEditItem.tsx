@@ -123,7 +123,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                   }}
                 />
                 {startDateError && (
-                  <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 0.5, ml: 1.5 }}>{startDateError}</Typography>
+                  <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 0.5, ml: 1.5, marginLeft: '0px' }}>
+                    {startDateError}
+                  </Typography>
                 )}
               </LocalizationProvider>
             </Box>
