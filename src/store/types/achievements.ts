@@ -18,3 +18,13 @@ export interface ViewAchievementStateRoot {
     value: AchievementsTabState;
   };
 }
+export interface ExpandedAchievementsRoot {
+  expanded: {
+    value: boolean;
+  };
+}
+export interface AchievementWithErrorIdRoot {
+  achievementWithErrorId: {
+    value: { achievementId: number };
+  };
+}

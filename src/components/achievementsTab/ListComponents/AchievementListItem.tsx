@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Achievement } from '../../../models/Achievement.interface';
+import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
 import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/types/achievements';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
@@ -52,29 +53,37 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
 
   const onSwitchChange = () => {
     setChecked(!isChecked);
-    !isChecked
-      ? dispatch(
-          updateChangedAchievement({
-            achievementId: achievement.achievementId,
-            achievementName: achievement.achievementName,
-            checked: true,
-            issueDate: issueDate,
-            expiringDate: expiringDate,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        )
-      : dispatch(
-          updateChangedAchievement({
-            achievementId: achievement.achievementId,
-            achievementName: achievement.achievementName,
-            checked: false,
-            issueDate: null,
-            expiringDate: null,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        );
+    if (!isChecked) {
+      dispatch(
+        updateChangedAchievement({
+          achievementId: achievement.achievementId,
+          achievementName: achievement.achievementName,
+          checked: true,
+          issueDate: issueDate,
+          expiringDate: expiringDate,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    } else {
+      if (achievement.hasError) {
+        dispatch(setAchievementWithErrorId({ achievementId: achievement.achievementId }));
+      }
+      dispatch(
+        updateChangedAchievement({
+          achievementId: achievement.achievementId,
+          achievementName: achievement.achievementName,
+          checked: false,
+          issueDate: null,
+          expiringDate: null,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    }
   };
   const onDatePickerChange = () => {
+    if (achievement.hasError) {
+      dispatch(setAchievementWithErrorId({ achievementId: achievement.achievementId }));
+    }
     dispatch(
       updateChangedAchievement({
         achievementId: achievement.achievementId,
@@ -201,7 +210,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       ...(!achievement.hasError
                         ? {
                             textField: {
-                              size: 'small',
+                              size: 'medium',
                               error: false,
                             },
                           }
@@ -235,14 +244,14 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           slotProps={{
-                            ...(!achievement.hasError && !issueDateExists
-                              ? {
+                            ...(achievement.hasError && issueDateExists
+                              ? null
+                              : {
                                   textField: {
                                     size: 'medium',
                                     error: false,
                                   },
-                                }
-                              : null),
+                                }),
                           }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}

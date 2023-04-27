@@ -16,7 +16,7 @@ const AchievementListItemErrorText = (props: AchievementListItemErrorTextProps) 
       />
       <ListItemText
         disableTypography
-        sx={{ fontSize: 15, color: '#ef4349', position: 'absolute', paddingTop: 12, paddingLeft: 67 }}
+        sx={{ fontSize: 15, color: '#ef4349', position: 'absolute', paddingTop: 13, paddingLeft: 67 }}
         primary={expiringDateErrorMessage}
       />
     </>

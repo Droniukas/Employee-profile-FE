@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import viewAchievementsStateReducer from '../states/achievementsTabState';
+import achievementWithErrorIdReducer from '../states/achievementWithErrorId';
 import achievementNamesReducer from '../states/changedAchievements';
 import skillNamesReducer from '../states/changedSkills';
 import onCancelReducer from '../states/onCancel';
@@ -13,6 +14,7 @@ const store = configureStore({
     viewSkillsState: viewSkillsStateReducer,
     viewAchievementsState: viewAchievementsStateReducer,
     onCancel: onCancelReducer,
+    achievementWithErrorId: achievementWithErrorIdReducer,
   },
 });
 
