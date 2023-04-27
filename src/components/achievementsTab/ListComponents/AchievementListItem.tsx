@@ -31,6 +31,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const achievementIssueDateExists: boolean = achievement.issueDate !== null && achievement.issueDate !== undefined;
   const achievementExpiringDateExists: boolean =
     achievement.expiringDate !== null && achievement.expiringDate !== undefined;
+  const isErrorWhenDatesExists = achievement.hasError && issueDateExists && expiringDateExists;
 
   useEffect(() => {
     setChecked(achievement.checked);
@@ -131,21 +132,20 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
             {achievement.achievementName}
             {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
-              <AchievementListItemErrorText message={'Issue date cannot be empty!'} />
-            ) : achievement.hasError &&
-              expiringDate !== null &&
-              expiringDate !== undefined &&
-              issueDate !== null &&
-              issueDate !== undefined &&
-              dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
-              <AchievementListItemErrorText message={'Expiring Date cannot be earlier than Issued Date.'} />
-            ) : achievement.hasError &&
-              expiringDate !== null &&
-              expiringDate !== undefined &&
-              issueDate !== null &&
-              issueDate !== undefined &&
-              dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
-              <AchievementListItemErrorText message={'Certificate activity period cannot be less than 1 year.'} />
+              <AchievementListItemErrorText
+                issueDateErrorMessage={'Issue date cannot be empty!'}
+                expiringDateErrorMessage={''}
+              />
+            ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
+              <AchievementListItemErrorText
+                issueDateErrorMessage={''}
+                expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
+              />
+            ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
+              <AchievementListItemErrorText
+                issueDateErrorMessage={''}
+                expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
+              />
             ) : null}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
@@ -235,10 +235,14 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           slotProps={{
-                            textField: {
-                              size: 'small',
-                              error: false,
-                            },
+                            ...(!achievement.hasError && !issueDateExists
+                              ? {
+                                  textField: {
+                                    size: 'medium',
+                                    error: false,
+                                  },
+                                }
+                              : null),
                           }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}

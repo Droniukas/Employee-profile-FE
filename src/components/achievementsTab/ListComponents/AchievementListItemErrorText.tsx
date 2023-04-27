@@ -1,17 +1,25 @@
 import { ListItemText } from '@mui/material';
 
 type AchievementListItemErrorTextProps = {
-  message: string;
+  issueDateErrorMessage: string;
+  expiringDateErrorMessage: string;
 };
 
 const AchievementListItemErrorText = (props: AchievementListItemErrorTextProps) => {
-  const { message } = props;
+  const { issueDateErrorMessage, expiringDateErrorMessage } = props;
   return (
-    <ListItemText
-      disableTypography
-      sx={{ fontSize: 15, color: '#ef4349', position: 'absolute' }}
-      primary={message} // "The input for the start date is required"
-    />
+    <>
+      <ListItemText
+        disableTypography
+        sx={{ fontSize: 15, color: '#ef4349', position: 'absolute' }}
+        primary={issueDateErrorMessage}
+      />
+      <ListItemText
+        disableTypography
+        sx={{ fontSize: 15, color: '#ef4349', position: 'absolute', paddingTop: 12, paddingLeft: 67 }}
+        primary={expiringDateErrorMessage}
+      />
+    </>
   );
 };
 

@@ -48,22 +48,20 @@ const AchievementsTabData = () => {
   const hasErrors = () => {
     const changedAchievements = store.getState().changedAchievements.value;
     achievementsData.forEach((achievement) => (achievement.hasError = false));
-    const unselectedLevelAchievements = changedAchievements.filter(
-      (achievement) =>
+    const unselectedLevelAchievements = changedAchievements.filter((achievement) => {
+      const isErrorWhenDatesExist =
+        achievement.issueDate !== null &&
+        achievement.issueDate !== undefined &&
+        achievement.checked === true &&
+        achievement.expiringDate !== null &&
+        achievement.expiringDate !== undefined;
+
+      return (
         ((achievement.issueDate === null || achievement.issueDate === undefined) && achievement.checked === true) ||
-        (achievement.issueDate !== null &&
-          achievement.issueDate !== undefined &&
-          achievement.checked === true &&
-          achievement.expiringDate !== null &&
-          achievement.expiringDate !== undefined &&
-          dayjs(achievement.expiringDate).isBefore(dayjs(achievement.issueDate))) ||
-        (achievement.issueDate !== null &&
-          achievement.issueDate !== undefined &&
-          achievement.checked === true &&
-          achievement.expiringDate !== null &&
-          achievement.expiringDate !== undefined &&
-          dayjs(achievement.expiringDate).diff(dayjs(achievement.issueDate), 'year') < 1),
-    );
+        (isErrorWhenDatesExist && dayjs(achievement.expiringDate).isBefore(dayjs(achievement.issueDate))) ||
+        (isErrorWhenDatesExist && dayjs(achievement.expiringDate).diff(dayjs(achievement.issueDate), 'year') < 1)
+      );
+    });
     if (unselectedLevelAchievements.length > 0) {
       unselectedLevelAchievements.forEach((changedAchievementWithError) => {
         setErrorForAchievements(changedAchievementWithError);
