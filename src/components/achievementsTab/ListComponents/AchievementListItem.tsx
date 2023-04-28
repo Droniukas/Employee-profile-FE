@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Achievement } from '../../../models/Achievement.interface';
+import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
 import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/types/achievements';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
@@ -27,9 +28,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const [isChecked, setChecked] = useState<boolean>(false);
 
   const expiringDateExists: boolean = expiringDate !== undefined && expiringDate !== null;
+  const issueDateExists: boolean = issueDate !== undefined && issueDate !== null;
   const achievementIssueDateExists: boolean = achievement.issueDate !== null && achievement.issueDate !== undefined;
   const achievementExpiringDateExists: boolean =
     achievement.expiringDate !== null && achievement.expiringDate !== undefined;
+  const isErrorWhenDatesExists = achievement.hasError && issueDateExists && expiringDateExists;
 
   useEffect(() => {
     setChecked(achievement.checked);
@@ -50,29 +53,37 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
 
   const onSwitchChange = () => {
     setChecked(!isChecked);
-    !isChecked
-      ? dispatch(
-          updateChangedAchievement({
-            achievementId: achievement.achievementId,
-            achievementName: achievement.achievementName,
-            checked: true,
-            issueDate: issueDate,
-            expiringDate: expiringDate,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        )
-      : dispatch(
-          updateChangedAchievement({
-            achievementId: achievement.achievementId,
-            achievementName: achievement.achievementName,
-            checked: false,
-            issueDate: null,
-            expiringDate: null,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        );
+    if (!isChecked) {
+      dispatch(
+        updateChangedAchievement({
+          achievementId: achievement.achievementId,
+          achievementName: achievement.achievementName,
+          checked: true,
+          issueDate: issueDate,
+          expiringDate: expiringDate,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    } else {
+      if (achievement.hasError) {
+        dispatch(setAchievementWithErrorId({ achievementId: achievement.achievementId }));
+      }
+      dispatch(
+        updateChangedAchievement({
+          achievementId: achievement.achievementId,
+          achievementName: achievement.achievementName,
+          checked: false,
+          issueDate: null,
+          expiringDate: null,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    }
   };
   const onDatePickerChange = () => {
+    if (achievement.hasError) {
+      dispatch(setAchievementWithErrorId({ achievementId: achievement.achievementId }));
+    }
     dispatch(
       updateChangedAchievement({
         achievementId: achievement.achievementId,
@@ -129,7 +140,22 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           />
           <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
             {achievement.achievementName}
-            {achievement.hasError ? <AchievementListItemErrorText /> : null}
+            {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
+              <AchievementListItemErrorText
+                issueDateErrorMessage={'Issue date cannot be empty!'}
+                expiringDateErrorMessage={''}
+              />
+            ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
+              <AchievementListItemErrorText
+                issueDateErrorMessage={''}
+                expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
+              />
+            ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
+              <AchievementListItemErrorText
+                issueDateErrorMessage={''}
+                expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
+              />
+            ) : null}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -184,12 +210,13 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       ...(!achievement.hasError
                         ? {
                             textField: {
-                              size: 'small',
+                              size: 'medium',
                               error: false,
                             },
                           }
                         : null),
                     }}
+                    disableFuture
                     label={'MON, YYYY'}
                     views={['month', 'year']}
                     sx={{ width: 200, marginRight: 7 }}
@@ -197,6 +224,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     onChange={(newValue) => {
                       setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
                       wasChange = true;
+                      if (achievement.hasError) {
+                        achievement.hasError = false;
+                      }
                     }}
                   />
                   <Checkbox
@@ -214,16 +244,19 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                           slotProps={{
-                            textField: {
-                              size: 'small',
-                              error: false,
-                            },
+                            ...(achievement.hasError && issueDateExists
+                              ? null
+                              : {
+                                  textField: {
+                                    size: 'medium',
+                                    error: false,
+                                  },
+                                }),
                           }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
                           views={['month', 'year']}
-                          minDate={dayjs(issueDate)}
-                          maxDate={dayjs(issueDate).add(1, 'year')}
+                          minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists ? dayjs(expiringDate) : dayjs(issueDate)}
                           onChange={(newValue) => {
                             setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
