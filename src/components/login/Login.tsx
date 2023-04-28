@@ -14,6 +14,7 @@ import { AppState } from '../../App';
 import LoginInterface from '../../models/Login.interface';
 import { LoginService } from '../../services/login.service';
 import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
+import { ROUTES } from '../routes/routes';
 
 type LoginProps = {
   setAppState: (newState: AppState) => void;
@@ -54,7 +55,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
       const loginService = new LoginService();
       const responseData = await loginService.checkCredentials(data);
       const currentPath = '/' + (location.pathname + location.search).substring(1);
-      currentPath === '/' ? navigate('/skills?filter=my') : navigate(currentPath);
+      currentPath === '/' ? navigate(`${ROUTES.SKILLS}`) : navigate(currentPath);
       setAppState(AppState.LANDING_PAGE);
     } catch (error) {
       console.log(error);

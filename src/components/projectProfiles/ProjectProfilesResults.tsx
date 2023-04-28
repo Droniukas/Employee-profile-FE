@@ -221,6 +221,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     if (date === null) {
       return null;
     } else {
+      console.log(date);
       return moment(date).format('YYYY/MM/DD');
     }
   };

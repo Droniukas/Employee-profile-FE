@@ -1,6 +1,7 @@
 import { Avatar, Box, Checkbox, Link, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 
 import Employee from '../../models/Employee.interface';
+import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeAddItemProps = {
   employee: Employee;
@@ -37,8 +38,8 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
             <Link
               href={
                 employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
-                  ? `http://localhost:3000/skills?employeeId=${employee.id}`
-                  : 'http://localhost:3000/skills?filter=my'
+                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${employee.id}`
+                  : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
               }
               underline="hover"
               target="_blank"

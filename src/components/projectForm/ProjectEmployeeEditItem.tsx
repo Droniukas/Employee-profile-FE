@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import StatusChip from '../findEmployee/StatusChip';
+import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
@@ -94,8 +95,8 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 <Link
                   href={
                     projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
-                      ? `http://localhost:3000/skills?employeeId=${projectEmployee.id}`
-                      : 'http://localhost:3000/skills?filter=my'
+                      ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${projectEmployee.id}`
+                      : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
                   }
                   underline="hover"
                   target="_blank"

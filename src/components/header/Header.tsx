@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
+import { ROUTES } from '../routes/routes';
 
 const Header = () => {
   const [result, setResult] = useState<Employee>();
@@ -70,7 +71,7 @@ const Header = () => {
               setAnchorEl(null);
             }}
           >
-            <Link href={'http://localhost:3000/skills?filter=my'} underline="none">
+            <Link href={`${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`} underline="none">
               <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleMyProfileSelection}>
                 My Profile
               </MenuItem>
