@@ -1,5 +1,6 @@
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
 import { Achievement } from '../../models/Achievement.interface';
@@ -9,6 +10,7 @@ import { setAchievementsTabState } from '../../states/achievementsTabState';
 import { setChangedAchievements } from '../../states/changedAchievements';
 import { triggerOnCancel } from '../../states/onCancel';
 import store from '../../store/store';
+import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
@@ -19,6 +21,25 @@ const AchievementsTabData = () => {
   const employeeIdParam = searchParams.get('employeeId');
 
   const dispatch = useDispatch();
+
+  const achievementWithErrorId = useSelector((state: AchievementWithErrorIdRoot) => state.achievementWithErrorId.value);
+  useEffect(() => {
+    setErrorForAchievementById(achievementWithErrorId.achievementId);
+    setAchievementsData([...achievementsData]);
+  }, [achievementWithErrorId]);
+  const setErrorForAchievementById = (childAchievementId: number) => {
+    const achievementWithError: Achievement | undefined = achievementsData.find(
+      (achievement) => achievement.achievementId === childAchievementId,
+    );
+    if (achievementWithError === undefined) return;
+    achievementWithError.hasError = false;
+    const parentAchievements = achievementsData.filter(
+      (parentAchievement) => parentAchievement.achievementId === achievementWithError.parentAchievementId,
+    );
+    parentAchievements.forEach((achievement) => {
+      setErrorForAchievementById(achievement.achievementId);
+    });
+  };
 
   useEffect(() => {
     fetchAndFilterAchievementsData();
@@ -57,10 +78,19 @@ const AchievementsTabData = () => {
   const hasErrors = () => {
     const changedAchievements = store.getState().changedAchievements.value;
     achievementsData.forEach((achievement) => (achievement.hasError = false));
-    const unselectedLevelAchievements = changedAchievements.filter(
-      (achievement) =>
-        (achievement.issueDate === null || achievement.issueDate === undefined) && achievement.checked === true,
-    );
+    const unselectedLevelAchievements = changedAchievements.filter((achievement) => {
+      const isErrorWhenDatesExist =
+        achievement.issueDate !== null &&
+        achievement.issueDate !== undefined &&
+        achievement.checked === true &&
+        achievement.expiringDate !== null &&
+        achievement.expiringDate !== undefined;
+      return (
+        ((achievement.issueDate === null || achievement.issueDate === undefined) && achievement.checked === true) ||
+        (isErrorWhenDatesExist && dayjs(achievement.expiringDate).isBefore(dayjs(achievement.issueDate))) ||
+        (isErrorWhenDatesExist && dayjs(achievement.expiringDate).diff(dayjs(achievement.issueDate), 'year') < 1)
+      );
+    });
     if (unselectedLevelAchievements.length > 0) {
       unselectedLevelAchievements.forEach((changedAchievementWithError) => {
         setErrorForAchievements(changedAchievementWithError);

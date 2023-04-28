@@ -19,6 +19,7 @@ const store = configureStore({
     expandedSkill: expandedSkillReducer,
     expandedAchievement: expandedAchievementReducer,
     skillWithErrorId: skillWithErrorIdReducer,
+    achievementWithErrorId: achievementWithErrorIdReducer
   },
 });
 
