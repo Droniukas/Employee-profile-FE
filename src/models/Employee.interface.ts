@@ -1,3 +1,5 @@
+import { EmploymentDate } from './EmployementData.interface';
+
 interface Employee {
   id: number;
   name: string;
@@ -8,6 +10,7 @@ interface Employee {
   imageType: string;
   imageBytes: string;
   isManager: boolean;
+  employmentDates: EmploymentDate[];
 }
 
 export default Employee;

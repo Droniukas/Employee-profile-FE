@@ -102,7 +102,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               >
                 <FolderIcon
                   sx={{
-                    color: '#000048',
+                    color: 'primary.main',
                     fontSize: 26,
                   }}
                 />
@@ -128,7 +128,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                 </Typography>
                 <Typography
                   sx={{
-                    color: '#000048',
+                    color: 'primary.main',
                     fontSize: 20,
                   }}
                 >
@@ -150,7 +150,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     onClick={() => setProject(project)}
                     sx={{
                       textDecoration: 'underline',
-                      color: '#000048',
+                      color: 'primary.main',
                       fontSize: 14,
                       height: 15,
                     }}
@@ -187,7 +187,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   className="btn-edit"
                   aria-label="edit"
                   sx={{
-                    color: '#000048',
+                    color: 'primary.main',
                     position: 'relative',
                     left: 320,
                     backgroundColor: '#F4F4F4',
@@ -200,7 +200,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   className="btn-delete"
                   aria-label="delete"
                   sx={{
-                    color: '#000048',
+                    color: 'primary.main',
                     position: 'relative',
                     left: 335,
                     backgroundColor: '#F4F4F4',
@@ -322,7 +322,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         <ListItem alignItems="flex-start">
           <Typography
             sx={{
-              color: '#000048',
+              color: 'primary.main',
               fontSize: 20,
             }}
           >

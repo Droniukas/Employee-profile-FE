@@ -152,7 +152,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         >
           {project ? 'Edit project profile' : 'Add project profile'}
         </Typography>
-
         <Box>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
@@ -174,7 +173,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-
         <Box
           component="div"
           sx={{
@@ -207,7 +205,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-
         <Box display={'flex'} sx={{}}>
           <Box display={'inline-block'}>
             <InputLabel>
@@ -264,13 +261,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             {values.projectEmployees.length > 0 && (
               <Link
                 component="button"
-                sx={{ marginLeft: 'auto', color: '#000048' }}
+                sx={{ marginLeft: 'auto', color: 'primary.main' }}
                 onClick={(event) => {
                   setShowAddEmployeesForm(true);
                   event.preventDefault();
                 }}
               >
-                <Typography sx={{ fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'primary.main' }}>Add team member</Typography>
               </Link>
             )}
           </Box>
@@ -290,7 +287,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                 alignItems: 'center',
               }}
             >
-              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>
+              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: 'primary.main' }}>
                 No team members yet
               </Typography>
 
@@ -309,13 +306,15 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
 
               <Link
                 component="button"
-                sx={{ color: '#000048' }}
+                sx={{ color: 'primary.main' }}
                 onClick={(event) => {
                   setShowAddEmployeesForm(true);
                   event.preventDefault();
                 }}
               >
-                <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
+                <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: 'primary.main' }}>
+                  Add team member
+                </Typography>
               </Link>
             </Box>
           )}

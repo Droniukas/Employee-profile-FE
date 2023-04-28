@@ -1,3 +1,4 @@
+import { Link } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
@@ -8,19 +9,20 @@ import React from 'react';
 
 import Employee from '../../models/Employee.interface';
 import StatusChip from './StatusChip';
+import { ROUTES } from '../routes/routes';
 
 type FindEmployeeResultsProps = {
   employees: Employee[];
+};
+
+export const isInactiveOrDismissed = (status: string): boolean => {
+  return ['INACTIVE', 'DISMISSED'].includes(status);
 };
 
 const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmployeeResultsProps) => {
   const { employees } = props;
 
   if (!employees) return null;
-
-  const isInactiveOrDismissed = (status: string): boolean => {
-    return ['INACTIVE', 'DISMISSED'].includes(status);
-  };
 
   const renderResultItem = (employee: Employee) => {
     return (
@@ -36,11 +38,6 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              employee.middleName
-                ? `${employee.name} ${employee.middleName} ${employee.surname}`
-                : `${employee.name} ${employee.surname}`
-            }
             secondary={
               <>
                 {employee.title}
@@ -49,9 +46,23 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
               </>
             }
             sx={{
-              color: isInactiveOrDismissed(employee.status) ? '#666666' : '#000048',
+              color: isInactiveOrDismissed(employee.status) ? '#666666' : 'primary.main',
             }}
-          />
+          >
+            <Link
+              href={
+                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${employee.id}`
+                  : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
+              }
+              underline="hover"
+              target="_blank"
+            >
+              {employee.middleName
+                ? `${employee.name} ${employee.middleName} ${employee.surname}`
+                : `${employee.name} ${employee.surname}`}
+            </Link>
+          </ListItemText>
         </ListItem>
         <Divider variant="fullWidth" component="li" />
       </div>

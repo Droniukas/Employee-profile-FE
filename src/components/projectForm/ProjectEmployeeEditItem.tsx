@@ -5,6 +5,7 @@ import {
   Grid,
   IconButton,
   InputLabel,
+  Link,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -17,6 +18,7 @@ import { useEffect, useState } from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import StatusChip from '../findEmployee/StatusChip';
+import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
@@ -79,11 +81,6 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={
-                  projectEmployee.middleName
-                    ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
-                    : `${projectEmployee.name} ${projectEmployee.surname}`
-                }
                 secondary={
                   <>
                     {projectEmployee.title}
@@ -92,9 +89,23 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                   </>
                 }
                 sx={{
-                  color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : '#000048',
+                  color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : 'primary.main',
                 }}
-              />
+              >
+                <Link
+                  href={
+                    projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                      ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${projectEmployee.id}`
+                      : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
+                  }
+                  underline="hover"
+                  target="_blank"
+                >
+                  {projectEmployee.middleName
+                    ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
+                    : `${projectEmployee.name} ${projectEmployee.surname}`}
+                </Link>
+              </ListItemText>
             </Box>
           </Grid>
           <Grid item xs={5.5} display={'flex'}>
@@ -113,7 +124,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                   }}
                 />
                 {startDateError && (
-                  <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 0.5, ml: 1.5 }}>{startDateError}</Typography>
+                  <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 0.5, ml: 1.5, marginLeft: '0px' }}>
+                    {startDateError}
+                  </Typography>
                 )}
               </LocalizationProvider>
             </Box>
@@ -137,7 +150,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               className="btn-delete"
               aria-label="delete"
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 backgroundColor: '#F4F4F4',
               }}
               onClick={handleDelete}

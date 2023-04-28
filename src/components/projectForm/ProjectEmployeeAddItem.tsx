@@ -1,6 +1,7 @@
-import { Avatar, Box, Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { Avatar, Box, Checkbox, Link, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 
 import Employee from '../../models/Employee.interface';
+import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeAddItemProps = {
   employee: Employee;
@@ -29,16 +30,25 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              employee.middleName
-                ? `${employee.name} ${employee.middleName} ${employee.surname}`
-                : `${employee.name} ${employee.surname}`
-            }
             secondary={employee.title}
             sx={{
-              color: '#000048',
+              color: 'primary.main',
             }}
-          />
+          >
+            <Link
+              href={
+                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${employee.id}`
+                  : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
+              }
+              underline="hover"
+              target="_blank"
+            >
+              {employee.middleName
+                ? `${employee.name} ${employee.middleName} ${employee.surname}`
+                : `${employee.name} ${employee.surname}`}
+            </Link>
+          </ListItemText>
         </Box>
       </ListItem>
     </>
