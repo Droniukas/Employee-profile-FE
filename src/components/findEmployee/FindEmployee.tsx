@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
+import SearchDropdown from '../inputs/SearchDropdown';
 import SearchInput from '../inputs/SearchInput';
 import FindEmployeeResults from './FindEmployeeResults';
 
@@ -86,6 +87,7 @@ const FindEmployee = () => {
           }}
         >
           <SearchInput placeholder="Search employees by name..." onChange={(value) => setInputValue(value)} />
+          <SearchDropdown placeholder="Select skills" noOptionsText="No such skill." />
         </Box>
       </div>
       {employees.length > 0 && (
