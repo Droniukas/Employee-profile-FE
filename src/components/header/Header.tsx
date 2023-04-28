@@ -71,7 +71,7 @@ const Header = () => {
             }}
           >
             <Link href={'http://localhost:3000/skills?filter=my'} underline="none">
-              <MenuItem sx={{ color: '#000048', fontWeight: 'bold' }} onClick={handleMyProfileSelection}>
+              <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleMyProfileSelection}>
                 My Profile
               </MenuItem>
             </Link>

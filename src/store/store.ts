@@ -3,10 +3,11 @@ import { configureStore } from '@reduxjs/toolkit';
 import viewAchievementsStateReducer from '../states/achievementsTabState';
 import achievementNamesReducer from '../states/changedAchievements';
 import skillNamesReducer from '../states/changedSkills';
-import expandedReducer from '../states/expanded';
+import expandedSkillReducer from '../states/expandedSkill';
 import onCancelReducer from '../states/onCancel';
 import viewSkillsStateReducer from '../states/skillsTabState';
 import skillWithErrorIdReducer from '../states/skillWithErrorId';
+import expandedAchievementReducer from '../states/expandedAchievement';
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     viewSkillsState: viewSkillsStateReducer,
     viewAchievementsState: viewAchievementsStateReducer,
     onCancel: onCancelReducer,
-    expanded: expandedReducer,
+    expandedSkill: expandedSkillReducer,
+    expandedAchievement: expandedAchievementReducer,
     skillWithErrorId: skillWithErrorIdReducer,
   },
 });

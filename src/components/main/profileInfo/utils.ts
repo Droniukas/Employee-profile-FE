@@ -1,4 +1,4 @@
-import { EmploymentDate } from '../../../models/Employee.interface';
+import { EmploymentDate } from '../../../models/EmployementData.interface';
 
 export const getDate = (stringDate: string | null): string | null => {
   if (stringDate === null) return null;

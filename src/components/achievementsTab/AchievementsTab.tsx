@@ -8,6 +8,7 @@ import AchievementsTabFilterDropdown from './AchievementsTabFilterDropdown';
 import AchievementsTabStateButtons from './AchievementsTabStateButtons';
 import { sortByAchievement } from './utils';
 import { useSearchParams } from 'react-router-dom';
+import AchievementsTabExpandButton from './AchievementsTabExpandButton';
 
 type AchievementsTabProps = {
   achievementsData: Achievement[];
@@ -41,8 +42,9 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
       <Box component="span" sx={{ width: '1344px', display: 'inline-block' }}>
         {!employeeIdParam ? (
           <Box component="span" sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <Box display="inline-block">
+            <Box sx={{ display: 'flex', gap: '20px' }}>
               <AchievementsTabFilterDropdown />
+              <AchievementsTabExpandButton />
             </Box>
             <Box display="inline-block">
               <AchievementsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
@@ -58,7 +60,7 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
             <ListItem alignItems="flex-start">
               <Typography
                 sx={{
-                  color: '#000048',
+                  color: 'primary.main',
                   fontSize: 20,
                 }}
               >

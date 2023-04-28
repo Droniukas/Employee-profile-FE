@@ -30,7 +30,7 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
             borderRadius: 8,
           },
           input: {
-            color: '#000048',
+            color: 'primary.main',
           },
           backgroundColor: 'white',
         }}

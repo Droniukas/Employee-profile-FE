@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Skill } from '../../models/Skill.interface';
-import { ExpandedRoot } from '../../store/types/skills';
+import { ExpandedSkillRoot } from '../../store/types/skills';
 import SkillListItem from './ListComponents/SkillListItem';
 import { sortBySkill } from './utils';
 
@@ -15,7 +15,7 @@ type SkillsTabCategoryProps = {
 };
 const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (props: SkillsTabCategoryProps) => {
   const { currentSkill, mapData, skillsData } = props;
-  const expanded = useSelector((state: ExpandedRoot) => state.expanded.value);
+  const expanded = useSelector((state: ExpandedSkillRoot) => state.expandedSkill.value);
 
   useEffect(() => {
     setIsCollapsed(expanded);

@@ -1,7 +1,4 @@
-export interface EmploymentDate {
-  hiringDate: string;
-  exitDate: string;
-}
+import { EmploymentDate } from './EmployementData.interface';
 
 interface Employee {
   id: number;

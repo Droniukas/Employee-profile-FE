@@ -19,8 +19,8 @@ export interface ViewSkillStateRoot {
   };
 }
 
-export interface ExpandedRoot {
-  expanded: {
+export interface ExpandedSkillRoot {
+  expandedSkill: {
     value: boolean;
   };
 }

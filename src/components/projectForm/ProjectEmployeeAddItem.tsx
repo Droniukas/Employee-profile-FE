@@ -31,7 +31,7 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
           <ListItemText
             secondary={employee.title}
             sx={{
-              color: '#000048',
+              color: 'primary.main',
             }}
           >
             <Link

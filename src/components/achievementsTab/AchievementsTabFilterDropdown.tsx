@@ -39,7 +39,7 @@ const AchievementsTabFilterDropdown = () => {
     >
       <Typography
         sx={{
-          color: '#000048',
+          color: 'primary.main',
           fontSize: 14,
         }}
       >
@@ -59,14 +59,14 @@ const AchievementsTabFilterDropdown = () => {
             onChange={onFilterValueChange}
             disableUnderline
             sx={{
-              color: '#000048',
+              color: 'primary.main',
               fontSize: 14,
             }}
           >
             <MenuItem
               value={AchievementsTabFilter.ALL_ACHIEVEMENTS}
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >
@@ -75,7 +75,7 @@ const AchievementsTabFilterDropdown = () => {
             <MenuItem
               value={AchievementsTabFilter.MY_ACHIEVEMENTS}
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >

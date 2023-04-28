@@ -1,10 +1,12 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { Achievement } from '../../models/Achievement.interface';
 import AchievementListItem from './ListComponents/AchievementListItem';
 import { sortByAchievement } from './utils';
+import { ExpandedAchievementRoot } from '../../store/types/achievements';
+import { useSelector } from 'react-redux';
 
 type AchievementsTabCategoryProps = {
   currentAchievement: Achievement;
@@ -16,7 +18,12 @@ const AchievementsTabCategory: React.FunctionComponent<AchievementsTabCategoryPr
   props: AchievementsTabCategoryProps,
 ) => {
   const { currentAchievement, mapData, achievementsData } = props;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const expanded = useSelector((state: ExpandedAchievementRoot) => state.expandedAchievement.value);
+
+  useEffect(() => {
+    setIsCollapsed(expanded);
+  }, [expanded]);
+  const [isCollapsed, setIsCollapsed] = useState(expanded);
   const mapAchievements = (achievements: Achievement[]) => {
     return achievements.map((achievement: Achievement) => {
       if (achievement.showOnFilter) {
