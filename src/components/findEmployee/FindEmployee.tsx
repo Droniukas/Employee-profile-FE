@@ -13,6 +13,7 @@ import { EmployeeService } from '../../services/employee.service';
 import { SkillsService } from '../../services/skills.service';
 import SearchDropdown from '../inputs/SearchDropdown';
 import SearchInput from '../inputs/SearchInput';
+import SearchSkillDropdown from '../inputs/SearchSkillDropdown';
 import FindEmployeeResults from './FindEmployeeResults';
 
 const FindEmployee = () => {
