@@ -51,7 +51,7 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
             <ListItem alignItems="flex-start">
               <Typography
                 sx={{
-                  color: '#000048',
+                  color: 'primary.main',
                   fontSize: 20,
                 }}
               >

@@ -36,7 +36,7 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
             }
             secondary={employee.title}
             sx={{
-              color: '#000048',
+              color: 'primary.main',
             }}
           />
         </Box>

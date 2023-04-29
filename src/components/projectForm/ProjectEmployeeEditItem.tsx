@@ -92,7 +92,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                   </>
                 }
                 sx={{
-                  color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : '#000048',
+                  color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : 'primary.main',
                 }}
               />
             </Box>
@@ -137,7 +137,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               className="btn-delete"
               aria-label="delete"
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 backgroundColor: '#F4F4F4',
               }}
               onClick={handleDelete}

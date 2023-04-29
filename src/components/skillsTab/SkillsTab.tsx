@@ -48,7 +48,7 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
             <ListItem alignItems="flex-start">
               <Typography
                 sx={{
-                  color: '#000048',
+                  color: 'primary.main',
                   fontSize: 20,
                 }}
               >

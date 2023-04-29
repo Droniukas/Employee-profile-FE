@@ -8,40 +8,33 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useRef, useState } from 'react';
 
-import SearchSkill from '../../models/SearchSkill.interface';
-import { SkillsService } from '../../services/skills.service';
+import SearchAchievement from '../../models/SearchAchievement.interface';
+import { AchievementsService } from '../../services/achievements.service';
 
-type SearchDropdownProps = {
-  placeholder: string;
-  noOptionsText: string;
-};
-
-const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProps) => {
-  const { placeholder, noOptionsText } = props;
-
-  const [skillsCategories, setSkillsCategories] = useState<SearchSkill[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<SearchSkill[]>([]);
+const SearchAchievementDropdown = () => {
+  const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
+  const [selectedAchievements, setSelectedAchievements] = useState<SearchAchievement[]>([]);
   const deleteFunctionRef = useRef({});
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-  const skillService = new SkillsService();
+  const achievementService = new AchievementsService();
 
-  const getSkillsCategories = async () => {
-    const results = await skillService.getSkillsCategories();
-    setSkillsCategories(results);
+  const getAchievementsCategories = async () => {
+    const results = await achievementService.getAchievementsCategories();
+    setDropdownAchievements(results);
   };
 
   useEffect(() => {
-    getSkillsCategories();
+    getAchievementsCategories();
   }, []);
 
-  const handleChange = (event: React.SyntheticEvent, value: SearchSkill[], reason: string) => {
-    setSelectedSkills(value);
+  const handleChange = (event: React.SyntheticEvent, value: SearchAchievement[], reason: string) => {
+    setSelectedAchievements(value);
   };
 
-  const updateDeleteFunctions = (value: SearchSkill[], getTagProps: AutocompleteRenderGetTagProps) => {
+  const updateDeleteFunctions = (value: SearchAchievement[], getTagProps: AutocompleteRenderGetTagProps) => {
     const deleteFunctionRefObject = {};
     value.forEach((tag, index) => {
       (deleteFunctionRefObject as Array<any>)[index] = getTagProps({ index }).onDelete;
@@ -52,7 +45,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
   };
 
   const handleUnselectOption = (label: string) => {
-    const index = selectedSkills.findIndex((skill) => skill.skillName === label);
+    const index = selectedAchievements.findIndex((achievement) => achievement.achievementName === label);
     (deleteFunctionRef.current as Array<any>)[index]();
   };
 
@@ -69,19 +62,19 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
       }}
     >
       <Autocomplete
-        id="skill-search-box"
+        id="achievement-search-box"
         onChange={handleChange}
-        options={skillsCategories}
-        noOptionsText="No such skill."
-        getOptionLabel={(option) => `${option.skillName}`}
+        options={dropdownAchievements}
+        noOptionsText="No such achievement."
+        getOptionLabel={(option) => `${option.achievementName}`}
         groupBy={(option) => option.category}
         multiple
         disableCloseOnSelect
-        PaperComponent={({ children }) => <Paper style={{ color: '#000048' }}>{children}</Paper>}
+        PaperComponent={({ children }) => <Paper style={{ color: 'primary.main' }}>{children}</Paper>}
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Select skills"
+            placeholder="Select achievements"
             fullWidth
             sx={{
               fontSize: '14px',
@@ -89,7 +82,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
                 borderRadius: 8,
               },
               input: {
-                color: '#000048',
+                color: 'primary.main',
               },
               backgroundColor: 'white',
             }}
@@ -97,29 +90,29 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
         )}
         renderOption={(props, option, { selected }) => {
           return (
-            <Box component="li" {...props} key={option.skillId}>
+            <Box component="li" {...props} key={option.achievementId}>
               <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
-              {option.skillName}
+              {option.achievementName}
             </Box>
           );
         }}
         renderTags={updateDeleteFunctions}
       />
-      {selectedSkills.length > 0 ? (
+      {selectedAchievements.length > 0 ? (
         <Box
           sx={{
             mt: 0.5,
           }}
         >
-          {selectedSkills.map((skill) => (
+          {selectedAchievements.map((achievement) => (
             <Chip
-              key={skill.skillId}
-              label={skill.skillName}
+              key={achievement.achievementId}
+              label={achievement.achievementName}
               sx={{
                 mr: 0.5,
                 mt: 0.25,
               }}
-              onDelete={() => handleUnselectOption(skill.skillName)}
+              onDelete={() => handleUnselectOption(achievement.achievementName)}
             />
           ))}
         </Box>
@@ -128,4 +121,4 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
   );
 };
 
-export default SearchDropdown;
+export default SearchAchievementDropdown;

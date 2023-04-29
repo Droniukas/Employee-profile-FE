@@ -95,7 +95,7 @@ const ProjectProfiles = () => {
           <Box
             sx={{
               display: filteredProjectsList.length === 0 ? 'none' : 'inline',
-              color: '#000048',
+              color: 'primary.main',
               fontSize: 14,
             }}
           >

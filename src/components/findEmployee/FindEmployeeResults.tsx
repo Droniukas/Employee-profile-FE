@@ -49,7 +49,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
               </>
             }
             sx={{
-              color: isInactiveOrDismissed(employee.status) ? '#666666' : '#000048',
+              color: isInactiveOrDismissed(employee.status) ? '#666666' : 'primary.main',
             }}
           />
         </ListItem>
