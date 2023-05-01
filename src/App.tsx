@@ -27,13 +27,15 @@ const App = () => {
     <>
       {appState === AppState.LANDING_PAGE && (
         <main>
-          <Header />
-          <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="img"></img>
-          <TabPanel index={0} value={0} />
-          <Main />
-          <footer>
-            <Footer />
-          </footer>
+          <ThemeProvider theme={theme}>
+            <Header />
+            <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="img"></img>
+            <TabPanel index={0} value={0} />
+            <Main />
+            <footer>
+              <Footer />
+            </footer>
+          </ThemeProvider>
         </main>
       )}
       {appState === AppState.LOGIN_PAGE && (

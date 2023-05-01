@@ -13,7 +13,7 @@ const EmployeeDates: React.FunctionComponent<EmployeeDatesProps> = (props) => {
   return (
     <div>
       {employee.employmentDates.sort(sortByStartDate).map((date, index) => {
-        const dateDivStyleProp: CSSProperties = { color: 'primary.main', display: 'inline-block', fontWeight: 'bold' };
+        const dateDivStyleProp: CSSProperties = { color: 'primary.main', display: 'inline-block' };
         const hiringDateFormated = <div style={dateDivStyleProp}>{getDate(date.hiringDate)}</div>;
         const exitDateFormated = getDate(date.exitDate) ? (
           <div style={dateDivStyleProp}>{getDate(date.exitDate)}</div>

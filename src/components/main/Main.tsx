@@ -2,7 +2,7 @@ import './Main.scss';
 
 import { Box, CssBaseline, Tab, Tabs, ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes, useSearchParams } from 'react-router-dom';
+import { Link, matchPath, Route, Routes, useSearchParams } from 'react-router-dom';
 
 import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
@@ -14,6 +14,8 @@ import { ROUTES } from '../routes/routes';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
+import NotFoundPage from './NotFoundPage';
+import AccessDeniedPage from './AccessDeniedPage';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -62,9 +64,25 @@ const Main = () => {
     return '';
   };
 
+  const routes = [
+    { path: ROUTES.SKILLS },
+    { path: ROUTES.ACHIEVEMENTS },
+    { path: ROUTES.MY_PROJECTS },
+    { path: ROUTES.SEARCH, managerOnly: true },
+    { path: ROUTES.PROJECT_PROFILES, managerOnly: true },
+  ];
+  const routeIsFound = routes.find((route) => matchPath(route.path, location.pathname));
+
+  const employeeHasAccess = () => {
+    if (!result?.isManager || employeeIdParam) {
+      return !routes.some((route) => route.path === location.pathname && route.managerOnly);
+    }
+    return true;
+  };
+
   return (
     <>
-      {result && (
+      {result && routeIsFound && employeeHasAccess() && (
         <>
           <ProfileInfo employee={result} />
 
@@ -174,6 +192,12 @@ const Main = () => {
           </ThemeProvider>
         </>
       )}
+      {
+        <ThemeProvider theme={theme}>
+          {!employeeHasAccess() && <AccessDeniedPage />}
+          {!routeIsFound && <NotFoundPage />}
+        </ThemeProvider>
+      }
     </>
   );
 };
