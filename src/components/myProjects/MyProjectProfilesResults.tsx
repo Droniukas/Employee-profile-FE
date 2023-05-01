@@ -71,7 +71,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
         const getResponsibilities = async () => {
           try {
             const result = await projectsService.getResponsibilitiesFromProjectEmployee(projectId);
-            console.log('Responsibilities result:', result);
 
             if (Array.isArray(result)) {
               setResponsibilities(result);
@@ -87,7 +86,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
 
         getResponsibilities();
       }, [projectId]);
-      console.log('Responsibilities:', responsibilities);
 
       if (responsibilities === null) {
         return <Typography>Loading...</Typography>;
@@ -117,11 +115,8 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
         try {
           const res = await projectsService.addResponsibilitiesToProjectEmployee(data);
           setResponse(res.data);
-          console.log(res.data);
         } catch (error) {
           console.error(error);
-          console.log(data);
-          console.log(error);
         }
       }
     };
@@ -170,7 +165,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
               <Box
                 sx={{
                   position: 'relative',
-                  width: 400,
+                  width: 600,
                   left: 25,
                 }}
               >
@@ -201,11 +196,11 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: '3',
+                    WebkitLineClamp: '5',
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow ? project.description : project.description.substring(0, 135) + '...'}
+                  {!isTextOverflow ? project.description : project.description.substring(0, 2000) + '...'}
                 </Typography>
                 <Box>
                   {response && (

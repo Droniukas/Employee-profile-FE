@@ -14,7 +14,6 @@ import MyProjectProfilesResult from './MyProjectProfilesResults';
 const MyProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  const [addedProjectId, setAddedProjectId] = useState<string>('');
   const [filterTextValue, setFilterTextValue] = useState('All');
 
   const projectsService = new ProjectsService();
@@ -30,12 +29,6 @@ const MyProjectProfiles = () => {
   const getProjects = async () => {
     const projects = await projectsService.getMyProjects();
     setProjects(projects);
-  };
-
-  const closeProjectForm = (projectId?: string) => {
-    setOpenPopup(false);
-    if (projectId) setAddedProjectId(projectId);
-    getProjects();
   };
 
   const filteredProjectsList = projects.filter((project) => {
