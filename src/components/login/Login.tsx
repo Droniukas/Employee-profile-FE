@@ -10,19 +10,12 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { AppState } from '../../App';
 import LoginInterface from '../../models/Login.interface';
 import { LoginService } from '../../services/login.service';
-import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 import { ROUTES } from '../routes/routes';
+import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 
-type LoginProps = {
-  setAppState: (newState: AppState) => void;
-};
-
-const Login: React.FC<LoginProps> = (props: LoginProps) => {
-  const { setAppState } = props;
-
+const Login = () => {
   const {
     register,
     handleSubmit,
@@ -54,9 +47,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
     try {
       const loginService = new LoginService();
       const responseData = await loginService.checkCredentials(data);
-      const currentPath = '/' + (location.pathname + location.search).substring(1);
-      currentPath === '/' ? navigate(`${ROUTES.SKILLS}`) : navigate(currentPath);
-      setAppState(AppState.LANDING_PAGE);
+      navigate(ROUTES.HOME);
     } catch (error) {
       console.log(error);
     }

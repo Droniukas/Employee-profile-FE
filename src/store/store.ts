@@ -6,6 +6,7 @@ import skillNamesReducer from '../states/changedSkills';
 import expandedSkillReducer from '../states/expandedSkill';
 import onCancelReducer from '../states/onCancel';
 import viewSkillsStateReducer from '../states/skillsTabState';
+import userStateReducer from '../states/userState';
 import skillWithErrorIdReducer from '../states/skillWithErrorId';
 import expandedAchievementReducer from '../states/expandedAchievement';
 import achievementWithErrorIdReducer from '../states/achievementWithErrorId';
@@ -17,6 +18,7 @@ const store = configureStore({
     viewSkillsState: viewSkillsStateReducer,
     viewAchievementsState: viewAchievementsStateReducer,
     onCancel: onCancelReducer,
+    userState: userStateReducer,
     expandedSkill: expandedSkillReducer,
     expandedAchievement: expandedAchievementReducer,
     skillWithErrorId: skillWithErrorIdReducer,

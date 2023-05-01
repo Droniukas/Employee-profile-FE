@@ -13,8 +13,13 @@ export class EmployeeService {
     return response.data;
   }
 
-  public async getById(id: string) {
+  public async getById(id: number) {
     const response = await axios.get(`/employee/get/${id}`, {});
+    return response.data;
+  }
+
+  public async getByEmail(email?: string) {
+    const response = await axios.get(`/employee/getByEmail/${email}`, {});
     return response.data;
   }
 }

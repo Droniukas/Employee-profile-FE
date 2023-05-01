@@ -44,12 +44,13 @@ const Main = () => {
 
   const employeeService = new EmployeeService();
 
-  const getResult = async (id: string) => {
+  const getResult = async (id: number) => {
     const employee = await employeeService.getById(id);
     setResult(employee);
   };
 
   useEffect(() => {
+    getResult(Number(`${process.env.REACT_APP_TEMP_USER_ID}`));
     getResult(`${employeeIdParam ? employeeIdParam : process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
