@@ -1,9 +1,9 @@
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { StyleVariants } from '../enums/StyleVariants';
-import { ExpandedAchievementRoot } from '../../store/types/achievements';
 import { setExpandedAchievement } from '../../states/expandedAchievement';
+import { ExpandedAchievementRoot } from '../../store/types/achievements';
+import { StyleVariants } from '../enums/StyleVariants';
 
 const AchievementsTabExpandButton = () => {
   const expanded = useSelector((state: ExpandedAchievementRoot) => state.expandedAchievement.value);

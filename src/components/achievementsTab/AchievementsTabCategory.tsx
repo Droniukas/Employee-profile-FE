@@ -1,12 +1,12 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import React, { ReactNode, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Achievement } from '../../models/Achievement.interface';
+import { ExpandedAchievementRoot } from '../../store/types/achievements';
 import AchievementListItem from './ListComponents/AchievementListItem';
 import { sortByAchievement } from './utils';
-import { ExpandedAchievementRoot } from '../../store/types/achievements';
-import { useSelector } from 'react-redux';
 
 type AchievementsTabCategoryProps = {
   currentAchievement: Achievement;

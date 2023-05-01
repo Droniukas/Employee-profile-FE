@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import { EmploymentDate } from '../../../models/EmployementData.interface';
 
 export const getDate = (date: string | null): string | null => {

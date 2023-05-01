@@ -1,14 +1,14 @@
 import { Box, List, ListItem, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { Achievement } from '../../models/Achievement.interface';
 import AchievementsTabCategory from './AchievementsTabCategory';
+import AchievementsTabExpandButton from './AchievementsTabExpandButton';
 import AchievementsTabFilterDropdown from './AchievementsTabFilterDropdown';
 import AchievementsTabStateButtons from './AchievementsTabStateButtons';
 import { sortByAchievement } from './utils';
-import { useSearchParams } from 'react-router-dom';
-import AchievementsTabExpandButton from './AchievementsTabExpandButton';
 
 type AchievementsTabProps = {
   achievementsData: Achievement[];
