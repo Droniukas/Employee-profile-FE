@@ -14,6 +14,7 @@ import { ROUTES } from '../routes/routes';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
+import MyProjectProfiles from '../myProjects/MyProjectProfiles';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -145,7 +146,7 @@ const Main = () => {
                   path={ROUTES.MY_PROJECTS}
                   element={
                     <TabPanel value={value} index={2}>
-                      My projects
+                      <MyProjectProfiles />
                     </TabPanel>
                   }
                 />

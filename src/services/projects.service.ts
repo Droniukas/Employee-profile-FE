@@ -52,8 +52,13 @@ export class ProjectsService {
     const myProjectEmployee = response.data.map((myProjectEmployee: MyProjectEmployee) => {
       return myProjectEmployee;
     });
+    console.log(response);
+    console.log(myProjectEmployee);
+
     const projectIds = myProjectEmployee.map((myProjectEmployee: MyProjectEmployee) => myProjectEmployee.projectId);
     console.log(projectIds);
+    console.log('kode taip yra' + projectIds);
+
     console.log('data' + myProjectEmployee);
 
     const projectRequests = projectIds.map((projectId: string) => {
@@ -78,7 +83,7 @@ export class ProjectsService {
   //   const response = await axios.post('project/projects-employees/', data);
   //   return response.data;
   // }
-  public async getResponsibilitiesFromProjectEmployee(projectId: number) {
+  public async getResponsibilitiesFromProjectEmployee(projectId: string) {
     const response = await axios.get(`project/responsibilities/${projectId}/${process.env.REACT_APP_TEMP_USER_ID}`);
     const plainText = response.data;
     const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
