@@ -17,6 +17,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
+import MyProjectEmployee from '../../models/MyProjectEmployee';
 import Project from '../../models/Project.interface';
 import { responsibilitiesSchema } from '../../schemas/myResponsibilitySchema';
 import { EmployeeService } from '../../services/employee.service';
@@ -24,13 +25,13 @@ import { ProjectsService } from '../../services/projects.service';
 import { ProjectStatus } from '../enums/ProjectStatus';
 
 type ProjectFormProps = {
-  onClose: (projectId?: string) => void;
+  onClose: (projectId?: number) => void;
   project?: Project;
   showEndDate: boolean;
 };
 
 const MyForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
-  const { onClose, project } = props;
+  const { onClose, project, showEndDate } = props;
 
   const projectsService = new ProjectsService();
 
@@ -55,25 +56,10 @@ const MyForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     projectEmployees: [],
     status: '',
   };
-  if (project) initialValues = project;
-  // let projectId: Project[id] == ProjectEmployee[id]
-
-  const handleFormSubmit = async () => {
-    let result;
-    if (project) {
-      result = await projectsService.addResponsibilitiesToForm(inputValue);
-      onClose();
-    } else {
-      result = await projectsService.addResponsibilitiesToForm(inputValue);
-      onClose(result.id);
-    }
+  let myPEValues: MyProjectEmployee = {
+    responsibilities: '',
   };
-
-  const { values, touched, errors, dirty, handleBlur, handleChange, handleSubmit } = useFormik({
-    initialValues,
-    onSubmit: handleFormSubmit,
-    validationSchema: responsibilitiesSchema,
-  });
+  // let projectId: Project[id] == ProjectEmployee[id]
 
   const setStatusColors = (projectStatus: string) => {
     let statusColor;
@@ -119,6 +105,26 @@ const MyForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       return moment(date).format('YYYY/MM/DD');
     }
   };
+
+  const handleFormSubmit = async () => {
+    let result;
+    if (project) {
+      result = await projectsService.addResponsibilitiesToForm(inputValue);
+      onClose();
+    } else {
+      result = await projectsService.addResponsibilitiesToForm(inputValue);
+      onClose(result.id);
+    }
+  };
+
+  if (project) {
+    initialValues = project;
+  }
+  const { values, touched, errors, dirty, handleBlur, handleChange, handleSubmit } = useFormik({
+    initialValues,
+    onSubmit: handleFormSubmit,
+    validationSchema: responsibilitiesSchema,
+  });
 
   const [responsibilities, setResponsibilities] = useState<string[]>([]);
   const ResponsibilitiesList = () => {

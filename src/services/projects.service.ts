@@ -79,7 +79,7 @@ export class ProjectsService {
   //   return response.data;
   // }
   public async getResponsibilitiesFromProjectEmployee(projectId: number) {
-    const response = await axios.get(`project/responsibilities/ ${projectId}/${process.env.REACT_APP_TEMP_USER_ID}`);
+    const response = await axios.get(`project/responsibilities/${projectId}/${process.env.REACT_APP_TEMP_USER_ID}`);
     const plainText = response.data;
     const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
     return responsibilities;
