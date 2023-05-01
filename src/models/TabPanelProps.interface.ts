@@ -1,4 +1,4 @@
-import { ROUTES } from '../components/routes/routes';
+import { ROUTES } from '../routes/routes';
 
 interface TabPanelProps {
   children?: React.ReactNode;

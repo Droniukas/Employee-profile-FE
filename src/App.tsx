@@ -5,10 +5,10 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import LoginPage from './components/LoginButton/LoginButton';
-import HomePage from './components/pages/homePage/HomePage';
-import LogoutPage from './components/pages/logoutPage/LogoutPage';
-import { ROUTES } from './components/routes/routes';
+import HomePage from './pages/homePage/HomePage';
+import LoginPage from './pages/loginPage/LoginPage';
+import LogoutPage from './pages/logoutPage/LogoutPage';
+import { ROUTES } from './routes/routes';
 import { EmployeeService } from './services/employee.service';
 import { setUserState } from './states/userState';
 
@@ -23,14 +23,13 @@ const App = () => {
       localStorage.setItem('access_token', token);
       const identity = await getIdTokenClaims();
       const employee = await employeeService.getByEmail(identity?.email);
-      console.log('emoloyee=> ', employee);
       dispatch(setUserState(employee));
     };
 
     if (isAuthenticated) {
       configureAuthenticationTokens();
     }
-  }, [dispatch, employeeService, getAccessTokenSilently, getIdTokenClaims, isAuthenticated]);
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return (
     <>

@@ -2,14 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import Employee from '../models/Employee.interface';
 
-const initStateValue: Employee | string = 'hi';
+const initStateValue: Employee | null = null;
 
 export const userStateSlice = createSlice({
   name: 'userState',
   initialState: { value: initStateValue },
   reducers: {
     setUserState: (state, action) => {
-      console.log(action.payload);
       state.value = action.payload;
     },
   },

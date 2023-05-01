@@ -13,7 +13,7 @@ export class EmployeeService {
     return response.data;
   }
 
-  public async getById(id: number) {
+  public async getById(id: string) {
     const response = await axios.get(`/employee/get/${id}`, {});
     return response.data;
   }

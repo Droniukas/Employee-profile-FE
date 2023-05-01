@@ -11,8 +11,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import LoginInterface from '../../models/Login.interface';
+import { ROUTES } from '../../routes/routes';
 import { LoginService } from '../../services/login.service';
-import { ROUTES } from '../routes/routes';
 import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 
 const Login = () => {

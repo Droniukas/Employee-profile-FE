@@ -11,6 +11,7 @@ import { setChangedAchievements } from '../../states/changedAchievements';
 import { triggerOnCancel } from '../../states/onCancel';
 import store from '../../store/store';
 import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
+import { UserStateRoot } from '../../store/types/user';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
@@ -19,6 +20,7 @@ const AchievementsTabData = () => {
   const achievementsService = new AchievementsService();
   const [searchParams, setSearchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const dispatch = useDispatch();
 
@@ -52,9 +54,7 @@ const AchievementsTabData = () => {
       );
       setAchievementsData(getFilteredAchievementsData(getAchievementsDataWithCount(response), 'my'));
     } else {
-      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
-        Number(process.env.REACT_APP_TEMP_USER_ID),
-      );
+      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(userId);
       setAchievementsData(
         getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
       );

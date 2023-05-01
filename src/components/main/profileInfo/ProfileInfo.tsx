@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import Employee from '../../../models/Employee.interface';
 import { isInactiveOrDismissed } from '../../findEmployee/FindEmployeeResults';
 import StatusChip from '../../findEmployee/StatusChip';
+import Loading from '../../loading/Loading';
 import EmployeeDates from './EmployeeDates';
 
 type ProfileInfoProps = {
@@ -22,17 +23,21 @@ const ProfileInfo: React.FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
   return (
     <>
       <Box sx={{ position: 'relative', padding: '150px', marginLeft: 20, paddingRight: 100 }}>
-        <Avatar
-          src={`data:${employee?.imageType};base64,${employee?.imageBytes}`}
-          sx={{
-            position: 'absolute',
-            width: 120,
-            height: 120,
-            left: '5vw',
-            top: 200,
-            opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
-          }}
-        />
+        {employee.imageBytes && employee.imageType ? (
+          <Avatar
+            src={`data:${employee?.imageType};base64,${employee?.imageBytes}`}
+            sx={{
+              position: 'absolute',
+              width: 120,
+              height: 120,
+              left: '5vw',
+              top: 200,
+              opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
+            }}
+          />
+        ) : (
+          <Loading size={120} style={{ position: 'absolute', top: '200', left: '5vw' }} />
+        )}
         <h1 className="name">
           {employee.name} {employee.middleName} {employee.surname}
         </h1>

@@ -1,19 +1,20 @@
 import './Header.scss';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Avatar, Box, Link, Menu, MenuItem } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { EmployeeService } from '../../services/employee.service';
-import { ROUTES } from '../routes/routes';
+import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
+import Loading from '../loading/Loading';
 
 const Header = () => {
-  const employeeService = new EmployeeService();
   const result = useSelector((state: UserStateRoot) => state.userState.value);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { logout } = useAuth0();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -22,67 +23,68 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const getResult = async (id: string) => {
-    const employee = await employeeService.getById(id);
-    setResult(employee);
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}/${ROUTES.LOGOUT}` } });
   };
 
-  useEffect(() => {
-    getResult(`${process.env.REACT_APP_TEMP_USER_ID}`);
-  }, []);
-
   return (
-    <>
-      <Box
-        sx={{
-          position: 'fixed',
-          zIndex: 4,
-          backgroundColor: '#FFFFFF',
-          borderBottom: 2,
-          borderColor: 'divider',
-          height: 100,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'right',
-          alignItems: 'right',
-        }}
-      >
-        <div className="top-header">
-          <NotificationsIcon sx={{ width: 40, height: 40, marginRight: 4, marginBottom: 1.1 }} />
-          {result.imageBytes && result.imageType && (
-            <Avatar
-              src={`data:${result?.imageType};base64,${result?.imageBytes}`}
-              sx={{ width: 65, height: 65, marginTop: 1, display: 'inline-block', cursor: 'pointer' }}
-              onClick={(event) => {
-                handleClick(event);
-              }}
-            />
-          )}
-          <Menu
-            disableScrollLock={true}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
+    <Box
+      sx={{
+        position: 'fixed',
+        zIndex: 4,
+        backgroundColor: '#FFFFFF',
+        borderBottom: 2,
+        borderColor: 'divider',
+        height: 100,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'right',
+        alignItems: 'right',
+      }}
+    >
+      <div className="top-header">
+        <NotificationsIcon sx={{ width: 40, height: 40, marginRight: 4, marginBottom: 1.1 }} />
+        {result ? (
+          <Avatar
+            src={`data:${result?.imageType};base64,${result?.imageBytes}`}
+            sx={{ width: 65, height: 65, marginTop: 1, display: 'inline-block', cursor: 'pointer' }}
+            onClick={(event) => {
+              handleClick(event);
             }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={() => {
-              setAnchorEl(null);
-            }}
-          >
-            <Link href={`${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`} underline="none">
-              <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleMyProfileSelection}>
-                My Profile
-              </MenuItem>
-            </Link>
-          </Menu>
-        </div>
-      </Box>
-    </>
+          />
+        ) : (
+          <Loading size={65} style={{ marginTop: 1, display: 'inline-block' }} />
+        )}
+        <Menu
+          disableScrollLock={true}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={() => {
+            setAnchorEl(null);
+          }}
+        >
+          <Link href={`${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`} underline="none">
+            <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleMyProfileSelection}>
+              My Profile
+            </MenuItem>
+          </Link>
+          <Link underline="none">
+            <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleLogout}>
+              Log out
+            </MenuItem>
+          </Link>
+        </Menu>
+      </div>
+    </Box>
   );
 };
 

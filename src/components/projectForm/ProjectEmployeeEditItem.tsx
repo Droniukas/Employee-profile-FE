@@ -15,10 +15,12 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import { ROUTES } from '../../routes/routes';
+import { UserStateRoot } from '../../store/types/user';
 import StatusChip from '../findEmployee/StatusChip';
-import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
@@ -29,6 +31,7 @@ type ProjectEmployeeEditItemProps = {
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
   const { projectEmployee, onUpdate, onDelete } = props;
   const [startDateError, setStartDateError] = useState<string | null>(null);
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
@@ -94,7 +97,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               >
                 <Link
                   href={
-                    projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                    projectEmployee.id !== userId
                       ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${projectEmployee.id}`
                       : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
                   }

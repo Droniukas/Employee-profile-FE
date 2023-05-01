@@ -9,6 +9,7 @@ import { Achievement } from '../../../models/Achievement.interface';
 import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
 import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/types/achievements';
+import { UserStateRoot } from '../../../store/types/user';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
 import { StyledSwitch } from './StyledSwitch';
@@ -26,6 +27,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   const [issueDate, setIssueDate] = useState<string | null>();
   const [expiringDate, setExpiringDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const expiringDateExists: boolean = expiringDate !== undefined && expiringDate !== null;
   const issueDateExists: boolean = issueDate !== undefined && issueDate !== null;
@@ -61,7 +63,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           checked: true,
           issueDate: issueDate,
           expiringDate: expiringDate,
-          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+          employeeId: userId,
         }),
       );
     } else {
@@ -75,7 +77,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           checked: false,
           issueDate: null,
           expiringDate: null,
-          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+          employeeId: userId,
         }),
       );
     }
@@ -91,7 +93,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
         checked: true,
         issueDate: issueDate,
         expiringDate: expiringDate,
-        employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        employeeId: userId,
       }),
     );
   };

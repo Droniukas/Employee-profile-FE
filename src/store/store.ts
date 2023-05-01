@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import viewAchievementsStateReducer from '../states/achievementsTabState';
+import achievementWithErrorIdReducer from '../states/achievementWithErrorId';
 import achievementNamesReducer from '../states/changedAchievements';
 import skillNamesReducer from '../states/changedSkills';
+import expandedAchievementReducer from '../states/expandedAchievement';
 import expandedSkillReducer from '../states/expandedSkill';
 import onCancelReducer from '../states/onCancel';
 import viewSkillsStateReducer from '../states/skillsTabState';
-import userStateReducer from '../states/userState';
 import skillWithErrorIdReducer from '../states/skillWithErrorId';
-import expandedAchievementReducer from '../states/expandedAchievement';
-import achievementWithErrorIdReducer from '../states/achievementWithErrorId';
+import userStateReducer from '../states/userState';
 
 const store = configureStore({
   reducer: {

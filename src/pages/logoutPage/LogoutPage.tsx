@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import theme from '../../../config/theme';
+import theme from '../../config/theme';
 import { ROUTES } from '../../routes/routes';
 
 const LogoutPage = () => {
