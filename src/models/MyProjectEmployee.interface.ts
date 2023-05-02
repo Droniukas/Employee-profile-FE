@@ -1,6 +1,6 @@
 interface MyProjectEmployee {
-  projectId: string | number;
-  employeeId: string | number;
+  projectId: number;
+  employeeId: number;
   responsibilities: string;
 }
 

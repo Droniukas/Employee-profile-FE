@@ -1,7 +1,7 @@
 import { FormikValues } from 'formik';
 
 import { ProjectStatus } from '../components/enums/ProjectStatus';
-import MyProjectEmployee from '../models/MyProjectEmployee';
+import MyProjectEmployee from '../models/MyProjectEmployee.interface';
 import Project from '../models/Project.interface';
 import axios from './axios';
 

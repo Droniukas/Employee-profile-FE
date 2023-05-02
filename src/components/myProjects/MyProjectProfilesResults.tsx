@@ -12,6 +12,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
+import MyProjectEmployeeResponsibilities from '../../models/MyProjectEmployeeResponsibilities.interface';
 import Project from '../../models/Project.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
@@ -32,11 +33,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
 
   const employeeService = new EmployeeService();
 
-  interface Response {
-    responsibilities: string;
-  }
-
-  const [response, setResponse] = useState<Response | null>(null);
+  const [response, setResponse] = useState<MyProjectEmployeeResponsibilities | null>(null);
 
   const closeEditForm = () => {
     setOpenPopup(false);
@@ -59,10 +56,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   };
 
   const renderResultItem = (project: Project) => {
-    const visibleDescriptionLength = 415;
-
-    const isTextOverflow = project.description.length > visibleDescriptionLength;
-
     const projectsService = new ProjectsService();
 
     const ResponsibilitiesList = (props: { projectId: string }) => {
@@ -108,8 +101,8 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
         const inputValue = event.currentTarget?.querySelector('input')?.value;
         if (!inputValue) return;
         const data = {
-          projectId: String(project.id),
-          employeeId: `${process.env.REACT_APP_TEMP_USER_ID}`,
+          projectId: Number(project.id),
+          employeeId: Number(`${process.env.REACT_APP_TEMP_USER_ID}`),
           responsibilities: inputValue,
         };
         try {
@@ -200,9 +193,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow
-                    ? project.description
-                    : project.description.substring(0, visibleDescriptionLength) + '...'}
+                  {project.description}
                 </Typography>
                 <Box>
                   {response && (
