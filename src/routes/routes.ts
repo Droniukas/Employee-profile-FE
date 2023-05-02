@@ -1,7 +1,7 @@
 export enum ROUTES {
   HOME = '/',
   LOGIN = '/login',
-  LOGOUT = 'logout',
+  LOGOUT = '/logout',
   SKILLS = '/skills',
   ACHIEVEMENTS = '/achievements',
   MY_PROJECTS = '/my-projects',

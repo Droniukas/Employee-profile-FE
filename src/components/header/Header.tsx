@@ -25,7 +25,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
-    logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}/${ROUTES.LOGOUT}` } });
+    logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}${ROUTES.LOGOUT}` } });
   };
 
   return (
