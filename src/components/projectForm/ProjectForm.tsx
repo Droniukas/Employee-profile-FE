@@ -18,7 +18,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { getIn, useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
@@ -29,7 +29,7 @@ import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
 
 type ProjectFormProps = {
-  onClose: (projectId?: string) => void;
+  onClose: (projectId?: number) => void;
   project?: Project;
 };
 
@@ -43,7 +43,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [projectEmployeeErrors, setProjectEmployeeErrors] = useState<ProjectEmployeeError[]>([]);
 
   let initialValues: Project = {
-    id: '',
     title: '',
     description: '',
     startDate: dayjs().toISOString(),
@@ -68,7 +67,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {
-        console.log('true');
         const projectEmployeeErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
         setProjectEmployeeErrors(projectEmployeeErrors);
       }
@@ -125,6 +123,16 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     setFieldValue('projectEmployees', sortedProjectEmployees);
   };
 
+  const deleteProjectEmployee = useCallback(
+    (projectEmployeeId: number) => {
+      const updatedProjectEmployees = values.projectEmployees.filter(
+        (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
+      );
+      setFieldValue('projectEmployees', updatedProjectEmployees);
+    },
+    [values.projectEmployees, setFieldValue],
+  );
+
   return (
     <Dialog open={true} fullWidth maxWidth="md">
       <Dialog open={confirmationDialog} maxWidth="xl">
@@ -166,7 +174,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         >
           {project ? 'Edit project profile' : 'Add project profile'}
         </Typography>
-
         <Box>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
@@ -188,7 +195,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-
         <Box
           component="div"
           sx={{
@@ -221,7 +227,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-
         <Box display={'flex'} sx={{}}>
           <Box display={'inline-block'}>
             <InputLabel>
@@ -278,13 +283,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             {values.projectEmployees.length > 0 && (
               <Link
                 component="button"
-                sx={{ marginLeft: 'auto', color: '#000048' }}
+                sx={{ marginLeft: 'auto', color: 'primary.main' }}
                 onClick={(event) => {
                   setShowAddEmployeesForm(true);
                   event.preventDefault();
                 }}
               >
-                <Typography sx={{ fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'primary.main' }}>Add team member</Typography>
               </Link>
             )}
           </Box>
@@ -297,6 +302,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
               touched={getIn(touched, 'projectEmployees')}
               handleBlur={handleBlur}
               setFieldValue={setFieldValue}
+              deleteProjectEmployee={deleteProjectEmployee}
             />
           ) : (
             <Box
@@ -311,7 +317,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                 alignItems: 'center',
               }}
             >
-              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: '#000048' }}>
+              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: 'primary.main' }}>
                 No team members yet
               </Typography>
 
@@ -330,13 +336,15 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
 
               <Link
                 component="button"
-                sx={{ color: '#000048' }}
+                sx={{ color: 'primary.main' }}
                 onClick={(event) => {
                   setShowAddEmployeesForm(true);
                   event.preventDefault();
                 }}
               >
-                <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: '#000048' }}>Add team member</Typography>
+                <Typography sx={{ my: 2, fontSize: 14, fontWeight: 400, color: 'primary.main' }}>
+                  Add team member
+                </Typography>
               </Link>
             </Box>
           )}

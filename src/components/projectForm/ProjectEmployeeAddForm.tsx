@@ -34,7 +34,7 @@ const ProjectEmployeeAddForm: React.FC<ProjectEmployeeAddFormProps> = (props: Pr
   const handleSelectionChange = (selectedEmployees: Employee[]) => {
     const newProjectEmployees = selectedEmployees.map((employee) => ({
       ...employee,
-      projectEmployeeStatus: 'ACTIVE',
+      status: employee.status,
       projectEmployeeStartDate: '',
       projectEmployeeEndDate: '',
     }));

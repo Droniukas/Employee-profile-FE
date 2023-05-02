@@ -1,5 +1,15 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Avatar, Box, Grid, IconButton, InputLabel, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Grid,
+  IconButton,
+  InputLabel,
+  Link,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -8,6 +18,7 @@ import React from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
+import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
@@ -18,10 +29,21 @@ type ProjectEmployeeEditItemProps = {
   isTouched: boolean;
   handleBlur: FormikHandlers['handleBlur'];
   setFieldValue: (field: string, value: string) => void;
+  onDelete: (projectEmployeeId: number) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const { projectEmployee, index, startDateError, endDateError, error, isTouched, handleBlur, setFieldValue } = props;
+  const {
+    projectEmployee,
+    index,
+    startDateError,
+    endDateError,
+    error,
+    isTouched,
+    handleBlur,
+    setFieldValue,
+    onDelete,
+  } = props;
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
@@ -35,6 +57,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
     setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newDate);
   };
 
+  const handleDelete = () => {
+    onDelete(projectEmployee.id);
+  };
   return (
     <Grid container alignItems={'center'} mb={1}>
       <Grid item xs={5}>
@@ -44,21 +69,30 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               src={`data:${projectEmployee.imageType};base64,${projectEmployee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? 0.35 : 1,
+                opacity: isInactiveOrDismissed(projectEmployee.status) ? 0.35 : 1,
               }}
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              projectEmployee.middleName
-                ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
-                : `${projectEmployee.name} ${projectEmployee.surname}`
-            }
-            secondary={projectEmployee.title}
+            secondary={<>{projectEmployee.title}</>}
             sx={{
-              color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : '#000048',
+              color: isInactiveOrDismissed(projectEmployee.status) ? '#666666' : 'primary.main',
             }}
-          />
+          >
+            <Link
+              href={
+                projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${projectEmployee.id}`
+                  : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
+              }
+              underline="hover"
+              target="_blank"
+            >
+              {projectEmployee.middleName
+                ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
+                : `${projectEmployee.name} ${projectEmployee.surname}`}
+            </Link>
+          </ListItemText>
         </Box>
       </Grid>
       <Grid item xs={6} display={'flex'}>
@@ -84,6 +118,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               slotProps={{
                 textField: {
                   error: isTouched && Boolean(startDateError),
+                  helperText: isTouched && startDateError,
                   onBlur: handleBlur(`projectEmployees.${index}`),
                 },
               }}
@@ -127,23 +162,25 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
             color: '#000048',
             backgroundColor: '#F4F4F4',
           }}
+          onClick={handleDelete}
         >
           <DeleteIcon />
         </IconButton>
       </Grid>
       <Grid item xs={5} />
       <Grid item xs={6}>
-        {isTouched && <Typography sx={{ color: '#d32f2f', fontSize: 12, ml: 1 }}>{startDateError}</Typography>}
         {error && (
           <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 1 }}>
             {error.message}
             <br />
             {error.employmentDates.map((employmentDate, index) => {
-              const startDate = dayjs(employmentDate.hiringDate).format('YYYY/MM/DD');
-              const endDate = employmentDate.exitDate ? dayjs(employmentDate.exitDate).format('YYYY/MM/DD') : 'Present';
+              const hiringDate = dayjs(employmentDate.hiringDate).format('YYYY/MM/DD');
+              const exitDate = employmentDate.exitDate
+                ? dayjs(employmentDate.exitDate).format('YYYY/MM/DD')
+                : 'Present';
               return (
                 <span key={employmentDate.hiringDate}>
-                  {startDate} - {endDate}
+                  {hiringDate} - {exitDate}
                   {index < error.employmentDates.length - 1 ? ',' : ''}
                   <br />
                 </span>

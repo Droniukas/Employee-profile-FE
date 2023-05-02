@@ -7,7 +7,7 @@ import { SkillsTabFilter } from '../enums/SkillsTabFilter';
 const SkillsTabFilterDropdown = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [status, setStatus] = useState<SkillsTabFilter>(
+  const [status, setStatus] = useState<string>(
     searchParams.get('filter') === SkillsTabFilter.ALL_SKILLS_URL
       ? SkillsTabFilter.ALL_SKILLS
       : SkillsTabFilter.MY_SKILLS,
@@ -39,7 +39,7 @@ const SkillsTabFilterDropdown = () => {
     >
       <Typography
         sx={{
-          color: '#000048',
+          color: 'primary.main',
           fontSize: 14,
         }}
       >
@@ -59,14 +59,14 @@ const SkillsTabFilterDropdown = () => {
             onChange={onFilterValueChange}
             disableUnderline
             sx={{
-              color: '#000048',
+              color: 'primary.main',
               fontSize: 14,
             }}
           >
             <MenuItem
               value={SkillsTabFilter.ALL_SKILLS}
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >
@@ -75,7 +75,7 @@ const SkillsTabFilterDropdown = () => {
             <MenuItem
               value={SkillsTabFilter.MY_SKILLS}
               sx={{
-                color: '#000048',
+                color: '#primary.main',
                 fontSize: 14,
               }}
             >

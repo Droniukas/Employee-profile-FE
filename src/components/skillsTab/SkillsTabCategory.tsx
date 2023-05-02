@@ -1,8 +1,10 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Skill } from '../../models/Skill.interface';
+import { ExpandedSkillRoot } from '../../store/types/skills';
 import SkillListItem from './ListComponents/SkillListItem';
 import { sortBySkill } from './utils';
 
@@ -13,7 +15,12 @@ type SkillsTabCategoryProps = {
 };
 const SkillsTabCategory: React.FunctionComponent<SkillsTabCategoryProps> = (props: SkillsTabCategoryProps) => {
   const { currentSkill, mapData, skillsData } = props;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const expanded = useSelector((state: ExpandedSkillRoot) => state.expandedSkill.value);
+
+  useEffect(() => {
+    setIsCollapsed(expanded);
+  }, [expanded]);
+  const [isCollapsed, setIsCollapsed] = useState(expanded);
 
   const mapSkills = (skills: Skill[]) => {
     return skills.map((skill: Skill) => {

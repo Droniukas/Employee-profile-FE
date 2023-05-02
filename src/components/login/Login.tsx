@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppState } from '../../App';
 import LoginInterface from '../../models/Login.interface';
 import { LoginService } from '../../services/login.service';
+import { ROUTES } from '../routes/routes';
 import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 
 type LoginProps = {
@@ -53,7 +54,8 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
     try {
       const loginService = new LoginService();
       const responseData = await loginService.checkCredentials(data);
-      navigate('/skills?filter=my');
+      const currentPath = '/' + (location.pathname + location.search).substring(1);
+      currentPath === '/' ? navigate(`${ROUTES.SKILLS}`) : navigate(currentPath);
       setAppState(AppState.LANDING_PAGE);
     } catch (error) {
       console.log(error);

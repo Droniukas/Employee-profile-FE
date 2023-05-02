@@ -1,6 +1,7 @@
-import { Avatar, Box, Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { Avatar, Box, Checkbox, Link, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 
 import Employee from '../../models/Employee.interface';
+import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeAddItemProps = {
   employee: Employee;
@@ -10,6 +11,9 @@ type ProjectEmployeeAddItemProps = {
 
 const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: ProjectEmployeeAddItemProps) => {
   const { employee, selected, onStateChange } = props;
+  const isInactiveOrDismissed = (status: string): boolean => {
+    return ['INACTIVE', 'DISMISSED'].includes(status);
+  };
 
   return (
     <>
@@ -25,20 +29,30 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
               src={`data:${employee.imageType};base64,${employee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
+                opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
               }}
             />
           </ListItemAvatar>
           <ListItemText
-            primary={
-              employee.middleName
-                ? `${employee.name} ${employee.middleName} ${employee.surname}`
-                : `${employee.name} ${employee.surname}`
-            }
             secondary={employee.title}
             sx={{
-              color: '#000048',
+              color: 'primary.main',
             }}
-          />
+          >
+            <Link
+              href={
+                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${employee.id}`
+                  : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
+              }
+              underline="hover"
+              target="_blank"
+            >
+              {employee.middleName
+                ? `${employee.name} ${employee.middleName} ${employee.surname}`
+                : `${employee.name} ${employee.surname}`}
+            </Link>
+          </ListItemText>
         </Box>
       </ListItem>
     </>

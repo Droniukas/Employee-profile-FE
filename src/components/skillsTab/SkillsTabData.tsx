@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
 import { ChangedSkill } from '../../models/ChangedSkill.interface';
@@ -9,6 +9,7 @@ import { setChangedSkills } from '../../states/changedSkills';
 import { triggerOnCancel } from '../../states/onCancel';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
+import { SkillWithErrorIdRoot } from '../../store/types/skills';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
@@ -17,16 +18,41 @@ const SkillsTabData = () => {
   const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
   const skillsService = new SkillsService();
   const [searchParams, setSearchParams] = useSearchParams();
+  const employeeIdParam = searchParams.get('employeeId');
 
   const dispatch = useDispatch();
+
+  const skillWithErrorId = useSelector((state: SkillWithErrorIdRoot) => state.skillWithErrorId.value);
+
+  useEffect(() => {
+    setErrorForSkillById(skillWithErrorId.skillId);
+    setSkillsData([...skillsData]);
+  }, [skillWithErrorId]);
+
+  const setErrorForSkillById = (childSkillId: number) => {
+    const skillWithError: Skill | undefined = skillsData.find((skill) => skill.skillId === childSkillId);
+    if (skillWithError === undefined) return;
+    skillWithError.hasError = false;
+    const parentSkills = skillsData.filter((parentSkill) => parentSkill.skillId === skillWithError.parentSkillId);
+    parentSkills.forEach((skill) => {
+      setErrorForSkillById(skill.skillId);
+    });
+  };
 
   useEffect(() => {
     fetchAndFilterSkillsData();
   }, [location.href]);
 
   const fetchAndFilterSkillsData = async () => {
-    const response: Skill[] = await skillsService.fetchSkillsData();
-    setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+    if (employeeIdParam) {
+      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(Number(employeeIdParam));
+      setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), 'my'));
+    } else {
+      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(
+        Number(process.env.REACT_APP_TEMP_USER_ID),
+      );
+      setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+    }
   };
 
   const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {
@@ -50,6 +76,7 @@ const SkillsTabData = () => {
       setSkillsData([...skillsData]);
       return true;
     }
+    setSkillsData([...skillsData]);
   };
 
   const handleSave = async () => {

@@ -13,9 +13,10 @@ type ProjectEmployeeEditListProps = {
   touched: FormikTouched<ProjectEmployee>;
   handleBlur: FormikHandlers['handleBlur'];
   setFieldValue: (field: string, value: string) => void;
+  deleteProjectEmployee: (projectEmployeeId: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const { projectEmployees, formikErrors, errors, touched, handleBlur, setFieldValue } = props;
+  const { projectEmployees, formikErrors, errors, touched, handleBlur, setFieldValue, deleteProjectEmployee } = props;
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -58,6 +59,7 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
               isTouched={getIn(touched, `${index}`)}
               handleBlur={handleBlur}
               setFieldValue={setFieldValue}
+              onDelete={deleteProjectEmployee}
             />
           </ListItem>
           {index !== projectEmployees.length - 1 && <Divider variant="fullWidth" />}

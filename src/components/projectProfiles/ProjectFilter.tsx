@@ -34,7 +34,7 @@ const ProjectFilter: React.FC<ProjectFilterProps> = (props: ProjectFilterProps) 
     >
       <Typography
         sx={{
-          color: '#000048',
+          color: 'primary.main',
           fontSize: 14,
         }}
       >
@@ -54,14 +54,14 @@ const ProjectFilter: React.FC<ProjectFilterProps> = (props: ProjectFilterProps) 
             onChange={onFilterValueChange}
             disableUnderline
             sx={{
-              color: '#000048',
+              color: 'primary.main',
               fontSize: 14,
             }}
           >
             <MenuItem
               value="All"
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >
@@ -70,7 +70,7 @@ const ProjectFilter: React.FC<ProjectFilterProps> = (props: ProjectFilterProps) 
             <MenuItem
               value={ProjectStatus.ONGOING}
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >
@@ -79,7 +79,7 @@ const ProjectFilter: React.FC<ProjectFilterProps> = (props: ProjectFilterProps) 
             <MenuItem
               value={ProjectStatus.FINISHED}
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >
@@ -88,7 +88,7 @@ const ProjectFilter: React.FC<ProjectFilterProps> = (props: ProjectFilterProps) 
             <MenuItem
               value={ProjectStatus.FUTURE}
               sx={{
-                color: '#000048',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >

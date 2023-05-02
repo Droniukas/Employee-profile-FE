@@ -1,5 +1,5 @@
 interface ProjectEmployee {
-  id: string;
+  id: number;
   name: string;
   surname: string;
   middleName: string;
@@ -8,7 +8,7 @@ interface ProjectEmployee {
   imageBytes: string;
   projectEmployeeStartDate: string;
   projectEmployeeEndDate: string;
-  projectEmployeeStatus: string;
+  status: string;
 }
 
 export default ProjectEmployee;

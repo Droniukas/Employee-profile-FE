@@ -1,10 +1,11 @@
-import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText } from '@mui/material';
+import { Box, Checkbox, checkboxClasses, ListItem, ListItemText } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
-import { OnCancelRoot, ViewStateRoot } from '../../../store/types';
+import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
+import { OnCancelRoot, ViewSkillStateRoot } from '../../../store/types/skills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';
 import { mapSkillLevelToTooltip } from '../utils';
@@ -18,7 +19,7 @@ type SkillListItemProps = {
 
 const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: SkillListItemProps) => {
   const { skill } = props;
-  const viewState = useSelector((state: ViewStateRoot) => state.viewState.value);
+  const viewState = useSelector((state: ViewSkillStateRoot) => state.viewSkillsState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
 
@@ -39,25 +40,30 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
 
   const onCheckboxChange = () => {
     setChecked(!isChecked);
-    !isChecked
-      ? dispatch(
-          updateChangedSkill({
-            skillId: skill.skillId,
-            skillName: skill.skillName,
-            checked: true,
-            skillLevel: skillLevel,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        )
-      : dispatch(
-          updateChangedSkill({
-            skillId: skill.skillId,
-            skillName: skill.skillName,
-            checked: false,
-            skillLevel: null,
-            employeeId: process.env.REACT_APP_TEMP_USER_ID,
-          }),
-        );
+    if (!isChecked) {
+      dispatch(
+        updateChangedSkill({
+          skillId: skill.skillId,
+          skillName: skill.skillName,
+          checked: true,
+          skillLevel: skillLevel,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    } else {
+      if (skill.hasError) {
+        dispatch(setSkillWithErrorId({ skillId: skill.skillId }));
+      }
+      dispatch(
+        updateChangedSkill({
+          skillId: skill.skillId,
+          skillName: skill.skillName,
+          checked: false,
+          skillLevel: null,
+          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        }),
+      );
+    }
   };
 
   const tooltipText: string = mapSkillLevelToTooltip(skillLevel);
@@ -66,29 +72,22 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
     <>
       <Box>
         <ListItem disablePadding sx={{ marginLeft: '27px' }}>
-          <FormControlLabel
-            control={
-              <>
-                <Checkbox
-                  disabled={viewState === SkillsTabState.VIEW_STATE}
-                  checked={isChecked}
-                  onChange={onCheckboxChange}
-                  sx={{
-                    color: checkboxColor,
-                    [`&.${checkboxClasses.checked}`]: {
-                      color: checkboxColor,
-                    },
-                  }}
-                />
-              </>
-            }
-            label=""
+          <Checkbox
+            disabled={viewState === SkillsTabState.VIEW_STATE}
+            checked={isChecked}
+            onChange={onCheckboxChange}
+            sx={{
+              color: checkboxColor,
+              [`&.${checkboxClasses.checked}`]: {
+                color: checkboxColor,
+              },
+              marginLeft: -2,
+            }}
           />
           <ListItemText
             sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main', float: 'top' }}
           >
             {skill.skillName}
-            {skill.hasError ? <SkillListItemErrorText /> : null}
           </ListItemText>
           {viewState === SkillsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -106,6 +105,11 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
             ) : null
           ) : null}
         </ListItem>
+        {skill.hasError ? (
+          <ListItem sx={{ padding: 0, margin: 0, marginLeft: '50px' }}>
+            <SkillListItemErrorText />
+          </ListItem>
+        ) : null}
       </Box>
     </>
   );
