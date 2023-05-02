@@ -15,8 +15,9 @@ import {
 } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { FormikContext, getIn, useFormik } from 'formik';
+import { getIn, useFormik } from 'formik';
 import React, { useState } from 'react';
 
 import Project from '../../models/Project.interface';
@@ -26,7 +27,6 @@ import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
-import { AxiosError } from 'axios';
 
 type ProjectFormProps = {
   onClose: (projectId?: string) => void;
@@ -67,7 +67,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         onClose(result.id);
       }
     } catch (error: unknown) {
-      setProjectEmployeeErrors((error as AxiosError).response?.data as ProjectEmployeeError[]);
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        console.log('true');
+        const projectEmployeeErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
+        setProjectEmployeeErrors(projectEmployeeErrors);
+      }
     }
   };
 
@@ -286,16 +290,14 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
 
           {values.projectEmployees.length > 0 ? (
-            <FormikContext.Provider value={projectForm}>
-              <ProjectEmployeeEditList
-                projectEmployees={values.projectEmployees}
-                formikErrors={getIn(errors, 'projectEmployees')}
-                errors={projectEmployeeErrors}
-                touched={getIn(touched, 'projectEmployees')}
-                handleBlur={handleBlur}
-                setFieldValue={setFieldValue}
-              />
-            </FormikContext.Provider>
+            <ProjectEmployeeEditList
+              projectEmployees={values.projectEmployees}
+              formikErrors={getIn(errors, 'projectEmployees')}
+              errors={projectEmployeeErrors}
+              touched={getIn(touched, 'projectEmployees')}
+              handleBlur={handleBlur}
+              setFieldValue={setFieldValue}
+            />
           ) : (
             <Box
               component="div"
