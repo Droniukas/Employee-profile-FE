@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { AppState } from '../../App';
 import LoginInterface from '../../models/Login.interface';
 import { LoginService } from '../../services/login.service';
-import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 import { ROUTES } from '../routes/routes';
+import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
 
 type LoginProps = {
   setAppState: (newState: AppState) => void;

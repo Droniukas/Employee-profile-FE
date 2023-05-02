@@ -9,12 +9,12 @@ import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
 import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import FindEmployee from '../findEmployee/FindEmployee';
+import MyProjectProfiles from '../myProjects/MyProjectProfiles';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import { ROUTES } from '../routes/routes';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
-import MyProjectProfiles from '../myProjects/MyProjectProfiles';
 
 const getIndexedProps = (index: number) => {
   return {
