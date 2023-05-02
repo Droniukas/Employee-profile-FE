@@ -88,7 +88,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
       }, [projectId]);
 
       if (responsibilities === null) {
-        return <Typography>Loading...</Typography>;
+        return <Typography>No responsibilities</Typography>;
       }
 
       return (
@@ -177,8 +177,8 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   }}
                 >
                   <>
-                    {correctDateFormat(project.startDate)} -{' '}
-                    {project.endDate ? correctDateFormat(project.endDate) : 'Present'}
+                    {'From '} {correctDateFormat(project.startDate)}
+                    {project.endDate ? ' to ' + correctDateFormat(project.endDate) : ''}
                   </>
                 </Typography>
                 <Typography
@@ -278,7 +278,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   className="btn-edit"
                   aria-label="edit"
                   sx={{
-                    color: '#000048',
+                    color: 'primary.main',
                     position: 'relative',
                     left: 320,
                     backgroundColor: '#F4F4F4',
