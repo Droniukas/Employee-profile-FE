@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
-import StatusChip from '../findEmployee/StatusChip';
 import { ROUTES } from '../routes/routes';
 
 type ProjectEmployeeEditItemProps = {
@@ -76,20 +75,14 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                   src={`data:${projectEmployee.imageType};base64,${projectEmployee.imageBytes}`}
                   sx={{
                     border: '0.01px solid lightgrey',
-                    opacity: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? 0.35 : 1,
+                    opacity: isInactiveOrDismissed(projectEmployee.status) ? 0.35 : 1,
                   }}
                 />
               </ListItemAvatar>
               <ListItemText
-                secondary={
-                  <>
-                    {projectEmployee.title}
-                    <span style={{ margin: '0 12px' }}>/</span>
-                    <StatusChip status={projectEmployee.projectEmployeeStatus} />
-                  </>
-                }
+                secondary={<>{projectEmployee.title}</>}
                 sx={{
-                  color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : 'primary.main',
+                  color: isInactiveOrDismissed(projectEmployee.status) ? '#666666' : 'primary.main',
                 }}
               >
                 <Link

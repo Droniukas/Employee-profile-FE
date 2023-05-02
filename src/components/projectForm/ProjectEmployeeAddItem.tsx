@@ -11,6 +11,9 @@ type ProjectEmployeeAddItemProps = {
 
 const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: ProjectEmployeeAddItemProps) => {
   const { employee, selected, onStateChange } = props;
+  const isInactiveOrDismissed = (status: string): boolean => {
+    return ['INACTIVE', 'DISMISSED'].includes(status);
+  };
 
   return (
     <>
@@ -26,6 +29,7 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
               src={`data:${employee.imageType};base64,${employee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
+                opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
               }}
             />
           </ListItemAvatar>

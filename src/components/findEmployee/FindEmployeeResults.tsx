@@ -8,8 +8,8 @@ import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 
 import Employee from '../../models/Employee.interface';
-import StatusChip from './StatusChip';
 import { ROUTES } from '../routes/routes';
+import StatusChip from './StatusChip';
 
 type FindEmployeeResultsProps = {
   employees: Employee[];
