@@ -20,7 +20,6 @@ import { useSelector } from 'react-redux';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
-import StatusChip from '../findEmployee/StatusChip';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;

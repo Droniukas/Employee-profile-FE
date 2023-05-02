@@ -14,11 +14,6 @@ import LoginInterface from '../../models/Login.interface';
 import { ROUTES } from '../../routes/routes';
 import { LoginService } from '../../services/login.service';
 import { emailValidationRules, passwordValidationRules } from './validation/validationRules';
-import { ROUTES } from '../routes/routes';
-
-type LoginProps = {
-  setAppState: (newState: AppState) => void;
-};
 
 const Login = () => {
   const {
