@@ -7,7 +7,6 @@ import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-ro
 import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
 import { EmployeeService } from '../../services/employee.service';
-import store from '../../store/store';
 import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
@@ -17,6 +16,15 @@ import AccessDeniedPage from './AccessDeniedPage';
 import NotFoundPage from './NotFoundPage';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
+import store from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { setChangedSkills } from '../../states/changedSkills';
+import { setSkillsTabState } from '../../states/skillsTabState';
+import { triggerOnCancel } from '../../states/onCancel';
+import { SkillsTabStateRoot } from '../../store/types/skills';
+import { SkillsTabState } from '../enums/SkillsTabState';
+import { Skill } from '../../models/Skill.interface';
+import { ChangedSkill } from '../../models/ChangedSkill.interface';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -28,16 +36,20 @@ const getIndexedProps = (index: number) => {
 const Main = () => {
   const [result, setResult] = useState<Employee>();
   const [value, setValue] = React.useState<ROUTES>(ROUTES.SKILLS);
-  useEffect(() => {
-    setValue(location.pathname as ROUTES);
-  }, []);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
   const [achievementsSearchParams, setAchievementsSearchParams] = useState<string | null>();
+  const [selectedTabURL, setSelectedTabURL] = useState<string>();
+  const [selectedTabValue, setSelectedTabValue] = useState<ROUTES>();
+  const [skillsData, setSkillsData] = useState<Skill[]>([]);
+
+  const skillsViewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);
+
   const employeeIdParam = searchParams.get('employeeId');
-  const [allowChange, setAllowChange] = useState<boolean>(true);
-  const [currentPath, setCurrentPath] = useState('/' + (location.pathname + location.search).substring(1));
+
+  useEffect(() => {
+    setValue(location.pathname as ROUTES);
+  }, []);
 
   useEffect(() => {
     if (window.location.href.includes('skills')) {
@@ -57,18 +69,6 @@ const Main = () => {
   useEffect(() => {
     getResult(`${employeeIdParam ? employeeIdParam : process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
-
-  // const handleChange = (event: React.SyntheticEvent, newValue: ROUTES) => {
-  //   const changedSkills = store.getState().changedSkills.value;
-  //   if (changedSkills.length > 0) {
-  //     setAllowChange(false);
-  //     setCurrentPath('/' + (location.pathname + location.search).substring(1));
-  //     // open modal
-  //     return;
-  //   }
-  //   setValue(newValue);
-  //   // here we should also trigger cancel
-  // };
 
   const getEmployeeIdURLPart = (withOtherFilters?: boolean) => {
     if (employeeIdParam) return `${withOtherFilters ? '&' : '?'}employeeId=` + employeeIdParam;
@@ -90,16 +90,48 @@ const Main = () => {
     }
     return true;
   };
-  // temporary
-  const navigate = useNavigate();
 
-  const handleTabClick = (tabURL: string, tabValue: ROUTES) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [skillsConfirmationDialog, setSkillsConfirmationDialog] = useState<boolean>(false);
+
+  const triggerSkillsTabCancel = () => {
+    dispatch(setChangedSkills([]));
+    dispatch(setSkillsTabState({}));
+    dispatch(triggerOnCancel({}));
+  };
+
+  const changedSkillsHaveDifferences = (changedSkills: ChangedSkill[]) => {
+    console.log(changedSkills);
+    console.log(skillsData);
+    return !changedSkills.every((changedSkill) => {
+      return skillsData.some((skill) => {
+        return (
+          skill.skillId === changedSkill.skillId &&
+          skill.checked === changedSkill.checked &&
+          skill.skillLevel === changedSkill.skillLevel
+        );
+      });
+    });
+  };
+
+  const handleTabClick = (currentTabURL: string, currentTabValue: ROUTES) => {
+    setSelectedTabURL(currentTabURL);
+    setSelectedTabValue(currentTabValue);
     const changedSkills = store.getState().changedSkills.value;
-    if (changedSkills.length > 0) {
+    if (changedSkillsHaveDifferences(changedSkills)) {
+      setSkillsConfirmationDialog(true);
       return;
     }
-    navigate(tabURL);
-    setValue(tabValue);
+    if (skillsViewState === SkillsTabState.EDIT_STATE) {
+      triggerSkillsTabCancel();
+    }
+    switchTabs(currentTabURL, currentTabValue);
+  };
+
+  const switchTabs = (currentTabURL: string, currentTabValue: ROUTES) => {
+    navigate(currentTabURL);
+    setValue(currentTabValue);
   };
 
   return (
@@ -176,7 +208,17 @@ const Main = () => {
                     path={ROUTES.SKILLS}
                     element={
                       <TabPanel value={value} index={0}>
-                        <SkillsTabData />
+                        <SkillsTabData
+                          confirmationDialogOpen={skillsConfirmationDialog}
+                          confirmationDialogOnCancel={() => setSkillsConfirmationDialog(false)}
+                          confirmationDialogOnConfirm={() => {
+                            setSkillsConfirmationDialog(false);
+                            if (selectedTabURL && selectedTabValue) switchTabs(selectedTabURL, selectedTabValue);
+                            triggerSkillsTabCancel();
+                          }}
+                          skillsData={skillsData}
+                          setSkillsData={setSkillsData}
+                        />
                       </TabPanel>
                     }
                   />

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { setAchievementsTabState } from '../../states/achievementsTabState';
-import { ViewAchievementStateRoot } from '../../store/types/achievements';
+import { achievementsTabStateRoot } from '../../store/types/achievements';
 import { AchievementsTabState } from '../enums/AchievementsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 
@@ -21,7 +21,7 @@ const AchievementsTabStateButtons: React.FunctionComponent<AchievementsTabStateB
     dispatch(setAchievementsTabState({}));
   };
 
-  const viewState = useSelector((state: ViewAchievementStateRoot) => state.viewAchievementsState.value);
+  const viewState = useSelector((state: achievementsTabStateRoot) => state.achievementsTabState.value);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   return (

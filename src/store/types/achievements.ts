@@ -13,8 +13,8 @@ export interface ChangedAchievementsDataRoot {
   };
 }
 
-export interface ViewAchievementStateRoot {
-  viewAchievementsState: {
+export interface achievementsTabStateRoot {
+  achievementsTabState: {
     value: AchievementsTabState;
   };
 }

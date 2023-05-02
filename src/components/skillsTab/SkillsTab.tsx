@@ -33,7 +33,6 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
   };
   return (
     <>
-      {}
       <Box component="span" sx={{ width: '1344px', display: 'inline-block' }}>
         {!employeeIdParam ? (
           <Box component="span" sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
