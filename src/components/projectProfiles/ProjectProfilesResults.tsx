@@ -231,7 +231,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     let additionalEmployees = 0;
 
     const filteredEmployeesList = employees.filter((employee) => {
-      if (employee.projectEmployeeStatus === 'ACTIVE') {
+      if (employee.status === 'ACTIVE') {
         if (counter < avatarsNeed) {
           counter++;
           return employee;
