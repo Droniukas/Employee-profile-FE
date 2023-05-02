@@ -21,10 +21,12 @@ import React, { useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
+import { AxiosError } from 'axios';
 
 type ProjectFormProps = {
   onClose: (projectId?: string) => void;
@@ -38,6 +40,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
+  const [projectEmployeeErrors, setProjectEmployeeErrors] = useState<ProjectEmployeeError[]>([]);
 
   let initialValues: Project = {
     id: '',
@@ -55,12 +58,16 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     values.title.trim();
     values.description.trim();
 
-    if (project) {
-      result = await projectsService.updateProject(values);
-      onClose();
-    } else {
-      result = await projectsService.createProject(values);
-      onClose(result.id);
+    try {
+      if (project) {
+        result = await projectsService.updateProject(values);
+        onClose();
+      } else {
+        result = await projectsService.createProject(values);
+        onClose(result.id);
+      }
+    } catch (error: unknown) {
+      setProjectEmployeeErrors((error as AxiosError).response?.data as ProjectEmployeeError[]);
     }
   };
 
@@ -283,6 +290,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
               <ProjectEmployeeEditList
                 projectEmployees={values.projectEmployees}
                 formikErrors={getIn(errors, 'projectEmployees')}
+                errors={projectEmployeeErrors}
                 touched={getIn(touched, 'projectEmployees')}
                 handleBlur={handleBlur}
                 setFieldValue={setFieldValue}

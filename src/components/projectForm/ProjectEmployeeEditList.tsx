@@ -3,17 +3,19 @@ import { FormikErrors, FormikHandlers, FormikTouched, getIn } from 'formik';
 import React from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
   formikErrors: FormikErrors<ProjectEmployee>;
+  errors: ProjectEmployeeError[];
   touched: FormikTouched<ProjectEmployee>;
   handleBlur: FormikHandlers['handleBlur'];
   setFieldValue: (field: string, value: string) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const { projectEmployees, formikErrors, touched, handleBlur, setFieldValue } = props;
+  const { projectEmployees, formikErrors, errors, touched, handleBlur, setFieldValue } = props;
 
   return (
     <List sx={{ marginTop: '8px' }}>
@@ -24,6 +26,7 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
             projectEmployee={projectEmployee}
             startDateError={getIn(formikErrors, `${index}.projectEmployeeStartDate`)}
             endDateError={getIn(formikErrors, `${index}.projectEmployeeEndDate`)}
+            errorMessage={errors.find((error) => error.employeeId === projectEmployee.id)?.errorMessage}
             isTouched={getIn(touched, `${index}`)}
             handleBlur={handleBlur}
             setFieldValue={setFieldValue}
