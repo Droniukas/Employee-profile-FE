@@ -10,9 +10,11 @@ export const changedSkillsSlice = createSlice({
   reducers: {
     setChangedSkills: (state, action) => {
       state.value = action.payload;
+      console.log(state.value);
     },
     updateChangedSkill: (state, action) => {
       state.value = [...state.value.filter((item) => item.skillId !== action.payload.skillId), action.payload];
+      console.log(state.value);
     },
   },
 });
