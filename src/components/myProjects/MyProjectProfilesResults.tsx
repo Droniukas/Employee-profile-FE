@@ -246,14 +246,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   </Typography>
                 </Box>
               </Box>
-              <Box
-                alignItems="flex-start"
-                display="flex"
-                sx={{
-                  position: 'relative',
-                  left: 70,
-                }}
-              ></Box>
             </Stack>
             <Stack
               direction="row"
