@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
+import { setAuthToken } from './config/auth';
 import HomePage from './pages/homePage/HomePage';
 import LoginPage from './pages/loginPage/LoginPage';
 import LogoutPage from './pages/logoutPage/LogoutPage';
@@ -13,16 +14,15 @@ import { EmployeeService } from './services/employee.service';
 import { setUserState } from './states/userState';
 
 const App = () => {
-  const { isAuthenticated, getAccessTokenSilently, getIdTokenClaims } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
   const employeeService = new EmployeeService();
   const dispatch = useDispatch();
 
   useEffect(() => {
     const configureAuthenticationTokens = async () => {
       const token = await getAccessTokenSilently();
-      localStorage.setItem('access_token', token);
-      const identity = await getIdTokenClaims();
-      const employee = await employeeService.getByEmail(identity?.email);
+      setAuthToken(token);
+      const employee = await employeeService.getByEmail(user?.email);
       dispatch(setUserState(employee));
     };
 

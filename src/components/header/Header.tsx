@@ -6,6 +6,7 @@ import { Avatar, Box, Link, Menu, MenuItem } from '@mui/material';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { deleteAuthToken } from '../../config/auth';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
 import Loading from '../loading/Loading';
@@ -24,7 +25,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
+    deleteAuthToken();
     logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}${ROUTES.LOGOUT}` } });
   };
 
