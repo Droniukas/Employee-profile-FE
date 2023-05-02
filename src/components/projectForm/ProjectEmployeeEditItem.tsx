@@ -13,50 +13,37 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { FormikHandlers } from 'formik';
+import React from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
-import StatusChip from '../findEmployee/StatusChip';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
-  onUpdate: (updatedProjectEmployee: ProjectEmployee) => void;
+  index: number;
+  startDateError: string;
+  endDateError: string;
+  errorMessage?: string;
+  isTouched: boolean;
+  handleBlur: FormikHandlers['handleBlur'];
+  setFieldValue: (field: string, value: string) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const { projectEmployee, onUpdate } = props;
-  const [startDateError, setStartDateError] = useState<string | null>(null);
+  const { projectEmployee, index, startDateError, endDateError, errorMessage, isTouched, handleBlur, setFieldValue } =
+    props;
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
   };
 
-  const handleStartDateChange = (newValue: string) => {
-    setStartDateError(null);
-    if (newValue > projectEmployee.projectEmployeeEndDate) {
-      onUpdate({
-        ...projectEmployee,
-        projectEmployeeStartDate: newValue,
-        projectEmployeeEndDate: '',
-      });
-    } else {
-      onUpdate({
-        ...projectEmployee,
-        projectEmployeeStartDate: newValue,
-      });
-    }
+  const setProjectEmployeeStartDate = (newDate: string) => {
+    setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newDate);
   };
 
-  const handleEndDateChange = (newValue: string) => {
-    onUpdate({
-      ...projectEmployee,
-      projectEmployeeEndDate: newValue,
-    });
+  const setProjectEmployeeEndDate = (newDate: string) => {
+    setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newDate);
   };
-
-  useEffect(() => {
-    projectEmployee.projectEmployeeStartDate ? setStartDateError(null) : setStartDateError('Field is required');
-  }, [projectEmployee.projectEmployeeStartDate]);
 
   return (
     <>
@@ -79,13 +66,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                     ? `${projectEmployee.name} ${projectEmployee.middleName} ${projectEmployee.surname}`
                     : `${projectEmployee.name} ${projectEmployee.surname}`
                 }
-                secondary={
-                  <>
-                    {projectEmployee.title}
-                    <span style={{ margin: '0 12px' }}>/</span>
-                    <StatusChip status={projectEmployee.projectEmployeeStatus} />
-                  </>
-                }
+                secondary={projectEmployee.title}
                 sx={{
                   color: isInactiveOrDismissed(projectEmployee.projectEmployeeStatus) ? '#666666' : '#000048',
                 }}
@@ -101,15 +82,22 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 <DatePicker
                   sx={{ width: 170 }}
                   format="YYYY/MM/DD"
-                  value={dayjs(projectEmployee.projectEmployeeStartDate)}
+                  value={
+                    projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null
+                  }
                   onChange={(newValue) => {
-                    if (newValue === null) return;
-                    handleStartDateChange(dayjs(newValue).toISOString());
+                    dayjs(newValue).isValid()
+                      ? setProjectEmployeeStartDate(dayjs(newValue).toISOString())
+                      : setProjectEmployeeStartDate('');
+                  }}
+                  slotProps={{
+                    textField: {
+                      error: isTouched && Boolean(startDateError),
+                      helperText: isTouched && startDateError,
+                      onBlur: handleBlur(`projectEmployees.${index}`),
+                    },
                   }}
                 />
-                {startDateError && (
-                  <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 0.5, ml: 1.5 }}>{startDateError}</Typography>
-                )}
               </LocalizationProvider>
             </Box>
             <Box>
@@ -122,7 +110,16 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                   format="YYYY/MM/DD"
                   minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
                   value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
-                  onChange={(newValue) => handleEndDateChange(dayjs(newValue).toISOString())}
+                  onChange={(newValue) => {
+                    dayjs(newValue).isValid()
+                      ? setProjectEmployeeEndDate(dayjs(newValue).toISOString())
+                      : setProjectEmployeeEndDate('');
+                  }}
+                  slotProps={{
+                    textField: {
+                      error: isTouched && Boolean(endDateError),
+                    },
+                  }}
                 />
               </LocalizationProvider>
             </Box>
@@ -139,10 +136,16 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               <DeleteIcon />
             </IconButton>
           </Grid>
+          <Grid item xs={5.5} />
+          <Grid item xs={5.5}>
+            {errorMessage && <Typography sx={{ color: '#d32f2f', fontSize: 14, mt: 1 }}>{errorMessage}</Typography>}
+          </Grid>
         </Grid>
       </ListItem>
     </>
   );
 };
 
-export default ProjectEmployeeEditItem;
+const ProjectEmployeeEditItemMemo = React.memo(ProjectEmployeeEditItem);
+
+export default ProjectEmployeeEditItemMemo;

@@ -1,41 +1,40 @@
 import { Divider, List } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { FormikErrors, FormikHandlers, FormikTouched, getIn } from 'formik';
+import React from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
-  updateProjectEmployee: (updatedProjectEmployee: ProjectEmployee) => void;
+  formikErrors: FormikErrors<ProjectEmployee>;
+  touched: FormikTouched<ProjectEmployee>;
+  handleBlur: FormikHandlers['handleBlur'];
+  setFieldValue: (field: string, value: string) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const { projectEmployees, updateProjectEmployee } = props;
-  const [sortedProjectEmployees, setSortedProjectEmployees] = useState<ProjectEmployee[]>([]);
-
-  useEffect(() => {
-    const sortedCopy = [...projectEmployees].sort((a, b) => {
-      const nameComparison = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
-      if (nameComparison !== 0) {
-        return nameComparison;
-      }
-      return a.surname.localeCompare(b.surname, undefined, { sensitivity: 'base' });
-    });
-    setSortedProjectEmployees(sortedCopy);
-  }, [projectEmployees]);
-
-  const handleProjectEmployeeStateChange = (updatedProjectEmployee: ProjectEmployee) => {
-    updateProjectEmployee(updatedProjectEmployee);
-  };
+  const { projectEmployees, formikErrors, touched, handleBlur, setFieldValue } = props;
 
   return (
     <List sx={{ marginTop: '8px' }}>
-      {sortedProjectEmployees.map((projectEmployee, index) => (
-        <React.Fragment key={projectEmployee.id}>
-          <ProjectEmployeeEditItem projectEmployee={projectEmployee} onUpdate={handleProjectEmployeeStateChange} />
-          {index !== sortedProjectEmployees.length - 1 && <Divider variant="fullWidth" />}
+      {projectEmployees.map((projectEmployee, index) => (
+        <React.Fragment key={index}>
+          <ProjectEmployeeEditItem
+            index={index}
+            projectEmployee={projectEmployee}
+            startDateError={getIn(formikErrors, `${index}.projectEmployeeStartDate`)}
+            endDateError={getIn(formikErrors, `${index}.projectEmployeeEndDate`)}
+            isTouched={getIn(touched, `${index}`)}
+            handleBlur={handleBlur}
+            setFieldValue={setFieldValue}
+          />
+          {index !== projectEmployees.length - 1 && <Divider variant="fullWidth" />}
         </React.Fragment>
       ))}
     </List>
   );
 };
-export default ProjectEmployeeEditList;
+
+const ProjectEmployeeEditListMemo = React.memo(ProjectEmployeeEditList);
+
+export default ProjectEmployeeEditListMemo;

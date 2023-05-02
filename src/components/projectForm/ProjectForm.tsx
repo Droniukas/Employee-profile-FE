@@ -16,8 +16,8 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { useFormik } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
+import { FormikContext, getIn, useFormik } from 'formik';
+import React, { useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
@@ -64,42 +64,55 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     }
   };
 
-  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: handleFormSubmit,
-      validationSchema: projectSchema,
-    });
+  const projectForm = useFormik({
+    initialValues,
+    onSubmit: handleFormSubmit,
+    validationSchema: projectSchema,
+  });
+
+  const {
+    values,
+    touched,
+    errors,
+    dirty,
+    handleBlur,
+    handleChange,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit,
+    setTouched,
+  } = projectForm;
 
   const handleAddEmployeesFormClose = () => {
     setShowAddEmployeesForm(false);
   };
 
-  const handleAddClick = (newProjectEmployees: ProjectEmployee[]) => {
-    setFieldValue('projectEmployees', [...values.projectEmployees, ...newProjectEmployees]);
+  const sortProjectEmployees = (projectEmployees: ProjectEmployee[]) => {
+    const sortedProjectEmployees = projectEmployees.sort((a, b) => {
+      const nameComparison = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+      if (nameComparison !== 0) {
+        return nameComparison;
+      }
+      return a.surname.localeCompare(b.surname, undefined, { sensitivity: 'base' });
+    });
+    return sortedProjectEmployees;
   };
 
-  const updateProjectEmployee = useCallback(
-    (updatedProjectEmployee: ProjectEmployee) => {
-      setFieldValue(
-        'projectEmployees',
-        values.projectEmployees.map((projectEmployee: ProjectEmployee) =>
-          projectEmployee.id === updatedProjectEmployee.id ? updatedProjectEmployee : projectEmployee,
-        ),
-      );
-    },
-    [values.projectEmployees, setFieldValue],
-  );
+  const handleAddClick = (newProjectEmployees: ProjectEmployee[]) => {
+    const sortedProjectEmployees = sortProjectEmployees([...values.projectEmployees, ...newProjectEmployees]);
+    const newTouched = { projectEmployees: Array(sortedProjectEmployees.length).fill(false) };
 
-  const ProjectEmployeeEditListMemo = useMemo(
-    () => (
-      <ProjectEmployeeEditList
-        projectEmployees={values.projectEmployees}
-        updateProjectEmployee={updateProjectEmployee}
-      />
-    ),
-    [values.projectEmployees, updateProjectEmployee],
-  );
+    values.projectEmployees.forEach((projectEmployee, index) => {
+      const isTouched = touched.projectEmployees?.[index] ? true : false;
+      const newIndex = sortedProjectEmployees.findIndex((pe) => pe.id === projectEmployee.id);
+      if (newIndex !== -1) {
+        newTouched.projectEmployees[newIndex] = isTouched;
+      }
+    });
+
+    setTouched(newTouched);
+    setFieldValue('projectEmployees', sortedProjectEmployees);
+  };
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
@@ -153,9 +166,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             value={values.title}
             error={touched.title && Boolean(errors.title)}
             helperText={touched.title && errors.title}
-            name={'title'}
             size="small"
             variant="outlined"
+            name={'title'}
             inputProps={{ maxLength: 50 }}
             sx={{
               '& fieldset': {
@@ -266,7 +279,15 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
 
           {values.projectEmployees.length > 0 ? (
-            ProjectEmployeeEditListMemo
+            <FormikContext.Provider value={projectForm}>
+              <ProjectEmployeeEditList
+                projectEmployees={values.projectEmployees}
+                formikErrors={getIn(errors, 'projectEmployees')}
+                touched={getIn(touched, 'projectEmployees')}
+                handleBlur={handleBlur}
+                setFieldValue={setFieldValue}
+              />
+            </FormikContext.Provider>
           ) : (
             <Box
               component="div"
