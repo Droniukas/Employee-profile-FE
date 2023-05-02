@@ -45,7 +45,7 @@ const Main = () => {
 
   const getResult = async (id: string) => {
     const employee = await employeeService.getById(id);
-    return employee;
+    setResult(employee);
   };
 
   useEffect(() => {

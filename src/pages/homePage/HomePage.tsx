@@ -1,7 +1,7 @@
 import './HomePage.scss';
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Footer from '../../components/footer/Footer';
 import Header from '../../components/header/Header';
@@ -11,9 +11,15 @@ import { ROUTES } from '../../routes/routes';
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const employeeIdParam = searchParams.get('employeeId');
 
   useEffect(() => {
-    navigate(ROUTES.SKILLS);
+    if (employeeIdParam) {
+      navigate(`${ROUTES.SKILLS}?employeeId=${employeeIdParam}`);
+    } else {
+      navigate(`${ROUTES.SKILLS}?filter=my`);
+    }
   }, []);
 
   return (
