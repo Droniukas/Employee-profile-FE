@@ -118,7 +118,6 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               slotProps={{
                 textField: {
                   error: isTouched && Boolean(startDateError),
-                  helperText: isTouched && startDateError,
                   onBlur: handleBlur(`projectEmployees.${index}`),
                 },
               }}
@@ -169,6 +168,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
       </Grid>
       <Grid item xs={5} />
       <Grid item xs={6}>
+        {isTouched && <Typography sx={{ color: '#d32f2f', fontSize: 12 }}>{startDateError}</Typography>}
         {error && (
           <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 1 }}>
             {error.message}

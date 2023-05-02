@@ -1,7 +1,7 @@
 import EmploymentDates from './EmploymentDates.interface';
 
 interface ProjectEmployeeError {
-  employeeId: string;
+  employeeId: number;
   message: string;
   employmentDates: EmploymentDates[];
 }
