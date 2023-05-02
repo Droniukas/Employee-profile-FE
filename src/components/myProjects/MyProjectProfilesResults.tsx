@@ -65,10 +65,12 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
       useEffect(() => {
         const getResponsibilities = async () => {
           try {
-            const result = await projectsService.getResponsibilitiesFromProjectEmployee(projectId);
+            const getResponsibilitiesFromProjectById = await projectsService.getResponsibilitiesFromProjectEmployee(
+              projectId,
+            );
 
-            if (Array.isArray(result)) {
-              setResponsibilities(result);
+            if (Array.isArray(getResponsibilitiesFromProjectById)) {
+              setResponsibilities(getResponsibilitiesFromProjectById);
             } else {
               setResponsibilities(null);
             }
@@ -87,7 +89,11 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
       return (
         <>
           {responsibilities.length > 0 ? (
-            responsibilities.map((responsibility, index) => <Typography key={index}>{responsibility}</Typography>)
+            responsibilities.map((responsibility, index) => (
+              <Typography key={index} fontSize="14">
+                {responsibility}
+              </Typography>
+            ))
           ) : (
             <Typography>No responsibilities found</Typography>
           )}
@@ -106,8 +112,8 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
           responsibilities: inputValue,
         };
         try {
-          const res = await projectsService.addResponsibilitiesToProjectEmployee(data);
-          setResponse(res.data);
+          const addResponsibilitiesToMyProject = await projectsService.addResponsibilitiesToProjectEmployee(data);
+          setResponse(addResponsibilitiesToMyProject.data);
         } catch (error) {
           console.error(error);
         }
@@ -186,7 +192,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   sx={{
                     color: '#666666',
                     fontSize: 14,
-                    overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: '5',
@@ -216,13 +221,15 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
-                      my: 2,
+                      my: 1,
                     }}
                   >
                     <InputLabel>
-                      <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project Responsibilities</Typography>
+                      <Typography sx={{ fontSize: 16, fontWeight: 400, color: '#666666' }}>
+                        Project Responsibilities
+                      </Typography>
                     </InputLabel>
-                    <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
+                    <Typography sx={{ fontSize: 14, color: '#666666' }}>
                       <ResponsibilitiesList projectId={String(project.id)} />
                     </Typography>
                   </Box>
@@ -230,7 +237,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     hiddenLabel
                     variant="standard"
                     onKeyPress={handleKeyPress}
-                    placeholder="Responsibilities"
+                    sx={{ color: 'primary.main' }}
                   />
                   <Typography
                     sx={{
@@ -239,7 +246,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       color: 'primary.main',
                       fontSize: 14,
                       height: 20,
-                      weight: 400,
+                      fontWeight: 500,
                     }}
                   >
                     {employeeId?.title}
