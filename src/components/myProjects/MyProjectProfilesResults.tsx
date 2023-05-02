@@ -59,7 +59,9 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   };
 
   const renderResultItem = (project: Project) => {
-    const isTextOverflow = project.description.length > 150;
+    const visibleDescriptionLength = 415;
+
+    const isTextOverflow = project.description.length > visibleDescriptionLength;
 
     const projectsService = new ProjectsService();
 
@@ -75,11 +77,9 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
             if (Array.isArray(result)) {
               setResponsibilities(result);
             } else {
-              console.error('Unexpected response from server:', result);
               setResponsibilities(null);
             }
           } catch (error) {
-            console.error(error);
             setResponsibilities(null);
           }
         };
@@ -200,7 +200,9 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow ? project.description : project.description.substring(0, 2000) + '...'}
+                  {!isTextOverflow
+                    ? project.description
+                    : project.description.substring(0, visibleDescriptionLength) + '...'}
                 </Typography>
                 <Box>
                   {response && (
