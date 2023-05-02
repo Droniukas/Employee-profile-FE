@@ -1,7 +1,6 @@
 import '../projectProfiles/ProjectProfiles.scss';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react';
 
@@ -82,7 +81,7 @@ const MyProjectProfiles = () => {
           <Box
             sx={{
               display: filteredProjectsList.length === 0 ? 'none' : 'inline',
-              color: '#000048',
+              color: 'primary.main',
               fontSize: 14,
             }}
           >
@@ -106,19 +105,7 @@ const MyProjectProfiles = () => {
               position: 'relative',
               left: 0,
             }}
-          >
-            <Button
-              type="submit"
-              variant="contained"
-              id="addNewProject"
-              onClick={() => setOpenPopup(true)}
-              sx={{
-                my: 1,
-              }}
-            >
-              Add new project
-            </Button>
-          </Box>
+          ></Box>
         </Stack>
       </Stack>
       <Box
