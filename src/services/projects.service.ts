@@ -73,7 +73,6 @@ export class ProjectsService {
     const plainText = response.data;
     const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
     return responsibilities;
-    return response.data;
   }
 
   public async addResponsibilitiesToProjectEmployee(myProjectEmployee: MyProjectEmployee) {
