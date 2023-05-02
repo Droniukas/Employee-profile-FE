@@ -214,7 +214,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                         weight: 400,
                       }}
                     >
-                      Responsibilities: {response.responsibilities}
+                      My responsibilities: {response.responsibilities}
                     </Typography>
                   )}
                   <Box
