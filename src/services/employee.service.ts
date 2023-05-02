@@ -18,8 +18,8 @@ export class EmployeeService {
     return response.data;
   }
 
-  public async getByEmail(email?: string) {
-    const response = await axios.get(`/employee/getByEmail/${email}`, {});
+  public async getLoggedInUser() {
+    const response = await axios.get(`/users/me`, {});
     return response.data;
   }
 }

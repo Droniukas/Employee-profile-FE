@@ -22,7 +22,7 @@ const App = () => {
     const configureAuthenticationTokens = async () => {
       const token = await getAccessTokenSilently();
       setAuthToken(token);
-      const employee = await employeeService.getByEmail(user?.email);
+      const employee = await employeeService.getLoggedInUser();
       dispatch(setUserState(employee));
     };
 
