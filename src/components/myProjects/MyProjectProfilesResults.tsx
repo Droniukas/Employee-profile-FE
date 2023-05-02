@@ -28,7 +28,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   const { projects, rerender, filterStatus } = props;
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  const [resultemployee, setResults] = useState<Employee>();
+  const [employeeId, setEmployeeById] = useState<Employee>();
 
   const employeeService = new EmployeeService();
 
@@ -44,13 +44,13 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
     rerender();
   };
 
-  const getResults = async (id: string) => {
-    const resultemployee = await employeeService.getById(id);
-    setResults(resultemployee);
+  const getEmployeeById = async (id: string) => {
+    const employeeId = await employeeService.getById(id);
+    setEmployeeById(employeeId);
   };
 
   useEffect(() => {
-    getResults(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    getEmployeeById(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
   const setProject = (project: Project) => {
@@ -251,7 +251,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       weight: 400,
                     }}
                   >
-                    {resultemployee?.title}
+                    {employeeId?.title}
                   </Typography>
                 </Box>
               </Box>
