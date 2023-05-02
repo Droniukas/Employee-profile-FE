@@ -8,7 +8,7 @@ interface ProjectEmployee {
   imageBytes: string;
   projectEmployeeStartDate: string;
   projectEmployeeEndDate: string;
-  projectEmployeeStatus: string;
+  status: string;
 }
 
 export default ProjectEmployee;
