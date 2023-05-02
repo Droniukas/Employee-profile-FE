@@ -74,28 +74,6 @@ const MyProjectProfiles = () => {
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 300,
-            left: -180,
-          }}
-        >
-          <Box
-            sx={{
-              display: filteredProjectsList.length === 0 ? 'none' : 'inline',
-              color: 'primary.main',
-              fontSize: 14,
-            }}
-          >
-            {filterTextValue === 'All'
-              ? filteredProjectsList.length + ' projects found'
-              : filteredProjectsList.length + " '" + filterTextValue + "' projects found"}
-          </Box>
-        </Stack>
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          sx={{
-            position: 'relative',
             width: 145,
             left: 440,
           }}
