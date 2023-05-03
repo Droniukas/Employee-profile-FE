@@ -147,7 +147,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow ? project.description : project.description.substring(0, visibleDescriptionLength) + '...'}
+                  {!isTextOverflow
+                    ? project.description
+                    : project.description.substring(0, visibleDescriptionLength) + '...'}
                   <Button
                     onClick={() => setProject(project)}
                     sx={{
@@ -330,7 +332,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' projects found. Check the filter settings."}
+              : `No '${filterStatus}' projects found. Check the filter settings.`}
           </Typography>
         </ListItem>
       </List>
