@@ -4,36 +4,6 @@
   background: #fff;
 }
 
-.img {
-  position: fixed;
-  top: -200px;
-  left: 0;
-  width: 1600px;
-  height: 1600px;
-  opacity: 5%;
-}
-
 .MuiFormHelperText-root {
   margin-left: 0 !important;
-}
-
-html {
-  height: 100%;
-}
-
-body {
-  position: relative;
-}
-
-main {
-  margin: 0 auto;
-  min-height: calc(100vh);
-  padding-bottom: 100px;
-}
-
-footer {
-  position: absolute;
-  right: 0;
-  left: 0;
-  bottom: 0;
 }

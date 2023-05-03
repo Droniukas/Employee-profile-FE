@@ -12,7 +12,7 @@ const AchievementsTabExpandButton = () => {
     <Button
       variant={StyleVariants.CONTAINED}
       onClick={() => {
-        dispatch(setExpandedAchievement({}));
+        dispatch(setExpandedAchievement());
       }}
     >
       {expanded ? 'Collapse all' : 'Expand all'}

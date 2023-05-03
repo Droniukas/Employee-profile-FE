@@ -27,7 +27,7 @@ const AchievementsTabCategory: React.FunctionComponent<AchievementsTabCategoryPr
   const mapAchievements = (achievements: Achievement[]) => {
     return achievements.map((achievement: Achievement) => {
       if (achievement.showOnFilter) {
-        return <AchievementListItem achievement={achievement} showEndDate={true} key={achievement.achievementId} />;
+        return <AchievementListItem achievement={achievement} key={achievement.achievementId} />;
       }
     });
   };

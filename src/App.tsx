@@ -1,57 +1,43 @@
 import './App.scss';
 
-import Grid from '@mui/material/Grid';
-import { ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 
-import Footer from './components/footer/Footer';
-import Header from './components/header/Header';
-import Login from './components/login/Login';
-import LoginFooter from './components/login/LoginFooter';
-import Main from './components/main/Main';
-import TabPanel from './components/main/TabPanel';
-import theme from './config/theme';
-
-export enum AppState {
-  LANDING_PAGE = 'LandingPage',
-  LOGIN_PAGE = 'LoginPage',
-}
+import { setAuthToken } from './config/auth';
+import HomePage from './pages/homePage/HomePage';
+import LoginPage from './pages/loginPage/LoginPage';
+import LogoutPage from './pages/logoutPage/LogoutPage';
+import { ROUTES } from './routes/routes';
+import { EmployeeService } from './services/employee.service';
+import { setUserState } from './states/userState';
 
 const App = () => {
-  const [appState, setAppState] = useState<AppState>(AppState.LOGIN_PAGE);
-  const handleAppStateChange = (newState: AppState) => {
-    setAppState(newState);
-  };
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const employeeService = new EmployeeService();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const configureAuthenticationTokens = async () => {
+      const token = await getAccessTokenSilently();
+      setAuthToken(token);
+      const employee = await employeeService.getLoggedInUser();
+      dispatch(setUserState(employee));
+    };
+
+    if (isAuthenticated) {
+      configureAuthenticationTokens();
+    }
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return (
     <>
-      {appState === AppState.LANDING_PAGE && (
-        <main>
-          <Header />
-          <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="img"></img>
-          <TabPanel index={0} value={0} />
-          <Main />
-          <footer>
-            <Footer />
-          </footer>
-        </main>
-      )}
-      {appState === AppState.LOGIN_PAGE && (
-        <ThemeProvider theme={theme}>
-          <Grid
-            container
-            sx={{
-              spacing: 0,
-              direction: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Login setAppState={handleAppStateChange} />
-          </Grid>
-          <LoginFooter />
-        </ThemeProvider>
-      )}
+      <Routes>
+        <Route path="*" Component={withAuthenticationRequired(HomePage)} />
+        <Route path={ROUTES.LOGIN} Component={LoginPage} />
+        <Route path={ROUTES.LOGOUT} Component={LogoutPage} />
+      </Routes>
     </>
   );
 };
