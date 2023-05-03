@@ -18,7 +18,7 @@ const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps>
   const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {
-    dispatch(setSkillsTabState({}));
+    dispatch(setSkillsTabState());
   };
 
   const viewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);

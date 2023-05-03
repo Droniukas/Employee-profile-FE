@@ -4,13 +4,13 @@ import { Box, Button, CssBaseline, Tab, Tabs, ThemeProvider } from '@mui/materia
 import React, { useEffect, useState } from 'react';
 import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
-import theme from '../../config/theme';
 import Employee from '../../models/Employee.interface';
+import { ROUTES } from '../../routes/routes';
 import { EmployeeService } from '../../services/employee.service';
+import { UserStateRoot } from '../../store/types/user';
 import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
-import { ROUTES } from '../routes/routes';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import AccessDeniedPage from './AccessDeniedPage';
 import NotFoundPage from './NotFoundPage';
@@ -36,7 +36,8 @@ const getIndexedProps = (index: number) => {
 const Main = () => {
   const [result, setResult] = useState<Employee>();
   const [value, setValue] = React.useState<ROUTES>(ROUTES.SKILLS);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+  const [searchParams] = useSearchParams();
   const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
   const [achievementsSearchParams, setAchievementsSearchParams] = useState<string | null>();
   const [selectedTabURL, setSelectedTabURL] = useState<string>();
@@ -52,12 +53,13 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
+    setValue(location.pathname as ROUTES);
     if (window.location.href.includes('skills')) {
       setSkillsSearchParams(searchParams.get('filter'));
     } else {
       setAchievementsSearchParams(searchParams.get('filter'));
     }
-  });
+  }, []);
 
   const employeeService = new EmployeeService();
 
@@ -67,8 +69,11 @@ const Main = () => {
   };
 
   useEffect(() => {
-    getResult(`${employeeIdParam ? employeeIdParam : process.env.REACT_APP_TEMP_USER_ID}`);
-  }, []);
+    setResult(user);
+    if (employeeIdParam) {
+      getResult(employeeIdParam);
+    }
+  }, [employeeIdParam, user]);
 
   const getEmployeeIdURLPart = (withOtherFilters?: boolean) => {
     if (employeeIdParam) return `${withOtherFilters ? '&' : '?'}employeeId=` + employeeIdParam;
@@ -139,7 +144,6 @@ const Main = () => {
       {result && routeIsFound && employeeHasAccess() && (
         <>
           <ProfileInfo employee={result} />
-
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>

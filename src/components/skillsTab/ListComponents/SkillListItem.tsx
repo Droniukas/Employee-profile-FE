@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
 import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
+import { UserStateRoot } from '../../../store/types/user';
 import { OnCancelRoot, SkillsTabStateRoot } from '../../../store/types/skills';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { SkillsTabState } from '../../enums/SkillsTabState';
@@ -22,6 +23,7 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
   const viewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);
   const [skillLevel, setSkillLevel] = useState<SkillLevel>(SkillLevel.NONE);
   const [isChecked, setChecked] = useState<boolean>(false);
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   useEffect(() => {
     setChecked(skill.checked);
@@ -47,7 +49,7 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
           skillName: skill.skillName,
           checked: true,
           skillLevel: skillLevel,
-          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+          employeeId: userId,
         }),
       );
     } else {
@@ -60,7 +62,7 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
           skillName: skill.skillName,
           checked: false,
           skillLevel: null,
-          employeeId: process.env.REACT_APP_TEMP_USER_ID,
+          employeeId: userId,
         }),
       );
     }
