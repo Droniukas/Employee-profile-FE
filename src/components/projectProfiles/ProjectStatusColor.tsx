@@ -2,7 +2,12 @@ import Box from '@mui/material/Box';
 
 import { ProjectStatus } from '../enums/ProjectStatus';
 
-export const statusColors = (projectStatus: string) => {
+interface Project {
+  projectStatus: string;
+}
+
+const ProjectStatusColor = (props: Project) => {
+  const { projectStatus } = props;
   let statusColor;
   let fontColor;
 
@@ -39,3 +44,5 @@ export const statusColors = (projectStatus: string) => {
     </>
   );
 };
+
+export default ProjectStatusColor;

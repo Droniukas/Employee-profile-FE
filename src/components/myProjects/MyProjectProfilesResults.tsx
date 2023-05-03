@@ -17,7 +17,7 @@ import Project from '../../models/Project.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectForm from '../projectForm/ProjectForm';
-import { statusColors } from '../projectProfiles/ProjectStatusColors';
+import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
@@ -66,7 +66,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
         const getResponsibilities = async () => {
           try {
             const getResponsibilitiesFromProjectById = await projectsService.getResponsibilitiesFromProjectEmployee(
-              projectId,
+              Number(projectId),
             );
 
             if (Array.isArray(getResponsibilitiesFromProjectById)) {
@@ -237,6 +237,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     hiddenLabel
                     variant="standard"
                     onKeyPress={handleKeyPress}
+                    placeholder="My responsibilities"
                     sx={{ color: 'primary.main' }}
                   />
                   <Typography
@@ -264,7 +265,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                 left: 0,
               }}
             >
-              {statusColors(project.status)}
+              <ProjectStatusColor projectStatus={project.status} />
               <Box alignItems="flex-end" display="flex">
                 <IconButton
                   className="btn-edit"

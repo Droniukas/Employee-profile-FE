@@ -55,7 +55,7 @@ export class ProjectsService {
 
     const projectIds = myProjectEmployee.map((myProjectEmployee: MyProjectEmployee) => myProjectEmployee.projectId);
 
-    const projectRequests = projectIds.map((projectId: string) => {
+    const projectRequests = projectIds.map((projectId: number) => {
       return axios.get(`/project/get/${projectId}`);
     });
 
@@ -68,7 +68,7 @@ export class ProjectsService {
     return projects;
   }
 
-  public async getResponsibilitiesFromProjectEmployee(projectId: string) {
+  public async getResponsibilitiesFromProjectEmployee(projectId: number) {
     const response = await axios.get(`project/responsibilities/${projectId}/${process.env.REACT_APP_TEMP_USER_ID}`);
     const plainText = response.data;
     const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
@@ -76,16 +76,6 @@ export class ProjectsService {
   }
 
   public async addResponsibilitiesToProjectEmployee(myProjectEmployee: MyProjectEmployee) {
-    const { projectId, employeeId, responsibilities } = myProjectEmployee;
-    const data = {
-      projectId: projectId,
-      employeeId: employeeId,
-      responsibilities: responsibilities,
-    };
-    const response = await axios.post('project/projects-employee-responsibilities', data);
-    return response.data;
-  }
-  public async addResponsibilitiesToForm(myProjectEmployee: MyProjectEmployee) {
     const { projectId, employeeId, responsibilities } = myProjectEmployee;
     const data = {
       projectId: projectId,

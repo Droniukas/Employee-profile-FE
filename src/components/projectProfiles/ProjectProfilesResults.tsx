@@ -17,7 +17,7 @@ import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import { statusColors } from './ProjectStatusColors';
+import ProjectStatusColor from './ProjectStatusColor';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
@@ -180,7 +180,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                 left: 0,
               }}
             >
-              {statusColors(project.status)}
+              <ProjectStatusColor projectStatus={project.status} />
               <Box alignItems="flex-end" display="flex">
                 <IconButton
                   ref={focusProjectId === project.id ? buttonToFocusRef : null}
