@@ -112,10 +112,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     const newTouched = { projectEmployees: Array(sortedProjectEmployees.length).fill(false) };
 
     values.projectEmployees.forEach((projectEmployee, index) => {
-      const isTouched = touched.projectEmployees?.[index] ? true : false;
       const newIndex = sortedProjectEmployees.findIndex((pe) => pe.id === projectEmployee.id);
       if (newIndex !== -1) {
-        newTouched.projectEmployees[newIndex] = isTouched;
+        newTouched.projectEmployees[newIndex] = touched.projectEmployees?.[index];
       }
     });
 

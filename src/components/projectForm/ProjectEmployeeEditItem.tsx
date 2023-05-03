@@ -82,7 +82,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
             <Link
               href={
                 projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
-                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${projectEmployee.id}`
+                  ? `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}?employeeId=${projectEmployee.id}`
                   : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
               }
               underline="hover"
