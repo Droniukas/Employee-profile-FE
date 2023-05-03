@@ -27,7 +27,7 @@ const Main = () => {
   const [result, setResult] = useState<Employee>();
   const [value, setValue] = React.useState<ROUTES>(ROUTES.SKILLS);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
   const [achievementsSearchParams, setAchievementsSearchParams] = useState<string | null>();
   const employeeIdParam = searchParams.get('employeeId');

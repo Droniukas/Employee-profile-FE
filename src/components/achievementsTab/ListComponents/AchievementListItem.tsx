@@ -16,13 +16,12 @@ import { StyledSwitch } from './StyledSwitch';
 
 type AchievementListItemProps = {
   achievement: Achievement;
-  showEndDate: boolean;
 };
 
 let wasChange = false;
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
-  const { achievement, showEndDate } = props;
+  const { achievement } = props;
   const viewState = useSelector((state: ViewAchievementStateRoot) => state.viewAchievementsState.value);
   const [issueDate, setIssueDate] = useState<string | null>();
   const [expiringDate, setExpiringDate] = useState<string | null>();

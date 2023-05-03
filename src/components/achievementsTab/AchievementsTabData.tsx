@@ -18,7 +18,7 @@ import { getAchievementsDataWithCount, getFilteredAchievementsData } from './uti
 const AchievementsTabData = () => {
   const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
   const achievementsService = new AchievementsService();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
@@ -105,7 +105,7 @@ const AchievementsTabData = () => {
     if (hasErrors()) return;
     await achievementsService.updateEmployeeAchievements(changedAchievements);
     await fetchAndFilterAchievementsData();
-    dispatch(setAchievementsTabState({}));
+    dispatch(setAchievementsTabState());
     dispatch(setChangedAchievements([]));
   };
 
@@ -113,8 +113,8 @@ const AchievementsTabData = () => {
     achievementsData.forEach((achievement) => (achievement.hasError = false));
     await fetchAndFilterAchievementsData();
     dispatch(setChangedAchievements([]));
-    dispatch(setAchievementsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setAchievementsTabState());
+    dispatch(triggerOnCancel());
   };
 
   return (

@@ -14,7 +14,7 @@ import { EmployeeService } from './services/employee.service';
 import { setUserState } from './states/userState';
 
 const App = () => {
-  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const employeeService = new EmployeeService();
   const dispatch = useDispatch();
 

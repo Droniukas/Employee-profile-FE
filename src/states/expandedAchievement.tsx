@@ -6,7 +6,7 @@ export const expandedAchievementSlice = createSlice({
   name: 'expandedAchievement',
   initialState: { value: initStateValue },
   reducers: {
-    setExpandedAchievement: (state: { value: boolean }, _action) => {
+    setExpandedAchievement: (state: { value: boolean }) => {
       state.value = !state.value;
     },
   },

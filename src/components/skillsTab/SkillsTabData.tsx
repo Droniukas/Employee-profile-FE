@@ -84,7 +84,7 @@ const SkillsTabData = () => {
     if (hasErrors()) return;
     await skillsService.updateEmployeeSkills(changedSkills);
     await fetchAndFilterSkillsData();
-    dispatch(setSkillsTabState({}));
+    dispatch(setSkillsTabState());
     dispatch(setChangedSkills([]));
   };
 
@@ -92,8 +92,8 @@ const SkillsTabData = () => {
     skillsData.forEach((skill) => (skill.hasError = false));
     await fetchAndFilterSkillsData();
     dispatch(setChangedSkills([]));
-    dispatch(setSkillsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setSkillsTabState());
+    dispatch(triggerOnCancel());
   };
 
   return (
