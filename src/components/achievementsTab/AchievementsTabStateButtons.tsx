@@ -18,7 +18,7 @@ const AchievementsTabStateButtons: React.FunctionComponent<AchievementsTabStateB
   const { saveFunction, cancelFunction } = props;
   const dispatch = useDispatch();
   const changeView = (dispatch: Dispatch<AnyAction>) => {
-    dispatch(setAchievementsTabState({}));
+    dispatch(setAchievementsTabState());
   };
 
   const viewState = useSelector((state: ViewAchievementStateRoot) => state.viewAchievementsState.value);

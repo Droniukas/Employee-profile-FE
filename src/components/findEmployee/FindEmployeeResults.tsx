@@ -6,9 +6,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import Employee from '../../models/Employee.interface';
-import { ROUTES } from '../routes/routes';
+import { ROUTES } from '../../routes/routes';
+import { UserStateRoot } from '../../store/types/user';
 import StatusChip from './StatusChip';
 
 type FindEmployeeResultsProps = {
@@ -21,6 +23,7 @@ export const isInactiveOrDismissed = (status: string): boolean => {
 
 const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmployeeResultsProps) => {
   const { employees } = props;
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   if (!employees) return null;
 
@@ -51,7 +54,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
           >
             <Link
               href={
-                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                employee.id !== userId
                   ? `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}?employeeId=${employee.id}`
                   : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
               }

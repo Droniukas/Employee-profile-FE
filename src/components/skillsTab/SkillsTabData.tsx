@@ -10,6 +10,7 @@ import { triggerOnCancel } from '../../states/onCancel';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
 import { SkillWithErrorIdRoot } from '../../store/types/skills';
+import { UserStateRoot } from '../../store/types/user';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
@@ -19,6 +20,7 @@ const SkillsTabData = () => {
   const skillsService = new SkillsService();
   const [searchParams, setSearchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const dispatch = useDispatch();
 
@@ -48,9 +50,7 @@ const SkillsTabData = () => {
       const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(Number(employeeIdParam));
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), 'my'));
     } else {
-      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(
-        Number(process.env.REACT_APP_TEMP_USER_ID),
-      );
+      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(userId);
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
     }
   };
@@ -84,7 +84,7 @@ const SkillsTabData = () => {
     if (hasErrors()) return;
     await skillsService.updateEmployeeSkills(changedSkills);
     await fetchAndFilterSkillsData();
-    dispatch(setSkillsTabState({}));
+    dispatch(setSkillsTabState());
     dispatch(setChangedSkills([]));
   };
 
@@ -92,8 +92,8 @@ const SkillsTabData = () => {
     skillsData.forEach((skill) => (skill.hasError = false));
     await fetchAndFilterSkillsData();
     dispatch(setChangedSkills([]));
-    dispatch(setSkillsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setSkillsTabState());
+    dispatch(triggerOnCancel());
   };
 
   return (

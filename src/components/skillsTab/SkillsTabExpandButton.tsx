@@ -12,7 +12,7 @@ const SkillsTabExpandButton = () => {
     <Button
       variant={StyleVariants.CONTAINED}
       onClick={() => {
-        dispatch(setExpandedSkill({}));
+        dispatch(setExpandedSkill());
       }}
     >
       {expanded ? 'Collapse all' : 'Expand all'}

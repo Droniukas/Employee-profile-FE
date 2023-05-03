@@ -15,10 +15,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { FormikHandlers } from 'formik';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
-import { ROUTES } from '../routes/routes';
+import { ROUTES } from '../../routes/routes';
+import { UserStateRoot } from '../../store/types/user';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
@@ -44,6 +46,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
     setFieldValue,
     onDelete,
   } = props;
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
@@ -81,7 +84,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           >
             <Link
               href={
-                projectEmployee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                projectEmployee.id !== userId
                   ? `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}?employeeId=${projectEmployee.id}`
                   : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
               }

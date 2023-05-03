@@ -19,7 +19,7 @@ type AchievementsTabProps = {
 const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: AchievementsTabProps) => {
   const { cancelFunction, saveFunction, achievementsData } = props;
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
 
   const mapData = (achievements: Achievement[]): ReactNode => {

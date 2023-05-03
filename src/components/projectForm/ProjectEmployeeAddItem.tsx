@@ -1,7 +1,9 @@
 import { Avatar, Box, Checkbox, Link, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 import Employee from '../../models/Employee.interface';
-import { ROUTES } from '../routes/routes';
+import { ROUTES } from '../../routes/routes';
+import { UserStateRoot } from '../../store/types/user';
 
 type ProjectEmployeeAddItemProps = {
   employee: Employee;
@@ -11,6 +13,7 @@ type ProjectEmployeeAddItemProps = {
 
 const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: ProjectEmployeeAddItemProps) => {
   const { employee, selected, onStateChange } = props;
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
   };
@@ -41,7 +44,7 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
           >
             <Link
               href={
-                employee.id.toString() !== `${process.env.REACT_APP_TEMP_USER_ID}`
+                employee.id !== userId
                   ? `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}?employeeId=${employee.id}`
                   : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
               }

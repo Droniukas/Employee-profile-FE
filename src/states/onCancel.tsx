@@ -6,7 +6,7 @@ export const onCancelSlice = createSlice({
   name: 'onCancel',
   initialState: { value: initStateValue },
   reducers: {
-    triggerOnCancel: (state: { value: boolean }, _action) => {
+    triggerOnCancel: (state: { value: boolean }) => {
       state.value = !state.value;
     },
   },

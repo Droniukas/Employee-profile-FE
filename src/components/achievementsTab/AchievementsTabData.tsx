@@ -11,14 +11,16 @@ import { setChangedAchievements } from '../../states/changedAchievements';
 import { triggerOnCancel } from '../../states/onCancel';
 import store from '../../store/store';
 import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
+import { UserStateRoot } from '../../store/types/user';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
 const AchievementsTabData = () => {
   const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
   const achievementsService = new AchievementsService();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const dispatch = useDispatch();
 
@@ -52,9 +54,7 @@ const AchievementsTabData = () => {
       );
       setAchievementsData(getFilteredAchievementsData(getAchievementsDataWithCount(response), 'my'));
     } else {
-      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
-        Number(process.env.REACT_APP_TEMP_USER_ID),
-      );
+      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(userId);
       setAchievementsData(
         getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
       );
@@ -105,7 +105,7 @@ const AchievementsTabData = () => {
     if (hasErrors()) return;
     await achievementsService.updateEmployeeAchievements(changedAchievements);
     await fetchAndFilterAchievementsData();
-    dispatch(setAchievementsTabState({}));
+    dispatch(setAchievementsTabState());
     dispatch(setChangedAchievements([]));
   };
 
@@ -113,8 +113,8 @@ const AchievementsTabData = () => {
     achievementsData.forEach((achievement) => (achievement.hasError = false));
     await fetchAndFilterAchievementsData();
     dispatch(setChangedAchievements([]));
-    dispatch(setAchievementsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setAchievementsTabState());
+    dispatch(triggerOnCancel());
   };
 
   return (
