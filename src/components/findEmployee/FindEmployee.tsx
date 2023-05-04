@@ -5,10 +5,13 @@ import Box from '@mui/material/Box';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
+import SearchAchievement from '../../models/SearchAchievement.interface';
+import SearchSkill from '../../models/SearchSkill.interface';
+import { AchievementsService } from '../../services/achievements.service';
 import { EmployeeService } from '../../services/employee.service';
-import SearchAchievementDropdown from '../inputs/SearchAchievementDropdown';
+import { SkillsService } from '../../services/skills.service';
+import SearchDropdown from '../inputs/SearchDropdown';
 import SearchInput from '../inputs/SearchInput';
-import SearchSkillDropdown from '../inputs/SearchSkillDropdown';
 import FindEmployeeResults from './FindEmployeeResults';
 
 const FindEmployee = () => {
@@ -17,6 +20,8 @@ const FindEmployee = () => {
   const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
 
   const employeeService = new EmployeeService();
+  const skillService = new SkillsService();
+  const achievementService = new AchievementsService();
 
   const [inputValue, _setInputValue] = useState('');
   const inputValueRef = useRef(inputValue);
@@ -42,6 +47,34 @@ const FindEmployee = () => {
     _setPage(val);
   };
 
+  const [dropdownSkills, setDropdownSkills] = useState<SearchSkill[]>([]);
+  const [selectedSkill, setSelectedSkill] = useState<SearchSkill[]>([]);
+
+  const getSkillsCategories = async () => {
+    const results = await skillService.getSkillsCategories();
+    setDropdownSkills(results);
+  };
+
+  const handleSearchSkillChange = (event: React.SyntheticEvent, value: SearchSkill[], reason: string) => {
+    setSelectedSkill(value);
+    console.log('in findemployee');
+    // getEmployees();
+  };
+
+  const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
+  const [selectedAchievement, setSelectedAchievement] = useState<SearchAchievement[]>([]);
+
+  const getAchievementsCategories = async () => {
+    const results = await achievementService.getAchievementsCategories();
+    setDropdownAchievements(results);
+  };
+
+  const handleSearchAchievementChange = (event: React.SyntheticEvent, value: SearchAchievement[], reason: string) => {
+    setSelectedAchievement(value);
+    console.log('in findemployee');
+    // getEmployees();
+  };
+
   const getEmployees = async () => {
     const results = await employeeService.searchByNameSkillsAchievements(
       inputValueRef.current,
@@ -55,6 +88,9 @@ const FindEmployee = () => {
   };
 
   useEffect(() => {
+    getSkillsCategories();
+    getAchievementsCategories();
+
     const keyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
         setPage(0);
@@ -94,8 +130,32 @@ const FindEmployee = () => {
           }}
         >
           <SearchInput placeholder="Search employees by name..." onChange={(value) => setInputValue(value)} />
-          <SearchSkillDropdown />
-          <SearchAchievementDropdown />
+          <SearchDropdown
+            id="skill-search-box"
+            placeholder="Select skills"
+            options={dropdownSkills.map((skill) => {
+              return {
+                category: skill.category,
+                id: skill.skillId,
+                name: skill.skillName,
+              };
+            })}
+            noOptionsText="No such skill."
+            onChange={handleSearchSkillChange}
+          />
+          <SearchDropdown
+            id="achievement-search-box"
+            placeholder="Select achievements"
+            options={dropdownAchievements.map((achievement) => {
+              return {
+                category: achievement.category,
+                id: achievement.achievementId,
+                name: achievement.achievementName,
+              };
+            })}
+            noOptionsText="No such achievement."
+            onChange={handleSearchAchievementChange}
+          />
         </Box>
       </div>
       {employees.length > 0 && (
