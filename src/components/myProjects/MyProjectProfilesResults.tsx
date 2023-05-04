@@ -29,8 +29,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
 
   const employeeService = new EmployeeService();
 
-  const [response, setResponse] = useState<responsibilities | null>(null);
-
   const getEmployeeById = async (id: string) => {
     const employeeId = await employeeService.getById(id);
     setEmployeeById(employeeId);
@@ -42,67 +40,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   const renderResultItem = (myProject: MyProject) => {
     const projectsService = new ProjectsService();
 
-    const ResponsibilitiesList = (props: { projectId: string }) => {
-      const { projectId } = props;
-      const [responsibilities, setResponsibilities] = useState<string[] | null>(null);
-
-      useEffect(() => {
-        const getResponsibilities = async () => {
-          try {
-            const getResponsibilitiesFromProjectById = await projectsService.getResponsibilitiesFromProjectEmployee(
-              Number(projectId),
-            );
-
-            if (Array.isArray(getResponsibilitiesFromProjectById)) {
-              setResponsibilities(getResponsibilitiesFromProjectById);
-            } else {
-              setResponsibilities(null);
-            }
-          } catch (error) {
-            setResponsibilities(null);
-          }
-        };
-
-        getResponsibilities();
-      }, [projectId]);
-
-      if (responsibilities === null) {
-        return <Typography>No responsibilities</Typography>;
-      }
-
-      return (
-        <>
-          {responsibilities.length > 0 ? (
-            responsibilities.map((responsibility, index) => (
-              <Typography key={index} fontSize="14">
-                {responsibility}
-              </Typography>
-            ))
-          ) : (
-            <Typography>No responsibilities found</Typography>
-          )}
-        </>
-      );
-    };
-    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-
-        const inputValue = event.currentTarget?.querySelector('input')?.value;
-        if (!inputValue) return;
-        const data = {
-          projectId: Number(myProject.id),
-          employeeId: Number(`${process.env.REACT_APP_TEMP_USER_ID}`),
-          responsibilities: inputValue,
-        };
-        try {
-          const addResponsibilitiesToMyProject = await projectsService.addResponsibilitiesToProjectEmployee(data);
-          setResponse(addResponsibilitiesToMyProject.data);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
     return (
       <div key={myProject.id}>
         <ListItem
@@ -185,20 +122,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   {myProject.description}
                 </Typography>
                 <Box>
-                  {response && (
-                    <Typography
-                      sx={{
-                        mt: 2,
-                        mb: 2,
-                        color: 'primary.main',
-                        fontSize: 14,
-                        height: 20,
-                        weight: 400,
-                      }}
-                    >
-                      My responsibilities: {myProject.responsibilities}
-                    </Typography>
-                  )}
                   <Box
                     component="div"
                     sx={{
@@ -209,18 +132,15 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     }}
                   >
                     <InputLabel>
-                      <Typography sx={{ fontSize: 16, fontWeight: 400, color: '#666666' }}>
-                        Project Responsibilities
+                      <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
+                        My responsibilities
                       </Typography>
                     </InputLabel>
-                    <Typography sx={{ fontSize: 14, color: '#666666' }}>
-                      <ResponsibilitiesList projectId={String(myProject.id)} />
-                    </Typography>
+                    <Typography sx={{ fontSize: 14, color: '#666666' }}>{myProject.responsibilities}</Typography>
                   </Box>
                   <TextField
                     hiddenLabel
                     variant="standard"
-                    onKeyPress={handleKeyPress}
                     placeholder="My responsibilities"
                     sx={{ color: 'primary.main' }}
                   />
