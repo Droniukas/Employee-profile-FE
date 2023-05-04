@@ -14,7 +14,6 @@ import React, { useEffect, useState } from 'react';
 import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
 import MyProjectEmployeeResponsibilities from '../../models/MyProjectEmployeeResponsibilities.interface';
-import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
@@ -27,35 +26,16 @@ type ProjectProfilesResultsProps = {
 
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { myProject, filterStatus } = props;
-  const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [employeeId, setEmployeeById] = useState<Employee>();
-  const [projectEmployee, setProjectEmployee] = useState<ProjectEmployee | null>();
 
   const employeeService = new EmployeeService();
-  const projectsService = new ProjectsService();
 
   const [response, setResponse] = useState<MyProjectEmployeeResponsibilities | null>(null);
-
-  // const closeEditForm = () => {
-  //   setOpenPopup(false);
-  //   setProjectToEdit(null);
-  //   getProjects();
-  // };
 
   const getEmployeeById = async (id: string) => {
     const employeeId = await employeeService.getById(id);
     setEmployeeById(employeeId);
   };
-
-  // const getProjectEmployee = async () => {
-  //   const projectEmployee = await projectsService.getMyProjects();
-  //   setProjectEmployee(projectEmployee);
-  //   console.log(projectEmployee);
-  // };
-  // useEffect(() => {
-  //   getProjectEmployee();
-  // }, []);
-
   useEffect(() => {
     getEmployeeById(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);

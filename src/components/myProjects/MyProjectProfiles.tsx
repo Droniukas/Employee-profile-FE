@@ -12,7 +12,6 @@ import MyProjectProfilesResult from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
-  const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [filterTextValue, setFilterTextValue] = useState('All');
 
   const projectsService = new ProjectsService();
@@ -26,7 +25,7 @@ const MyProjectProfiles = () => {
   };
 
   const getProjects = async () => {
-    const myProjects = await projectsService.getMyProjects3();
+    const myProjects = await projectsService.getMyProjects();
     setProjects(myProjects);
   };
 
@@ -97,7 +96,6 @@ const MyProjectProfiles = () => {
         <MyProjectProfilesResult
           myProject={filteredProjectsList}
           rerender={rerenderProjects}
-          // getProjects={getProjects}
           filterStatus={filterTextValue}
         />
       </Box>

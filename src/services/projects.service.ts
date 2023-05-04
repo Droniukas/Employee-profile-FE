@@ -64,58 +64,8 @@ export class ProjectsService {
       }
     }
   }
+
   public async getMyProjects() {
-    const response = await axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
-    const myProjectEmployee = response.data.map((myProjectEmployee: MyProjectEmployee) => {
-      console.log(myProjectEmployee);
-      return myProjectEmployee;
-    });
-
-    const projectIds = myProjectEmployee.map((myProjectEmployee: MyProjectEmployee) => myProjectEmployee.projectId);
-
-    const projectRequests = projectIds.map(() => {
-      return axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
-    });
-
-    const projectResponses = await Promise.all(projectRequests);
-    const projects = projectResponses.map((response: any) => response.data);
-    projects.forEach((MyProject) => {
-      this.mapMyProjectStatus(MyProject);
-    });
-    console.log(projects);
-
-    return projects;
-  }
-
-  // public async getMyProjects2() {
-  //   try {
-  //     const response = await axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
-  //     const myProjectEmployee: MyProject[] = response.data;
-
-  //     const projectIds = myProjectEmployee.map((myProjectEmployee: MyProject) => myProjectEmployee.id);
-
-  //     const projectRequests = projectIds.map((projectId) => {
-  //       let myProjectEmployee: MyProject | undefined = myProjectEmployee.find((p) => p.id === projectId);
-  //       if (!myProjectEmployee) throw new Error(`MyProject not found for id ${projectId}`);
-  //       myProjectEmployee = this.mapMyProjectStatus(myProjectEmployee);
-  //       return myProjectEmployee;
-  //     });
-
-  //     const myProjects = await Promise.all(projectRequests);
-  //     console.log(myProjects);
-
-  //     return myProjects;
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error('Failed to get my projects');
-  //   }
-  // }
-  public async getMyProjects2() {
-    const response = await axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
-    return response;
-  }
-
-  public async getMyProjects3() {
     const response = await axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
     response.data.map((myProject: MyProject) => {
       this.mapMyProjectStatus(myProject);
@@ -123,21 +73,6 @@ export class ProjectsService {
     console.log(response);
     return response.data;
   }
-  // public async getMyProjectsById() {
-  //   try {
-  //     const response = await axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
-  //     const projectPromises = response.data.map(async (projectId: number) => {
-  //       const detailedResponse = await axios.get(`/project/get/${projectId}`);
-  //       return detailedResponse.data;
-  //     });
-  //     const myprojects = await Promise.all(projectPromises);
-  //     console.log(myprojects);
-  //     return myprojects;
-  //   } catch (error) {
-  //     console.error(error);
-  //     // handle the error in an appropriate way (e.g. display an error message to the user)
-  //   }
-  // }
 
   public async getResponsibilitiesFromProjectEmployee(projectId: number) {
     const response = await axios.get(`project/responsibilities/${projectId}/${process.env.REACT_APP_TEMP_USER_ID}`);
