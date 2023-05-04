@@ -13,7 +13,6 @@ import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
-import MyProjectEmployeeResponsibilities from '../../models/MyProjectEmployeeResponsibilities.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
@@ -30,7 +29,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
 
   const employeeService = new EmployeeService();
 
-  const [response, setResponse] = useState<MyProjectEmployeeResponsibilities | null>(null);
+  const [response, setResponse] = useState<responsibilities | null>(null);
 
   const getEmployeeById = async (id: string) => {
     const employeeId = await employeeService.getById(id);
