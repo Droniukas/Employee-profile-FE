@@ -25,6 +25,12 @@ import { SkillsTabState } from '../enums/SkillsTabState';
 import { Skill } from '../../models/Skill.interface';
 import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import { EmployeeService } from '../../services/employee.service';
+import { Achievement } from '../../models/Achievement.interface';
+import { setChangedAchievements } from '../../states/changedAchievements';
+import { setAchievementsTabState } from '../../states/achievementsTabState';
+import { achievementsTabStateRoot } from '../../store/types/achievements';
+import { AchievementsTabState } from '../enums/AchievementsTabState';
+import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -43,8 +49,10 @@ const Main = () => {
   const [selectedTabURL, setSelectedTabURL] = useState<string>();
   const [selectedTabValue, setSelectedTabValue] = useState<ROUTES>();
   const [skillsData, setSkillsData] = useState<Skill[]>([]);
+  const [achievementsData, setAchievementsData] = useState<Achievement[]>([]);
 
   const skillsViewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);
+  const achievementsViewState = useSelector((state: achievementsTabStateRoot) => state.achievementsTabState.value);
 
   const employeeIdParam = searchParams.get('employeeId');
 
@@ -100,10 +108,17 @@ const Main = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [skillsConfirmationDialog, setSkillsConfirmationDialog] = useState<boolean>(false);
+  const [achievementsConfirmationDialog, setAchievementsConfirmationDialog] = useState<boolean>(false);
 
   const triggerSkillsTabCancel = () => {
     dispatch(setChangedSkills([]));
     dispatch(setSkillsTabState());
+    dispatch(triggerOnCancel());
+  };
+
+  const triggerAchievementsTabCancel = () => {
+    dispatch(setChangedAchievements([]));
+    dispatch(setAchievementsTabState());
     dispatch(triggerOnCancel());
   };
 
@@ -119,6 +134,19 @@ const Main = () => {
     });
   };
 
+  const changedAchievementsHaveDifferences = (changedAchievements: ChangedAchievement[]) => {
+    return !changedAchievements.every((changedAchievement) => {
+      return achievementsData.some((achievement) => {
+        return (
+          achievement.achievementId === changedAchievement.achievementId &&
+          achievement.checked === changedAchievement.checked &&
+          achievement.issueDate === changedAchievement.issueDate &&
+          achievement.expiringDate === changedAchievement.expiringDate
+        );
+      });
+    });
+  };
+
   const handleTabClick = (currentTabURL: string, currentTabValue: ROUTES) => {
     setSelectedTabURL(currentTabURL);
     setSelectedTabValue(currentTabValue);
@@ -127,8 +155,16 @@ const Main = () => {
       setSkillsConfirmationDialog(true);
       return;
     }
+    const changedAchievements = store.getState().changedAchievements.value;
+    if (changedAchievementsHaveDifferences(changedAchievements)) {
+      setAchievementsConfirmationDialog(true);
+      return;
+    }
     if (skillsViewState === SkillsTabState.EDIT_STATE) {
       triggerSkillsTabCancel();
+    }
+    if (achievementsViewState === AchievementsTabState.EDIT_STATE) {
+      triggerAchievementsTabCancel();
     }
     switchTabs(currentTabURL, currentTabValue);
   };
@@ -229,7 +265,17 @@ const Main = () => {
                   path={ROUTES.ACHIEVEMENTS}
                   element={
                     <TabPanel value={currentRouteValue} index={1}>
-                      <AchievementsTabData />
+                      <AchievementsTabData
+                        confirmationDialogOpen={achievementsConfirmationDialog}
+                        confirmationDialogOnCancel={() => setAchievementsConfirmationDialog(false)}
+                        confirmationDialogOnConfirm={() => {
+                          setAchievementsConfirmationDialog(false);
+                          if (selectedTabURL && selectedTabValue) switchTabs(selectedTabURL, selectedTabValue);
+                          triggerAchievementsTabCancel();
+                        }}
+                        achievementsData={achievementsData}
+                        setAchievementsData={setAchievementsData}
+                      />
                     </TabPanel>
                   }
                 />
