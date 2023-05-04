@@ -1,12 +1,10 @@
-import SearchAchievement from '../models/SearchAchievement.interface';
-import SearchSkill from '../models/SearchSkill.interface';
 import axios from './axios';
 
 export class EmployeeService {
   public async searchByNameSkillsAchievements(
     searchValue: string,
-    skills: SearchSkill[],
-    achievements: SearchAchievement[],
+    skills: number[],
+    achievements: number[],
     page: number,
     size: number,
     isLimited?: boolean,
