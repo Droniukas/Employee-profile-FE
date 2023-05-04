@@ -1,6 +1,6 @@
 import './Main.scss';
 
-import { Box, Button, CssBaseline, Tab, Tabs, ThemeProvider } from '@mui/material';
+import { Box, Button, CssBaseline, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -12,8 +12,8 @@ import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import FindEmployee from '../findEmployee/FindEmployee';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import SkillsTabData from '../skillsTab/SkillsTabData';
-import AccessDeniedPage from './AccessDeniedPage';
-import NotFoundPage from './NotFoundPage';
+import AccessDeniedPage from '../../pages/accessDeniedPage/AccessDeniedPage';
+import NotFoundPage from '../../pages/notFoundPage/NotFoundPage';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
 import store from '../../store/store';
@@ -35,7 +35,7 @@ const getIndexedProps = (index: number) => {
 
 const Main = () => {
   const [result, setResult] = useState<Employee>();
-  const [value, setValue] = React.useState<ROUTES>(ROUTES.SKILLS);
+  const [currentRouteValue, setCurrentRouteValue] = React.useState<ROUTES>(ROUTES.SKILLS);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
   const [searchParams] = useSearchParams();
   const [skillsSearchParams, setSkillsSearchParams] = useState<string | null>();
@@ -49,17 +49,17 @@ const Main = () => {
   const employeeIdParam = searchParams.get('employeeId');
 
   useEffect(() => {
-    setValue(location.pathname as ROUTES);
+    setCurrentRouteValue(location.pathname as ROUTES);
   }, []);
 
   useEffect(() => {
-    setValue(location.pathname as ROUTES);
+    setCurrentRouteValue(location.pathname as ROUTES);
     if (window.location.href.includes('skills')) {
       setSkillsSearchParams(searchParams.get('filter'));
     } else {
       setAchievementsSearchParams(searchParams.get('filter'));
     }
-  }, []);
+  }, [searchParams]);
 
   const employeeService = new EmployeeService();
 
@@ -102,13 +102,11 @@ const Main = () => {
 
   const triggerSkillsTabCancel = () => {
     dispatch(setChangedSkills([]));
-    dispatch(setSkillsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setSkillsTabState());
+    dispatch(triggerOnCancel());
   };
 
   const changedSkillsHaveDifferences = (changedSkills: ChangedSkill[]) => {
-    console.log(changedSkills);
-    console.log(skillsData);
     return !changedSkills.every((changedSkill) => {
       return skillsData.some((skill) => {
         return (
@@ -136,7 +134,22 @@ const Main = () => {
 
   const switchTabs = (currentTabURL: string, currentTabValue: ROUTES) => {
     navigate(currentTabURL);
-    setValue(currentTabValue);
+    setCurrentRouteValue(currentTabValue);
+  };
+
+  const createTabRoute = (tabRoute: ROUTES) => {
+    if ([ROUTES.SKILLS, ROUTES.ACHIEVEMENTS].includes(tabRoute)) {
+      return (
+        tabRoute +
+        createTabQueryParameters(tabRoute === ROUTES.SKILLS ? skillsSearchParams : achievementsSearchParams) +
+        getEmployeeIdURLPart(true)
+      );
+    }
+    return tabRoute;
+  };
+
+  const createTabQueryParameters = (searchParams: string | null | undefined) => {
+    return `?filter=${searchParams ? searchParams : 'my'}`;
   };
 
   return (
@@ -144,136 +157,116 @@ const Main = () => {
       {result && routeIsFound && employeeHasAccess() && (
         <>
           <ProfileInfo employee={result} />
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
-              <Tabs value={value} indicatorColor="secondary" aria-label="secondary">
+          <CssBaseline />
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
+            <Tabs value={currentRouteValue} indicatorColor="secondary" aria-label="secondary">
+              <Tab
+                label="Skills"
+                value={ROUTES.SKILLS}
+                onClick={() => handleTabClick(createTabRoute(ROUTES.SKILLS), ROUTES.SKILLS)}
+                component={Button}
+                {...getIndexedProps(0)}
+              />
+              <Tab
+                label="Achievements"
+                value={ROUTES.ACHIEVEMENTS}
+                onClick={() => handleTabClick(createTabRoute(ROUTES.ACHIEVEMENTS), ROUTES.ACHIEVEMENTS)}
+                component={Button}
+                {...getIndexedProps(1)}
+              />
+              <Tab
+                label="My projects"
+                value={ROUTES.MY_PROJECTS}
+                onClick={() => handleTabClick(ROUTES.MY_PROJECTS + getEmployeeIdURLPart(), ROUTES.MY_PROJECTS)}
+                component={Button}
+                {...getIndexedProps(2)}
+              />
+              {(result?.isManager && employeeIdParam) ?? (
                 <Tab
-                  label="Skills"
-                  value={ROUTES.SKILLS}
-                  onClick={() =>
-                    handleTabClick(
-                      ROUTES.SKILLS +
-                        `?filter=${skillsSearchParams ? skillsSearchParams : 'my'}` +
-                        getEmployeeIdURLPart(true),
-                      ROUTES.SKILLS,
-                    )
-                  }
+                  label="Search"
+                  value={ROUTES.SEARCH}
+                  onClick={() => handleTabClick(ROUTES.SEARCH, ROUTES.SEARCH)}
                   component={Button}
-                  {...getIndexedProps(0)}
+                  {...getIndexedProps(3)}
                 />
+              )}
+              {(result?.isManager && employeeIdParam) ?? (
                 <Tab
-                  label="Achievements"
-                  value={ROUTES.ACHIEVEMENTS}
-                  onClick={() =>
-                    handleTabClick(
-                      ROUTES.ACHIEVEMENTS +
-                        `?filter=${achievementsSearchParams ? achievementsSearchParams : 'my'}` +
-                        getEmployeeIdURLPart(true),
-                      ROUTES.ACHIEVEMENTS,
-                    )
-                  }
+                  label="Project profiles"
+                  value={ROUTES.PROJECT_PROFILES}
+                  onClick={() => handleTabClick(ROUTES.PROJECT_PROFILES, ROUTES.PROJECT_PROFILES)}
                   component={Button}
-                  {...getIndexedProps(1)}
+                  {...getIndexedProps(4)}
                 />
-                <Tab
-                  label="My projects"
-                  value={ROUTES.MY_PROJECTS}
-                  onClick={() => handleTabClick(ROUTES.MY_PROJECTS + getEmployeeIdURLPart(), ROUTES.MY_PROJECTS)}
-                  component={Button}
-                  {...getIndexedProps(2)}
-                />
-                {(result?.isManager && employeeIdParam) ?? (
-                  <Tab
-                    label="Search"
-                    value={ROUTES.SEARCH}
-                    onClick={() => handleTabClick(ROUTES.SEARCH, ROUTES.SEARCH)}
-                    component={Button}
-                    {...getIndexedProps(3)}
-                  />
-                )}
-                {(result?.isManager && employeeIdParam) ?? (
-                  <Tab
-                    label="Project profiles"
-                    value={ROUTES.PROJECT_PROFILES}
-                    onClick={() => handleTabClick(ROUTES.PROJECT_PROFILES, ROUTES.PROJECT_PROFILES)}
-                    component={Button}
-                    {...getIndexedProps(4)}
-                  />
-                )}
-              </Tabs>
-            </Box>
+              )}
+            </Tabs>
+          </Box>
 
-            <Box display="flex" justifyContent="left" alignItems="left" paddingLeft="230px">
-              <Routes>
-                <>
+          <Box display="flex" justifyContent="left" alignItems="left" paddingLeft="230px">
+            <Routes>
+              <>
+                <Route
+                  index
+                  path={ROUTES.SKILLS}
+                  element={
+                    <TabPanel value={currentRouteValue} index={0}>
+                      <SkillsTabData
+                        confirmationDialogOpen={skillsConfirmationDialog}
+                        confirmationDialogOnCancel={() => setSkillsConfirmationDialog(false)}
+                        confirmationDialogOnConfirm={() => {
+                          setSkillsConfirmationDialog(false);
+                          if (selectedTabURL && selectedTabValue) switchTabs(selectedTabURL, selectedTabValue);
+                          triggerSkillsTabCancel();
+                        }}
+                        skillsData={skillsData}
+                        setSkillsData={setSkillsData}
+                      />
+                    </TabPanel>
+                  }
+                />
+                <Route
+                  path={ROUTES.ACHIEVEMENTS}
+                  element={
+                    <TabPanel value={currentRouteValue} index={1}>
+                      <AchievementsTabData />
+                    </TabPanel>
+                  }
+                />
+                <Route
+                  path={ROUTES.MY_PROJECTS}
+                  element={
+                    <TabPanel value={currentRouteValue} index={2}>
+                      My projects
+                    </TabPanel>
+                  }
+                />
+                {(result?.isManager && employeeIdParam) ?? (
                   <Route
-                    index
-                    path={ROUTES.SKILLS}
+                    path={ROUTES.SEARCH}
                     element={
-                      <TabPanel value={value} index={0}>
-                        <SkillsTabData
-                          confirmationDialogOpen={skillsConfirmationDialog}
-                          confirmationDialogOnCancel={() => setSkillsConfirmationDialog(false)}
-                          confirmationDialogOnConfirm={() => {
-                            setSkillsConfirmationDialog(false);
-                            if (selectedTabURL && selectedTabValue) switchTabs(selectedTabURL, selectedTabValue);
-                            triggerSkillsTabCancel();
-                          }}
-                          skillsData={skillsData}
-                          setSkillsData={setSkillsData}
-                        />
+                      <TabPanel value={currentRouteValue} index={3}>
+                        <FindEmployee />
                       </TabPanel>
                     }
                   />
+                )}
+                {(result?.isManager && employeeIdParam) ?? (
                   <Route
-                    path={ROUTES.ACHIEVEMENTS}
+                    path={ROUTES.PROJECT_PROFILES}
                     element={
-                      <TabPanel value={value} index={1}>
-                        <AchievementsTabData />
+                      <TabPanel value={currentRouteValue} index={4}>
+                        <ProjectProfiles />
                       </TabPanel>
                     }
                   />
-                  <Route
-                    path={ROUTES.MY_PROJECTS}
-                    element={
-                      <TabPanel value={value} index={2}>
-                        My projects
-                      </TabPanel>
-                    }
-                  />
-                  {(result?.isManager && employeeIdParam) ?? (
-                    <Route
-                      path={ROUTES.SEARCH}
-                      element={
-                        <TabPanel value={value} index={3}>
-                          <FindEmployee />
-                        </TabPanel>
-                      }
-                    />
-                  )}
-                  {(result?.isManager && employeeIdParam) ?? (
-                    <Route
-                      path={ROUTES.PROJECT_PROFILES}
-                      element={
-                        <TabPanel value={value} index={4}>
-                          <ProjectProfiles />
-                        </TabPanel>
-                      }
-                    />
-                  )}
-                </>
-              </Routes>
-            </Box>
-          </ThemeProvider>
+                )}
+              </>
+            </Routes>
+          </Box>
         </>
       )}
-      {
-        <ThemeProvider theme={theme}>
-          {!employeeHasAccess() && <AccessDeniedPage />}
-          {!routeIsFound && <NotFoundPage />}
-        </ThemeProvider>
-      }
+      {!employeeHasAccess() && <AccessDeniedPage />}
+      {!routeIsFound && <NotFoundPage />}
     </>
   );
 };

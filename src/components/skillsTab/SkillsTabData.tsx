@@ -30,6 +30,7 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
   const skillsService = new SkillsService();
   const [searchParams, setSearchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const dispatch = useDispatch();

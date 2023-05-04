@@ -21,7 +21,7 @@ type AchievementListItemProps = {
 let wasChange = false;
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
-  const { achievement, showEndDate } = props;
+  const { achievement } = props;
   const viewState = useSelector((state: achievementsTabStateRoot) => state.achievementsTabState.value);
   const [issueDate, setIssueDate] = useState<string | null>();
   const [expiringDate, setExpiringDate] = useState<string | null>();

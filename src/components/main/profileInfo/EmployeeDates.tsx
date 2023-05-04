@@ -10,6 +10,8 @@ type EmployeeDatesProps = {
 const EmployeeDates: React.FunctionComponent<EmployeeDatesProps> = (props) => {
   const { employee } = props;
 
+  if (!employee.employmentDates) return null;
+
   return (
     <div>
       {employee.employmentDates.sort(sortByStartDate).map((date, index) => {
