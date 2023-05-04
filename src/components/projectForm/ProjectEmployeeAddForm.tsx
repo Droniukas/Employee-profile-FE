@@ -24,7 +24,7 @@ const ProjectEmployeeAddForm: React.FC<ProjectEmployeeAddFormProps> = (props: Pr
   const employeeService = new EmployeeService();
 
   const getNonAddedEmployees = async () => {
-    const searchResult = await employeeService.searchByNameSkillsAchievements(searchValue, 0, 0, false);
+    const searchResult = await employeeService.searchByNameSkillsAchievements(searchValue, [], [], 0, 0, false);
     const filteredResult = searchResult.employees.filter((employee: Employee) => {
       return !projectEmployees.some((projectEmployee) => projectEmployee.id === employee.id);
     });
