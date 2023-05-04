@@ -6,7 +6,6 @@ import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-ro
 
 import Employee from '../../models/Employee.interface';
 import { ROUTES } from '../../routes/routes';
-import { EmployeeService } from '../../services/employee.service';
 import { UserStateRoot } from '../../store/types/user';
 import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import FindEmployee from '../findEmployee/FindEmployee';
@@ -25,6 +24,7 @@ import { SkillsTabStateRoot } from '../../store/types/skills';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import { Skill } from '../../models/Skill.interface';
 import { ChangedSkill } from '../../models/ChangedSkill.interface';
+import { EmployeeService } from '../../services/employee.service';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -69,10 +69,11 @@ const Main = () => {
   };
 
   useEffect(() => {
-    setResult(user);
     if (employeeIdParam) {
       getResult(employeeIdParam);
+      return;
     }
+    setResult(user);
   }, [employeeIdParam, user]);
 
   const getEmployeeIdURLPart = (withOtherFilters?: boolean) => {

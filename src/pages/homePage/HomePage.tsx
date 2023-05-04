@@ -1,6 +1,5 @@
 import './HomePage.scss';
 
-import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Footer from '../../components/footer/Footer';
@@ -8,18 +7,26 @@ import Header from '../../components/header/Header';
 import Main from '../../components/main/Main';
 import TabPanel from '../../components/main/TabPanel';
 import { ROUTES } from '../../routes/routes';
+import { useEffect } from 'react';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
 
   useEffect(() => {
     if (employeeIdParam) {
-      navigate(`${ROUTES.SKILLS}?employeeId=${employeeIdParam}`);
+      if (location.pathname === '/') {
+        navigate(`${ROUTES.SKILLS}?employeeId=${employeeIdParam}`);
+        return;
+      }
     } else {
-      navigate(`${ROUTES.SKILLS}?filter=my`);
+      if (location.pathname === '/') {
+        navigate(`${ROUTES.SKILLS}?filter=my`);
+        return;
+      }
     }
+    navigate(location.pathname + location.search);
   }, []);
 
   return (

@@ -31,8 +31,6 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
 
-  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
-
   const dispatch = useDispatch();
 
   const skillWithErrorId = useSelector((state: SkillWithErrorIdRoot) => state.skillWithErrorId.value);
@@ -55,6 +53,10 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
   useEffect(() => {
     fetchAndFilterSkillsData();
   }, [location.href]);
+
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+  if (!user) return null;
+  const userId = user.id;
 
   const fetchAndFilterSkillsData = async () => {
     if (employeeIdParam) {
