@@ -6,35 +6,33 @@ import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-import SearchAchievement from '../../models/SearchAchievement.interface';
-import { AchievementsService } from '../../services/achievements.service';
+import Dropdown from '../../models/Dropdown.interface';
 
-const SearchAchievementDropdown = () => {
-  const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
-  const [selectedAchievements, setSelectedAchievements] = useState<SearchAchievement[]>([]);
+type SearchSkillDropdownProps = {
+  id: string;
+  placeholder: string;
+  options: Dropdown[];
+  noOptionsText: string;
+  onChange: (values: Dropdown[]) => void;
+};
+
+const SearchDropdown: React.FC<SearchSkillDropdownProps> = (props: SearchSkillDropdownProps) => {
+  const { id, placeholder, options, noOptionsText, onChange } = props;
+
+  const [selectedOption, setSelectedOption] = useState<Dropdown[]>([]);
   const deleteFunctionRef = useRef({});
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-  const achievementService = new AchievementsService();
-
-  const getAchievementsCategories = async () => {
-    const results = await achievementService.getAchievementsCategories();
-    setDropdownAchievements(results);
+  const handleChange = (event: React.SyntheticEvent, value: Dropdown[], reason: string) => {
+    setSelectedOption(value);
+    onChange(value);
   };
 
-  useEffect(() => {
-    getAchievementsCategories();
-  }, []);
-
-  const handleChange = (event: React.SyntheticEvent, value: SearchAchievement[], reason: string) => {
-    setSelectedAchievements(value);
-  };
-
-  const updateDeleteFunctions = (value: SearchAchievement[], getTagProps: AutocompleteRenderGetTagProps) => {
+  const updateDeleteFunctions = (value: Dropdown[], getTagProps: AutocompleteRenderGetTagProps) => {
     const deleteFunctionRefObject = {};
     value.forEach((tag, index) => {
       (deleteFunctionRefObject as Array<any>)[index] = getTagProps({ index }).onDelete;
@@ -45,7 +43,7 @@ const SearchAchievementDropdown = () => {
   };
 
   const handleUnselectOption = (label: string) => {
-    const index = selectedAchievements.findIndex((achievement) => achievement.achievementName === label);
+    const index = selectedOption.findIndex((option) => option.name === label);
     (deleteFunctionRef.current as Array<any>)[index]();
   };
 
@@ -62,19 +60,20 @@ const SearchAchievementDropdown = () => {
       }}
     >
       <Autocomplete
-        id="achievement-search-box"
+        id={id}
         onChange={handleChange}
-        options={dropdownAchievements}
-        noOptionsText="No such achievement."
-        getOptionLabel={(option) => `${option.achievementName}`}
+        options={options}
+        noOptionsText={noOptionsText}
+        getOptionLabel={(option) => `${option.name}`}
         groupBy={(option) => option.category}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         multiple
         disableCloseOnSelect
         PaperComponent={({ children }) => <Paper style={{ color: 'primary.main' }}>{children}</Paper>}
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Select achievements"
+            placeholder={placeholder}
             fullWidth
             sx={{
               fontSize: '14px',
@@ -90,29 +89,29 @@ const SearchAchievementDropdown = () => {
         )}
         renderOption={(props, option, { selected }) => {
           return (
-            <Box component="li" {...props} key={option.achievementId}>
+            <Box component="li" {...props} key={option.id}>
               <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
-              {option.achievementName}
+              {option.name}
             </Box>
           );
         }}
         renderTags={updateDeleteFunctions}
       />
-      {selectedAchievements.length > 0 ? (
+      {selectedOption.length > 0 ? (
         <Box
           sx={{
             mt: 0.5,
           }}
         >
-          {selectedAchievements.map((achievement) => (
+          {selectedOption.map((option) => (
             <Chip
-              key={achievement.achievementId}
-              label={achievement.achievementName}
+              key={option.id}
+              label={option.name}
               sx={{
                 mr: 0.5,
                 mt: 0.25,
               }}
-              onDelete={() => handleUnselectOption(achievement.achievementName)}
+              onDelete={() => handleUnselectOption(option.name)}
             />
           ))}
         </Box>
@@ -121,4 +120,4 @@ const SearchAchievementDropdown = () => {
   );
 };
 
-export default SearchAchievementDropdown;
+export default SearchDropdown;
