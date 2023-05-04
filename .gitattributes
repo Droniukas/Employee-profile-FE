@@ -1,2 +1,6 @@
-[core]
-	autocrlf = false
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.tsx text eol=lf
+*.scss text eol=lf
+*.css text eol=lf
