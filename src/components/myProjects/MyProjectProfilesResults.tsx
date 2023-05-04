@@ -12,50 +12,55 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
+import MyProject from '../../models/MyProject.interface';
 import MyProjectEmployeeResponsibilities from '../../models/MyProjectEmployeeResponsibilities.interface';
-import Project from '../../models/Project.interface';
+import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
-import ProjectForm from '../projectForm/ProjectForm';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
 type ProjectProfilesResultsProps = {
-  projects: Project[];
+  myProject: MyProject[];
   rerender: () => void;
   filterStatus: string;
 };
 
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { projects, rerender, filterStatus } = props;
-  const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
+  const { myProject, filterStatus } = props;
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [employeeId, setEmployeeById] = useState<Employee>();
+  const [projectEmployee, setProjectEmployee] = useState<ProjectEmployee | null>();
 
   const employeeService = new EmployeeService();
+  const projectsService = new ProjectsService();
 
   const [response, setResponse] = useState<MyProjectEmployeeResponsibilities | null>(null);
 
-  const closeEditForm = () => {
-    setOpenPopup(false);
-    setProjectToEdit(null);
-    rerender();
-  };
+  // const closeEditForm = () => {
+  //   setOpenPopup(false);
+  //   setProjectToEdit(null);
+  //   getProjects();
+  // };
 
   const getEmployeeById = async (id: string) => {
     const employeeId = await employeeService.getById(id);
     setEmployeeById(employeeId);
   };
 
+  // const getProjectEmployee = async () => {
+  //   const projectEmployee = await projectsService.getMyProjects();
+  //   setProjectEmployee(projectEmployee);
+  //   console.log(projectEmployee);
+  // };
+  // useEffect(() => {
+  //   getProjectEmployee();
+  // }, []);
+
   useEffect(() => {
     getEmployeeById(`${process.env.REACT_APP_TEMP_USER_ID}`);
   }, []);
 
-  const setProject = (project: Project) => {
-    setProjectToEdit(project);
-    setOpenPopup(true);
-  };
-
-  const renderResultItem = (project: Project) => {
+  const renderResultItem = (myProject: MyProject) => {
     const projectsService = new ProjectsService();
 
     const ResponsibilitiesList = (props: { projectId: string }) => {
@@ -107,7 +112,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
         const inputValue = event.currentTarget?.querySelector('input')?.value;
         if (!inputValue) return;
         const data = {
-          projectId: Number(project.id),
+          projectId: Number(myProject.id),
           employeeId: Number(`${process.env.REACT_APP_TEMP_USER_ID}`),
           responsibilities: inputValue,
         };
@@ -120,7 +125,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
       }
     };
     return (
-      <div key={project.id}>
+      <div key={myProject.id}>
         <ListItem
           alignItems="flex-start"
           sx={{
@@ -176,8 +181,8 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(project.startDate)}
-                    {project.endDate ? ' to ' + correctDateFormat(project.endDate) : ''}
+                    {'From '} {correctDateFormat(myProject.startDate)}
+                    {myProject.endDate ? ' to ' + correctDateFormat(myProject.endDate) : ''}
                   </>
                 </Typography>
                 <Typography
@@ -186,7 +191,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     fontSize: 20,
                   }}
                 >
-                  {project.title}
+                  {myProject.title}
                 </Typography>
                 <Typography
                   sx={{
@@ -198,7 +203,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {project.description}
+                  {myProject.description}
                 </Typography>
                 <Box>
                   {response && (
@@ -212,7 +217,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                         weight: 400,
                       }}
                     >
-                      My responsibilities: {response.responsibilities}
+                      My responsibilities: {myProject.responsibilities}
                     </Typography>
                   )}
                   <Box
@@ -230,7 +235,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       </Typography>
                     </InputLabel>
                     <Typography sx={{ fontSize: 14, color: '#666666' }}>
-                      <ResponsibilitiesList projectId={String(project.id)} />
+                      <ResponsibilitiesList projectId={String(myProject.id)} />
                     </Typography>
                   </Box>
                   <TextField
@@ -265,7 +270,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                 left: 0,
               }}
             >
-              <ProjectStatusColor projectStatus={project.status} />
+              <ProjectStatusColor projectStatus={myProject.status} />
               <Box alignItems="flex-end" display="flex">
                 <IconButton
                   className="btn-edit"
@@ -276,7 +281,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     left: 320,
                     backgroundColor: '#F4F4F4',
                   }}
-                  onClick={() => setProject(project)}
                 >
                   <EditIcon />
                 </IconButton>
@@ -295,7 +299,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
     }
   };
 
-  if (!projects.length) {
+  if (!myProject.length) {
     return (
       <List
         sx={{
@@ -319,13 +323,12 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
         <List
           sx={{
             width: '100%',
           }}
         >
-          {projects.map((project) => renderResultItem(project))}
+          {myProject.map((myProject) => renderResultItem(myProject))}
         </List>
       </>
     );

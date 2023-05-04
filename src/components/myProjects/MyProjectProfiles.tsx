@@ -4,14 +4,14 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import React, { useEffect, useState } from 'react';
 
-import Project from '../../models/Project.interface';
+import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
 import MyProjectProfilesResult from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [myProjects, setProjects] = useState<MyProject[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [filterTextValue, setFilterTextValue] = useState('All');
 
@@ -26,19 +26,19 @@ const MyProjectProfiles = () => {
   };
 
   const getProjects = async () => {
-    const projects = await projectsService.getMyProjects();
-    setProjects(projects);
+    const myProjects = await projectsService.getMyProjects3();
+    setProjects(myProjects);
   };
 
-  const filteredProjectsList = projects.filter((project) => {
+  const filteredProjectsList = myProjects.filter((myProject) => {
     if (filterTextValue === ProjectStatus.ONGOING) {
-      return project.status === ProjectStatus.ONGOING;
+      return myProject.status === ProjectStatus.ONGOING;
     } else if (filterTextValue === ProjectStatus.FINISHED) {
-      return project.status === ProjectStatus.FINISHED;
+      return myProject.status === ProjectStatus.FINISHED;
     } else if (filterTextValue === ProjectStatus.FUTURE) {
-      return project.status === ProjectStatus.FUTURE;
+      return myProject.status === ProjectStatus.FUTURE;
     } else {
-      return project;
+      return myProject;
     }
   });
 
@@ -95,8 +95,9 @@ const MyProjectProfiles = () => {
         }}
       >
         <MyProjectProfilesResult
-          projects={filteredProjectsList}
+          myProject={filteredProjectsList}
           rerender={rerenderProjects}
+          // getProjects={getProjects}
           filterStatus={filterTextValue}
         />
       </Box>
