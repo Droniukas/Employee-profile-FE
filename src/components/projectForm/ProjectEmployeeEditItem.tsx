@@ -60,9 +60,6 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
     setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newDate);
   };
 
-  const handleDelete = () => {
-    onDelete(projectEmployee.id);
-  };
   return (
     <Grid container alignItems={'center'} mb={1}>
       <Grid item xs={5}>
@@ -161,10 +158,10 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           className="btn-delete"
           aria-label="delete"
           sx={{
-            color: '#000048',
+            color: 'primary.main',
             backgroundColor: '#F4F4F4',
           }}
-          onClick={handleDelete}
+          onClick={() => onDelete(projectEmployee.id)}
         >
           <DeleteIcon />
         </IconButton>
