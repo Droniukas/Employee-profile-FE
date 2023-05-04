@@ -5,8 +5,6 @@ import Box from '@mui/material/Box';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
-import SearchAchievement from '../../models/SearchAchievement.interface';
-import SearchSkill from '../../models/SearchSkill.interface';
 import { EmployeeService } from '../../services/employee.service';
 import SearchAchievementDropdown from '../inputs/SearchAchievementDropdown';
 import SearchInput from '../inputs/SearchInput';
@@ -17,8 +15,6 @@ const FindEmployee = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [totalEmployeesCount, setEmployeesCount] = useState<number>(0);
   const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
-  const searchSkillsRef = useRef<SearchSkill[]>([]);
-  const searchAchievementsRef = useRef<SearchAchievement[]>([]);
 
   const employeeService = new EmployeeService();
 
@@ -49,15 +45,11 @@ const FindEmployee = () => {
   const getEmployees = async () => {
     const results = await employeeService.searchByNameSkillsAchievements(
       inputValueRef.current,
-      searchSkillsRef.current,
-      searchAchievementsRef.current,
+      [],
+      [],
       pageRef.current,
       rowsPerPageRef.current,
     );
-    console.log('skills: ');
-    console.log(searchSkillsRef.current);
-    console.log('achievements: ');
-    console.log(searchAchievementsRef.current);
     setEmployees(results.employees);
     setEmployeesCount(results.count);
   };

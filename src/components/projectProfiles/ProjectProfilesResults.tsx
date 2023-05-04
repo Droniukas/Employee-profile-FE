@@ -64,7 +64,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const visibleDescriptionLength = 415;
+    const visibleDescriptionLength = 345;
     const isTextOverflow = project.description.length > visibleDescriptionLength;
 
     return (
@@ -112,7 +112,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               <Box
                 sx={{
                   position: 'relative',
-                  width: 950,
+                  width: 780,
                   left: 25,
                 }}
               >
@@ -168,7 +168,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                 display="flex"
                 sx={{
                   position: 'relative',
-                  left: 70,
+                  left: 60,
                 }}
               >
                 {renderEmployeesAvatarGroup(project.projectEmployees)}
