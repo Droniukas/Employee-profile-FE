@@ -6,7 +6,7 @@ export const expandedSkillSlice = createSlice({
   name: 'expandedSkill',
   initialState: { value: initStateValue },
   reducers: {
-    setExpandedSkill: (state: { value: boolean }, _action) => {
+    setExpandedSkill: (state: { value: boolean }) => {
       state.value = !state.value;
     },
   },

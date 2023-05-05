@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -10,12 +10,23 @@ import { triggerOnCancel } from '../../states/onCancel';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
 import { SkillWithErrorIdRoot } from '../../store/types/skills';
+import { UserStateRoot } from '../../store/types/user';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
-const SkillsTabData = () => {
-  const [skillsData, setSkillsData] = useState<Array<Skill>>([]);
+type SkillsTabDataProps = {
+  confirmationDialogOpen: boolean;
+  confirmationDialogOnCancel: () => void;
+  confirmationDialogOnConfirm: () => void;
+  skillsData: Skill[];
+  setSkillsData: React.Dispatch<React.SetStateAction<Skill[]>>;
+};
+
+const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
+  const { confirmationDialogOnCancel, confirmationDialogOnConfirm, confirmationDialogOpen, skillsData, setSkillsData } =
+    props;
   const skillsService = new SkillsService();
   const [searchParams, setSearchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
@@ -43,14 +54,16 @@ const SkillsTabData = () => {
     fetchAndFilterSkillsData();
   }, [location.href]);
 
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+  if (!user) return null;
+  const userId = user.id;
+
   const fetchAndFilterSkillsData = async () => {
     if (employeeIdParam) {
       const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(Number(employeeIdParam));
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), 'my'));
     } else {
-      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(
-        Number(process.env.REACT_APP_TEMP_USER_ID),
-      );
+      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(userId);
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
     }
   };
@@ -84,23 +97,26 @@ const SkillsTabData = () => {
     if (hasErrors()) return;
     await skillsService.updateEmployeeSkills(changedSkills);
     await fetchAndFilterSkillsData();
-    dispatch(setSkillsTabState({}));
+    dispatch(setSkillsTabState());
     dispatch(setChangedSkills([]));
   };
 
   const handleCancel = async () => {
     skillsData.forEach((skill) => (skill.hasError = false));
-    await fetchAndFilterSkillsData();
+    setSkillsData([...skillsData]);
     dispatch(setChangedSkills([]));
-    dispatch(setSkillsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setSkillsTabState());
+    dispatch(triggerOnCancel());
   };
 
   return (
     <>
-      {skillsData ? (
-        <SkillsTab skillsData={skillsData} saveFunction={handleSave} cancelFunction={handleCancel} />
-      ) : null}
+      {skillsData && <SkillsTab skillsData={skillsData} saveFunction={handleSave} cancelFunction={handleCancel} />}
+      <ConfirmationDialog
+        open={confirmationDialogOpen}
+        onCancel={confirmationDialogOnCancel}
+        onConfirm={confirmationDialogOnConfirm}
+      />
     </>
   );
 };

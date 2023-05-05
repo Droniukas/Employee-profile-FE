@@ -1,30 +1,20 @@
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  InputLabel,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Checkbox, Dialog, Divider, InputLabel, Link, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { useFormik } from 'formik';
-import React, { useCallback, useMemo, useState } from 'react';
+import { getIn, useFormik } from 'formik';
+import React, { useCallback, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
 type ProjectFormProps = {
   onClose: (projectId?: number) => void;
@@ -38,6 +28,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
+  const [projectEmployeeErrors, setProjectEmployeeErrors] = useState<ProjectEmployeeError[]>([]);
 
   let initialValues: Project = {
     title: '',
@@ -54,41 +45,70 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     values.title.trim();
     values.description.trim();
 
-    if (project) {
-      result = await projectsService.updateProject(values);
-      onClose();
-    } else {
-      result = await projectsService.createProject(values);
-      onClose(result.id);
+    try {
+      if (project) {
+        result = await projectsService.updateProject(values);
+        onClose();
+      } else {
+        result = await projectsService.createProject(values);
+        onClose(result.id);
+      }
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
+        const projectEmployeeErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
+        setProjectEmployeeErrors(projectEmployeeErrors);
+      }
     }
   };
 
-  const { values, touched, errors, dirty, handleBlur, handleChange, setFieldValue, setFieldTouched, handleSubmit } =
-    useFormik({
-      initialValues,
-      onSubmit: handleFormSubmit,
-      validationSchema: projectSchema,
-    });
+  const projectForm = useFormik({
+    initialValues,
+    onSubmit: handleFormSubmit,
+    validationSchema: projectSchema,
+  });
+
+  const {
+    values,
+    touched,
+    errors,
+    dirty,
+    handleBlur,
+    handleChange,
+    setFieldValue,
+    setFieldTouched,
+    handleSubmit,
+    setTouched,
+  } = projectForm;
 
   const handleAddEmployeesFormClose = () => {
     setShowAddEmployeesForm(false);
   };
 
-  const handleAddClick = (newProjectEmployees: ProjectEmployee[]) => {
-    setFieldValue('projectEmployees', [...values.projectEmployees, ...newProjectEmployees]);
+  const sortProjectEmployees = (projectEmployees: ProjectEmployee[]) => {
+    const sortedProjectEmployees = projectEmployees.sort((a, b) => {
+      const nameComparison = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+      if (nameComparison !== 0) {
+        return nameComparison;
+      }
+      return a.surname.localeCompare(b.surname, undefined, { sensitivity: 'base' });
+    });
+    return sortedProjectEmployees;
   };
 
-  const updateProjectEmployee = useCallback(
-    (updatedProjectEmployee: ProjectEmployee) => {
-      setFieldValue(
-        'projectEmployees',
-        values.projectEmployees.map((projectEmployee: ProjectEmployee) =>
-          projectEmployee.id === updatedProjectEmployee.id ? updatedProjectEmployee : projectEmployee,
-        ),
-      );
-    },
-    [values.projectEmployees, setFieldValue],
-  );
+  const handleAddClick = (newProjectEmployees: ProjectEmployee[]) => {
+    const sortedProjectEmployees = sortProjectEmployees([...values.projectEmployees, ...newProjectEmployees]);
+    const newTouched = { projectEmployees: Array(sortedProjectEmployees.length).fill(false) };
+
+    values.projectEmployees.forEach((projectEmployee, index) => {
+      const newIndex = sortedProjectEmployees.findIndex((pe) => pe.id === projectEmployee.id);
+      if (newIndex !== -1) {
+        newTouched.projectEmployees[newIndex] = touched.projectEmployees?.[index];
+      }
+    });
+
+    setTouched(newTouched);
+    setFieldValue('projectEmployees', sortedProjectEmployees);
+  };
 
   const deleteProjectEmployee = useCallback(
     (projectEmployeeId: number) => {
@@ -100,33 +120,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     [values.projectEmployees, setFieldValue],
   );
 
-  const ProjectEmployeeEditListMemo = useMemo(
-    () => (
-      <ProjectEmployeeEditList
-        projectEmployees={values.projectEmployees}
-        updateProjectEmployee={updateProjectEmployee}
-        deleteProjectEmployee={deleteProjectEmployee}
-      />
-    ),
-    [values.projectEmployees, updateProjectEmployee, deleteProjectEmployee],
-  );
-
   return (
     <Dialog open={true} fullWidth maxWidth="md">
-      <Dialog open={confirmationDialog} maxWidth="xl">
-        <DialogTitle>Confirm exit</DialogTitle>
-        <DialogContent>
-          <Typography>Changes will be lost, are you sure you want to leave?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmationDialog(false)} color="error" variant="contained">
-            Cancel
-          </Button>
-          <Button onClick={() => onClose()} sx={{ m: 1 }} variant="contained">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmationDialog
+        open={confirmationDialog}
+        onCancel={() => setConfirmationDialog(false)}
+        onConfirm={() => onClose()}
+      />
 
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
         <Button
@@ -162,9 +162,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             value={values.title}
             error={touched.title && Boolean(errors.title)}
             helperText={touched.title && errors.title}
-            name={'title'}
             size="small"
             variant="outlined"
+            name={'title'}
             inputProps={{ maxLength: 50 }}
             sx={{
               '& fieldset': {
@@ -273,7 +273,15 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
 
           {values.projectEmployees.length > 0 ? (
-            ProjectEmployeeEditListMemo
+            <ProjectEmployeeEditList
+              projectEmployees={values.projectEmployees}
+              formikErrors={getIn(errors, 'projectEmployees')}
+              errors={projectEmployeeErrors}
+              touched={getIn(touched, 'projectEmployees')}
+              handleBlur={handleBlur}
+              setFieldValue={setFieldValue}
+              deleteProjectEmployee={deleteProjectEmployee}
+            />
           ) : (
             <Box
               component="div"

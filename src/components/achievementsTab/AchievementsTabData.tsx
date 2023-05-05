@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -11,14 +11,31 @@ import { setChangedAchievements } from '../../states/changedAchievements';
 import { triggerOnCancel } from '../../states/onCancel';
 import store from '../../store/store';
 import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
+import { UserStateRoot } from '../../store/types/user';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
-const AchievementsTabData = () => {
-  const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
+type AchievementsTabDataProps = {
+  confirmationDialogOpen: boolean;
+  confirmationDialogOnCancel: () => void;
+  confirmationDialogOnConfirm: () => void;
+  achievementsData: Achievement[];
+  setAchievementsData: React.Dispatch<React.SetStateAction<Achievement[]>>;
+};
+
+const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (props) => {
+  const {
+    confirmationDialogOnCancel,
+    confirmationDialogOnConfirm,
+    confirmationDialogOpen,
+    achievementsData,
+    setAchievementsData,
+  } = props;
   const achievementsService = new AchievementsService();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const dispatch = useDispatch();
 
@@ -52,9 +69,7 @@ const AchievementsTabData = () => {
       );
       setAchievementsData(getFilteredAchievementsData(getAchievementsDataWithCount(response), 'my'));
     } else {
-      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
-        Number(process.env.REACT_APP_TEMP_USER_ID),
-      );
+      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(userId);
       setAchievementsData(
         getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
       );
@@ -105,7 +120,7 @@ const AchievementsTabData = () => {
     if (hasErrors()) return;
     await achievementsService.updateEmployeeAchievements(changedAchievements);
     await fetchAndFilterAchievementsData();
-    dispatch(setAchievementsTabState({}));
+    dispatch(setAchievementsTabState());
     dispatch(setChangedAchievements([]));
   };
 
@@ -113,15 +128,20 @@ const AchievementsTabData = () => {
     achievementsData.forEach((achievement) => (achievement.hasError = false));
     await fetchAndFilterAchievementsData();
     dispatch(setChangedAchievements([]));
-    dispatch(setAchievementsTabState({}));
-    dispatch(triggerOnCancel({}));
+    dispatch(setAchievementsTabState());
+    dispatch(triggerOnCancel());
   };
 
   return (
     <>
-      {achievementsData ? (
+      {achievementsData && (
         <AchievementsTab achievementsData={achievementsData} saveFunction={handleSave} cancelFunction={handleCancel} />
-      ) : null}
+      )}
+      <ConfirmationDialog
+        open={confirmationDialogOpen}
+        onCancel={confirmationDialogOnCancel}
+        onConfirm={confirmationDialogOnConfirm}
+      />
     </>
   );
 };

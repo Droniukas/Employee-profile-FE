@@ -1,11 +1,12 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Stack, Tooltip } from '@mui/material';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Skill } from '../../../models/Skill.interface';
 import { updateChangedSkill } from '../../../states/changedSkills';
 import { setSkillWithErrorId } from '../../../states/skillWithErrorId';
+import { UserStateRoot } from '../../../store/types/user';
 import { SkillLevel } from '../../enums/SkillLevel';
 import { mapSkillLevelToTooltip } from '../utils';
 
@@ -21,6 +22,7 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
 ) => {
   const { setSkillLevel, skillLevel, currentSkill, tooltipText } = props;
   const [open, setOpen] = useState(false);
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -38,7 +40,7 @@ const SkillLevelDropdownList: React.FunctionComponent<SkillLevelDropdownListProp
         skillName: currentSkill.skillName,
         checked: true,
         skillLevel: event.target.value,
-        employeeId: process.env.REACT_APP_TEMP_USER_ID,
+        employeeId: userId,
       }),
     );
   };

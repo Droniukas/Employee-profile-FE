@@ -17,4 +17,9 @@ export class EmployeeService {
     const response = await axios.get(`/employee/get/${id}`, {});
     return response.data;
   }
+
+  public async getLoggedInUser() {
+    const response = await axios.get(`/users/me`, {});
+    return response.data;
+  }
 }
