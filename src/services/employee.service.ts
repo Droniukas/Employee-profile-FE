@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 import axios from './axios';
 
 export class EmployeeService {
@@ -17,6 +19,9 @@ export class EmployeeService {
         page: page,
         size: size,
         isLimited: isLimited,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, { arrayFormat: 'comma' });
       },
     });
     return response.data;
