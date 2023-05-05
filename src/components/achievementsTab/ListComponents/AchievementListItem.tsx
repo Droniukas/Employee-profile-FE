@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Achievement } from '../../../models/Achievement.interface';
 import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
-import { OnCancelRoot, achievementsTabStateRoot } from '../../../store/types/achievements';
+import { achievementsTabStateRoot, OnCancelRoot } from '../../../store/types/achievements';
 import { UserStateRoot } from '../../../store/types/user';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
