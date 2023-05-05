@@ -89,6 +89,21 @@ const Main = () => {
     return '';
   };
 
+  const createTabRoute = (tabRoute: ROUTES) => {
+    if ([ROUTES.SKILLS, ROUTES.ACHIEVEMENTS].includes(tabRoute)) {
+      return (
+        tabRoute +
+        createTabQueryParameters(tabRoute === ROUTES.SKILLS ? skillsSearchParams : achievementsSearchParams) +
+        getEmployeeIdURLPart(true)
+      );
+    }
+    return tabRoute;
+  };
+
+  const createTabQueryParameters = (searchParams: string | null | undefined) => {
+    return `?filter=${searchParams ? searchParams : 'my'}`;
+  };
+
   const routes = [
     { path: ROUTES.SKILLS },
     { path: ROUTES.ACHIEVEMENTS },
@@ -172,21 +187,6 @@ const Main = () => {
   const switchTabs = (currentTabURL: string, currentTabValue: ROUTES) => {
     navigate(currentTabURL);
     setCurrentRouteValue(currentTabValue);
-  };
-
-  const createTabRoute = (tabRoute: ROUTES) => {
-    if ([ROUTES.SKILLS, ROUTES.ACHIEVEMENTS].includes(tabRoute)) {
-      return (
-        tabRoute +
-        createTabQueryParameters(tabRoute === ROUTES.SKILLS ? skillsSearchParams : achievementsSearchParams) +
-        getEmployeeIdURLPart(true)
-      );
-    }
-    return tabRoute;
-  };
-
-  const createTabQueryParameters = (searchParams: string | null | undefined) => {
-    return `?filter=${searchParams ? searchParams : 'my'}`;
   };
 
   return (
