@@ -55,7 +55,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
             <Link
               href={
                 employee.id !== userId
-                  ? `${process.env.REACT_APP_BASE_URL}/skills?employeeId=${employee.id}`
+                  ? `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}?employeeId=${employee.id}`
                   : `${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`
               }
               underline="hover"
