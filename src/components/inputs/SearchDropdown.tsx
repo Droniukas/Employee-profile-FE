@@ -15,7 +15,7 @@ type SearchSkillDropdownProps = {
   placeholder: string;
   options: Dropdown[];
   noOptionsText: string;
-  onChange: any;
+  onChange: (values: Dropdown[]) => void;
 };
 
 const SearchDropdown: React.FC<SearchSkillDropdownProps> = (props: SearchSkillDropdownProps) => {
@@ -29,8 +29,7 @@ const SearchDropdown: React.FC<SearchSkillDropdownProps> = (props: SearchSkillDr
 
   const handleChange = (event: React.SyntheticEvent, value: Dropdown[], reason: string) => {
     setSelectedOption(value);
-    console.log('in dropdown');
-    console.log(value);
+    onChange(value);
   };
 
   const updateDeleteFunctions = (value: Dropdown[], getTagProps: AutocompleteRenderGetTagProps) => {
@@ -67,6 +66,7 @@ const SearchDropdown: React.FC<SearchSkillDropdownProps> = (props: SearchSkillDr
         noOptionsText={noOptionsText}
         getOptionLabel={(option) => `${option.name}`}
         groupBy={(option) => option.category}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         multiple
         disableCloseOnSelect
         PaperComponent={({ children }) => <Paper style={{ color: 'primary.main' }}>{children}</Paper>}
