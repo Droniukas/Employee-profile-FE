@@ -15,7 +15,7 @@ type ProfileInfoProps = {
 const ProfileInfo: React.FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
   const { employee } = props;
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
 
   if (!employee) return null;

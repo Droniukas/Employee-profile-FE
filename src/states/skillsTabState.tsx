@@ -5,7 +5,7 @@ import { SkillsTabState } from '../components/enums/SkillsTabState';
 const initStateValue: SkillsTabState = SkillsTabState.VIEW_STATE;
 
 export const skillsTabStateSlice = createSlice({
-  name: 'onCancel',
+  name: 'skillsTabState',
   initialState: { value: initStateValue },
   reducers: {
     setSkillsTabState: (state: { value: SkillsTabState }) => {

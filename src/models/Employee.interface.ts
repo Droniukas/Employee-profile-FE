@@ -11,6 +11,7 @@ interface Employee {
   imageBytes: string;
   isManager: boolean;
   employmentDates: EmploymentDate[];
+  email: string;
 }
 
 export default Employee;

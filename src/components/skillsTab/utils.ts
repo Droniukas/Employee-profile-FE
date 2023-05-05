@@ -34,7 +34,7 @@ export const sortBySkill = (a: Skill, b: Skill) => {
 };
 
 export const getFilteredSkillsData = (skillsData: Skill[], filter: string | undefined | null) => {
-  if (filter === SkillsTabFilter.MY_SKILLS_URL) {
+  if (filter === SkillsTabFilter.MY_SKILLS_URL || filter === null) {
     skillsData.forEach((skill) => {
       if (!skill.category) {
         if (skill.checked) {
