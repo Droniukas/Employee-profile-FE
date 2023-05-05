@@ -18,7 +18,7 @@ export enum AppState {
 }
 
 const App = () => {
-  const [appState, setAppState] = useState<AppState>(AppState.LANDING_PAGE);
+  const [appState, setAppState] = useState<AppState>(AppState.LOGIN_PAGE);
   const handleAppStateChange = (newState: AppState) => {
     setAppState(newState);
   };
