@@ -18,39 +18,40 @@ import FindEmployeeResults from './FindEmployeeResults';
 const FindEmployee = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [totalEmployeesCount, setEmployeesCount] = useState<number>(0);
+  const [inputValue, _setInputValue] = useState('');
+  const [rowsPerPage, _setRowsPerPage] = useState<number>(10);
+  const [page, _setPage] = useState<number>(0);
+  const [dropdownSkills, setDropdownSkills] = useState<SearchSkill[]>([]);
+  const [selectedSkill, setSelectedSkill] = useState<Dropdown[]>([]);
+  const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
+  const [selectedAchievement, setSelectedAchievement] = useState<Dropdown[]>([]);
+
+  const inputValueRef = useRef(inputValue);
+  const rowsPerPageRef = useRef(rowsPerPage);
+  const pageRef = useRef(page);
+  const selectedSkillRef = useRef(selectedSkill);
+  const selectedAchievementRef = useRef(selectedAchievement);
+
   const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
 
   const employeeService = new EmployeeService();
   const skillService = new SkillsService();
   const achievementService = new AchievementsService();
 
-  const [inputValue, _setInputValue] = useState('');
-  const inputValueRef = useRef(inputValue);
-
   const setInputValue = (val: string) => {
     inputValueRef.current = val;
     _setInputValue(val);
   };
-
-  const [rowsPerPage, _setRowsPerPage] = useState<number>(10);
-  const rowsPerPageRef = useRef(rowsPerPage);
 
   const setRowsPerPage = (val: number) => {
     rowsPerPageRef.current = val;
     _setRowsPerPage(val);
   };
 
-  const [page, _setPage] = useState<number>(0);
-  const pageRef = useRef(page);
-
   const setPage = (val: number) => {
     pageRef.current = val;
     _setPage(val);
   };
-
-  const [dropdownSkills, setDropdownSkills] = useState<SearchSkill[]>([]);
-  const [selectedSkill, setSelectedSkill] = useState<Dropdown[]>([]);
-  const selectedSkillRef = useRef(selectedSkill);
 
   const getSkillsCategories = async () => {
     const results = await skillService.getSkillsCategories();
@@ -62,10 +63,6 @@ const FindEmployee = () => {
     setSelectedSkill(value);
     getEmployees();
   };
-
-  const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
-  const [selectedAchievement, setSelectedAchievement] = useState<Dropdown[]>([]);
-  const selectedAchievementRef = useRef(selectedAchievement);
 
   const getAchievementsCategories = async () => {
     const results = await achievementService.getAchievementsCategories();
