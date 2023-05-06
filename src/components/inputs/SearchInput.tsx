@@ -33,6 +33,7 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
             color: 'primary.main',
           },
           backgroundColor: 'white',
+          borderRadius: 8,
         }}
         fullWidth
         id="input-with-icon-textfield"
