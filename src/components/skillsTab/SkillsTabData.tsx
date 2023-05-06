@@ -16,6 +16,7 @@ import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { UserStateRoot } from '../../store/types/user';
+import { changedSkillsHaveDifferences } from '../main/utils';
 
 type SkillsTabDataProps = {
   confirmationDialogOpen: boolean;
@@ -53,21 +54,22 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
   };
 
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  const userId = user.id;
 
   const fetchAndFilterSkillsData = async () => {
     if (employeeIdParam) {
       const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(Number(employeeIdParam));
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), 'my'));
     } else {
-      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(userId);
-      setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+      if (user) {
+        const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(user.id);
+        setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+      }
     }
   };
 
-  // useEffect(() => {
-  //   fetchAndFilterSkillsData();
-  // }, [location.href]);
+  useEffect(() => {
+    fetchAndFilterSkillsData();
+  }, [location.href]);
 
   const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {
     const skillWithError = skillsData.find((skill) => skill.skillId === childSkill.skillId);
@@ -100,7 +102,9 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
     await fetchAndFilterSkillsData();
     dispatch(setSkillsTabState());
     dispatch(setChangedSkills([]));
-    setOpenSnackbar(true);
+    if (changedSkillsHaveDifferences(changedSkills, skillsData)) {
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCancel = async () => {

@@ -17,12 +17,16 @@ import ProjectEmployeeEditList from './ProjectEmployeeEditList';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
 type ProjectFormProps = {
-  onClose: (projectId?: number) => void;
+  onClose: (project?: Project) => void;
   project?: Project;
+  snackbarProps?: {
+    setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+    setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  };
 };
 
 const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
-  const { onClose, project } = props;
+  const { onClose, project, snackbarProps } = props;
 
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
@@ -49,9 +53,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       if (project) {
         result = await projectsService.updateProject(values);
         onClose();
+        if (snackbarProps && dirty) {
+          snackbarProps.setSnackbarMessage(`Project "${values.title}" successfully updated.`);
+          snackbarProps.setOpenSnackbar(true);
+        }
       } else {
         result = await projectsService.createProject(values);
-        onClose(result.id);
+        onClose(result);
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {

@@ -36,18 +36,14 @@ const ProjectProfiles = () => {
     setProjects(projects);
   };
 
-  const closeProjectForm = (projectId?: number) => {
+  const closeProjectForm = (project?: Project) => {
     setOpenPopup(false);
-    if (projectId) {
-      setAddedProjectId(projectId);
-      setSnackbarMessage('Project {project name} successfully created');
-      console.log('create');
-    } else {
-      setSnackbarMessage('Project {project name} successfully updated');
-      console.log('update');
+    if (project) {
+      setAddedProjectId(project.id);
+      setSnackbarMessage(`Project "${project.title}" successfully created.`);
+      setOpenSnackbar(true);
     }
     getProjects();
-    setOpenSnackbar(true);
   };
 
   const handleProjectDelete = async (id: number) => {
@@ -160,6 +156,7 @@ const ProjectProfiles = () => {
           handleProjectDelete={handleProjectDelete}
           focusProjectId={addedProjectId}
           filterStatus={filterTextValue}
+          snackbarProps={{ setOpenSnackbar: setOpenSnackbar, setSnackbarMessage: setSnackbarMessage }}
         />
       </Box>
       <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message={snackbarMessage} />

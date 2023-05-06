@@ -16,6 +16,7 @@ import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import CustomSnackbar from '../customSnackbar/CustomSnackbar';
+import { changedAchievementsHaveDifferences } from '../main/utils';
 
 type AchievementsTabDataProps = {
   confirmationDialogOpen: boolean;
@@ -36,7 +37,6 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
   const achievementsService = new AchievementsService();
   const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
-  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
@@ -60,6 +60,8 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     });
   };
 
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+
   const fetchAndFilterAchievementsData = async () => {
     if (employeeIdParam) {
       const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
@@ -67,10 +69,12 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
       );
       setAchievementsData(getFilteredAchievementsData(getAchievementsDataWithCount(response), 'my'));
     } else {
-      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(userId);
-      setAchievementsData(
-        getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
-      );
+      if (user) {
+        const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(user.id);
+        setAchievementsData(
+          getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
+        );
+      }
     }
   };
 
@@ -124,7 +128,9 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     await fetchAndFilterAchievementsData();
     dispatch(setAchievementsTabState());
     dispatch(setChangedAchievements([]));
-    setOpenSnackbar(true);
+    if (changedAchievementsHaveDifferences(changedAchievements, achievementsData)) {
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCancel = async () => {

@@ -10,7 +10,6 @@ import onCancelReducer from '../states/onCancel';
 import skillsTabStateReducer from '../states/skillsTabState';
 import skillWithErrorIdReducer from '../states/skillWithErrorId';
 import userStateReducer from '../states/userState';
-import { employeeApi } from '../states/apiSlice';
 
 const store = configureStore({
   reducer: {
@@ -24,9 +23,7 @@ const store = configureStore({
     expandedAchievement: expandedAchievementReducer,
     skillWithErrorId: skillWithErrorIdReducer,
     achievementWithErrorId: achievementWithErrorIdReducer,
-    [employeeApi.reducerPath]: employeeApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(employeeApi.middleware),
 });
 
 export default store;

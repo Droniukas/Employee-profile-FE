@@ -17,7 +17,7 @@ type SkillsTabProps = {
 };
 
 const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
   const { cancelFunction, saveFunction, skillsData } = props;
   const mapData = (skills: Skill[]): ReactNode => {
@@ -34,7 +34,7 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
   return (
     <>
       <Box component="span" sx={{ width: '1344px', display: 'inline-block' }}>
-        {!employeeIdParam ? (
+        {!employeeIdParam && (
           <Box component="span" sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
             <Box sx={{ display: 'flex', gap: '20px' }}>
               <SkillsTabFilterDropdown />
@@ -44,8 +44,8 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
               <SkillsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
             </Box>
           </Box>
-        ) : null}
-        {!skillsData.filter((skill) => skill.showOnFilter).length ? (
+        )}
+        {skillsData.length > 0 && !skillsData.filter((skill) => skill.showOnFilter).length && (
           <List
             sx={{
               width: '100%',
@@ -66,7 +66,7 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
               </Typography>
             </ListItem>
           </List>
-        ) : null}
+        )}
         {mapData(skillsData.filter((skill: Skill) => skill.parentSkillId === null).sort(sortBySkill))}
       </Box>
     </>

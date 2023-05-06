@@ -40,7 +40,7 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
     <>
       {}
       <Box component="span" sx={{ width: '1344px', display: 'inline-block' }}>
-        {!employeeIdParam ? (
+        {!employeeIdParam && (
           <Box component="span" sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
             <Box sx={{ display: 'flex', gap: '20px' }}>
               <AchievementsTabFilterDropdown />
@@ -50,8 +50,8 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
               <AchievementsTabStateButtons saveFunction={saveFunction} cancelFunction={cancelFunction} />
             </Box>
           </Box>
-        ) : null}
-        {!achievementsData.filter((achievement) => achievement.showOnFilter).length ? (
+        )}
+        {achievementsData.length > 0 && !achievementsData.filter((achievement) => achievement.showOnFilter).length ? (
           <List
             sx={{
               width: '100%',

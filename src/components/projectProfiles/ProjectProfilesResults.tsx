@@ -25,10 +25,14 @@ type ProjectProfilesResultsProps = {
   handleProjectDelete: (id: number) => void;
   focusProjectId?: number;
   filterStatus: string;
+  snackbarProps: {
+    setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+    setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  };
 };
 
 const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { projects, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
+  const { projects, rerender, handleProjectDelete, focusProjectId, filterStatus, snackbarProps } = props;
 
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
@@ -336,7 +340,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <ProjectForm onClose={closeEditForm} project={projectToEdit} snackbarProps={snackbarProps} />
+        )}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}

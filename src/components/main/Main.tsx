@@ -23,15 +23,14 @@ import { triggerOnCancel } from '../../states/onCancel';
 import { SkillsTabStateRoot } from '../../store/types/skills';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import { Skill } from '../../models/Skill.interface';
-import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import { EmployeeService } from '../../services/employee.service';
 import { Achievement } from '../../models/Achievement.interface';
 import { setChangedAchievements } from '../../states/changedAchievements';
 import { setAchievementsTabState } from '../../states/achievementsTabState';
 import { achievementsTabStateRoot } from '../../store/types/achievements';
 import { AchievementsTabState } from '../enums/AchievementsTabState';
-import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 import { isAxiosError } from 'axios';
+import { changedAchievementsHaveDifferences, changedSkillsHaveDifferences } from './utils';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -128,7 +127,10 @@ const Main = () => {
     { path: ROUTES.SEARCH, managerOnly: true },
     { path: ROUTES.PROJECT_PROFILES, managerOnly: true },
   ];
-  const routeIsFound = routes.find((route) => matchPath(route.path, location.pathname));
+  const routeIsFound = () => {
+    if (result) return routes.find((route) => matchPath(route.path, location.pathname));
+    return true;
+  };
 
   const employeeHasAccess = () => {
     if (user !== null && !user.isManager && employeeIdParam) {
@@ -157,41 +159,16 @@ const Main = () => {
     dispatch(triggerOnCancel());
   };
 
-  const changedSkillsHaveDifferences = (changedSkills: ChangedSkill[]) => {
-    return !changedSkills.every((changedSkill) => {
-      return skillsData.some((skill) => {
-        return (
-          skill.skillId === changedSkill.skillId &&
-          skill.checked === changedSkill.checked &&
-          skill.skillLevel === changedSkill.skillLevel
-        );
-      });
-    });
-  };
-
-  const changedAchievementsHaveDifferences = (changedAchievements: ChangedAchievement[]) => {
-    return !changedAchievements.every((changedAchievement) => {
-      return achievementsData.some((achievement) => {
-        return (
-          achievement.achievementId === changedAchievement.achievementId &&
-          achievement.checked === changedAchievement.checked &&
-          achievement.issueDate === changedAchievement.issueDate &&
-          achievement.expiringDate === changedAchievement.expiringDate
-        );
-      });
-    });
-  };
-
   const handleTabClick = (currentTabURL: string, currentTabValue: ROUTES) => {
     setSelectedTabURL(currentTabURL);
     setSelectedTabValue(currentTabValue);
     const changedSkills = store.getState().changedSkills.value;
-    if (changedSkillsHaveDifferences(changedSkills)) {
+    if (changedSkillsHaveDifferences(changedSkills, skillsData)) {
       setSkillsConfirmationDialog(true);
       return;
     }
     const changedAchievements = store.getState().changedAchievements.value;
-    if (changedAchievementsHaveDifferences(changedAchievements)) {
+    if (changedAchievementsHaveDifferences(changedAchievements, achievementsData)) {
       setAchievementsConfirmationDialog(true);
       return;
     }
@@ -210,8 +187,8 @@ const Main = () => {
   };
 
   return (
-    <>
-      {result && routeIsFound && employeeHasAccess() && employeeIsFound && (
+    <Box>
+      {result && routeIsFound() && employeeHasAccess() && employeeIsFound && (
         <>
           <ProfileInfo employee={result} />
           <CssBaseline />
@@ -332,9 +309,9 @@ const Main = () => {
           </Box>
         </>
       )}
-      {(!routeIsFound || !employeeIsFound) && <NotFoundPage />}
+      {(!routeIsFound() || !employeeIsFound) && <NotFoundPage />}
       {employeeIsFound && !employeeHasAccess() && <AccessDeniedPage />}
-    </>
+    </Box>
   );
 };
 
