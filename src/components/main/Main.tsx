@@ -31,6 +31,7 @@ import { setAchievementsTabState } from '../../states/achievementsTabState';
 import { achievementsTabStateRoot } from '../../store/types/achievements';
 import { AchievementsTabState } from '../enums/AchievementsTabState';
 import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
+import { isAxiosError } from 'axios';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -50,6 +51,7 @@ const Main = () => {
   const [selectedTabValue, setSelectedTabValue] = useState<ROUTES>();
   const [skillsData, setSkillsData] = useState<Skill[]>([]);
   const [achievementsData, setAchievementsData] = useState<Achievement[]>([]);
+  const [employeeIsFound, setEmployeeIsFound] = useState<boolean>(true);
 
   const skillsViewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);
   const achievementsViewState = useSelector((state: achievementsTabStateRoot) => state.achievementsTabState.value);
@@ -72,8 +74,22 @@ const Main = () => {
   const employeeService = new EmployeeService();
 
   const getResult = async (id: string) => {
-    const employee = await employeeService.getById(id);
-    setResult(employee);
+    try {
+      const employee = await employeeService.getById(id);
+      setEmployeeIsFound(true);
+      setResult(employee);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (!(error.response?.status === 401)) {
+          setEmployeeIsFound(false);
+          throw new Error('unknown axios error');
+        } else {
+          throw new Error('Unauthorized');
+        }
+      } else {
+        throw new Error(String(error));
+      }
+    }
   };
 
   useEffect(() => {
@@ -82,6 +98,7 @@ const Main = () => {
       return;
     }
     setResult(user);
+    employeeHasAccess();
   }, [employeeIdParam, user]);
 
   const getEmployeeIdURLPart = (withOtherFilters?: boolean) => {
@@ -114,6 +131,9 @@ const Main = () => {
   const routeIsFound = routes.find((route) => matchPath(route.path, location.pathname));
 
   const employeeHasAccess = () => {
+    if (user !== null && !user.isManager && employeeIdParam) {
+      return false;
+    }
     if (!result?.isManager || employeeIdParam) {
       return !routes.some((route) => route.path === location.pathname && route.managerOnly);
     }
@@ -191,7 +211,7 @@ const Main = () => {
 
   return (
     <>
-      {result && routeIsFound && employeeHasAccess() && (
+      {result && routeIsFound && employeeHasAccess() && employeeIsFound && (
         <>
           <ProfileInfo employee={result} />
           <CssBaseline />
@@ -312,8 +332,8 @@ const Main = () => {
           </Box>
         </>
       )}
-      {!employeeHasAccess() && <AccessDeniedPage />}
-      {!routeIsFound && <NotFoundPage />}
+      {(!routeIsFound || !employeeIsFound) && <NotFoundPage />}
+      {employeeIsFound && !employeeHasAccess() && <AccessDeniedPage />}
     </>
   );
 };
