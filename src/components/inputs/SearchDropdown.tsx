@@ -84,6 +84,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
                 color: 'primary.main',
               },
               backgroundColor: 'white',
+              borderRadius: 8,
             }}
           />
         )}
