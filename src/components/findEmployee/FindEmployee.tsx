@@ -4,9 +4,9 @@ import { TablePagination } from '@mui/material';
 import Box from '@mui/material/Box';
 import React, { useEffect, useRef, useState } from 'react';
 
-import Dropdown from '../../models/Dropdown.interface';
 import Employee from '../../models/Employee.interface';
 import SearchAchievement from '../../models/SearchAchievement.interface';
+import SearchDropdownOption from '../../models/SearchDropdownOption.interface';
 import SearchSkill from '../../models/SearchSkill.interface';
 import { AchievementsService } from '../../services/achievements.service';
 import { EmployeeService } from '../../services/employee.service';
@@ -22,9 +22,9 @@ const FindEmployee = () => {
   const [rowsPerPage, _setRowsPerPage] = useState<number>(10);
   const [page, _setPage] = useState<number>(0);
   const [dropdownSkills, setDropdownSkills] = useState<SearchSkill[]>([]);
-  const [selectedSkill, setSelectedSkill] = useState<Dropdown[]>([]);
+  const [selectedSkill, setSelectedSkill] = useState<SearchDropdownOption[]>([]);
   const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
-  const [selectedAchievement, setSelectedAchievement] = useState<Dropdown[]>([]);
+  const [selectedAchievement, setSelectedAchievement] = useState<SearchDropdownOption[]>([]);
 
   const inputValueRef = useRef(inputValue);
   const rowsPerPageRef = useRef(rowsPerPage);
@@ -58,7 +58,7 @@ const FindEmployee = () => {
     setDropdownSkills(results);
   };
 
-  const handleSearchSkillChange = (value: Dropdown[]) => {
+  const handleSearchSkillChange = (value: SearchDropdownOption[]) => {
     selectedSkillRef.current = value;
     setSelectedSkill(value);
     getEmployees();
@@ -69,7 +69,7 @@ const FindEmployee = () => {
     setDropdownAchievements(results);
   };
 
-  const handleSearchAchievementChange = (value: Dropdown[]) => {
+  const handleSearchAchievementChange = (value: SearchDropdownOption[]) => {
     selectedAchievementRef.current = value;
     setSelectedAchievement(value);
     getEmployees();

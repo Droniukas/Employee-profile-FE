@@ -8,31 +8,31 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import React, { useRef, useState } from 'react';
 
-import Dropdown from '../../models/Dropdown.interface';
+import SearchDropdownOption from '../../models/SearchDropdownOption.interface';
 
-type SearchSkillDropdownProps = {
+type SearchDropdownProps = {
   id: string;
   placeholder: string;
-  options: Dropdown[];
+  options: SearchDropdownOption[];
   noOptionsText: string;
-  onChange: (values: Dropdown[]) => void;
+  onChange: (values: SearchDropdownOption[]) => void;
 };
 
-const SearchDropdown: React.FC<SearchSkillDropdownProps> = (props: SearchSkillDropdownProps) => {
+const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProps) => {
   const { id, placeholder, options, noOptionsText, onChange } = props;
 
-  const [selectedOption, setSelectedOption] = useState<Dropdown[]>([]);
+  const [selectedOption, setSelectedOption] = useState<SearchDropdownOption[]>([]);
   const deleteFunctionRef = useRef({});
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-  const handleChange = (event: React.SyntheticEvent, value: Dropdown[], reason: string) => {
+  const handleChange = (event: React.SyntheticEvent, value: SearchDropdownOption[], reason: string) => {
     setSelectedOption(value);
     onChange(value);
   };
 
-  const updateDeleteFunctions = (value: Dropdown[], getTagProps: AutocompleteRenderGetTagProps) => {
+  const updateDeleteFunctions = (value: SearchDropdownOption[], getTagProps: AutocompleteRenderGetTagProps) => {
     const deleteFunctionRefObject = {};
     value.forEach((tag, index) => {
       (deleteFunctionRefObject as Array<any>)[index] = getTagProps({ index }).onDelete;
