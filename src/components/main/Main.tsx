@@ -195,7 +195,7 @@ const Main = () => {
         <>
           <ProfileInfo employee={result} />
           <CssBaseline />
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '150px 250px 0px' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '20px 250px 0px' }}>
             <Tabs value={currentRouteValue} indicatorColor="secondary" aria-label="secondary">
               <Tab
                 label="Skills"

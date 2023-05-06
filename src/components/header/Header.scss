@@ -1,52 +1,7 @@
-.search-text {
-  position: relative;
-  margin-top: 1px;
-  margin-left: 15px;
-  color: #000048;
-}
-
-.search-div {
-  position: absolute;
-  display: block;
-  margin-top: 280px;
-  margin-left: 9px;
-  justify-content: center;
-  align-items: center;
-}
-
-.profile {
-  position: absolute;
-  display: block;
-  margin-top: 130px;
-  margin-left: 10%;
-  justify-content: center;
-  align-items: center;
-}
-
-.round-box {
-  position: absolute;
-  margin-left: 4px;
-  margin-top: 5px;
-  width: 70px;
-  height: 70px;
-  border-radius: 24px;
-  background: linear-gradient(90deg, rgba(61, 84, 206, 0.12) 0.02%, rgba(53, 202, 207, 0.12) 100.04%),
-    rgba(255, 255, 255, 0.1);
-}
-
-.profile-text {
-  position: relative;
-  margin-top: 7px;
-  margin-left: 1px;
-  color: #000048;
-}
-
 .top-header {
-  margin: 12px 96px 12px 0;
-}
-
-.image {
-  position: relative;
-  width: 100%;
-  height: 100px;
+  //margin: 12px 96px 12px 0;
+  margin-right: 96px;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
