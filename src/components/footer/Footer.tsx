@@ -12,12 +12,12 @@ const Footer = () => {
           backgroundColor: 'white',
           borderTop: 2,
           borderColor: 'divider',
-          height: 64,
+          height: 52,
           width: '100%',
         }}
       >
-        <p className="footer copyright">Copyright © {moment().format('YYYY')} Cognizant</p>
-        <p className="footer policy">Privacy policy</p>
+        <p className="footer-paragraph copyright">Copyright © {moment().format('YYYY')} Cognizant</p>
+        <p className="footer-paragraph policy">Privacy policy</p>
       </Box>
     </>
   );

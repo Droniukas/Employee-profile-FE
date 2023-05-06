@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -10,11 +10,12 @@ import { triggerOnCancel } from '../../states/onCancel';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
 import { SkillWithErrorIdRoot } from '../../store/types/skills';
-import { UserStateRoot } from '../../store/types/user';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
+import { UserStateRoot } from '../../store/types/user';
 
 type SkillsTabDataProps = {
   confirmationDialogOpen: boolean;
@@ -28,8 +29,9 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
   const { confirmationDialogOnCancel, confirmationDialogOnConfirm, confirmationDialogOpen, skillsData, setSkillsData } =
     props;
   const skillsService = new SkillsService();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -50,12 +52,7 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
     });
   };
 
-  useEffect(() => {
-    fetchAndFilterSkillsData();
-  }, [location.href]);
-
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  if (!user) return null;
   const userId = user.id;
 
   const fetchAndFilterSkillsData = async () => {
@@ -67,6 +64,10 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
     }
   };
+
+  // useEffect(() => {
+  //   fetchAndFilterSkillsData();
+  // }, [location.href]);
 
   const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {
     const skillWithError = skillsData.find((skill) => skill.skillId === childSkill.skillId);
@@ -99,6 +100,7 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
     await fetchAndFilterSkillsData();
     dispatch(setSkillsTabState());
     dispatch(setChangedSkills([]));
+    setOpenSnackbar(true);
   };
 
   const handleCancel = async () => {
@@ -117,6 +119,7 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
         onCancel={confirmationDialogOnCancel}
         onConfirm={confirmationDialogOnConfirm}
       />
+      <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message="Skills successfully updated" />
     </>
   );
 };

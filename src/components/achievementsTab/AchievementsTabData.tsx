@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import { UserStateRoot } from '../../store/types/user';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 type AchievementsTabDataProps = {
   confirmationDialogOpen: boolean;
@@ -36,6 +37,7 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
   const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -58,10 +60,6 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     });
   };
 
-  useEffect(() => {
-    fetchAndFilterAchievementsData();
-  }, [location.href]);
-
   const fetchAndFilterAchievementsData = async () => {
     if (employeeIdParam) {
       const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(
@@ -75,6 +73,10 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
       );
     }
   };
+
+  useEffect(() => {
+    fetchAndFilterAchievementsData();
+  }, [location.href]);
 
   const setErrorForAchievements = (childAchievement: ChangedAchievement | Achievement) => {
     const achievementWithError = achievementsData.find(
@@ -122,6 +124,7 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     await fetchAndFilterAchievementsData();
     dispatch(setAchievementsTabState());
     dispatch(setChangedAchievements([]));
+    setOpenSnackbar(true);
   };
 
   const handleCancel = async () => {
@@ -142,6 +145,7 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
         onCancel={confirmationDialogOnCancel}
         onConfirm={confirmationDialogOnConfirm}
       />
+      <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message="Achievements successfully updated" />
     </>
   );
 };

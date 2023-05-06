@@ -11,12 +11,15 @@ import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<number>();
   const [filterTextValue, setFilterTextValue] = useState('All');
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
 
   const projectsService = new ProjectsService();
 
@@ -35,8 +38,16 @@ const ProjectProfiles = () => {
 
   const closeProjectForm = (projectId?: number) => {
     setOpenPopup(false);
-    if (projectId) setAddedProjectId(projectId);
+    if (projectId) {
+      setAddedProjectId(projectId);
+      setSnackbarMessage('Project {project name} successfully created');
+      console.log('create');
+    } else {
+      setSnackbarMessage('Project {project name} successfully updated');
+      console.log('update');
+    }
     getProjects();
+    setOpenSnackbar(true);
   };
 
   const handleProjectDelete = async (id: number) => {
@@ -151,6 +162,7 @@ const ProjectProfiles = () => {
           filterStatus={filterTextValue}
         />
       </Box>
+      <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message={snackbarMessage} />
     </div>
   );
 };

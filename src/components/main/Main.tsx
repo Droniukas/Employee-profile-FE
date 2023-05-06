@@ -134,7 +134,7 @@ const Main = () => {
     if (user !== null && !user.isManager && employeeIdParam) {
       return false;
     }
-    if (!result?.isManager || employeeIdParam) {
+    if ((result && !result?.isManager) || employeeIdParam) {
       return !routes.some((route) => route.path === location.pathname && route.managerOnly);
     }
     return true;

@@ -12,6 +12,7 @@ import LogoutPage from './pages/logoutPage/LogoutPage';
 import { ROUTES } from './routes/routes';
 import { EmployeeService } from './services/employee.service';
 import { setUserState } from './states/userState';
+import { useGetEmployeeByIdQuery } from './states/apiSlice';
 
 const App = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -23,6 +24,7 @@ const App = () => {
       const token = await getAccessTokenSilently();
       setAuthToken(token);
       const employee = await employeeService.getLoggedInUser();
+
       dispatch(setUserState(employee));
     };
 
@@ -30,6 +32,9 @@ const App = () => {
       configureAuthenticationTokens();
     }
   }, [getAccessTokenSilently, isAuthenticated]);
+
+  const { data } = useGetEmployeeByIdQuery();
+  console.log(data);
 
   return (
     <>
