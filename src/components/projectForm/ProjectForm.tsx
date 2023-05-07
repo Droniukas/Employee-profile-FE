@@ -12,9 +12,9 @@ import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
-import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
 type ProjectFormProps = {
   onClose: (projectId?: number) => void;
@@ -212,7 +212,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                sx={{ width: 300 }}
+                sx={{
+                  width: 170,
+                  '& .MuiInputBase-input': {
+                    height: 10,
+                  },
+                }}
                 format="YYYY/MM/DD"
                 value={dayjs(values.startDate)}
                 onChange={(newValue) => {
@@ -243,7 +248,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                sx={{ width: 300 }}
+                sx={{
+                  width: 170,
+                  '& .MuiInputBase-input': {
+                    height: 10,
+                  },
+                }}
                 format="YYYY/MM/DD"
                 minDate={dayjs(values.startDate)}
                 value={values.endDate ? dayjs(values.endDate) : null}
