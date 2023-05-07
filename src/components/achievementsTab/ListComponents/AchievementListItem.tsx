@@ -1,4 +1,4 @@
-import { Box, Checkbox, FormControlLabel, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -8,11 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Achievement } from '../../../models/Achievement.interface';
 import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
-import { OnCancelRoot, achievementsTabStateRoot } from '../../../store/types/achievements';
+import { achievementsTabStateRoot, OnCancelRoot } from '../../../store/types/achievements';
 import { UserStateRoot } from '../../../store/types/user';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
-import { StyledSwitch } from './StyledSwitch';
 
 type AchievementListItemProps = {
   achievement: Achievement;
@@ -49,6 +48,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     achievement.issueDate !== undefined ? setIssueDate(achievement.issueDate) : issueDate;
     achievement.expiringDate !== undefined ? setExpiringDate(achievement.expiringDate) : expiringDate;
   }, [onCancel]);
+
+  const checkboxColor = viewState == AchievementsTabState.VIEW_STATE ? 'adaec3' : 'primary.main';
 
   const dispatch = useDispatch();
 
@@ -102,20 +103,27 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     wasChange = false;
   }
 
-  const certificateMessage =
+  const expiringDateMessage =
     endDateExists && achievementExpiringDateExists
-      ? 'Certificate:  ' + dayjs(achievement.expiringDate).format('MMM YYYY')
+      ? dayjs(achievement.expiringDate).format('MMM YYYY')
       : endDateExists && expiringDateExists
-      ? 'Certificate:  ' + dayjs(expiringDate).format('MMM YYYY')
+      ? dayjs(expiringDate).format('MMM YYYY')
       : '';
+
+  const issueDateMessage =
+    achievement.issueDate !== undefined && achievement.issueDate !== null
+      ? dayjs(achievement.issueDate).format('MMM, YYYY')
+      : endDateExists && expiringDateExists
+      ? dayjs(issueDate).format('MMM YYYY')
+      : 'Both are invalid';
   return (
     <>
       <Box>
-        <ListItem disablePadding sx={{ marginLeft: '27px', minHeight: 60 }}>
+        <ListItem disablePadding sx={{ marginLeft: '40px', display: 'inline-block' }}>
           <FormControlLabel
             control={
               <>
-                <StyledSwitch
+                {/* <StyledSwitch
                   disabled={viewState === AchievementsTabState.VIEW_STATE}
                   checked={isChecked}
                   onChange={() => {
@@ -134,12 +142,40 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                         viewState == AchievementsTabState.VIEW_STATE ? 'grey' : 'rgba(120, 236, 232, 0.4)',
                     },
                   }}
+                /> */}
+                <Checkbox
+                  disabled={viewState === AchievementsTabState.VIEW_STATE}
+                  checked={isChecked}
+                  onChange={() => {
+                    onSwitchChange();
+                    if (issueDate !== null) {
+                      setIssueDate(null);
+                    }
+                    if (expiringDate !== null) {
+                      setExpiringDate(null);
+                    }
+                  }}
+                  sx={{
+                    color: checkboxColor,
+                    [`&.${checkboxClasses.checked}`]: {
+                      color: checkboxColor,
+                    },
+                    marginLeft: -2,
+                  }}
                 />
               </>
             }
             label=""
           />
-          <ListItemText sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main' }}>
+          <ListItemText
+            sx={{
+              fontWeight: '400',
+              paddingLeft: '0px',
+              marginLeft: '0px',
+              color: 'primary.main',
+              display: 'inline-flex',
+            }}
+          >
             {achievement.achievementName}
             {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
               <AchievementListItemErrorText
@@ -161,31 +197,51 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (
               <>
-                <Box sx={{ marginRight: '0px', width: '400px', display: 'inline-block' }}>
-                  <ListItemText
+                <Box sx={{ display: 'inline', width: '96%' }}>
+                  <Box
                     sx={{
-                      fontWeight: '200',
-                      color: '#666666',
-                      display: 'inline-block',
-                      marginRight: '50px',
+                      marginRight: '60px',
+                      // width: '500px',
+                      // display: 'inline-flex',
+                      // position: 'absolute',
+                      // right: '0px',
+                      // backgroundColor: 'red',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      position: 'absolute',
+                      right: 0,
                     }}
                   >
-                    {achievement.issueDate !== undefined && achievement.issueDate !== null
-                      ? dayjs(achievement.issueDate).format('MMM, YYYY')
-                      : issueDate !== undefined && issueDate !== null
-                      ? dayjs(issueDate).format('MMM, YYYY')
-                      : 'Both are invalid'}
-                  </ListItemText>
-                  <ListItemText
-                    sx={{
-                      fontWeight: '400',
-                      marginRight: '50px',
-                      color: '#666666',
-                      display: 'inline-block',
-                    }}
-                  >
-                    {certificateMessage}
-                  </ListItemText>
+                    <ListItemText
+                      sx={{
+                        // fontWeight: '200',
+                        color: '#666666',
+                        // display: 'inline-block',
+                        marginRight: '40px',
+                        // textAlign: 'right',
+                      }}
+                    >
+                      {/* {achievement.issueDate !== undefined && achievement.issueDate !== null
+                        ? 'Issued date:   ' + dayjs(achievement.issueDate).format('MMM, YYYY')
+                        : issueDate !== undefined && issueDate !== null
+                        ? 'Issued date:   ' + dayjs(issueDate).format('MMM, YYYY')
+                        : 'Both are invalid'} */}
+                      {'Issued date: ' + issueDateMessage}
+                    </ListItemText>
+                    {expiringDateExists && (
+                      <ListItemText
+                        sx={{
+                          fontWeight: '400',
+                          marginRight: '40px',
+                          color: '#666666',
+                          // display: 'inline-block',
+                          // textAlign: 'right',
+                        }}
+                      >
+                        {'Expired date: ' + expiringDateMessage}
+                      </ListItemText>
+                    )}
+                  </Box>
                 </Box>
               </>
             ) : null
@@ -194,82 +250,105 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
         {viewState === AchievementsTabState.EDIT_STATE ? (
           isChecked ? (
             <>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Box
-                  marginX={2}
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    position: 'relative',
-                    my: 2.5,
-                    paddingLeft: 9,
-                  }}
-                >
-                  <Typography sx={{ fontSize: 14, fontWeight: 400, paddingRight: 3 }}>Completed</Typography>
-                  <DatePicker
-                    slotProps={{
-                      ...(!achievement.hasError
-                        ? {
-                            textField: {
-                              size: 'medium',
-                              error: false,
-                            },
-                          }
-                        : null),
+              <Box sx={{ width: '100%', position: 'absolute' }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Box
+                    marginX={2}
+                    sx={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      position: 'absolute',
+                      right: 5,
+                      // my: 2.5,
+                      // paddingLeft: 9,
                     }}
-                    disableFuture
-                    label={'MON, YYYY'}
-                    views={['month', 'year']}
-                    sx={{ width: 200, marginRight: 7 }}
-                    value={achievementIssueDateExists ? dayjs(achievement.issueDate) : dayjs(issueDate)}
-                    onChange={(newValue) => {
-                      setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
-                      wasChange = true;
-                      if (achievement.hasError) {
-                        achievement.hasError = false;
-                      }
-                    }}
-                  />
-                  <Checkbox
-                    checked={endDateExists}
-                    onChange={(e) => {
-                      endDateExists ? setExpiringDate(null) : {};
-                      setEndDateExists(e.target.checked);
-                      wasChange = true;
-                    }}
-                    sx={{ paddingRight: 1 }}
-                  />
-                  <Typography sx={{ fontSize: 14, fontWeight: 400, paddingRight: 3 }}>Certificate issued</Typography>
-                  {endDateExists && (
-                    <Box sx={{ my: 1 }}>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          slotProps={{
-                            ...(achievement.hasError && issueDateExists
-                              ? null
-                              : {
-                                  textField: {
-                                    size: 'medium',
-                                    error: false,
-                                  },
-                                }),
-                          }}
-                          sx={{ width: 200 }}
-                          label={'MON, YYYY'}
-                          views={['month', 'year']}
-                          minDate={dayjs(issueDate).add(1, 'year')}
-                          value={endDateExists ? dayjs(expiringDate) : dayjs(issueDate)}
-                          onChange={(newValue) => {
-                            setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
-                            wasChange = true;
-                            setEndDateExists(true);
-                          }}
-                        />
-                      </LocalizationProvider>
-                    </Box>
-                  )}
-                </Box>
-              </LocalizationProvider>
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 400,
+                        paddingRight: 3,
+                        top: -60,
+                        position: 'relative',
+                      }}
+                    >
+                      Issued date:
+                    </Typography>
+                    <DatePicker
+                      slotProps={{
+                        ...(!achievement.hasError
+                          ? {
+                              textField: {
+                                size: 'small',
+                                error: false,
+                              },
+                            }
+                          : null),
+                      }}
+                      disableFuture
+                      // label={'MON, YYYY'}
+                      views={['month', 'year']}
+                      sx={{ width: 140, marginRight: 7, top: -60 }}
+                      value={achievementIssueDateExists ? dayjs(achievement.issueDate) : dayjs(issueDate)}
+                      format="MMM, YYYY"
+                      onChange={(newValue) => {
+                        setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
+                        wasChange = true;
+                        if (achievement.hasError) {
+                          achievement.hasError = false;
+                        }
+                      }}
+                    />
+                    {/* <Checkbox
+                      checked={endDateExists}
+                      onChange={(e) => {
+                        endDateExists ? setExpiringDate(null) : {};
+                        setEndDateExists(e.target.checked);
+                        wasChange = true;
+                      }}
+                      sx={{ paddingRight: 1 }}
+                    /> */}
+                    <Typography sx={{ fontSize: 14, fontWeight: 400, paddingRight: 3, top: -60, position: 'relative' }}>
+                      Expired date:
+                    </Typography>
+                    {
+                      /* endDateExists */ true && (
+                        <Box sx={{ my: 1 }}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              slotProps={{
+                                ...(achievement.hasError && issueDateExists
+                                  ? null
+                                  : {
+                                      textField: {
+                                        size: 'small',
+                                        error: false,
+                                      },
+                                      borderRadius: 50,
+                                    }),
+                              }}
+                              sx={{ width: 150, top: -60 }}
+                              // label="Basic date picker"
+                              // placeholder: 'Placeholder',
+                              // defaultValue={format(MMM, YYYY)}
+                              // inputFormat="MM/DD/YYYY"
+                              format="MMM, YYYY"
+                              views={['month', 'year']}
+                              minDate={dayjs(issueDate).add(1, 'year').format('MMM, YYYY')}
+                              value={endDateExists ? dayjs(expiringDate) : 'Mon, YYYY'}
+                              onChange={(newValue) => {
+                                setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
+                                wasChange = true;
+                                setEndDateExists(true);
+                              }}
+                            />
+                          </LocalizationProvider>
+                        </Box>
+                      )
+                    }
+                  </Box>
+                </LocalizationProvider>
+              </Box>
             </>
           ) : null
         ) : null}

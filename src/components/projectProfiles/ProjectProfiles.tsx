@@ -139,8 +139,8 @@ const ProjectProfiles = () => {
         sx={{
           position: 'relative',
           my: 2,
-          width: 1344,
-          left: -205,
+          width: '70vw',
+          left: '-10.5vw',
         }}
       >
         <ProjectProfilesResult
