@@ -19,7 +19,7 @@ export const StyledSwitch = styled(Switch)(() => ({
       },
       '& + .MuiSwitch-track': {
         opacity: 1,
-        backgroundColor: '#000048',
+        backgroundColor: 'primary.main',
       },
     },
   },
