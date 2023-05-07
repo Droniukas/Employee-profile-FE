@@ -47,6 +47,31 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
     (deleteFunctionRef.current as Array<any>)[index]();
   };
 
+  interface StylePaperParams {
+    children?: React.ReactNode;
+  }
+
+  const stylePaperComponents = (params: StylePaperParams) => {
+    const { children } = params ?? {};
+
+    return <Paper style={{ color: 'primary.main' }}>{children}</Paper>;
+  };
+
+  interface RenderOptionParams {
+    selected: boolean;
+  }
+
+  const handleRenderOption = (props: object, option: SearchDropdownOption, params: RenderOptionParams) => {
+    const { selected } = params;
+
+    return (
+      <Box component="li" {...props} key={option.id}>
+        <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+        {option.name}
+      </Box>
+    );
+  };
+
   return (
     <Box
       component="form"
@@ -69,7 +94,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
         isOptionEqualToValue={(option, value) => option.id === value.id}
         multiple
         disableCloseOnSelect
-        PaperComponent={({ children }) => <Paper style={{ color: 'primary.main' }}>{children}</Paper>}
+        PaperComponent={stylePaperComponents}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -88,14 +113,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
             }}
           />
         )}
-        renderOption={(props, option, { selected }) => {
-          return (
-            <Box component="li" {...props} key={option.id}>
-              <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
-              {option.name}
-            </Box>
-          );
-        }}
+        renderOption={handleRenderOption}
         renderTags={updateDeleteFunctions}
       />
       {selectedOption.length > 0 ? (
