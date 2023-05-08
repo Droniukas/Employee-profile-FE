@@ -52,16 +52,11 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
           </Box>
         ) : null}
         {!achievementsData.filter((achievement) => achievement.showOnFilter).length ? (
-          <List
-          // sx={{
-          //   width: '100%',
-          // }}
-          >
+          <List>
             <ListItem alignItems="flex-start">
               <Typography
                 sx={{
                   color: 'primary.main',
-                  // fontSize: 10,
                 }}
               >
                 {!employeeIdParam ? (

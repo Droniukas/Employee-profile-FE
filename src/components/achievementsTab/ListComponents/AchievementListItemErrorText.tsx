@@ -16,11 +16,8 @@ const AchievementListItemErrorText = (props: AchievementListItemErrorTextProps) 
           fontSize: 15,
           color: '#ef4349',
           position: 'absolute',
-          // right: '0px',
-          // backgroundColor: 'yellow',
           top: '-14px',
           right: '375px',
-          // display: 'inline',
         }}
         primary={issueDateErrorMessage}
       />
@@ -30,8 +27,6 @@ const AchievementListItemErrorText = (props: AchievementListItemErrorTextProps) 
           fontSize: 15,
           color: '#ef4349',
           position: 'absolute',
-          // paddingTop: 13,
-          // paddingLeft: 67,
           right: 0,
           top: '-14px',
         }}
