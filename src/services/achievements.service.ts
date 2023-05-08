@@ -8,9 +8,14 @@ export class AchievementsService {
   }
 
   public async updateEmployeeAchievements(changedAchievementsItem: ChangedAchievement[]) {
-    const response = await axios.put(`${process.env.REACT_APP_API_URL}/achievements/update`, {
+    const response = await axios.put(`/achievements/update`, {
       changedAchievements: changedAchievementsItem,
     });
+    return response.data;
+  }
+
+  public async getAchievementsCategories() {
+    const response = await axios.get(`/achievements/getAchievementsCategories`);
     return response.data;
   }
 }
