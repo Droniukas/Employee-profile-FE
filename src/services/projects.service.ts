@@ -55,13 +55,13 @@ export class ProjectsService {
 
   private mapMyProjectStatus(myProject: MyProject) {
     const today = new Date();
-    const startDateFormatted = new Date(myProject.startDate);
-    const endDateFormatted = new Date(myProject.endDate);
+    const startDateFormatted = myProject.startDate ? new Date(myProject.startDate) : undefined;
+    const endDateFormatted = myProject.endDate ? new Date(myProject.endDate) : undefined;
 
-    if (startDateFormatted > today) {
+    if (startDateFormatted && startDateFormatted > today) {
       myProject.status = ProjectStatus.FUTURE;
     } else {
-      if (myProject.endDate === null || endDateFormatted > today) {
+      if (!endDateFormatted || endDateFormatted > today) {
         myProject.status = ProjectStatus.ONGOING;
       } else {
         myProject.status = ProjectStatus.FINISHED;
@@ -73,6 +73,13 @@ export class ProjectsService {
     const response = await axios.get(`/project/getProjectEmployeeBy/${this.userId}`);
     response.data.map((myProject: MyProject) => {
       this.mapMyProjectStatus(myProject);
+    });
+    return response.data;
+  }
+
+  public async updateProject2(myProject: FormikValues) {
+    const response = await axios.post('project/addResponsibilitiesToProjectEmployee', {
+      ...myProject,
     });
     return response.data;
   }

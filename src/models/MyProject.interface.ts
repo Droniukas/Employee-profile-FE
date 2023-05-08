@@ -2,8 +2,8 @@ interface MyProject {
   id?: number;
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  startDate?: string;
+  endDate?: string;
   projectEmployeeStartDate: string;
   projectEmployeeEndDate: string;
   responsibilities: string;

@@ -18,6 +18,7 @@ import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
+import MyProjectEdit from './MyProjectEdit';
 
 type ProjectProfilesResultsProps = {
   myProject: MyProject[];
@@ -26,13 +27,26 @@ type ProjectProfilesResultsProps = {
 };
 
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { myProject, filterStatus } = props;
+  const { myProject, rerender, filterStatus } = props;
+
+  const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
+  const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [employeeId, setEmployeeById] = useState<Employee>();
   const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const projectsService = new ProjectsService();
   const employeeService = new EmployeeService();
+
+  const closeEditForm = () => {
+    setOpenPopup(false);
+    setProjectToEdit(null);
+    rerender();
+  };
+  const setProject = (MyProject: MyProject) => {
+    setProjectToEdit(MyProject);
+    setOpenPopup(true);
+  };
 
   const getEmployeeById = async (id: string) => {
     const employeeId = await employeeService.getById(id);
@@ -118,8 +132,18 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(myProject.startDate)}
-                    {myProject.endDate ? ' to ' + correctDateFormat(myProject.endDate) : ''}
+                    {myProject.projectEmployeeStartDate && (
+                      <>
+                        {'From '}
+                        {correctDateFormat(myProject.projectEmployeeStartDate)}
+                      </>
+                    )}
+                    {myProject.projectEmployeeEndDate && (
+                      <>
+                        {' to '}
+                        {correctDateFormat(myProject.projectEmployeeEndDate)}
+                      </>
+                    )}
                   </>
                 </Typography>
                 <Typography
@@ -205,6 +229,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                     left: 320,
                     backgroundColor: '#F4F4F4',
                   }}
+                  onClick={() => setProject(myProject)}
                 >
                   <EditIcon />
                 </IconButton>
@@ -247,6 +272,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   } else {
     return (
       <>
+        {openPopup && projectToEdit && <MyProjectEdit onClose={closeEditForm} myProject={projectToEdit} />}
         <List
           sx={{
             width: '100%',
