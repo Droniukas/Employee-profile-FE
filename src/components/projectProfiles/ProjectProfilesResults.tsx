@@ -86,8 +86,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 1100,
-                left: 0,
+                width: '100%',
+                right: 0,
               }}
             >
               <Box
@@ -179,9 +179,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               justifyContent="flex-start"
               alignItems="center"
               sx={{
-                position: 'relative',
+                position: 'absolute',
                 width: 215,
-                left: 0,
+                right: 0,
               }}
             >
               {setStatusColors(project.status)}
