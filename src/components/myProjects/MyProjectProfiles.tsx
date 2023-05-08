@@ -17,14 +17,10 @@ const MyProjectProfiles = () => {
   const projectsService = new ProjectsService();
 
   useEffect(() => {
-    getProjects();
+    rerenderProjects();
   }, []);
 
-  const rerenderProjects = () => {
-    getProjects();
-  };
-
-  const getProjects = async () => {
+  const rerenderProjects = async () => {
     const myProjects = await projectsService.getMyProjects();
     setProjects(myProjects);
   };
@@ -66,23 +62,6 @@ const MyProjectProfiles = () => {
           >
             <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
           </Box>
-        </Stack>
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          sx={{
-            position: 'relative',
-            width: 145,
-            left: 440,
-          }}
-        >
-          <Box
-            sx={{
-              position: 'relative',
-              left: 0,
-            }}
-          ></Box>
         </Stack>
       </Stack>
       <Box

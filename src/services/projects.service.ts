@@ -70,7 +70,7 @@ export class ProjectsService {
   }
 
   public async getMyProjects() {
-    const response = await axios.get(`/project/getProjectEmployeeBy/${this.userId}`);
+    const response = await axios.get(`/project/getMyProjectsByEmployee/${this.userId}`);
     response.data.map((myProject: MyProject) => {
       this.mapMyProjectStatus(myProject);
     });

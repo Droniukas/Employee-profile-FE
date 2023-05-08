@@ -24,7 +24,7 @@ type ProjectProfilesResultsProps = {
 };
 
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { myProjects, filterStatus } = props;
+  const { myProjects, rerender, filterStatus } = props;
   const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const user = useSelector((state: UserStateRoot) => state.userState.value);
@@ -45,6 +45,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
         try {
           const addResponsibilitiesToMyProject = await projectsService.addResponsibilitiesToProjectEmployee(data);
           setResponse(addResponsibilitiesToMyProject.data);
+          rerender();
         } catch (error) {
           console.error(error);
         }
