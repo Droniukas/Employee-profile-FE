@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
 import { EmployeeService } from '../../services/employee.service';
+import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
@@ -27,8 +28,10 @@ type ProjectProfilesResultsProps = {
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { myProject, filterStatus } = props;
   const [employeeId, setEmployeeById] = useState<Employee>();
+  const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
+  const projectsService = new ProjectsService();
   const employeeService = new EmployeeService();
 
   const getEmployeeById = async (id: string) => {
@@ -38,8 +41,26 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   useEffect(() => {
     getEmployeeById(`${userId}`);
   }, []);
-
   const renderResultItem = (myProject: MyProject) => {
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+
+        const inputValue = event.currentTarget?.querySelector('input')?.value;
+        if (!inputValue) return;
+        const data = {
+          projectId: Number(myProject.id),
+          employeeId: Number(userId),
+          responsibilities: inputValue,
+        };
+        try {
+          const addResponsibilitiesToMyProject = await projectsService.addResponsibilitiesToProjectEmployee(data);
+          setResponse(addResponsibilitiesToMyProject.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
     return (
       <div key={myProject.id}>
         <ListItem
@@ -136,14 +157,18 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                         My responsibilities
                       </Typography>
                     </InputLabel>
-                    <Typography sx={{ fontSize: 14, color: '#666666' }}>{myProject.responsibilities}</Typography>
+                    {myProject.responsibilities ? (
+                      <Typography sx={{ fontSize: 14, color: '#666666' }}>{myProject.responsibilities}</Typography>
+                    ) : (
+                      <TextField
+                        hiddenLabel
+                        variant="standard"
+                        onKeyPress={handleKeyPress}
+                        placeholder="Enter responsibilities..."
+                        sx={{ color: 'primary.main' }}
+                      />
+                    )}
                   </Box>
-                  <TextField
-                    hiddenLabel
-                    variant="standard"
-                    placeholder="My responsibilities"
-                    sx={{ color: 'primary.main' }}
-                  />
                   <Typography
                     sx={{
                       mt: 2,
