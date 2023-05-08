@@ -12,7 +12,6 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
-import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
@@ -26,10 +25,9 @@ type ProjectProfilesResultsProps = {
 
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { myProjects, filterStatus } = props;
-  const [employeeId] = useState<Employee>();
-  const [setResponse] = useState();
+  const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
-
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
 
   const renderResultItem = (myProject: MyProject) => {
@@ -173,7 +171,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       fontWeight: 500,
                     }}
                   >
-                    {employeeId?.title}
+                    {user.title}
                   </Typography>
                 </Box>
               </Box>
