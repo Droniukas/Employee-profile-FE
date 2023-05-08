@@ -8,9 +8,14 @@ export class SkillsService {
   }
 
   public async updateEmployeeSkills(changedSkillsItem: ChangedSkill[]) {
-    const response = await axios.put(`${process.env.REACT_APP_API_URL}/skills/update`, {
+    const response = await axios.put(`/skills/update`, {
       changedSkills: changedSkillsItem,
     });
+    return response.data;
+  }
+
+  public async getSkillsCategories() {
+    const response = await axios.get(`/skills/getSkillsCategories`);
     return response.data;
   }
 }

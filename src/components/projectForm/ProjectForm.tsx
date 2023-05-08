@@ -212,7 +212,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                sx={{ width: 300 }}
+                sx={{
+                  width: 170,
+                  '& .MuiInputBase-input': {
+                    height: 10,
+                  },
+                }}
                 format="YYYY/MM/DD"
                 value={dayjs(values.startDate)}
                 onChange={(newValue) => {
@@ -243,7 +248,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                sx={{ width: 300 }}
+                sx={{
+                  width: 170,
+                  '& .MuiInputBase-input': {
+                    height: 10,
+                  },
+                }}
                 format="YYYY/MM/DD"
                 minDate={dayjs(values.startDate)}
                 value={values.endDate ? dayjs(values.endDate) : null}

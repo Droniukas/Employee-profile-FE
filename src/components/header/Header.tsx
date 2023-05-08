@@ -37,25 +37,25 @@ const Header = () => {
         backgroundColor: '#FFFFFF',
         borderBottom: 2,
         borderColor: 'divider',
-        height: 100,
+        height: 64,
         width: '100%',
         display: 'flex',
         justifyContent: 'right',
-        alignItems: 'right',
+        alignItems: 'center',
       }}
     >
       <div className="top-header">
-        <NotificationsIcon sx={{ width: 40, height: 40, marginRight: 4, marginBottom: 1.1 }} />
+        <NotificationsIcon sx={{ width: 20, height: 20, marginRight: 4 }} />
         {result ? (
           <Avatar
             src={`data:${result?.imageType};base64,${result?.imageBytes}`}
-            sx={{ width: 65, height: 65, marginTop: 1, display: 'inline-block', cursor: 'pointer' }}
+            sx={{ width: 40, height: 40, cursor: 'pointer' }}
             onClick={(event) => {
               handleClick(event);
             }}
           />
         ) : (
-          <Loading size={65} style={{ marginTop: 1, display: 'inline-block' }} />
+          <Loading size={40} style={{ display: 'inline-block' }} />
         )}
         <Menu
           disableScrollLock={true}
