@@ -75,7 +75,7 @@ const SkillsTabFilterDropdown = () => {
             <MenuItem
               value={SkillsTabFilter.MY_SKILLS}
               sx={{
-                color: '#primary.main',
+                color: 'primary.main',
                 fontSize: 14,
               }}
             >

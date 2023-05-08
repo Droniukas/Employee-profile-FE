@@ -68,7 +68,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const isTextOverflow = project.description.length > 135;
+    const visibleDescriptionLength = 340;
+    const isTextOverflow = project.description.length > visibleDescriptionLength;
+
     return (
       <div key={project.id}>
         <ListItem
@@ -88,7 +90,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 800,
+                width: 1100,
                 left: 0,
               }}
             >
@@ -114,7 +116,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               <Box
                 sx={{
                   position: 'relative',
-                  width: 400,
+                  width: 780,
                   left: 25,
                 }}
               >
@@ -126,8 +128,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   }}
                 >
                   <>
-                    {correctDateFormat(project.startDate)} -{' '}
-                    {project.endDate ? correctDateFormat(project.endDate) : 'Present'}
+                    {'From '} {correctDateFormat(project.startDate)}
+                    {project.endDate ? ' to ' + correctDateFormat(project.endDate) : ''}
                   </>
                 </Typography>
                 <Typography
@@ -149,7 +151,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow ? project.description : project.description.substring(0, 135) + '...'}
+                  {!isTextOverflow
+                    ? project.description
+                    : project.description.substring(0, visibleDescriptionLength) + '...'}
                   <Button
                     onClick={() => setProject(project)}
                     sx={{
@@ -168,7 +172,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                 display="flex"
                 sx={{
                   position: 'relative',
-                  left: 70,
+                  left: 60,
                 }}
               >
                 {renderEmployeesAvatarGroup(project.projectEmployees)}
@@ -180,7 +184,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 544,
+                width: 215,
                 left: 0,
               }}
             >
@@ -193,7 +197,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   sx={{
                     color: 'primary.main',
                     position: 'relative',
-                    left: 320,
+                    left: 20,
                     backgroundColor: '#F4F4F4',
                   }}
                   onClick={() => setProject(project)}
@@ -206,7 +210,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   sx={{
                     color: 'primary.main',
                     position: 'relative',
-                    left: 335,
+                    left: 35,
                     backgroundColor: '#F4F4F4',
                   }}
                   onClick={() => handleDeleteClick(project)}
@@ -332,7 +336,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' projects found. Check the filter settings."}
+              : `No '${filterStatus}' projects found. Check the filter settings.`}
           </Typography>
         </ListItem>
       </List>

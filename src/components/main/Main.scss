@@ -2,7 +2,7 @@
   position: absolute;
   height: 40px;
   left: 5vw;
-  top: 320px;
+  top: 200px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -14,7 +14,7 @@
   position: absolute;
   height: 20px;
   left: 5vw;
-  top: 365px;
+  top: 250px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
@@ -24,7 +24,7 @@
 
 .main {
   width: 100vw;
-  min-height: calc(100vh - 400px);
+  min-height: calc(100vh - 200px);
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
