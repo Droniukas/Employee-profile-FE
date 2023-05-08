@@ -1,5 +1,6 @@
 import './HomePage.scss';
 
+import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Footer from '../../components/footer/Footer';
@@ -7,7 +8,6 @@ import Header from '../../components/header/Header';
 import Main from '../../components/main/Main';
 import TabPanel from '../../components/main/TabPanel';
 import { ROUTES } from '../../routes/routes';
-import { useEffect } from 'react';
 
 const HomePage = () => {
   const navigate = useNavigate();

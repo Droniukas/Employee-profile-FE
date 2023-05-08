@@ -2,36 +2,36 @@ import './Main.scss';
 
 import { Box, Button, CssBaseline, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
+import { Achievement } from '../../models/Achievement.interface';
+import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
+import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import Employee from '../../models/Employee.interface';
+import { Skill } from '../../models/Skill.interface';
+import AccessDeniedPage from '../../pages/accessDeniedPage/AccessDeniedPage';
+import NotFoundPage from '../../pages/notFoundPage/NotFoundPage';
 import { ROUTES } from '../../routes/routes';
+import { EmployeeService } from '../../services/employee.service';
+import { setAchievementsTabState } from '../../states/achievementsTabState';
+import { setChangedAchievements } from '../../states/changedAchievements';
+import { setChangedSkills } from '../../states/changedSkills';
+import { triggerOnCancel } from '../../states/onCancel';
+import { setSkillsTabState } from '../../states/skillsTabState';
+import store from '../../store/store';
+import { achievementsTabStateRoot } from '../../store/types/achievements';
+import { SkillsTabStateRoot } from '../../store/types/skills';
 import { UserStateRoot } from '../../store/types/user';
 import AchievementsTabData from '../achievementsTab/AchievementsTabData';
+import { AchievementsTabState } from '../enums/AchievementsTabState';
+import { SkillsTabState } from '../enums/SkillsTabState';
 import FindEmployee from '../findEmployee/FindEmployee';
 import MyProjectProfiles from '../myProjects/MyProjectProfiles';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import SkillsTabData from '../skillsTab/SkillsTabData';
-import AccessDeniedPage from '../../pages/accessDeniedPage/AccessDeniedPage';
-import NotFoundPage from '../../pages/notFoundPage/NotFoundPage';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
-import store from '../../store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { setChangedSkills } from '../../states/changedSkills';
-import { setSkillsTabState } from '../../states/skillsTabState';
-import { triggerOnCancel } from '../../states/onCancel';
-import { SkillsTabStateRoot } from '../../store/types/skills';
-import { SkillsTabState } from '../enums/SkillsTabState';
-import { Skill } from '../../models/Skill.interface';
-import { ChangedSkill } from '../../models/ChangedSkill.interface';
-import { EmployeeService } from '../../services/employee.service';
-import { Achievement } from '../../models/Achievement.interface';
-import { setChangedAchievements } from '../../states/changedAchievements';
-import { setAchievementsTabState } from '../../states/achievementsTabState';
-import { achievementsTabStateRoot } from '../../store/types/achievements';
-import { AchievementsTabState } from '../enums/AchievementsTabState';
-import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -283,10 +283,8 @@ const Main = () => {
                 <Route
                   path={ROUTES.MY_PROJECTS}
                   element={
-                    <TabPanel value={value} index={2}>
-                      <MyProjectProfiles />
                     <TabPanel value={currentRouteValue} index={2}>
-                      My projects
+                      <MyProjectProfiles />
                     </TabPanel>
                   }
                 />

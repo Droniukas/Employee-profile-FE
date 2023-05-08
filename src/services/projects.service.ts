@@ -1,12 +1,16 @@
 import { FormikValues } from 'formik';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import { ProjectStatus } from '../components/enums/ProjectStatus';
 import MyProject from '../models/MyProject.interface';
 import MyProjectEmployee from '../models/MyProjectEmployee.interface';
 import Project from '../models/Project.interface';
+import { UserStateRoot } from '../store/types/user';
 import axios from './axios';
 
 export class ProjectsService {
+  userId = useSelector((state: UserStateRoot) => state.userState.value).id;
+
   public async getAllProjects() {
     const response = await axios.get('/project/all', {});
     response.data.map((project: Project) => {
@@ -66,16 +70,15 @@ export class ProjectsService {
   }
 
   public async getMyProjects() {
-    const response = await axios.get(`/project/getProjectEmployeeBy/${process.env.REACT_APP_TEMP_USER_ID}`);
+    const response = await axios.get(`/project/getProjectEmployeeBy/${this.userId}`);
     response.data.map((myProject: MyProject) => {
       this.mapMyProjectStatus(myProject);
     });
-    console.log(response);
     return response.data;
   }
 
   public async getResponsibilitiesFromProjectEmployee(projectId: number) {
-    const response = await axios.get(`project/responsibilities/${projectId}/${process.env.REACT_APP_TEMP_USER_ID}`);
+    const response = await axios.get(`project/responsibilities/${projectId}/${this.userId}`);
     const plainText = response.data;
     const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
     return responsibilities;
@@ -89,8 +92,6 @@ export class ProjectsService {
       responsibilities: responsibilities,
     };
     const response = await axios.post('project/addResponsibilitiesToProjectEmployee', data);
-    console.log(data);
-
     return response.data;
   }
 }

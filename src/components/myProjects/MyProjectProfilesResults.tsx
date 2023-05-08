@@ -10,11 +10,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
 import { EmployeeService } from '../../services/employee.service';
-import { ProjectsService } from '../../services/projects.service';
+import { UserStateRoot } from '../../store/types/user';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
 type ProjectProfilesResultsProps = {
@@ -26,6 +27,7 @@ type ProjectProfilesResultsProps = {
 const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { myProject, filterStatus } = props;
   const [employeeId, setEmployeeById] = useState<Employee>();
+  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const employeeService = new EmployeeService();
 
@@ -34,12 +36,10 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
     setEmployeeById(employeeId);
   };
   useEffect(() => {
-    getEmployeeById(`${process.env.REACT_APP_TEMP_USER_ID}`);
+    getEmployeeById(`${userId}`);
   }, []);
 
   const renderResultItem = (myProject: MyProject) => {
-    const projectsService = new ProjectsService();
-
     return (
       <div key={myProject.id}>
         <ListItem

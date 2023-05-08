@@ -11,10 +11,10 @@ import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
 import { SkillWithErrorIdRoot } from '../../store/types/skills';
 import { UserStateRoot } from '../../store/types/user';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import { SkillLevel } from '../enums/SkillLevel';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
-import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 
 type SkillsTabDataProps = {
   confirmationDialogOpen: boolean;
