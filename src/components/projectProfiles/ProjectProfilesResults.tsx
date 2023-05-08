@@ -64,7 +64,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const visibleDescriptionLength = 345;
+    const visibleDescriptionLength = 340;
     const isTextOverflow = project.description.length > visibleDescriptionLength;
 
     return (
