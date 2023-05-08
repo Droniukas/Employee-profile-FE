@@ -77,13 +77,6 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async getResponsibilitiesFromProjectEmployee(projectId: number) {
-    const response = await axios.get(`project/responsibilities/${projectId}/${this.userId}`);
-    const plainText = response.data;
-    const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
-    return responsibilities;
-  }
-
   public async addResponsibilitiesToProjectEmployee(myProjectEmployee: MyProjectEmployee) {
     const { projectId, employeeId, responsibilities } = myProjectEmployee;
     const data = {

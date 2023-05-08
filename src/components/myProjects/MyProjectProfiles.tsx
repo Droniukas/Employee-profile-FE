@@ -94,7 +94,7 @@ const MyProjectProfiles = () => {
         }}
       >
         <MyProjectProfilesResult
-          myProject={filteredProjectsList}
+          myProjects={filteredProjectsList}
           rerender={rerenderProjects}
           filterStatus={filterTextValue}
         />
