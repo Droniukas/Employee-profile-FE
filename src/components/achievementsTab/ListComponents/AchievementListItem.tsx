@@ -4,6 +4,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Calendar from '@mui/icons-material/Event';
 
 import { Achievement } from '../../../models/Achievement.interface';
 import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
@@ -177,22 +178,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
             }}
           >
             {achievement.achievementName}
-            {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
-              <AchievementListItemErrorText
-                issueDateErrorMessage={'Issue date cannot be empty!'}
-                expiringDateErrorMessage={''}
-              />
-            ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
-              <AchievementListItemErrorText
-                issueDateErrorMessage={''}
-                expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
-              />
-            ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
-              <AchievementListItemErrorText
-                issueDateErrorMessage={''}
-                expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
-              />
-            ) : null}
           </ListItemText>
           {viewState === AchievementsTabState.VIEW_STATE ? (
             isChecked ? (
@@ -259,6 +244,12 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       alignItems: 'center',
                       position: 'absolute',
                       right: 5,
+                      '& fieldset': { border: '1px solid #DDDDDD', borderRadius: '15px', fontSize: 14 },
+                      '& .MuiButtonBase-root': { color: 'primary.main' },
+                      [`${achievement.hasError}`]: {
+                        '& fieldset': { border: '1px solid red', borderRadius: '15px', fontSize: 14 },
+                      },
+                      color: 'primary.main',
                       // my: 2.5,
                       // paddingLeft: 9,
                     }}
@@ -266,7 +257,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     <Typography
                       sx={{
                         fontSize: 14,
-                        fontWeight: 400,
+                        fontWeight: '400',
                         paddingRight: 3,
                         top: -60,
                         position: 'relative',
@@ -275,6 +266,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       Issued date:
                     </Typography>
                     <DatePicker
+                      // slots={{
+                      //   openPickerIcon: pickersCalendarHeaderClasses
+                      // }}
                       slotProps={{
                         ...(!achievement.hasError
                           ? {
@@ -284,15 +278,34 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                 InputLabelProps: {
                                   shrink: false,
                                 },
+                                InputProps: {
+                                  endAdornment: <Calendar />,
+                                },
+                                // sx: {
+                                //   '& fieldset': { borderColor: 'primary.main', borderRadius: '15px' },
+                                // },
+                                // '& fieldset': {
+                                //   }
+                                // },
+                                // sx={{
+                                // }},
                               },
                             }
-                          : null),
+                          : {
+                              textField: {
+                                size: 'small',
+                                error: true,
+                                InputLabelProps: {
+                                  shrink: false,
+                                },
+                              },
+                            }),
                       }}
                       disableFuture
                       // label={'MON, YYYY'}
                       format="MMM, YYYY"
                       views={['month', 'year']}
-                      sx={{ width: 150, marginRight: 7, top: -60 }}
+                      sx={{ width: 150, marginRight: 7, top: -60, color: 'primary.main', fontSize: 14 }}
                       value={achievementIssueDateExists ? dayjs(achievement.issueDate) : null}
                       onChange={(newValue) => {
                         setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
@@ -322,7 +335,15 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                             <DatePicker
                               slotProps={{
                                 ...(achievement.hasError && issueDateExists
-                                  ? null
+                                  ? {
+                                      textField: {
+                                        size: 'small',
+                                        error: true,
+                                        InputLabelProps: {
+                                          shrink: false,
+                                        },
+                                      },
+                                    }
                                   : {
                                       textField: {
                                         size: 'small',
@@ -333,7 +354,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                       },
                                     }),
                               }}
-                              sx={{ width: 150, top: -60 }}
+                              sx={{ width: 150, top: -60, color: 'rgba(0, 0, 72, 0.37)' }}
                               // label="Basic date picker"
                               // placeholder: 'Placeholder',
                               // defaultValue={format(MMM, YYYY)}
@@ -365,6 +386,21 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
             </>
           ) : null
         ) : null}
+        <Box sx={{ right: 0, position: 'relative' }}>
+          {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
+            <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
+          ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
+            <AchievementListItemErrorText
+              issueDateErrorMessage={''}
+              expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
+            />
+          ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
+            <AchievementListItemErrorText
+              issueDateErrorMessage={''}
+              expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
+            />
+          ) : null}
+        </Box>
       </Box>
     </>
   );
