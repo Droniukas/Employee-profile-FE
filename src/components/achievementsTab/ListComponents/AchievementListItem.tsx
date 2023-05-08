@@ -103,19 +103,23 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     wasChange = false;
   }
 
-  const expiringDateMessage =
-    endDateExists && achievementExpiringDateExists
-      ? dayjs(achievement.expiringDate).format('MMM YYYY')
-      : endDateExists && expiringDateExists
-      ? dayjs(expiringDate).format('MMM YYYY')
-      : 'Something wrong with the expiring date';
+  let expiringDateMessage = '';
+  if (endDateExists && achievementExpiringDateExists) {
+    expiringDateMessage = dayjs(achievement.expiringDate).format('MMM, YYYY');
+  } else if (endDateExists && expiringDateExists) {
+    expiringDateMessage = dayjs(expiringDate).format('MMM, YYYY');
+  } else {
+    expiringDateMessage = 'Something wrong with the expiring date';
+  }
 
-  const issueDateMessage =
-    achievement.issueDate !== undefined && achievement.issueDate !== null
-      ? dayjs(achievement.issueDate).format('MMM, YYYY')
-      : endDateExists && expiringDateExists
-      ? dayjs(issueDate).format('MMM YYYY')
-      : 'Both are invalid';
+  let issueDateMessage = '';
+  if (achievement.issueDate !== undefined && achievement.issueDate !== null) {
+    issueDateMessage = dayjs(achievement.issueDate).format('MMM, YYYY');
+  } else if (issueDateExists) {
+    issueDateMessage = dayjs(issueDate).format('MMM, YYYY');
+  } else {
+    issueDateMessage = 'Both are invalid';
+  }
   return (
     <>
       <Box>
@@ -209,7 +213,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       alignItems: 'center',
                       position: 'absolute',
                       right: 5,
-                      '& fieldset': { border: '1px solid #DDDDDD', borderRadius: '15px', fontSize: 14 },
+                      '& fieldset': { border: '1px solid #DDDDDD', borderRadius: '8px', fontSize: 14 },
                       '& .MuiButtonBase-root': { color: 'primary.main' },
                       color: 'primary.main',
                     }}
