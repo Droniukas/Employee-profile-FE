@@ -281,16 +281,19 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                               textField: {
                                 size: 'small',
                                 error: false,
+                                InputLabelProps: {
+                                  shrink: false,
+                                },
                               },
                             }
                           : null),
                       }}
                       disableFuture
                       // label={'MON, YYYY'}
-                      views={['month', 'year']}
-                      sx={{ width: 140, marginRight: 7, top: -60 }}
-                      value={achievementIssueDateExists ? dayjs(achievement.issueDate) : dayjs(issueDate)}
                       format="MMM, YYYY"
+                      views={['month', 'year']}
+                      sx={{ width: 150, marginRight: 7, top: -60 }}
+                      value={achievementIssueDateExists ? dayjs(achievement.issueDate) : null}
                       onChange={(newValue) => {
                         setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
                         wasChange = true;
@@ -298,6 +301,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           achievement.hasError = false;
                         }
                       }}
+                      label={issueDateExists && !wasChange ? '' : 'Mon, YYYY'}
                     />
                     {/* <Checkbox
                       checked={endDateExists}
@@ -323,8 +327,10 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                       textField: {
                                         size: 'small',
                                         error: false,
+                                        InputLabelProps: {
+                                          shrink: false,
+                                        },
                                       },
-                                      borderRadius: 50,
                                     }),
                               }}
                               sx={{ width: 150, top: -60 }}
@@ -334,13 +340,20 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                               // inputFormat="MM/DD/YYYY"
                               format="MMM, YYYY"
                               views={['month', 'year']}
-                              minDate={dayjs(issueDate).add(1, 'year').format('MMM, YYYY')}
-                              value={endDateExists ? dayjs(expiringDate) : 'Mon, YYYY'}
+                              minDate={dayjs(issueDate).add(1, 'year')}
+                              // value={
+                              //   endDateExists && expiringDate !== null
+                              //     ? dayjs(expiringDate)
+                              //     : dayjs(issueDate).add(1, 'year')
+                              // }
+                              //value={endDateExists ? dayjs(expiringDate) : null}
+                              value={endDateExists && expiringDate !== null ? dayjs(expiringDate) : null}
                               onChange={(newValue) => {
                                 setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
                                 wasChange = true;
                                 setEndDateExists(true);
                               }}
+                              label={endDateExists && expiringDate && !wasChange ? '' : 'Mon, YYYY'}
                             />
                           </LocalizationProvider>
                         </Box>
