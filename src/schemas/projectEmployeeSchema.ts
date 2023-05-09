@@ -45,7 +45,8 @@ const validateActivityDates = (
     !projectEmployeeStartDate ||
     !projectStartDate ||
     !dayjs(projectEmployeeStartDate).isValid() ||
-    !dayjs(projectEmployeeEndDate).isValid()
+    !dayjs(projectEmployeeEndDate).isValid() ||
+    (projectEmployeeEndDate && projectEmployeeEndDate < projectEmployeeStartDate)
   ) {
     return true;
   } else if (

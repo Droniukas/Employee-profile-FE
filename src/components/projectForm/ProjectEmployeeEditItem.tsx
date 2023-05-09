@@ -13,7 +13,7 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { FormikErrors, FormikHandlers, getIn } from 'formik';
+import { FormikErrors, getIn } from 'formik';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -28,13 +28,12 @@ type ProjectEmployeeEditItemProps = {
   isTouched: boolean;
   formikErrors: FormikErrors<ProjectEmployee>;
   apiError?: ProjectEmployeeError;
-  handleBlur: FormikHandlers['handleBlur'];
   setFieldValue: (field: string, value: string | undefined) => void;
   onDelete: (projectEmployeeId: number) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const { projectEmployee, index, isTouched, formikErrors, apiError, handleBlur, setFieldValue, onDelete } = props;
+  const { projectEmployee, index, isTouched, formikErrors, apiError, setFieldValue, onDelete } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const isInactiveOrDismissed = (status: string): boolean => {
@@ -80,7 +79,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           </ListItemText>
         </Box>
       </Grid>
-      <Grid item xs={6} display={'flex'} onBlur={handleBlur(`projectEmployees.${index}`)}>
+      <Grid item xs={6} display={'flex'}>
         <Box mr={4}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
@@ -88,7 +87,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               sx={{
-                width: 170,
+                width: 180,
                 '& .MuiInputBase-input': {
                   height: 10,
                 },
@@ -114,7 +113,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               sx={{
-                width: 170,
+                width: 180,
                 '& .MuiInputBase-input': {
                   height: 10,
                 },
@@ -127,8 +126,8 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               }}
               slotProps={{
                 textField: {
-                  error: isTouched && Boolean(endDateError || activityPeriodError),
-                  helperText: isTouched && endDateError,
+                  error: Boolean(endDateError || activityPeriodError),
+                  helperText: endDateError,
                 },
               }}
             />

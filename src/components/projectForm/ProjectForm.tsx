@@ -85,6 +85,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     validationSchema: projectSchema.shape({
       projectEmployees: yup.array().of(projectEmployeeSchema(projectStartDate, projectEndDate)),
     }),
+    validateOnChange: false,
   });
 
   const {
@@ -334,10 +335,10 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             <ProjectEmployeeEditList
               projectEmployees={values.projectEmployees}
               formikErrors={getIn(errors, 'projectEmployees')}
-              errors={projectEmployeeErrors}
+              apiErrors={projectEmployeeErrors}
               touched={getIn(touched, 'projectEmployees')}
-              handleBlur={handleBlur}
               setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
               deleteProjectEmployee={deleteProjectEmployee}
             />
           ) : (

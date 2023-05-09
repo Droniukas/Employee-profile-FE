@@ -1,5 +1,5 @@
 import { Divider, List, ListItem } from '@mui/material';
-import { FormikErrors, FormikHandlers, FormikTouched, getIn } from 'formik';
+import { FormikErrors, FormikTouched, getIn } from 'formik';
 import React, { useEffect } from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
@@ -9,18 +9,19 @@ import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
   formikErrors: FormikErrors<ProjectEmployee>;
-  errors: ProjectEmployeeError[];
+  apiErrors: ProjectEmployeeError[];
   touched: FormikTouched<ProjectEmployee>;
-  handleBlur: FormikHandlers['handleBlur'];
   setFieldValue: (field: string, value: string | undefined) => void;
+  setFieldTouched: (field: string, touched?: boolean | undefined, shouldValidate?: boolean | undefined) => void;
   deleteProjectEmployee: (projectEmployeeId: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const { projectEmployees, formikErrors, errors, touched, handleBlur, setFieldValue, deleteProjectEmployee } = props;
+  const { projectEmployees, formikErrors, apiErrors, touched, setFieldValue, setFieldTouched, deleteProjectEmployee } =
+    props;
 
   useEffect(() => {
-    if (errors.length > 0) {
-      const firstProjectEmployeeWithErrorId = errors[0].employeeId;
+    if (apiErrors.length > 0) {
+      const firstProjectEmployeeWithErrorId = apiErrors[0].employeeId;
       const firstErrorElement = document.getElementById(
         `project-employee-edit-item-${firstProjectEmployeeWithErrorId}`,
       );
@@ -34,7 +35,7 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
         }, 200);
       }
     }
-  }, [errors]);
+  }, [apiErrors]);
 
   return (
     <List sx={{ marginTop: '8px' }}>
@@ -44,6 +45,7 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
             tabIndex={-1}
             onBlur={(event) => {
               event.currentTarget.style.backgroundColor = 'inherit';
+              setFieldTouched(`projectEmployees.${index}`, true, true);
             }}
             id={`project-employee-edit-item-${projectEmployee.id}`}
             sx={{
@@ -54,9 +56,8 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
               index={index}
               projectEmployee={projectEmployee}
               formikErrors={getIn(formikErrors, `${index}`)}
-              apiError={errors.find((error) => error.employeeId === projectEmployee.id)}
+              apiError={apiErrors.find((error) => error.employeeId === projectEmployee.id)}
               isTouched={getIn(touched, `${index}`)}
-              handleBlur={handleBlur}
               setFieldValue={setFieldValue}
               onDelete={deleteProjectEmployee}
             />
