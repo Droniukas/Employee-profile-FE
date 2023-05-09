@@ -4,6 +4,7 @@ import { Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { ROUTES } from '../../routes/routes';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import { ViewSkillStateRoot } from '../../store/types/skills';
 import { SkillsTabState } from '../enums/SkillsTabState';
@@ -30,7 +31,7 @@ const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps>
         <Button
           variant={StyleVariants.CONTAINED}
           onClick={() => {
-            navigate('/skills');
+            navigate(ROUTES.SKILLS);
             setSearchParams({ filter: 'all' });
             changeView(dispatch);
           }}

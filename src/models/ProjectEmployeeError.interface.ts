@@ -1,9 +1,9 @@
-import EmploymentDates from './EmploymentDates.interface';
+import { EmploymentDate } from './EmployementData.interface';
 
 interface ProjectEmployeeError {
   employeeId: number;
   message: string;
-  employmentDates: EmploymentDates[];
+  employmentDates: EmploymentDate[];
 }
 
 export default ProjectEmployeeError;

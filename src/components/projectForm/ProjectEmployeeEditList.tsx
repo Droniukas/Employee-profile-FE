@@ -12,7 +12,7 @@ type ProjectEmployeeEditListProps = {
   errors: ProjectEmployeeError[];
   touched: FormikTouched<ProjectEmployee>;
   handleBlur: FormikHandlers['handleBlur'];
-  setFieldValue: (field: string, value: string) => void;
+  setFieldValue: (field: string, value: string | undefined) => void;
   deleteProjectEmployee: (projectEmployeeId: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
@@ -53,9 +53,8 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
             <ProjectEmployeeEditItem
               index={index}
               projectEmployee={projectEmployee}
-              startDateError={getIn(formikErrors, `${index}.projectEmployeeStartDate`)}
-              endDateError={getIn(formikErrors, `${index}.projectEmployeeEndDate`)}
-              error={errors.find((error) => error.employeeId === projectEmployee.id)}
+              formikErrors={getIn(formikErrors, `${index}`)}
+              apiError={errors.find((error) => error.employeeId === projectEmployee.id)}
               isTouched={getIn(touched, `${index}`)}
               handleBlur={handleBlur}
               setFieldValue={setFieldValue}

@@ -18,11 +18,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { getIn, useFormik } from 'formik';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import * as yup from 'yup';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
+import { projectEmployeeSchema } from '../../schemas/projectEmployeeSchema';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
@@ -40,6 +42,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
+
   const [projectEmployeeErrors, setProjectEmployeeErrors] = useState<ProjectEmployeeError[]>([]);
 
   let initialValues: Project = {
@@ -51,6 +54,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     status: '',
   };
   if (project) initialValues = project;
+
+  const [projectStartDate, setProjectStartDate] = useState<string>(initialValues.startDate);
+  const [projectEndDate, setProjectEndDate] = useState<string>(initialValues.endDate);
 
   const handleFormSubmit = async () => {
     let result;
@@ -76,7 +82,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const projectForm = useFormik({
     initialValues,
     onSubmit: handleFormSubmit,
-    validationSchema: projectSchema,
+    validationSchema: projectSchema.shape({
+      projectEmployees: yup.array().of(projectEmployeeSchema(projectStartDate, projectEndDate)),
+    }),
   });
 
   const {
@@ -124,6 +132,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
 
   const deleteProjectEmployee = useCallback(
     (projectEmployeeId: number) => {
+      // const index = values.projectEmployees.findIndex((pe) => pe.id === projectEmployeeId);
+      // if (values.projectEmployees[index + 1]) {
+      //   touched.
+      //   setFieldTouched(`projectEmployees.${index}`, getIn(touched, `projectEmployees.${index + 1}`));
+      // }
       const updatedProjectEmployees = values.projectEmployees.filter(
         (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
       );
@@ -131,6 +144,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     },
     [values.projectEmployees, setFieldValue],
   );
+
+  useEffect(() => {
+    setProjectStartDate(values.startDate);
+    setProjectEndDate(values.endDate);
+  }, [values.startDate, values.endDate]);
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
@@ -226,8 +244,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             }}
           />
         </Box>
-        <Box display={'flex'} sx={{}}>
-          <Box display={'inline-block'}>
+        <Box display={'flex'}>
+          <Box display={'inline-block'} onBlur={handleBlur('startDate')}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
             </InputLabel>
@@ -235,30 +253,41 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
               <DatePicker
                 sx={{ width: 300 }}
                 format="YYYY/MM/DD"
-                value={dayjs(values.startDate)}
+                value={values.startDate ? dayjs(values.startDate) : null}
                 onChange={(newValue) => {
-                  if (newValue === null) return;
-                  setFieldValue('startDate', dayjs(newValue).toISOString());
-                  setFieldTouched('startDate', true);
-                  setFieldValue('endDate', '');
-                  setFieldTouched('endDate', true);
+                  setFieldValue('startDate', newValue?.toString());
+                }}
+                slotProps={{
+                  textField: {
+                    error: Boolean(errors.startDate),
+                    helperText: errors.startDate,
+                  },
                 }}
               />
             </LocalizationProvider>
           </Box>
-          <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
+          <Box
+            marginX={2}
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              position: 'relative',
+              top: errors.startDate ? 0 : 11.5,
+            }}
+          >
             <Checkbox
               checked={endDateExists}
               onChange={(e) => {
                 setEndDateExists(e.target.checked);
                 setFieldValue('endDate', '');
+                setFieldTouched('endDate', true);
               }}
             />
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
           </Box>
         </Box>
         {endDateExists && (
-          <Box sx={{ my: 2 }}>
+          <Box sx={{ my: 2 }} onBlur={handleBlur('endDate')}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
             </InputLabel>
@@ -268,7 +297,15 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                 format="YYYY/MM/DD"
                 minDate={dayjs(values.startDate)}
                 value={values.endDate ? dayjs(values.endDate) : null}
-                onChange={(newValue) => setFieldValue('endDate', dayjs(newValue).toISOString())}
+                onChange={(newValue) => {
+                  setFieldValue('endDate', newValue?.toString());
+                }}
+                slotProps={{
+                  textField: {
+                    error: Boolean(errors.endDate),
+                    helperText: errors.endDate,
+                  },
+                }}
               />
             </LocalizationProvider>
           </Box>

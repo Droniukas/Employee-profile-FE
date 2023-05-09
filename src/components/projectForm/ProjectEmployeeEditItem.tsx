@@ -13,7 +13,7 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { FormikHandlers } from 'formik';
+import { FormikErrors, FormikHandlers, getIn } from 'formik';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -25,40 +25,25 @@ import { UserStateRoot } from '../../store/types/user';
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
   index: number;
-  startDateError: string;
-  endDateError: string;
-  error?: ProjectEmployeeError;
   isTouched: boolean;
+  formikErrors: FormikErrors<ProjectEmployee>;
+  apiError?: ProjectEmployeeError;
   handleBlur: FormikHandlers['handleBlur'];
-  setFieldValue: (field: string, value: string) => void;
+  setFieldValue: (field: string, value: string | undefined) => void;
   onDelete: (projectEmployeeId: number) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const {
-    projectEmployee,
-    index,
-    startDateError,
-    endDateError,
-    error,
-    isTouched,
-    handleBlur,
-    setFieldValue,
-    onDelete,
-  } = props;
+  const { projectEmployee, index, isTouched, formikErrors, apiError, handleBlur, setFieldValue, onDelete } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
   };
 
-  const setProjectEmployeeStartDate = (newDate: string) => {
-    setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newDate);
-  };
-
-  const setProjectEmployeeEndDate = (newDate: string) => {
-    setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newDate);
-  };
+  const startDateError = getIn(formikErrors, `projectEmployeeStartDate`);
+  const endDateError = getIn(formikErrors, `projectEmployeeEndDate`);
+  const activityPeriodError = getIn(formikErrors, `projectEmployeeActivityDates`);
 
   return (
     <Grid container alignItems={'center'} mb={1}>
@@ -95,7 +80,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           </ListItemText>
         </Box>
       </Grid>
-      <Grid item xs={6} display={'flex'}>
+      <Grid item xs={6} display={'flex'} onBlur={handleBlur(`projectEmployees.${index}`)}>
         <Box mr={4}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
@@ -111,14 +96,12 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               format="YYYY/MM/DD"
               value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
               onChange={(newValue) => {
-                dayjs(newValue).isValid()
-                  ? setProjectEmployeeStartDate(dayjs(newValue).toISOString())
-                  : setProjectEmployeeStartDate('');
+                setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newValue?.toString());
               }}
               slotProps={{
                 textField: {
-                  error: isTouched && Boolean(startDateError),
-                  onBlur: handleBlur(`projectEmployees.${index}`),
+                  error: isTouched && Boolean(startDateError || activityPeriodError),
+                  helperText: isTouched && startDateError,
                 },
               }}
             />
@@ -140,13 +123,12 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
               value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
               onChange={(newValue) => {
-                dayjs(newValue).isValid()
-                  ? setProjectEmployeeEndDate(dayjs(newValue).toISOString())
-                  : setProjectEmployeeEndDate('');
+                setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newValue?.toString());
               }}
               slotProps={{
                 textField: {
-                  error: isTouched && Boolean(endDateError),
+                  error: isTouched && Boolean(endDateError || activityPeriodError),
+                  helperText: isTouched && endDateError,
                 },
               }}
             />
@@ -168,12 +150,12 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
       </Grid>
       <Grid item xs={5} />
       <Grid item xs={6}>
-        {isTouched && <Typography sx={{ color: '#d32f2f', fontSize: 12 }}>{startDateError}</Typography>}
-        {error && (
-          <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 1 }}>
-            {error.message}
+        <Typography sx={{ color: '#D32F2F', fontSize: 12 }}>{activityPeriodError}</Typography>
+        {apiError && (
+          <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 1 }}>
+            {apiError.message}
             <br />
-            {error.employmentDates.map((employmentDate, index) => {
+            {apiError.employmentDates.map((employmentDate, index) => {
               const hiringDate = dayjs(employmentDate.hiringDate).format('YYYY/MM/DD');
               const exitDate = employmentDate.exitDate
                 ? dayjs(employmentDate.exitDate).format('YYYY/MM/DD')
@@ -181,7 +163,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               return (
                 <span key={employmentDate.hiringDate}>
                   {hiringDate} - {exitDate}
-                  {index < error.employmentDates.length - 1 ? ',' : ''}
+                  {index < apiError.employmentDates.length - 1 ? ',' : ''}
                   <br />
                 </span>
               );
