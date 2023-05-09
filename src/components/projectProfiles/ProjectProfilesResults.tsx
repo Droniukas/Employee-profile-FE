@@ -67,7 +67,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const visibleDescriptionLength = width * 0.5;
+    const visibleDescriptionLength = width * 0.7;
     const isTextOverflow = project.description.length > visibleDescriptionLength;
 
     return (
@@ -89,8 +89,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               alignItems="center"
               sx={{
                 position: 'relative',
-                maxWidth: '80%',
-                marginRight: '250px',
+                maxWidth: '90%',
+                marginRight: '100px',
               }}
             >
               <Box
@@ -148,7 +148,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: '3',
+                    WebkitLineClamp: '4',
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
@@ -174,6 +174,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                 sx={{
                   position: 'relative',
                   left: 60,
+                  minWidth: '200px',
                 }}
               >
                 {renderEmployeesAvatarGroup(project.projectEmployees)}
