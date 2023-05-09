@@ -128,22 +128,25 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     });
 
     setTouched(newTouched);
-    setFieldValue('projectEmployees', sortedProjectEmployees);
+    setFieldValue('projectEmployees', sortedProjectEmployees, true);
   };
 
   const deleteProjectEmployee = useCallback(
     (projectEmployeeId: number) => {
-      // const index = values.projectEmployees.findIndex((pe) => pe.id === projectEmployeeId);
-      // if (values.projectEmployees[index + 1]) {
-      //   touched.
-      //   setFieldTouched(`projectEmployees.${index}`, getIn(touched, `projectEmployees.${index + 1}`));
-      // }
+      const deletedIndex = values.projectEmployees.findIndex((pe) => pe.id === projectEmployeeId);
+      const newTouched = {
+        ...touched,
+        projectEmployees: touched.projectEmployees?.filter((_, index) => index !== deletedIndex),
+      };
+
       const updatedProjectEmployees = values.projectEmployees.filter(
         (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
       );
-      setFieldValue('projectEmployees', updatedProjectEmployees);
+
+      setTouched(newTouched);
+      setFieldValue('projectEmployees', updatedProjectEmployees, true);
     },
-    [values.projectEmployees, setFieldValue],
+    [values.projectEmployees, setFieldValue, touched, setTouched],
   );
 
   useEffect(() => {
