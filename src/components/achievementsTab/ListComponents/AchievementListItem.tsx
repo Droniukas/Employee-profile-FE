@@ -219,7 +219,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     }}
                     disableFuture
                     label={'MON, YYYY'}
-                    views={['month', 'year']}
+                    views={['year', 'month']}
                     sx={{ width: 200, marginRight: 7 }}
                     value={achievementIssueDateExists ? dayjs(achievement.issueDate) : dayjs(issueDate)}
                     onChange={(newValue) => {
@@ -256,7 +256,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
-                          views={['month', 'year']}
+                          views={['year', 'month']}
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists ? dayjs(expiringDate) : dayjs(issueDate)}
                           onChange={(newValue) => {
