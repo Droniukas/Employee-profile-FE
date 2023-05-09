@@ -1,7 +1,9 @@
 import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, enUS, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import 'dayjs/locale/en';
+// import 'dayjs/plugin/localizedFormat';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -158,6 +160,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   //     expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
   //   />
   // ) : null}
+  // const localizedFormat = require('dayjs/plugin/localizedFormat');
+  // dayjs.extend(localizedFormat);
+  // dayjs().format('MMM, YYYY');
 
   return (
     <>
@@ -254,6 +259,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       right: 5,
                       '& fieldset': { border: '1px solid #DDDDDD', borderRadius: '8px', fontSize: 14 },
                       '& .MuiButtonBase-root': { color: 'primary.main' },
+                      '& .MuiDatePickerToolbar-root': { backgroundColor: 'red' },
+                      '& .MuiDatePickerToolbar-title': { backgroundColor: 'red' },
                       color: 'primary.main',
                     }}
                   >
@@ -308,16 +315,31 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       Expired date:
                     </Typography>
                     <Box sx={{ my: 1 }}>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        // adapterLocale={en}
+                        localeText={enUS.components.MuiLocalizationProvider.defaultProps.localeText}
+                      >
                         <DatePicker
                           // onKeyDown={(e) => {
                           //   e.preventDefault();
                           // }}
                           // disabled
-                          disableToolbar
+                          // disableToolbar
+                          // autoFocus
                           slotProps={{
                             ...(achievement.hasError && issueDateExists
                               ? {
+                                  toolbar: { toolbarFormat: 'MM YYYY', hidden: false, toolbarPlaceholder: null },
+                                  field: {
+                                    // defaultValue: '',
+                                    // value: '',
+                                    label: '',
+                                  },
+                                  InputAdornment: {
+                                    FormControlLabel: '',
+                                  },
+                                  localeText: { clearButtonLabel: 'test' },
                                   textField: {
                                     size: 'small',
                                     error: true,
@@ -327,9 +349,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                       // label: 'aa',
                                     },
                                     InputProps: {
+                                      readOnly: true,
                                       placeholder: ' ',
                                       label: ' ',
                                     },
+                                    value: ' ',
                                   },
                                 }
                               : {
