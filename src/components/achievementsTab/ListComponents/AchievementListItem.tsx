@@ -120,6 +120,45 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
   } else {
     issueDateMessage = 'Both are invalid';
   }
+
+  let errorMessage = null;
+
+  if (achievement.hasError && (issueDate === null || issueDate === undefined)) {
+    errorMessage = (
+      <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
+    );
+  } else if (isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate))) {
+    errorMessage = (
+      <AchievementListItemErrorText
+        issueDateErrorMessage={''}
+        expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
+      />
+    );
+  } else if (isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1) {
+    errorMessage = (
+      <AchievementListItemErrorText
+        issueDateErrorMessage={''}
+        expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
+      />
+    );
+  } else {
+    errorMessage = null;
+  }
+
+  // {(achievement.hasError && (issueDate === null || issueDate === undefined)) ? (
+  //   <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
+  // ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
+  //   <AchievementListItemErrorText
+  //     issueDateErrorMessage={''}
+  //     expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
+  //   />
+  // ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
+  //   <AchievementListItemErrorText
+  //     issueDateErrorMessage={''}
+  //     expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
+  //   />
+  // ) : null}
+
   return (
     <>
       <Box>
@@ -253,7 +292,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       }}
                       disableFuture
                       format="MMM, YYYY"
-                      views={['month', 'year']}
+                      views={['year', 'month']}
                       sx={{ width: 150, marginRight: 7, top: -60, color: 'primary.main', fontSize: 14 }}
                       value={achievementIssueDateExists ? dayjs(achievement.issueDate) : null}
                       onChange={(newValue) => {
@@ -271,6 +310,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     <Box sx={{ my: 1 }}>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
+                          // onKeyDown={(e) => {
+                          //   e.preventDefault();
+                          // }}
+                          // disabled
+                          disableToolbar
                           slotProps={{
                             ...(achievement.hasError && issueDateExists
                               ? {
@@ -279,6 +323,12 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                     error: true,
                                     InputLabelProps: {
                                       shrink: false,
+                                      placeholder: ' ',
+                                      // label: 'aa',
+                                    },
+                                    InputProps: {
+                                      placeholder: ' ',
+                                      label: ' ',
                                     },
                                   },
                                 }
@@ -294,10 +344,11 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           }}
                           sx={{ width: 150, top: -60, color: 'rgba(0, 0, 72, 0.37)' }}
                           format="MMM, YYYY"
-                          views={['month', 'year']}
+                          views={['year', 'month']}
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists && expiringDate !== null ? dayjs(expiringDate) : null}
                           onChange={(newValue) => {
+                            // newValue.preventDefault();
                             setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
                             wasChange = true;
                             setEndDateExists(true);
@@ -313,7 +364,8 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           ) : null
         ) : null}
         <Box sx={{ right: 0, position: 'relative' }}>
-          {achievement.hasError && (issueDate === null || issueDate === undefined) ? (
+          {errorMessage}
+          {/* {(achievement.hasError && (issueDate === null || issueDate === undefined)) ? (
             <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
           ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
             <AchievementListItemErrorText
@@ -325,7 +377,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
               issueDateErrorMessage={''}
               expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
             />
-          ) : null}
+          ) : null} */}
         </Box>
       </Box>
     </>
