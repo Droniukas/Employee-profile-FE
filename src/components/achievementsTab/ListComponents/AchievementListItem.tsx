@@ -1,19 +1,19 @@
 import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText, Typography } from '@mui/material';
-import { DatePicker, enUS, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import 'dayjs/locale/en';
-// import 'dayjs/plugin/localizedFormat';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { customUSLocale } from '../../../config/customUSLocale';
 import { Achievement } from '../../../models/Achievement.interface';
 import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
 import { achievementsTabStateRoot, OnCancelRoot } from '../../../store/types/achievements';
 import { UserStateRoot } from '../../../store/types/user';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
-import AchievementListItemErrorText from './AchievementListItemErrorText';
+import AchievementExpiringDateErrorText from './AchievementExpiringDateErrorText';
+import AchievementIssueDateErrorText from './AchievementIssueDateErrorText';
 
 type AchievementListItemProps = {
   achievement: Achievement;
@@ -123,46 +123,26 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
     issueDateMessage = 'Both are invalid';
   }
 
-  let errorMessage = null;
-
-  if (achievement.hasError && (issueDate === null || issueDate === undefined)) {
-    errorMessage = (
-      <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
-    );
-  } else if (isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate))) {
-    errorMessage = (
-      <AchievementListItemErrorText
-        issueDateErrorMessage={''}
-        expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
-      />
-    );
-  } else if (isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1) {
-    errorMessage = (
-      <AchievementListItemErrorText
-        issueDateErrorMessage={''}
-        expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
-      />
-    );
-  } else {
-    errorMessage = null;
-  }
-
-  // {(achievement.hasError && (issueDate === null || issueDate === undefined)) ? (
-  //   <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
-  // ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
-  //   <AchievementListItemErrorText
-  //     issueDateErrorMessage={''}
-  //     expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
-  //   />
-  // ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
-  //   <AchievementListItemErrorText
-  //     issueDateErrorMessage={''}
-  //     expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
-  //   />
-  // ) : null}
-  // const localizedFormat = require('dayjs/plugin/localizedFormat');
-  // dayjs.extend(localizedFormat);
-  // dayjs().format('MMM, YYYY');
+  const renderErrors = () => {
+    if (achievement.hasError && (issueDate === null || issueDate === undefined)) {
+      return <AchievementIssueDateErrorText />;
+    }
+    if (isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate))) {
+      return (
+        <AchievementExpiringDateErrorText
+          expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
+        />
+      );
+    }
+    if (isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1) {
+      return (
+        <AchievementExpiringDateErrorText
+          expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
+        />
+      );
+    }
+    return null;
+  };
 
   return (
     <>
@@ -197,10 +177,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           />
           <ListItemText
             sx={{
-              fontWeight: '400',
-              paddingLeft: '0px',
-              marginLeft: '0px',
-              color: 'primary.main',
               display: 'inline-flex',
             }}
           >
@@ -249,7 +225,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
           isChecked ? (
             <>
               <Box sx={{ width: '100%', position: 'absolute' }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="us" localeText={customUSLocale}>
                   <Box
                     marginX={2}
                     sx={{
@@ -315,45 +291,20 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       Expired date:
                     </Typography>
                     <Box sx={{ my: 1 }}>
-                      <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        // adapterLocale={en}
-                        localeText={enUS.components.MuiLocalizationProvider.defaultProps.localeText}
-                      >
+                      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="us" localeText={customUSLocale}>
                         <DatePicker
-                          // onKeyDown={(e) => {
-                          //   e.preventDefault();
-                          // }}
-                          // disabled
-                          // disableToolbar
-                          // autoFocus
                           slotProps={{
                             ...(achievement.hasError && issueDateExists
                               ? {
-                                  toolbar: { toolbarFormat: 'MM YYYY', hidden: false, toolbarPlaceholder: null },
-                                  field: {
-                                    // defaultValue: '',
-                                    // value: '',
-                                    label: '',
-                                  },
-                                  InputAdornment: {
-                                    FormControlLabel: '',
-                                  },
-                                  localeText: { clearButtonLabel: 'test' },
                                   textField: {
                                     size: 'small',
                                     error: true,
                                     InputLabelProps: {
                                       shrink: false,
-                                      placeholder: ' ',
-                                      // label: 'aa',
                                     },
                                     InputProps: {
                                       readOnly: true,
-                                      placeholder: ' ',
-                                      label: ' ',
                                     },
-                                    value: ' ',
                                   },
                                 }
                               : {
@@ -372,7 +323,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists && expiringDate !== null ? dayjs(expiringDate) : null}
                           onChange={(newValue) => {
-                            // newValue.preventDefault();
                             setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
                             wasChange = true;
                             setEndDateExists(true);
@@ -387,22 +337,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
             </>
           ) : null
         ) : null}
-        <Box sx={{ right: 0, position: 'relative' }}>
-          {errorMessage}
-          {/* {(achievement.hasError && (issueDate === null || issueDate === undefined)) ? (
-            <AchievementListItemErrorText issueDateErrorMessage={'Field is required'} expiringDateErrorMessage={''} />
-          ) : isErrorWhenDatesExists && dayjs(expiringDate).isBefore(dayjs(issueDate)) ? (
-            <AchievementListItemErrorText
-              issueDateErrorMessage={''}
-              expiringDateErrorMessage={'Expiring Date cannot be earlier than Issued Date.'}
-            />
-          ) : isErrorWhenDatesExists && dayjs(expiringDate).diff(dayjs(issueDate), 'year') < 1 ? (
-            <AchievementListItemErrorText
-              issueDateErrorMessage={''}
-              expiringDateErrorMessage={'Certificate activity period cannot be less than 1 year.'}
-            />
-          ) : null} */}
-        </Box>
+        <Box sx={{ right: 0, position: 'relative' }}>{renderErrors()}</Box>
       </Box>
     </>
   );
