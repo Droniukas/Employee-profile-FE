@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
@@ -25,7 +25,6 @@ type ProjectProfilesResultsProps = {
 
 const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { myProjects, getProjects, filterStatus } = props;
-  const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
@@ -43,8 +42,8 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
           responsibilities: inputValue,
         };
         try {
-          const addResponsibilitiesToMyProject = await projectsService.setProjectEmployeeResponsibilities(data);
-          setResponse(addResponsibilitiesToMyProject.data);
+          const addResponsibilitiesToMyProject = await projectsService.setMyProjectEmployeeResponsibilities(data);
+          addResponsibilitiesToMyProject.data;
           getProjects();
         } catch (error) {
           console.error(error);
