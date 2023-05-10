@@ -3,7 +3,7 @@ import './ProjectProfiles.scss';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import { ProjectsService } from '../../services/projects.service';
@@ -45,14 +45,15 @@ const ProjectProfiles = () => {
   };
 
   const filteredProjectsList = projects.filter((project) => {
-    if (filterTextValue === ProjectStatus.ONGOING) {
-      return project.status === ProjectStatus.ONGOING;
-    } else if (filterTextValue === ProjectStatus.FINISHED) {
-      return project.status === ProjectStatus.FINISHED;
-    } else if (filterTextValue === ProjectStatus.FUTURE) {
-      return project.status === ProjectStatus.FUTURE;
-    } else {
-      return project;
+    switch (filterTextValue) {
+      case ProjectStatus.ONGOING:
+        return project.status === ProjectStatus.ONGOING;
+      case ProjectStatus.FINISHED:
+        return project.status === ProjectStatus.FINISHED;
+      case ProjectStatus.FUTURE:
+        return project.status === ProjectStatus.FUTURE;
+      default:
+        return project;
     }
   });
 
@@ -62,21 +63,22 @@ const ProjectProfiles = () => {
 
   return (
     <div className="project-profiles-container">
-      <Stack direction="row">
+      <Stack direction="row" sx={{ width: '70vw' }}>
         <Stack
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 250,
-            left: -205,
+            width: 275,
+            right: 0,
           }}
         >
           <Box
             sx={{
               position: 'relative',
               left: 0,
+              paddingTop: 1,
             }}
           >
             <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
@@ -88,8 +90,9 @@ const ProjectProfiles = () => {
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 300,
-            left: -180,
+            width: '100%',
+            left: 0,
+            paddingTop: 1,
           }}
         >
           <Box
@@ -110,14 +113,14 @@ const ProjectProfiles = () => {
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 145,
-            left: 440,
+            width: 250,
+            right: 0,
           }}
         >
           <Box
             sx={{
-              position: 'relative',
-              left: 0,
+              position: 'absolute',
+              right: 0,
             }}
           >
             <Button
@@ -127,6 +130,9 @@ const ProjectProfiles = () => {
               onClick={() => setOpenPopup(true)}
               sx={{
                 my: 1,
+                padding: 1,
+                paddingLeft: 3,
+                paddingRight: 3,
               }}
             >
               Add new project
@@ -139,8 +145,8 @@ const ProjectProfiles = () => {
         sx={{
           position: 'relative',
           my: 2,
-          width: '70vw',
-          left: '-10.5vw',
+          width: '100%',
+          left: 0,
         }}
       >
         <ProjectProfilesResult
