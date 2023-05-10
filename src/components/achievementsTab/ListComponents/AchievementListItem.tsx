@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Achievement } from '../../../models/Achievement.interface';
 import { setAchievementWithErrorId } from '../../../states/achievementWithErrorId';
 import { updateChangedAchievement } from '../../../states/changedAchievements';
-import { OnCancelRoot, ViewAchievementStateRoot } from '../../../store/types/achievements';
+import { achievementsTabStateRoot, OnCancelRoot } from '../../../store/types/achievements';
 import { UserStateRoot } from '../../../store/types/user';
 import { AchievementsTabState } from '../../enums/AchievementsTabState';
 import AchievementListItemErrorText from './AchievementListItemErrorText';
@@ -22,7 +22,7 @@ let wasChange = false;
 
 const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (props: AchievementListItemProps) => {
   const { achievement } = props;
-  const viewState = useSelector((state: ViewAchievementStateRoot) => state.viewAchievementsState.value);
+  const viewState = useSelector((state: achievementsTabStateRoot) => state.achievementsTabState.value);
   const [issueDate, setIssueDate] = useState<string | null>();
   const [expiringDate, setExpiringDate] = useState<string | null>();
   const [isChecked, setChecked] = useState<boolean>(false);
@@ -219,7 +219,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     }}
                     disableFuture
                     label={'MON, YYYY'}
-                    views={['month', 'year']}
+                    views={['year', 'month']}
                     sx={{ width: 200, marginRight: 7 }}
                     value={achievementIssueDateExists ? dayjs(achievement.issueDate) : dayjs(issueDate)}
                     onChange={(newValue) => {
@@ -256,7 +256,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           }}
                           sx={{ width: 200 }}
                           label={'MON, YYYY'}
-                          views={['month', 'year']}
+                          views={['year', 'month']}
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists ? dayjs(expiringDate) : dayjs(issueDate)}
                           onChange={(newValue) => {

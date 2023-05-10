@@ -36,6 +36,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
 
+  const windowSize = useRef(window.innerWidth);
+  const width = windowSize.current * 0.2;
+
   const closeEditForm = () => {
     setOpenPopup(false);
     setProjectToEdit(null);
@@ -64,28 +67,30 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const isTextOverflow = project.description.length > 135;
+    const visibleDescriptionLength = width * 0.7;
+    const isTextOverflow = project.description.length > visibleDescriptionLength;
+
     return (
       <div key={project.id}>
         <ListItem
-          alignItems="flex-start"
+          alignItems="center"
           sx={{
             border: 1,
             borderColor: '#DDDDDD',
             borderRadius: 2,
-            backgroundColor: 'white',
             mb: 1,
+            backgroundColor: 'white',
           }}
         >
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
             <Stack
               direction="row"
               justifyContent="flex-start"
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 800,
-                left: 0,
+                maxWidth: '90%',
+                marginRight: '250px',
               }}
             >
               <Box
@@ -98,19 +103,20 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   height: 56,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  position: 'relative',
                 }}
               >
                 <FolderIcon
                   sx={{
                     color: 'primary.main',
                     fontSize: 26,
+                    width: 56,
                   }}
                 />
               </Box>
               <Box
                 sx={{
                   position: 'relative',
-                  width: 400,
                   left: 25,
                 }}
               >
@@ -122,8 +128,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   }}
                 >
                   <>
-                    {correctDateFormat(project.startDate)} -{' '}
-                    {project.endDate ? correctDateFormat(project.endDate) : 'Present'}
+                    {'From '} {correctDateFormat(project.startDate)}
+                    {project.endDate ? ' to ' + correctDateFormat(project.endDate) : ''}
                   </>
                 </Typography>
                 <Typography
@@ -141,11 +147,13 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: '3',
+                    WebkitLineClamp: '4',
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
-                  {!isTextOverflow ? project.description : project.description.substring(0, 135) + '...'}
+                  {!isTextOverflow
+                    ? project.description
+                    : project.description.substring(0, visibleDescriptionLength) + '...'}
                   <Button
                     onClick={() => setProject(project)}
                     sx={{
@@ -159,58 +167,59 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   </Button>
                 </Typography>
               </Box>
-              <Box
-                alignItems="flex-start"
-                display="flex"
-                sx={{
-                  position: 'relative',
-                  left: 70,
-                }}
-              >
-                {renderEmployeesAvatarGroup(project.projectEmployees)}
-              </Box>
             </Stack>
-            <Stack
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            sx={{
+              position: 'relative',
+              width: 215,
+              right: 190,
+              alignItems: 'center',
+            }}
+          >
+            <Box
+              alignItems="flex-start"
+              display="flex"
               sx={{
                 position: 'relative',
-                width: 544,
-                left: 0,
+                minWidth: '200px',
               }}
             >
-              {setStatusColors(project.status)}
-              <Box alignItems="flex-end" display="flex">
-                <IconButton
-                  ref={focusProjectId === project.id ? buttonToFocusRef : null}
-                  className="btn-edit"
-                  aria-label="edit"
-                  sx={{
-                    color: 'primary.main',
-                    position: 'relative',
-                    left: 320,
-                    backgroundColor: '#F4F4F4',
-                  }}
-                  onClick={() => setProject(project)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  className="btn-delete"
-                  aria-label="delete"
-                  sx={{
-                    color: 'primary.main',
-                    position: 'relative',
-                    left: 335,
-                    backgroundColor: '#F4F4F4',
-                  }}
-                  onClick={() => handleDeleteClick(project)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </Stack>
+              {renderEmployeesAvatarGroup(project.projectEmployees)}
+            </Box>
+            {setStatusColors(project.status)}
+            <Box alignItems="flex-end" display="flex">
+              <IconButton
+                ref={focusProjectId === project.id ? buttonToFocusRef : null}
+                className="btn-edit"
+                aria-label="edit"
+                sx={{
+                  color: 'primary.main',
+                  position: 'relative',
+                  left: 20,
+                  backgroundColor: '#F4F4F4',
+                }}
+                onClick={() => setProject(project)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                className="btn-delete"
+                aria-label="delete"
+                sx={{
+                  color: 'primary.main',
+                  position: 'relative',
+                  left: 35,
+                  backgroundColor: '#F4F4F4',
+                }}
+                onClick={() => handleDeleteClick(project)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
           </Stack>
         </ListItem>
       </div>
@@ -218,11 +227,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const correctDateFormat = (date: string) => {
-    if (date === null) {
-      return null;
-    } else {
-      return moment(date).format('YYYY/MM/DD');
-    }
+    return date === null ? null : moment(date).format('YYYY/MM/DD');
   };
 
   const renderEmployeesAvatarGroup = (employees: ProjectEmployee[]) => {
@@ -296,7 +301,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           sx={{
             justifyContent: 'center',
             alignItems: 'center',
-            width: 90,
+            minWidth: 90,
             height: 28,
             position: 'relative',
             left: 0,
@@ -328,7 +333,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           >
             {filterStatus === 'All'
               ? 'No projects added.'
-              : "No '" + filterStatus + "' projects found. Check the filter settings."}
+              : `No '${filterStatus}' projects found. Check the filter settings.`}
           </Typography>
         </ListItem>
       </List>

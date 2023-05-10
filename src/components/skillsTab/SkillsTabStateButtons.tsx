@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ROUTES } from '../../routes/routes';
 import { setSkillsTabState } from '../../states/skillsTabState';
-import { ViewSkillStateRoot } from '../../store/types/skills';
+import { SkillsTabStateRoot } from '../../store/types/skills';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import { StyleVariants } from '../enums/StyleVariants';
 
@@ -22,7 +22,7 @@ const SkillsTabStateButtons: React.FunctionComponent<SkillsTabStateButtonsProps>
     dispatch(setSkillsTabState());
   };
 
-  const viewState = useSelector((state: ViewSkillStateRoot) => state.viewSkillsState.value);
+  const viewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   return (

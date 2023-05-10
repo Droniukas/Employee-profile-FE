@@ -1,20 +1,7 @@
 import './ProjectForm.scss';
 
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  InputLabel,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Checkbox, Dialog, Divider, InputLabel, Link, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AxiosError } from 'axios';
@@ -29,6 +16,7 @@ import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { projectEmployeeSchema } from '../../schemas/projectEmployeeSchema';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
 
@@ -191,20 +179,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
-      <Dialog open={confirmationDialog} maxWidth="xl">
-        <DialogTitle>Confirm exit</DialogTitle>
-        <DialogContent>
-          <Typography>Changes will be lost, are you sure you want to leave?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmationDialog(false)} color="error" variant="contained">
-            Cancel
-          </Button>
-          <Button onClick={() => onClose()} sx={{ m: 1 }} variant="contained">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmationDialog
+        open={confirmationDialog}
+        onCancel={() => setConfirmationDialog(false)}
+        onConfirm={() => onClose()}
+      />
 
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
         <Button
@@ -298,7 +277,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                sx={{ width: 300 }}
+                sx={{
+                  width: 170,
+                  '& .MuiInputBase-input': {
+                    height: 10,
+                  },
+                }}
                 format="YYYY/MM/DD"
                 value={values.startDate ? dayjs(values.startDate) : null}
                 onChange={(newValue) => {
@@ -340,7 +324,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                sx={{ width: 300 }}
+                sx={{
+                  width: 170,
+                  '& .MuiInputBase-input': {
+                    height: 10,
+                  },
+                }}
                 format="YYYY/MM/DD"
                 minDate={dayjs(values.startDate)}
                 value={values.endDate ? dayjs(values.endDate) : null}

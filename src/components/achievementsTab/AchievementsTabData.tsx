@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -12,11 +12,26 @@ import { triggerOnCancel } from '../../states/onCancel';
 import store from '../../store/store';
 import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
 import { UserStateRoot } from '../../store/types/user';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
-const AchievementsTabData = () => {
-  const [achievementsData, setAchievementsData] = useState<Array<Achievement>>([]);
+type AchievementsTabDataProps = {
+  confirmationDialogOpen: boolean;
+  confirmationDialogOnCancel: () => void;
+  confirmationDialogOnConfirm: () => void;
+  achievementsData: Achievement[];
+  setAchievementsData: React.Dispatch<React.SetStateAction<Achievement[]>>;
+};
+
+const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (props) => {
+  const {
+    confirmationDialogOnCancel,
+    confirmationDialogOnConfirm,
+    confirmationDialogOpen,
+    achievementsData,
+    setAchievementsData,
+  } = props;
   const achievementsService = new AchievementsService();
   const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
@@ -119,9 +134,14 @@ const AchievementsTabData = () => {
 
   return (
     <>
-      {achievementsData ? (
+      {achievementsData && (
         <AchievementsTab achievementsData={achievementsData} saveFunction={handleSave} cancelFunction={handleCancel} />
-      ) : null}
+      )}
+      <ConfirmationDialog
+        open={confirmationDialogOpen}
+        onCancel={confirmationDialogOnCancel}
+        onConfirm={confirmationDialogOnConfirm}
+      />
     </>
   );
 };

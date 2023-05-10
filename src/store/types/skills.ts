@@ -13,8 +13,8 @@ export interface ChangedSkillsDataRoot {
   };
 }
 
-export interface ViewSkillStateRoot {
-  viewSkillsState: {
+export interface SkillsTabStateRoot {
+  skillsTabState: {
     value: SkillsTabState;
   };
 }
