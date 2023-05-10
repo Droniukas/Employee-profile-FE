@@ -17,10 +17,10 @@ const MyProjectProfiles = () => {
   const projectsService = new ProjectsService();
 
   useEffect(() => {
-    rerenderProjects();
+    getMyProjects();
   }, []);
 
-  const rerenderProjects = async () => {
+  const getMyProjects = async () => {
     const myProjects = await projectsService.getMyProjects();
     setProjects(myProjects);
   };
@@ -74,7 +74,7 @@ const MyProjectProfiles = () => {
       >
         <MyProjectProfilesResults
           myProjects={filteredProjectsList}
-          rerender={rerenderProjects}
+          getProjects={getMyProjects}
           filterStatus={filterTextValue}
         />
       </Box>

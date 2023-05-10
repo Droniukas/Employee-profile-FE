@@ -19,12 +19,12 @@ import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
 type ProjectProfilesResultsProps = {
   myProjects: MyProject[];
-  rerender: () => void;
+  getProjects: () => void;
   filterStatus: string;
 };
 
 const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { myProjects, rerender, filterStatus } = props;
+  const { myProjects, getProjects, filterStatus } = props;
   const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const user = useSelector((state: UserStateRoot) => state.userState.value);
@@ -45,7 +45,7 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
         try {
           const addResponsibilitiesToMyProject = await projectsService.setProjectEmployeeResponsibilities(data);
           setResponse(addResponsibilitiesToMyProject.data);
-          rerender();
+          getProjects();
         } catch (error) {
           console.error(error);
         }
