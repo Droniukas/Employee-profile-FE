@@ -23,7 +23,7 @@ type ProjectProfilesResultsProps = {
   filterStatus: string;
 };
 
-const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
+const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
   const { myProjects, rerender, filterStatus } = props;
   const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
@@ -252,4 +252,4 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
   }
 };
 
-export default MyProjectProfilesResult;
+export default MyProjectProfilesResults;

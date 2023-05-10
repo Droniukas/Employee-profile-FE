@@ -8,7 +8,7 @@ import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
-import MyProjectProfilesResult from './MyProjectProfilesResults';
+import MyProjectProfilesResults from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
@@ -72,7 +72,7 @@ const MyProjectProfiles = () => {
           left: -205,
         }}
       >
-        <MyProjectProfilesResult
+        <MyProjectProfilesResults
           myProjects={filteredProjectsList}
           rerender={rerenderProjects}
           filterStatus={filterTextValue}

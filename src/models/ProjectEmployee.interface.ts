@@ -4,7 +4,6 @@ interface ProjectEmployee {
   surname: string;
   middleName: string;
   title: string;
-  responsibilities?: string;
   imageType: string;
   imageBytes: string;
   projectEmployeeStartDate: string;
