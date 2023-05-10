@@ -9,34 +9,29 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
-import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
-import { EmployeeService } from '../../services/employee.service';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import MyProjectEdit from './MyProjectEdit';
 
 type ProjectProfilesResultsProps = {
-  myProject: MyProject[];
+  myProjects: MyProject[];
   rerender: () => void;
   filterStatus: string;
 };
 
-const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { myProject, rerender, filterStatus } = props;
-
+const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
+  const { myProjects, rerender, filterStatus } = props;
   const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  const [employeeId, setEmployeeById] = useState<Employee>();
   const [response, setResponse] = useState();
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
-
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
-  const employeeService = new EmployeeService();
 
   const closeEditForm = () => {
     setOpenPopup(false);
@@ -47,14 +42,6 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
     setProjectToEdit(MyProject);
     setOpenPopup(true);
   };
-
-  const getEmployeeById = async (id: string) => {
-    const employeeId = await employeeService.getById(id);
-    setEmployeeById(employeeId);
-  };
-  useEffect(() => {
-    getEmployeeById(`${userId}`);
-  }, []);
   const renderResultItem = (myProject: MyProject) => {
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
@@ -68,8 +55,9 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
           responsibilities: inputValue,
         };
         try {
-          const addResponsibilitiesToMyProject = await projectsService.addResponsibilitiesToProjectEmployee(data);
+          const addResponsibilitiesToMyProject = await projectsService.setProjectEmployeeResponsibilities(data);
           setResponse(addResponsibilitiesToMyProject.data);
+          rerender();
         } catch (error) {
           console.error(error);
         }
@@ -158,6 +146,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                   sx={{
                     color: '#666666',
                     fontSize: 14,
+                    whiteSpace: 'pre-wrap',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: '5',
@@ -182,7 +171,9 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       </Typography>
                     </InputLabel>
                     {myProject.responsibilities ? (
-                      <Typography sx={{ fontSize: 14, color: '#666666' }}>{myProject.responsibilities}</Typography>
+                      <Typography sx={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#666666' }}>
+                        {myProject.responsibilities}
+                      </Typography>
                     ) : (
                       <TextField
                         hiddenLabel
@@ -203,7 +194,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
                       fontWeight: 500,
                     }}
                   >
-                    {employeeId?.title}
+                    {user.title}
                   </Typography>
                 </Box>
               </Box>
@@ -248,7 +239,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
     }
   };
 
-  if (!myProject.length) {
+  if (!myProjects.length) {
     return (
       <List
         sx={{
@@ -278,11 +269,11 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
             width: '100%',
           }}
         >
-          {myProject.map((myProject) => renderResultItem(myProject))}
+          {myProjects.map((myProject) => renderResultItem(myProject))}
         </List>
       </>
     );
   }
 };
 
-export default MyProjectProfilesResult;
+export default MyProjectProfilesResults;

@@ -2,11 +2,11 @@ import Box from '@mui/material/Box';
 
 import { ProjectStatus } from '../enums/ProjectStatus';
 
-interface Project {
+interface ProjectStatusColorProps {
   projectStatus: string;
 }
 
-const ProjectStatusColor = (props: Project) => {
+const ProjectStatusColor = (props: ProjectStatusColorProps) => {
   const { projectStatus } = props;
   let statusColor;
   let fontColor;

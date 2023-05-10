@@ -8,23 +8,19 @@ import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
-import MyProjectProfilesResult from './MyProjectProfilesResults';
+import MyProjectProfilesResults from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
-  const [filterTextValue, setFilterTextValue] = useState('All');
+  const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
   useEffect(() => {
-    getProjects();
+    rerenderProjects();
   }, []);
 
-  const rerenderProjects = () => {
-    getProjects();
-  };
-
-  const getProjects = async () => {
+  const rerenderProjects = async () => {
     const myProjects = await projectsService.getMyProjects();
     setProjects(myProjects);
   };
@@ -41,7 +37,7 @@ const MyProjectProfiles = () => {
     }
   });
 
-  const onFilterValueSelection = (filterValue: string) => {
+  const onFilterValueSelection = (filterValue: ProjectStatus) => {
     setFilterTextValue(filterValue);
   };
 
@@ -67,23 +63,6 @@ const MyProjectProfiles = () => {
             <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
           </Box>
         </Stack>
-        <Stack
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          sx={{
-            position: 'relative',
-            width: 145,
-            left: 440,
-          }}
-        >
-          <Box
-            sx={{
-              position: 'relative',
-              left: 0,
-            }}
-          ></Box>
-        </Stack>
       </Stack>
       <Box
         sx={{
@@ -93,8 +72,8 @@ const MyProjectProfiles = () => {
           left: -205,
         }}
       >
-        <MyProjectProfilesResult
-          myProject={filteredProjectsList}
+        <MyProjectProfilesResults
+          myProjects={filteredProjectsList}
           rerender={rerenderProjects}
           filterStatus={filterTextValue}
         />

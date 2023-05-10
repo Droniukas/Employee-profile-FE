@@ -1,15 +1,17 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, Checkbox, Dialog, Divider, InputLabel, TextField, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Box, Button, Dialog, Divider, InputLabel, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
+import moment from 'moment';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
 import { responsibilitiesSchema } from '../../schemas/myResponsibilitySchema';
 import { ProjectsService } from '../../services/projects.service';
+import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
 type ProjectFormProps = {
   onClose: (projectId?: number) => void;
@@ -22,6 +24,7 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(myProject?.endDate ? true : false);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   let initialValues: MyProject = {
     title: '',
@@ -44,6 +47,14 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       onClose();
     } catch (error: unknown) {
       /* empty */
+    }
+  };
+
+  const correctDateFormat = (date: string) => {
+    if (date === null) {
+      return null;
+    } else {
+      return moment(date).format('YYYY/MM/DD');
     }
   };
 
@@ -74,8 +85,153 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           <CloseIcon fontSize="medium" />
         </Button>
       </Box>
+      <Box component="form" sx={{ marginX: 5, marginY: 3 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            mb: 2,
+            fontWeight: 400,
+            fontSize: 25,
+            fontStyle: 'Regular',
+            color: 'primary.main',
+          }}
+        >
+          {myProject ? 'Edit your responsibilities' : 'Add your profile'}
+        </Typography>
+        <Box>
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
+          </InputLabel>
+          <Typography
+            sx={{
+              fontSize: 24,
+              fontWeight: 400,
+              color: 'primary.main',
+              '& fieldset': {
+                borderRadius: 2,
+              },
+            }}
+          >
+            {values.title}
+          </Typography>
+        </Box>
+        {/* description input */}
+        <Box
+          component="div"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            my: 2,
+          }}
+        >
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
+          </InputLabel>
+          <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{values.description}</Typography>
+        </Box>
+        <Box>
+          <Typography
+            sx={{
+              color: '#666666',
+              fontSize: 14,
+              pt: 1,
+            }}
+          ></Typography>
+        </Box>
+        <Box display={'flex'}>
+          <Box mr={4} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 12 }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Status</Typography>
+            </InputLabel>
+            <ProjectStatusColor projectStatus={myProject.status} />
+          </Box>
+          <Box marginX={8} sx={{ alignItems: 'center', position: 'relative', top: 12 }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Role</Typography>
+            </InputLabel>
+            <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
+              <>
+                {myProject.projectEmployeeStartDate && (
+                  <>
+                    {'From '}
+                    {correctDateFormat(myProject.projectEmployeeStartDate)}
+                  </>
+                )}
+                {myProject.projectEmployeeEndDate && (
+                  <>
+                    {' to '}
+                    {correctDateFormat(myProject.projectEmployeeEndDate)}
+                  </>
+                )}
+              </>
+            </Typography>
+          </Box>
+          <Box mr={10} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 12 }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Status</Typography>
+            </InputLabel>
+            <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{user.title}</Typography>
+          </Box>
+        </Box>
+        <Divider
+          sx={{
+            my: 2,
+            '&::before, &::after': {
+              borderColor: '999999',
+            },
+          }}
+        ></Divider>
+        <Box
+          component="div"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            my: 2,
+          }}
+        >
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
+          </InputLabel>
+          <TextField
+            onBlur={handleBlur}
+            name={'responsibilities'}
+            hiddenLabel
+            onChange={handleChange}
+            variant="outlined"
+            value={values.responsibilities}
+            placeholder="Enter responsibilities..."
+            fullWidth
+            multiline
+            rows={8}
+            inputProps={{ maxLength: 2000 }}
+            sx={{
+              '& fieldset': {
+                borderRadius: 2,
+              },
+            }}
+          />
+        </Box>
+        <Divider />
+        <Box display={'flex'} justifyContent={'flex-end'}>
+          <Button
+            variant="contained"
+            color="info"
+            sx={{ m: 1 }}
+            onClick={() => {
+              dirty ? setConfirmationDialog(true) : onClose();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
+            Save
+          </Button>
+        </Box>
+      </Box>
 
-      <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
+      {/* <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
         <Typography
           variant="h1"
           sx={{
@@ -206,9 +362,9 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
         )}
         {/* Team member box */}
-      </Box>
+      {/* </Box> */}
       {/* Cancel/save Buttons */}
-      <Divider />
+      {/* <Divider />
       <Box display={'flex'} justifyContent={'flex-end'}>
         <Button
           variant="contained"
@@ -223,7 +379,7 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
           Save
         </Button>
-      </Box>
+      </Box> */}
     </Dialog>
   );
 };

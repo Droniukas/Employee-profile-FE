@@ -70,7 +70,7 @@ export class ProjectsService {
   }
 
   public async getMyProjects() {
-    const response = await axios.get(`/project/getProjectEmployeeBy/${this.userId}`);
+    const response = await axios.get(`/project/getMyProjectsByEmployee/${this.userId}`);
     response.data.map((myProject: MyProject) => {
       this.mapMyProjectStatus(myProject);
     });
@@ -78,27 +78,26 @@ export class ProjectsService {
   }
 
   public async updateProject2(myProject: FormikValues) {
-    const response = await axios.post('project/addResponsibilitiesToProjectEmployee', {
-      ...myProject,
-    });
+    console.log(myProject);
+    const { projectId, id, responsibilities } = myProject;
+    const data = {
+      projectId: projectId,
+      employeeId: id,
+      responsibilities: responsibilities,
+    };
+    const response = await axios.post('project/setMyProjectEmployeeResponsibilities', data);
+    console.log(data);
     return response.data;
   }
 
-  public async getResponsibilitiesFromProjectEmployee(projectId: number) {
-    const response = await axios.get(`project/responsibilities/${projectId}/${this.userId}`);
-    const plainText = response.data;
-    const responsibilities = plainText.split('\n').filter((line: string) => line.trim() !== '');
-    return responsibilities;
-  }
-
-  public async addResponsibilitiesToProjectEmployee(myProjectEmployee: MyProjectEmployee) {
+  public async setProjectEmployeeResponsibilities(myProjectEmployee: MyProjectEmployee) {
     const { projectId, employeeId, responsibilities } = myProjectEmployee;
     const data = {
       projectId: projectId,
       employeeId: employeeId,
       responsibilities: responsibilities,
     };
-    const response = await axios.post('project/addResponsibilitiesToProjectEmployee', data);
+    const response = await axios.post('project/setMyProjectEmployeeResponsibilities', data);
     return response.data;
   }
 }
