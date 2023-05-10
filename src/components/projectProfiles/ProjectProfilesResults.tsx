@@ -90,7 +90,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               sx={{
                 position: 'relative',
                 maxWidth: '90%',
-                marginRight: '100px',
+                marginRight: '250px',
               }}
             >
               <Box
@@ -168,17 +168,6 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   </Button>
                 </Typography>
               </Box>
-              <Box
-                alignItems="flex-start"
-                display="flex"
-                sx={{
-                  position: 'relative',
-                  left: 60,
-                  minWidth: '200px',
-                }}
-              >
-                {renderEmployeesAvatarGroup(project.projectEmployees)}
-              </Box>
             </Stack>
           </Stack>
           <Stack
@@ -188,10 +177,21 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
             sx={{
               position: 'relative',
               width: 215,
-              right: 30,
+              right: 190,
               alignItems: 'center',
             }}
           >
+            <Box
+              alignItems="flex-start"
+              display="flex"
+              sx={{
+                position: 'relative',
+                // left: 60,
+                minWidth: '200px',
+              }}
+            >
+              {renderEmployeesAvatarGroup(project.projectEmployees)}
+            </Box>
             {setStatusColors(project.status)}
             <Box alignItems="flex-end" display="flex">
               <IconButton
@@ -303,7 +303,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
           sx={{
             justifyContent: 'center',
             alignItems: 'center',
-            width: 90,
+            minWidth: 90,
             height: 28,
             position: 'relative',
             left: 0,
