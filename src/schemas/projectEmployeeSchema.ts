@@ -26,8 +26,8 @@ export const projectEmployeeSchema = (projectStartDate: string, projectEndDate: 
         'Team member activity dates should be within the project activity period',
         function () {
           return validateActivityDates(
-            dayjs(projectStartDate).isValid() ? dayjs(projectStartDate).toDate() : undefined,
-            dayjs(projectEndDate).isValid() ? dayjs(projectEndDate).toDate() : undefined,
+            dayjs(projectStartDate).isValid() ? dayjs(projectStartDate).startOf('day').toDate() : undefined,
+            dayjs(projectEndDate).isValid() ? dayjs(projectEndDate).startOf('day').toDate() : undefined,
             this.parent.projectEmployeeStartDate,
             this.parent.projectEmployeeEndDate,
           );

@@ -24,16 +24,30 @@ import { UserStateRoot } from '../../store/types/user';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
+  projectStartDate: string;
+  projectEndDate: string;
   index: number;
   isTouched: boolean;
   formikErrors: FormikErrors<ProjectEmployee>;
   apiError?: ProjectEmployeeError;
   setFieldValue: (field: string, value: string | undefined) => void;
+  setFieldTouched: (field: string, touched?: boolean | undefined, shouldValidate?: boolean | undefined) => void;
   onDelete: (projectEmployeeId: number) => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const { projectEmployee, index, isTouched, formikErrors, apiError, setFieldValue, onDelete } = props;
+  const {
+    projectEmployee,
+    projectStartDate,
+    projectEndDate,
+    index,
+    isTouched,
+    formikErrors,
+    apiError,
+    setFieldValue,
+    setFieldTouched,
+    onDelete,
+  } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
   const isInactiveOrDismissed = (status: string): boolean => {
@@ -80,7 +94,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
         </Box>
       </Grid>
       <Grid item xs={6} display={'flex'}>
-        <Box mr={4}>
+        <Box mr={4} onBlur={() => setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`)}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
           </InputLabel>
@@ -93,20 +107,21 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
                 },
               }}
               format="YYYY/MM/DD"
+              minDate={dayjs(projectStartDate)}
               value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
               onChange={(newValue) => {
                 setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newValue?.toString());
               }}
               slotProps={{
                 textField: {
-                  error: isTouched && Boolean(startDateError || activityPeriodError),
+                  error: Boolean(activityPeriodError) || (isTouched && Boolean(startDateError)),
                   helperText: isTouched && startDateError,
                 },
               }}
             />
           </LocalizationProvider>
         </Box>
-        <Box>
+        <Box onBlur={() => setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`)}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
           </InputLabel>
@@ -120,6 +135,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               }}
               format="YYYY/MM/DD"
               minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
+              maxDate={dayjs(projectEndDate)}
               value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
               onChange={(newValue) => {
                 setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newValue?.toString());

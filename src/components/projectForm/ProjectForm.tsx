@@ -337,6 +337,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           {values.projectEmployees.length > 0 ? (
             <ProjectEmployeeEditList
               projectEmployees={values.projectEmployees}
+              projectStartDate={projectStartDate}
+              projectEndDate={projectEndDate}
               formikErrors={getIn(errors, 'projectEmployees')}
               apiErrors={projectEmployeeErrors}
               touched={getIn(touched, 'projectEmployees')}

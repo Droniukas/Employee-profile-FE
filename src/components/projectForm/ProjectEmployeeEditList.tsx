@@ -8,6 +8,8 @@ import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
+  projectStartDate: string;
+  projectEndDate: string;
   formikErrors: FormikErrors<ProjectEmployee>;
   apiErrors: ProjectEmployeeError[];
   touched: FormikTouched<ProjectEmployee>;
@@ -16,8 +18,17 @@ type ProjectEmployeeEditListProps = {
   deleteProjectEmployee: (projectEmployeeId: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const { projectEmployees, formikErrors, apiErrors, touched, setFieldValue, setFieldTouched, deleteProjectEmployee } =
-    props;
+  const {
+    projectEmployees,
+    projectStartDate,
+    projectEndDate,
+    formikErrors,
+    apiErrors,
+    touched,
+    setFieldValue,
+    setFieldTouched,
+    deleteProjectEmployee,
+  } = props;
 
   useEffect(() => {
     if (apiErrors.length > 0) {
@@ -45,7 +56,6 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
             tabIndex={-1}
             onBlur={(event) => {
               event.currentTarget.style.backgroundColor = 'inherit';
-              setFieldTouched(`projectEmployees.${index}`, true, true);
             }}
             id={`project-employee-edit-item-${projectEmployee.id}`}
             sx={{
@@ -55,10 +65,13 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
             <ProjectEmployeeEditItem
               index={index}
               projectEmployee={projectEmployee}
+              projectStartDate={projectStartDate}
+              projectEndDate={projectEndDate}
               formikErrors={getIn(formikErrors, `${index}`)}
               apiError={apiErrors.find((error) => error.employeeId === projectEmployee.id)}
               isTouched={getIn(touched, `${index}`)}
               setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
               onDelete={deleteProjectEmployee}
             />
           </ListItem>
