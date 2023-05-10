@@ -117,7 +117,6 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               <Box
                 sx={{
                   position: 'relative',
-                  width: `${project.description + 500}px`,
                   left: 25,
                 }}
               >
@@ -186,7 +185,6 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
               display="flex"
               sx={{
                 position: 'relative',
-                // left: 60,
                 minWidth: '200px',
               }}
             >
