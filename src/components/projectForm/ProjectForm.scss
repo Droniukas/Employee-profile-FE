@@ -1,0 +1,14 @@
+.error-background {
+    border-radius: 10px;
+    animation-name: fade-background;
+    animation-duration: 2s;
+  }
+  
+  @keyframes fade-background {
+    from {
+      background-color: rgba(211, 47, 47, 0.3);
+    }
+    to {
+      background-color: transparent;
+    }
+  }

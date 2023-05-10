@@ -114,7 +114,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               }}
               slotProps={{
                 textField: {
-                  error: Boolean(activityPeriodError) || (isTouched && Boolean(startDateError)),
+                  error: Boolean(activityPeriodError) || (isTouched && Boolean(startDateError)) || false,
                   helperText: isTouched && startDateError,
                 },
               }}

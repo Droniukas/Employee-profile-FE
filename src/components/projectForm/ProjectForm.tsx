@@ -1,3 +1,5 @@
+import './ProjectForm.scss';
+
 import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
@@ -17,7 +19,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { getIn, useFormik } from 'formik';
+import { FormikErrors, getIn, useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 
@@ -43,12 +45,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
 
-  const [projectEmployeeErrors, setProjectEmployeeErrors] = useState<ProjectEmployeeError[]>([]);
+  const [projectEmployeeApiErrors, setProjectEmployeeApiErrors] = useState<ProjectEmployeeError[]>([]);
 
   let initialValues: Project = {
     title: '',
     description: '',
-    startDate: dayjs().toISOString(),
+    startDate: dayjs().startOf('day').toISOString(),
     endDate: '',
     projectEmployees: [],
     status: '',
@@ -73,8 +75,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {
-        const projectEmployeeErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
-        setProjectEmployeeErrors(projectEmployeeErrors);
+        const projectEmployeeApiErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
+        setProjectEmployeeApiErrors(projectEmployeeApiErrors);
       }
     }
   };
@@ -97,8 +99,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     handleChange,
     setFieldValue,
     setFieldTouched,
-    handleSubmit,
     setTouched,
+    isSubmitting,
+    handleSubmit,
   } = projectForm;
 
   const handleAddEmployeesFormClose = () => {
@@ -149,10 +152,42 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     [values.projectEmployees, setFieldValue, touched, setTouched],
   );
 
+  const focusElement = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          element.classList.add('error-background');
+        }, 500);
+      }, 250);
+      element.classList.remove('error-background');
+    }
+  };
+
   useEffect(() => {
     setProjectStartDate(values.startDate);
     setProjectEndDate(values.endDate);
   }, [values.startDate, values.endDate]);
+
+  useEffect(() => {
+    if (isSubmitting && errors) {
+      const firstElementWithErrorId = Object.keys(errors)[0];
+      if (firstElementWithErrorId === 'projectEmployees') {
+        const projectEmployeeErrors = errors.projectEmployees as FormikErrors<ProjectEmployee>[];
+        const firstErrorIndex = projectEmployeeErrors.findIndex((error) => error !== undefined);
+        focusElement(`projectEmployees${values.projectEmployees[firstErrorIndex].id}`);
+      } else {
+        focusElement(firstElementWithErrorId);
+      }
+    }
+  }, [isSubmitting, errors, values.projectEmployees]);
+
+  useEffect(() => {
+    if (projectEmployeeApiErrors.length > 0) {
+      focusElement(`projectEmployees${projectEmployeeApiErrors[0].employeeId}`);
+    }
+  }, [projectEmployeeApiErrors]);
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
@@ -208,6 +243,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             size="small"
             variant="outlined"
             name={'title'}
+            id={'title'}
             inputProps={{ maxLength: 50 }}
             sx={{
               '& fieldset': {
@@ -235,6 +271,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             error={touched.description && Boolean(errors.description)}
             helperText={touched.description && errors.description}
             name={'description'}
+            id={'description'}
             fullWidth
             multiline
             rows={8}
@@ -242,6 +279,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             placeholder="e.g., Give a short description about project background and expected outcome."
             inputProps={{ maxLength: 1000 }}
             sx={{
+              '& .MuiOutlinedInput-root': {
+                padding: 0,
+              },
+              '& textarea': {
+                padding: 2,
+              },
               '& fieldset': {
                 borderRadius: 2,
               },
@@ -249,7 +292,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           />
         </Box>
         <Box display={'flex'}>
-          <Box display={'inline-block'} onBlur={handleBlur('startDate')}>
+          <Box id={'startDate'} display={'inline-block'} onBlur={handleBlur('startDate')}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
             </InputLabel>
@@ -291,7 +334,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Box>
         </Box>
         {endDateExists && (
-          <Box sx={{ my: 2 }} onBlur={handleBlur('endDate')}>
+          <Box id={'endDate'} sx={{ my: 2 }} onBlur={handleBlur('endDate')}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
             </InputLabel>
@@ -340,7 +383,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
               projectStartDate={projectStartDate}
               projectEndDate={projectEndDate}
               formikErrors={getIn(errors, 'projectEmployees')}
-              apiErrors={projectEmployeeErrors}
+              apiErrors={projectEmployeeApiErrors}
               touched={getIn(touched, 'projectEmployees')}
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}

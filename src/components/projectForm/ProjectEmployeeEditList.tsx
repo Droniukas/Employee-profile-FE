@@ -1,6 +1,6 @@
 import { Divider, List, ListItem } from '@mui/material';
 import { FormikErrors, FormikTouched, getIn } from 'formik';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
@@ -10,7 +10,7 @@ type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
   projectStartDate: string;
   projectEndDate: string;
-  formikErrors: FormikErrors<ProjectEmployee>;
+  formikErrors: FormikErrors<ProjectEmployee>[];
   apiErrors: ProjectEmployeeError[];
   touched: FormikTouched<ProjectEmployee>;
   setFieldValue: (field: string, value: string | undefined) => void;
@@ -30,36 +30,15 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
     deleteProjectEmployee,
   } = props;
 
-  useEffect(() => {
-    if (apiErrors.length > 0) {
-      const firstProjectEmployeeWithErrorId = apiErrors[0].employeeId;
-      const firstErrorElement = document.getElementById(
-        `project-employee-edit-item-${firstProjectEmployeeWithErrorId}`,
-      );
-
-      if (firstErrorElement) {
-        firstErrorElement.style.backgroundColor = 'rgba(0, 0, 72, 0.02)';
-        firstErrorElement.style.outline = 'none';
-        firstErrorElement.focus({ preventScroll: true });
-        setTimeout(() => {
-          firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 200);
-      }
-    }
-  }, [apiErrors]);
-
   return (
     <List sx={{ marginTop: '8px' }}>
       {projectEmployees.map((projectEmployee, index) => (
         <React.Fragment key={projectEmployee.id}>
           <ListItem
-            tabIndex={-1}
-            onBlur={(event) => {
-              event.currentTarget.style.backgroundColor = 'inherit';
-            }}
-            id={`project-employee-edit-item-${projectEmployee.id}`}
+            id={`projectEmployees${projectEmployee.id}`}
             sx={{
               paddingX: 0.5,
+              outline: 'none',
             }}
           >
             <ProjectEmployeeEditItem

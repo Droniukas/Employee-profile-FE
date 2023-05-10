@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import * as yup from 'yup';
 
 export const projectSchema = yup.object({
@@ -9,7 +10,7 @@ export const projectSchema = yup.object({
     .typeError('Invalid date')
     .test('startDateBeforeEndDate', 'Start date can not be earlier than end date', function (projectStartDate) {
       const projectEndDate = this.parent.endDate;
-      if (!projectEndDate || !projectStartDate) {
+      if (!projectEndDate || !dayjs(projectEndDate).isValid() || !projectStartDate) {
         return true;
       }
       return projectStartDate <= projectEndDate;
