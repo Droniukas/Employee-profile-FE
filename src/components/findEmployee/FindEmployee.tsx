@@ -87,22 +87,17 @@ const FindEmployee = () => {
     setEmployeesCount(results.count);
   };
 
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      setPage(0);
+      getEmployees();
+      event.preventDefault();
+    }
+  };
+
   useEffect(() => {
     getSkillsCategories();
     getAchievementsCategories();
-
-    const keyDownHandler = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        setPage(0);
-        getEmployees();
-        event.preventDefault();
-      }
-    };
-    window.addEventListener('keydown', keyDownHandler);
-
-    return () => {
-      window.removeEventListener('keydown', keyDownHandler);
-    };
   }, []);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -129,7 +124,11 @@ const FindEmployee = () => {
             left: 0,
           }}
         >
-          <SearchInput placeholder="Search employees by name..." onChange={(value) => setInputValue(value)} />
+          <SearchInput
+            placeholder="Search employees by name, middle name or surname"
+            onChange={(value) => setInputValue(value)}
+            onKeyDown={keyDownHandler}
+          />
           <SearchDropdown
             id="skill-search-box"
             placeholder="Select skills"

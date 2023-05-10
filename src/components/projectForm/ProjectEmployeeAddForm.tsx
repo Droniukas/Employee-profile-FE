@@ -46,23 +46,16 @@ const ProjectEmployeeAddForm: React.FC<ProjectEmployeeAddFormProps> = (props: Pr
     onClose();
   };
 
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      getNonAddedEmployees();
+      event.preventDefault();
+    }
+  };
+
   useEffect(() => {
     getNonAddedEmployees();
   }, []);
-
-  useEffect(() => {
-    const keyDownHandler = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        getNonAddedEmployees();
-        event.preventDefault();
-      }
-    };
-    window.addEventListener('keydown', keyDownHandler);
-
-    return () => {
-      window.removeEventListener('keydown', keyDownHandler);
-    };
-  });
 
   return (
     <Dialog open={true} fullWidth maxWidth="sm">
@@ -85,10 +78,11 @@ const ProjectEmployeeAddForm: React.FC<ProjectEmployeeAddFormProps> = (props: Pr
           Add team members
         </Typography>
         <SearchInput
-          placeholder="Search employees by name..."
+          placeholder="Search employees by name, middle name or surname"
           onChange={(value) => {
             setSearchValue(value);
           }}
+          onKeyDown={keyDownHandler}
         />
         <ProjectEmployeeAddList employees={searchResult} onSelect={handleSelectionChange} />
       </Box>
