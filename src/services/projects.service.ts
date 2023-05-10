@@ -77,14 +77,14 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async addResponsibilitiesToProjectEmployee(myProjectEmployee: MyProjectEmployee) {
+  public async setProjectEmployeeResponsibilities(myProjectEmployee: MyProjectEmployee) {
     const { projectId, employeeId, responsibilities } = myProjectEmployee;
     const data = {
       projectId: projectId,
       employeeId: employeeId,
       responsibilities: responsibilities,
     };
-    const response = await axios.post('project/addResponsibilitiesToProjectEmployee', data);
+    const response = await axios.post('project/setProjectEmployeeResponsibilities', data);
     return response.data;
   }
 }

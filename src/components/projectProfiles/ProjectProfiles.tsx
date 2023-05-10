@@ -16,7 +16,7 @@ const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<number>();
-  const [filterTextValue, setFilterTextValue] = useState('All');
+  const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
@@ -56,7 +56,7 @@ const ProjectProfiles = () => {
     }
   });
 
-  const onFilterValueSelection = (filterValue: string) => {
+  const onFilterValueSelection = (filterValue: ProjectStatus) => {
     setFilterTextValue(filterValue);
   };
 

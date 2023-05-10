@@ -12,7 +12,7 @@ import MyProjectProfilesResult from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
-  const [filterTextValue, setFilterTextValue] = useState('All');
+  const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
@@ -37,7 +37,7 @@ const MyProjectProfiles = () => {
     }
   });
 
-  const onFilterValueSelection = (filterValue: string) => {
+  const onFilterValueSelection = (filterValue: ProjectStatus) => {
     setFilterTextValue(filterValue);
   };
 

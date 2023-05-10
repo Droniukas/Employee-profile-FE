@@ -43,7 +43,7 @@ const MyProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: P
           responsibilities: inputValue,
         };
         try {
-          const addResponsibilitiesToMyProject = await projectsService.addResponsibilitiesToProjectEmployee(data);
+          const addResponsibilitiesToMyProject = await projectsService.setProjectEmployeeResponsibilities(data);
           setResponse(addResponsibilitiesToMyProject.data);
           rerender();
         } catch (error) {
