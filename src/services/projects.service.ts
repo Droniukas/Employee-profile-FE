@@ -77,8 +77,7 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async updateProject2(myProject: FormikValues) {
-    console.log(myProject);
+  public async updateMyProject(myProject: FormikValues) {
     const { projectId, id, responsibilities } = myProject;
     const data = {
       projectId: projectId,
@@ -86,7 +85,6 @@ export class ProjectsService {
       responsibilities: responsibilities,
     };
     const response = await axios.post('project/setMyProjectEmployeeResponsibilities', data);
-    console.log(data);
     return response.data;
   }
 
