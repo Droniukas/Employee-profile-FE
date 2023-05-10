@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-// import { enEN as coreEnEN } from '@mui/material/locale';
 
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
@@ -69,7 +68,6 @@ const theme = createTheme({
       },
     },
   },
-  // enEN,
 });
 
 export default theme;
