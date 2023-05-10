@@ -15,17 +15,17 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
+import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
-type ProjectProfilesResultsProps = {
+type MyProjectProfilesResultsProps = {
   myProjects: MyProject[];
   getProjects: () => void;
   filterStatus: string;
 };
 
-const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
+const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props: MyProjectProfilesResultsProps) => {
   const { myProjects, getProjects, filterStatus } = props;
-  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
 
@@ -38,7 +38,7 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
         if (!inputValue) return;
         const data = {
           projectId: Number(myProject.id),
-          employeeId: Number(userId),
+          employeeId: Number(user.id),
           responsibilities: inputValue,
         };
         try {
@@ -229,7 +229,7 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
               fontSize: 20,
             }}
           >
-            {filterStatus === 'All'
+            {filterStatus === `${ProjectStatus.ALL}`
               ? 'No projects added.'
               : `No '${filterStatus}' projects found. Check the filter settings.`}
           </Typography>

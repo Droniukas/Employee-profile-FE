@@ -12,7 +12,7 @@ import MyProjectProfilesResults from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
-  const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
+  const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
