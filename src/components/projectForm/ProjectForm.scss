@@ -1,14 +1,17 @@
-.error-background {
-    border-radius: 10px;
-    animation-name: fade-background;
-    animation-duration: 2s;
+.field-error {
+  animation-name: fade-background !important;
+  animation-duration: 2s !important;
+}
+
+.field-error:not([id^='projectEmployees']) {
+  border-radius: 10px;
+}
+
+@keyframes fade-background {
+  from {
+    background-color: rgba(211, 47, 47, 0.3);
   }
-  
-  @keyframes fade-background {
-    from {
-      background-color: rgba(211, 47, 47, 0.3);
-    }
-    to {
-      background-color: transparent;
-    }
+  to {
+    background-color: transparent;
   }
+}

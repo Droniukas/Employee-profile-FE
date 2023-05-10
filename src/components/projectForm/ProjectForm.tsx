@@ -157,11 +157,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     if (element) {
       setTimeout(() => {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => {
-          element.classList.add('error-background');
-        }, 500);
       }, 250);
-      element.classList.remove('error-background');
+      setTimeout(() => {
+        element.classList.add('field-error');
+      }, 500);
+      element.classList.remove('field-error');
     }
   };
 
