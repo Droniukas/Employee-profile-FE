@@ -2,7 +2,7 @@ import '../projectProfiles/ProjectProfiles.scss';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
@@ -15,10 +15,6 @@ const MyProjectProfiles = () => {
   const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
-
-  useEffect(() => {
-    rerenderProjects();
-  }, []);
 
   const rerenderProjects = async () => {
     const myProjects = await projectsService.getMyProjects();
