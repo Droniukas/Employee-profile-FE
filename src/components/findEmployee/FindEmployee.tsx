@@ -120,7 +120,7 @@ const FindEmployee = () => {
           sx={{
             position: 'relative',
             my: 0.25,
-            width: 1344,
+            width: '70vw',
             left: 0,
           }}
         >

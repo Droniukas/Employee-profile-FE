@@ -62,15 +62,15 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
             mb: 1,
           }}
         >
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
             <Stack
               direction="row"
               justifyContent="flex-start"
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 800,
-                left: 0,
+                maxWidth: '90%',
+                marginRight: '250px',
               }}
             >
               <Box
@@ -83,19 +83,20 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   height: 56,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  position: 'relative',
                 }}
               >
                 <FolderIcon
                   sx={{
                     color: 'primary.main',
                     fontSize: 26,
+                    width: 56,
                   }}
                 />
               </Box>
               <Box
                 sx={{
                   position: 'relative',
-                  width: 600,
                   left: 25,
                 }}
               >
