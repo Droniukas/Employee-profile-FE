@@ -56,7 +56,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
 
   const startDateError = getIn(formikErrors, `projectEmployeeStartDate`);
   const endDateError = getIn(formikErrors, `projectEmployeeEndDate`);
-  const activityPeriodError = getIn(formikErrors, `projectEmployeeActivityDates`);
+  const activityPeriodError = getIn(formikErrors, `datesInActivityPeriod`);
 
   return (
     <Grid container alignItems={'center'} mb={1}>
@@ -94,7 +94,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
         </Box>
       </Grid>
       <Grid item xs={6} display={'flex'}>
-        <Box mr={4} onBlur={() => setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`)}>
+        <Box mr={4} onBlur={() => setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`)}>
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
           </InputLabel>
@@ -114,7 +114,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               }}
               slotProps={{
                 textField: {
-                  error: Boolean(activityPeriodError) || (isTouched && Boolean(startDateError)) || false,
+                  error:
+                    Boolean(isTouched && startDateError) ||
+                    Boolean(!startDateError && !endDateError && activityPeriodError),
                   helperText: isTouched && startDateError,
                 },
               }}
@@ -142,7 +144,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               }}
               slotProps={{
                 textField: {
-                  error: Boolean(endDateError || activityPeriodError),
+                  error: Boolean(endDateError) || Boolean(!startDateError && !endDateError && activityPeriodError),
                   helperText: endDateError,
                 },
               }}
@@ -150,7 +152,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           </LocalizationProvider>
         </Box>
       </Grid>
-      <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2.4 }}>
+      <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton
           className="btn-delete"
           aria-label="delete"
@@ -165,7 +167,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
       </Grid>
       <Grid item xs={5} />
       <Grid item xs={6}>
-        <Typography sx={{ color: '#D32F2F', fontSize: 12 }}>{activityPeriodError}</Typography>
+        <Typography sx={{ color: '#D32F2F', fontSize: 12 }}>
+          {!startDateError && !endDateError && activityPeriodError}
+        </Typography>
         {apiError && (
           <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 1 }}>
             {apiError.message}

@@ -36,6 +36,7 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
         <React.Fragment key={projectEmployee.id}>
           <ListItem
             id={`projectEmployees${projectEmployee.id}`}
+            tabIndex={-1}
             sx={{
               paddingX: 0.5,
               outline: 'none',

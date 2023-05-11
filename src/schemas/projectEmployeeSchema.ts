@@ -1,60 +1,42 @@
 import dayjs from 'dayjs';
 import * as yup from 'yup';
 
-export const projectEmployeeSchema = (projectStartDate: string, projectEndDate: string) =>
-  yup.object({
-    projectEmployeeStartDate: yup
-      .date()
-      .required('Start date is required')
-      .typeError('Invalid date')
-      .test(
-        'startDateBeforeEndDate',
-        'Start date can not be earlier than end date',
-        function (projectEmployeeStartDate) {
-          const projectEmployeeEndDate = this.parent.projectEmployeeEndDate;
-          if (!projectEmployeeEndDate || !dayjs(projectEmployeeEndDate).isValid() || !projectEmployeeStartDate) {
-            return true;
-          }
-          return projectEmployeeStartDate <= projectEmployeeEndDate;
-        },
-      ),
-    projectEmployeeEndDate: yup.date().nullable().typeError('Invalid date'),
-    projectEmployeeActivityDates: yup
-      .date()
-      .test(
-        'datesInProjectActivityPeriod',
-        'Team member activity dates should be within the project activity period',
-        function () {
-          return validateActivityDates(
-            dayjs(projectStartDate).isValid() ? dayjs(projectStartDate).startOf('day').toDate() : undefined,
-            dayjs(projectEndDate).isValid() ? dayjs(projectEndDate).startOf('day').toDate() : undefined,
-            this.parent.projectEmployeeStartDate,
-            this.parent.projectEmployeeEndDate,
-          );
-        },
-      ),
-  });
+export const projectEmployeeSchema = yup.object({
+  projectEmployeeStartDate: yup
+    .date()
+    .required('Start date is required')
+    .typeError('Invalid date')
+    .test('startDateBeforeEndDate', 'Start date can not be earlier than end date', function (projectEmployeeStartDate) {
+      const projectEmployeeEndDate = this.parent.projectEmployeeEndDate;
+      if (!projectEmployeeEndDate || !dayjs(projectEmployeeEndDate).isValid() || !projectEmployeeStartDate) {
+        return true;
+      }
+      return projectEmployeeStartDate <= projectEmployeeEndDate;
+    }),
+  projectEmployeeEndDate: yup.date().nullable().typeError('Invalid date'),
+  datesInActivityPeriod: yup
+    .string()
+    .test(
+      'datesInProjectActivityPeriod',
+      'Team member activity dates should be within the project activity period',
+      (_, context) => {
+        const projectEmployeeStartDate = context.parent.projectEmployeeStartDate;
+        const projectEmployeeEndDate = context.parent.projectEmployeeEndDate;
+        const projectStartDate = context.from?.[1].value.startDate
+          ? dayjs(context.from?.[1].value.startDate)
+          : undefined;
+        const projectEndDate = context.from?.[1].value.endDate ? dayjs(context.from?.[1].value.endDate) : undefined;
 
-const validateActivityDates = (
-  projectStartDate?: Date,
-  projectEndDate?: Date,
-  projectEmployeeStartDate?: Date,
-  projectEmployeeEndDate?: Date,
-) => {
-  if (
-    !projectEmployeeStartDate ||
-    !projectStartDate ||
-    !dayjs(projectEmployeeStartDate).isValid() ||
-    !dayjs(projectEmployeeEndDate).isValid() ||
-    (projectEmployeeEndDate && projectEmployeeEndDate < projectEmployeeStartDate)
-  ) {
-    return true;
-  } else if (
-    projectEmployeeStartDate < projectStartDate ||
-    (projectEndDate && projectEmployeeEndDate && projectEmployeeEndDate > projectEndDate) ||
-    (projectEndDate && !projectEmployeeEndDate)
-  ) {
-    return false;
-  }
-  return true;
-};
+        if (!projectEmployeeStartDate || !projectStartDate || (projectEndDate && projectEndDate < projectStartDate)) {
+          return true;
+        } else if (
+          projectEmployeeStartDate < projectStartDate ||
+          (projectEndDate && projectEmployeeEndDate && projectEmployeeEndDate > projectEndDate) ||
+          (projectEndDate && !projectEmployeeEndDate)
+        ) {
+          return false;
+        }
+        return true;
+      },
+    ),
+});

@@ -8,12 +8,10 @@ import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { FormikErrors, getIn, useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
-import * as yup from 'yup';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
-import { projectEmployeeSchema } from '../../schemas/projectEmployeeSchema';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
@@ -45,9 +43,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   };
   if (project) initialValues = project;
 
-  const [projectStartDate, setProjectStartDate] = useState<string>(initialValues.startDate);
-  const [projectEndDate, setProjectEndDate] = useState<string>(initialValues.endDate);
-
   const handleFormSubmit = async () => {
     let result;
     values.title.trim();
@@ -72,9 +67,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const projectForm = useFormik({
     initialValues,
     onSubmit: handleFormSubmit,
-    validationSchema: projectSchema.shape({
-      projectEmployees: yup.array().of(projectEmployeeSchema(projectStartDate, projectEndDate)),
-    }),
+    validationSchema: projectSchema,
     validateOnChange: false,
   });
 
@@ -83,12 +76,12 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     touched,
     errors,
     dirty,
+    isSubmitting,
     handleBlur,
     handleChange,
     setFieldValue,
     setFieldTouched,
     setTouched,
-    isSubmitting,
     handleSubmit,
   } = projectForm;
 
@@ -143,20 +136,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const focusElement = (elementId: string) => {
     const element = document.getElementById(elementId);
     if (element) {
-      setTimeout(() => {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 250);
+      element.focus();
       setTimeout(() => {
         element.classList.add('field-error');
-      }, 500);
+      }, 100);
       element.classList.remove('field-error');
     }
   };
-
-  useEffect(() => {
-    setProjectStartDate(values.startDate);
-    setProjectEndDate(values.endDate);
-  }, [values.startDate, values.endDate]);
 
   useEffect(() => {
     if (isSubmitting && errors) {
@@ -310,8 +296,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
               checked={endDateExists}
               onChange={(e) => {
                 setEndDateExists(e.target.checked);
-                setFieldValue('endDate', '');
-                setFieldTouched('endDate', true);
+                setFieldValue('endDate', '', true);
               }}
             />
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
@@ -369,8 +354,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           {values.projectEmployees.length > 0 ? (
             <ProjectEmployeeEditList
               projectEmployees={values.projectEmployees}
-              projectStartDate={projectStartDate}
-              projectEndDate={projectEndDate}
+              projectStartDate={values.startDate}
+              projectEndDate={values.endDate}
               formikErrors={getIn(errors, 'projectEmployees')}
               apiErrors={projectEmployeeApiErrors}
               touched={getIn(touched, 'projectEmployees')}
