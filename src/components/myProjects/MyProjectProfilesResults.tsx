@@ -60,6 +60,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
             borderRadius: 2,
             backgroundColor: 'white',
             mb: 1,
+            height: '100%',
           }}
         >
           <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
@@ -69,8 +70,8 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               alignItems="center"
               sx={{
                 position: 'relative',
-                maxWidth: '90%',
-                marginRight: '250px',
+                maxWidth: '75%',
+                marginRight: '100px',
               }}
             >
               <Box
@@ -128,12 +129,19 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: '5',
-                    WebkitBoxOrient: 'vertical',
                   }}
                 >
                   {myProject.description}
                 </Typography>
-                <Box>
+                <Box
+                  component="div"
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'realitive',
+                    my: 1,
+                  }}
+                >
                   <Box
                     component="div"
                     sx={{
@@ -155,6 +163,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                     ) : (
                       <TextField
                         hiddenLabel
+                        fullWidth
                         variant="standard"
                         onKeyPress={handleKeyPress}
                         placeholder="Enter responsibilities..."
@@ -183,8 +192,9 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 544,
-                left: 0,
+                width: 200,
+                right: 35,
+                alignItems: 'center',
               }}
             >
               <ProjectStatusColor projectStatus={myProject.status} />
@@ -194,8 +204,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   aria-label="edit"
                   sx={{
                     color: 'primary.main',
-                    position: 'relative',
-                    left: 320,
+                    left: '3vh',
                     backgroundColor: '#F4F4F4',
                   }}
                 >
