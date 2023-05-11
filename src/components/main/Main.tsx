@@ -27,6 +27,7 @@ import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import { AchievementsTabState } from '../enums/AchievementsTabState';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import FindEmployee from '../findEmployee/FindEmployee';
+import MyProjectProfiles from '../myProjects/MyProjectProfiles';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
@@ -283,7 +284,7 @@ const Main = () => {
                   path={ROUTES.MY_PROJECTS}
                   element={
                     <TabPanel value={currentRouteValue} index={2}>
-                      My projects
+                      <MyProjectProfiles />
                     </TabPanel>
                   }
                 />

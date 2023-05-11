@@ -16,7 +16,7 @@ const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<number>();
-  const [filterTextValue, setFilterTextValue] = useState('All');
+  const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
@@ -43,21 +43,13 @@ const ProjectProfiles = () => {
     await projectsService.deleteProjectById(id);
     setProjects(projects.filter((project) => project.id !== id));
   };
-
   const filteredProjectsList = projects.filter((project) => {
-    switch (filterTextValue) {
-      case ProjectStatus.ONGOING:
-        return project.status === ProjectStatus.ONGOING;
-      case ProjectStatus.FINISHED:
-        return project.status === ProjectStatus.FINISHED;
-      case ProjectStatus.FUTURE:
-        return project.status === ProjectStatus.FUTURE;
-      default:
-        return project;
-    }
+    if (filterTextValue !== ProjectStatus.ALL) {
+      return filterTextValue === project.status;
+    } else return true;
   });
 
-  const onFilterValueSelection = (filterValue: string) => {
+  const onFilterValueSelection = (filterValue: ProjectStatus) => {
     setFilterTextValue(filterValue);
   };
 
