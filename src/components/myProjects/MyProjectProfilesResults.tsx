@@ -70,8 +70,8 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               alignItems="center"
               sx={{
                 position: 'relative',
-                maxWidth: '75%',
-                marginRight: '100px',
+                maxWidth: '90%',
+                marginRight: '150px',
               }}
             >
               <Box
