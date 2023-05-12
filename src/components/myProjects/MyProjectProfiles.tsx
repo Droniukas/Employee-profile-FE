@@ -2,7 +2,7 @@ import '../projectProfiles/ProjectProfiles.scss';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';

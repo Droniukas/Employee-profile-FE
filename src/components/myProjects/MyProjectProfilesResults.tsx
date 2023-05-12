@@ -9,7 +9,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
@@ -35,7 +35,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   const closeEditForm = () => {
     setOpenPopup(false);
     setProjectToEdit(null);
-    rerender();
+    getProjects();
   };
   const setProject = (MyProject: MyProject) => {
     setProjectToEdit(MyProject);
@@ -81,6 +81,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               justifyContent="flex-start"
               alignItems="center"
               sx={{
+                width: '90%',
                 position: 'relative',
                 maxWidth: '90%',
                 marginRight: '150px',
@@ -109,6 +110,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               </Box>
               <Box
                 sx={{
+                  widht: 'auto',
                   position: 'relative',
                   left: 25,
                 }}
