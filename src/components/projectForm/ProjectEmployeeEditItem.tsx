@@ -93,85 +93,83 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           </ListItemText>
         </Box>
       </Grid>
-      <Grid item xs={5.5} display={'flex'}>
-        <Box>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
-          </InputLabel>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              sx={{
-                width: 170,
-                '& .MuiInputBase-input': {
-                  height: 10,
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderRadius: 2,
-                },
-              }}
-              format="YYYY/MM/DD"
-              minDate={dayjs(projectStartDate)}
-              maxDate={dayjs(projectEndDate)}
-              value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
-              onChange={(newValue) =>
-                setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newValue?.toString())
-              }
-              slotProps={{
-                textField: {
-                  error:
-                    Boolean(touched && startDateError) ||
-                    Boolean(!startDateError && !endDateError && activityPeriodError),
-                  onBlur: () => setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`),
-                },
-                popper: {
-                  onBlur: () =>
-                    setTimeout(() => {
-                      setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`);
-                    }, 100),
-                },
-              }}
-            />
-          </LocalizationProvider>
-        </Box>
-        <Box ml={'auto'}>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
-          </InputLabel>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              sx={{
-                width: 170,
-                '& .MuiInputBase-input': {
-                  height: 10,
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderRadius: 2,
-                },
-              }}
-              format="YYYY/MM/DD"
-              minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
-              maxDate={dayjs(projectEndDate)}
-              value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
-              onChange={(newValue) => {
-                setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newValue?.toString());
-              }}
-              slotProps={{
-                textField: {
-                  error: Boolean(endDateError) || Boolean(!startDateError && !endDateError && activityPeriodError),
-                  onBlur: () => setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`),
-                },
-                popper: {
-                  onBlur: () =>
-                    setTimeout(() => {
-                      setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`);
-                    }, 100),
-                },
-              }}
-            />
-          </LocalizationProvider>
-        </Box>
+      <Grid item xs={3}>
+        <InputLabel>
+          <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
+        </InputLabel>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            sx={{
+              width: 170,
+              '& .MuiInputBase-input': {
+                height: 10,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: 2,
+              },
+            }}
+            format="YYYY/MM/DD"
+            minDate={dayjs(projectStartDate)}
+            maxDate={dayjs(projectEndDate)}
+            value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
+            onChange={(newValue) =>
+              setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newValue?.toString())
+            }
+            slotProps={{
+              textField: {
+                error:
+                  Boolean(touched && startDateError) ||
+                  Boolean(!startDateError && !endDateError && activityPeriodError),
+                onBlur: () => setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`),
+              },
+              popper: {
+                onBlur: () =>
+                  setTimeout(() => {
+                    setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`);
+                  }, 100),
+              },
+            }}
+          />
+        </LocalizationProvider>
       </Grid>
-      <Grid item xs={1.5} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <Grid item xs={3}>
+        <InputLabel>
+          <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
+        </InputLabel>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            sx={{
+              width: 170,
+              '& .MuiInputBase-input': {
+                height: 10,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: 2,
+              },
+            }}
+            format="YYYY/MM/DD"
+            minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
+            maxDate={dayjs(projectEndDate)}
+            value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
+            onChange={(newValue) => {
+              setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newValue?.toString());
+            }}
+            slotProps={{
+              textField: {
+                error: Boolean(endDateError) || Boolean(!startDateError && !endDateError && activityPeriodError),
+                onBlur: () => setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`),
+              },
+              popper: {
+                onBlur: () =>
+                  setTimeout(() => {
+                    setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`);
+                  }, 100),
+              },
+            }}
+          />
+        </LocalizationProvider>
+      </Grid>
+      <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton
           className="btn-delete"
           aria-label="delete"
