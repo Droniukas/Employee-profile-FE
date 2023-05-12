@@ -12,25 +12,23 @@ import MyProjectProfilesResults from './MyProjectProfilesResults';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
-  const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
+  const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
-  const rerenderProjects = async () => {
+  useEffect(() => {
+    getMyProjects();
+  }, []);
+
+  const getMyProjects = async () => {
     const myProjects = await projectsService.getMyProjects();
     setProjects(myProjects);
   };
 
   const filteredProjectsList = myProjects.filter((myProject) => {
-    if (filterTextValue === ProjectStatus.ONGOING) {
-      return myProject.status === ProjectStatus.ONGOING;
-    } else if (filterTextValue === ProjectStatus.FINISHED) {
-      return myProject.status === ProjectStatus.FINISHED;
-    } else if (filterTextValue === ProjectStatus.FUTURE) {
-      return myProject.status === ProjectStatus.FUTURE;
-    } else {
-      return myProject;
-    }
+    if (filterTextValue !== ProjectStatus.ALL) {
+      return filterTextValue === myProject.status;
+    } else return true;
   });
 
   const onFilterValueSelection = (filterValue: ProjectStatus) => {
@@ -39,21 +37,22 @@ const MyProjectProfiles = () => {
 
   return (
     <div className="project-profiles-container">
-      <Stack direction="row">
+      <Stack direction="row" sx={{ width: '70vw' }}>
         <Stack
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 250,
-            left: -205,
+            width: 275,
+            right: 0,
           }}
         >
           <Box
             sx={{
               position: 'relative',
               left: 0,
+              paddingTop: 1,
             }}
           >
             <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
@@ -64,13 +63,13 @@ const MyProjectProfiles = () => {
         sx={{
           position: 'relative',
           my: 2,
-          width: 1344,
-          left: -205,
+          width: '100%',
+          left: 0,
         }}
       >
         <MyProjectProfilesResults
           myProjects={filteredProjectsList}
-          rerender={rerenderProjects}
+          getProjects={getMyProjects}
           filterStatus={filterTextValue}
         />
       </Box>

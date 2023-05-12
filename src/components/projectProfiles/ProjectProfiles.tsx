@@ -3,7 +3,7 @@ import './ProjectProfiles.scss';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import { ProjectsService } from '../../services/projects.service';
@@ -16,7 +16,7 @@ const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<number>();
-  const [filterTextValue, setFilterTextValue] = useState<`${ProjectStatus}`>(ProjectStatus.ALL);
+  const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
 
   const projectsService = new ProjectsService();
 
@@ -43,17 +43,10 @@ const ProjectProfiles = () => {
     await projectsService.deleteProjectById(id);
     setProjects(projects.filter((project) => project.id !== id));
   };
-
   const filteredProjectsList = projects.filter((project) => {
-    if (filterTextValue === ProjectStatus.ONGOING) {
-      return project.status === ProjectStatus.ONGOING;
-    } else if (filterTextValue === ProjectStatus.FINISHED) {
-      return project.status === ProjectStatus.FINISHED;
-    } else if (filterTextValue === ProjectStatus.FUTURE) {
-      return project.status === ProjectStatus.FUTURE;
-    } else {
-      return project;
-    }
+    if (filterTextValue !== ProjectStatus.ALL) {
+      return filterTextValue === project.status;
+    } else return true;
   });
 
   const onFilterValueSelection = (filterValue: ProjectStatus) => {
@@ -62,21 +55,22 @@ const ProjectProfiles = () => {
 
   return (
     <div className="project-profiles-container">
-      <Stack direction="row">
+      <Stack direction="row" sx={{ width: '70vw' }}>
         <Stack
           direction="row"
           justifyContent="flex-start"
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 250,
-            left: -205,
+            width: 275,
+            right: 0,
           }}
         >
           <Box
             sx={{
               position: 'relative',
               left: 0,
+              paddingTop: 1,
             }}
           >
             <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
@@ -88,8 +82,9 @@ const ProjectProfiles = () => {
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 300,
-            left: -180,
+            width: '100%',
+            left: 0,
+            paddingTop: 1,
           }}
         >
           <Box
@@ -110,14 +105,14 @@ const ProjectProfiles = () => {
           alignItems="center"
           sx={{
             position: 'relative',
-            width: 145,
-            left: 440,
+            width: 250,
+            right: 0,
           }}
         >
           <Box
             sx={{
-              position: 'relative',
-              left: 0,
+              position: 'absolute',
+              right: 0,
             }}
           >
             <Button
@@ -127,6 +122,9 @@ const ProjectProfiles = () => {
               onClick={() => setOpenPopup(true)}
               sx={{
                 my: 1,
+                padding: 1,
+                paddingLeft: 3,
+                paddingRight: 3,
               }}
             >
               Add new project
@@ -139,8 +137,8 @@ const ProjectProfiles = () => {
         sx={{
           position: 'relative',
           my: 2,
-          width: 1344,
-          left: -205,
+          width: '100%',
+          left: 0,
         }}
       >
         <ProjectProfilesResult

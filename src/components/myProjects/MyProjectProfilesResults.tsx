@@ -9,27 +9,26 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
+import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import MyProjectEdit from './MyProjectEdit';
 
-type ProjectProfilesResultsProps = {
+type MyProjectProfilesResultsProps = {
   myProjects: MyProject[];
-  rerender: () => void;
+  getProjects: () => void;
   filterStatus: string;
 };
 
-const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { myProjects, rerender, filterStatus } = props;
+const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props: MyProjectProfilesResultsProps) => {
+  const { myProjects, getProjects, filterStatus } = props;
   const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
-  const [response, setResponse] = useState();
-  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
   const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
 
@@ -51,13 +50,13 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
         if (!inputValue) return;
         const data = {
           projectId: Number(myProject.id),
-          employeeId: Number(userId),
+          employeeId: Number(user.id),
           responsibilities: inputValue,
         };
         try {
-          const addResponsibilitiesToMyProject = await projectsService.setProjectEmployeeResponsibilities(data);
-          setResponse(addResponsibilitiesToMyProject.data);
-          rerender();
+          const addResponsibilitiesToMyProject = await projectsService.setMyProjectEmployeeResponsibilities(data);
+          addResponsibilitiesToMyProject.data;
+          getProjects();
         } catch (error) {
           console.error(error);
         }
@@ -73,17 +72,18 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
             borderRadius: 2,
             backgroundColor: 'white',
             mb: 1,
+            height: '100%',
           }}
         >
-          <Stack direction="row">
+          <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
             <Stack
               direction="row"
               justifyContent="flex-start"
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 800,
-                left: 0,
+                maxWidth: '90%',
+                marginRight: '150px',
               }}
             >
               <Box
@@ -96,19 +96,20 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
                   height: 56,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  position: 'relative',
                 }}
               >
                 <FolderIcon
                   sx={{
                     color: 'primary.main',
                     fontSize: 26,
+                    width: 56,
                   }}
                 />
               </Box>
               <Box
                 sx={{
                   position: 'relative',
-                  width: 600,
                   left: 25,
                 }}
               >
@@ -150,12 +151,19 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: '5',
-                    WebkitBoxOrient: 'vertical',
                   }}
                 >
                   {myProject.description}
                 </Typography>
-                <Box>
+                <Box
+                  component="div"
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'realitive',
+                    my: 1,
+                  }}
+                >
                   <Box
                     component="div"
                     sx={{
@@ -177,6 +185,7 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
                     ) : (
                       <TextField
                         hiddenLabel
+                        fullWidth
                         variant="standard"
                         onKeyPress={handleKeyPress}
                         placeholder="Enter responsibilities..."
@@ -205,8 +214,9 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
               alignItems="center"
               sx={{
                 position: 'relative',
-                width: 544,
-                left: 0,
+                width: 200,
+                right: 35,
+                alignItems: 'center',
               }}
             >
               <ProjectStatusColor projectStatus={myProject.status} />
@@ -216,8 +226,7 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
                   aria-label="edit"
                   sx={{
                     color: 'primary.main',
-                    position: 'relative',
-                    left: 320,
+                    left: '3vh',
                     backgroundColor: '#F4F4F4',
                   }}
                   onClick={() => setProject(myProject)}
@@ -253,7 +262,7 @@ const MyProjectProfilesResults: React.FC<ProjectProfilesResultsProps> = (props: 
               fontSize: 20,
             }}
           >
-            {filterStatus === 'All'
+            {filterStatus === `${ProjectStatus.ALL}`
               ? 'No projects added.'
               : `No '${filterStatus}' projects found. Check the filter settings.`}
           </Typography>
