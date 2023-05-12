@@ -116,21 +116,21 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   };
 
   const deleteProjectEmployee = useCallback(
-    (projectEmployeeId: number) => {
-      const deletedIndex = values.projectEmployees.findIndex((pe) => pe.id === projectEmployeeId);
+    (index: number) => {
       const newTouched = {
         ...touched,
-        projectEmployees: touched.projectEmployees?.filter((_, index) => index !== deletedIndex),
+        projectEmployees: touched.projectEmployees?.filter((_, idx) => idx !== index),
       };
 
-      const updatedProjectEmployees = values.projectEmployees.filter(
-        (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
-      );
+      const newProjectEmployees = [
+        ...values.projectEmployees.slice(0, index),
+        ...values.projectEmployees.slice(index + 1),
+      ];
 
       setTouched(newTouched);
-      setFieldValue('projectEmployees', updatedProjectEmployees, true);
+      setFieldValue('projectEmployees', newProjectEmployees, true);
     },
-    [values.projectEmployees, setFieldValue, touched, setTouched],
+    [values.projectEmployees, touched, setTouched, setFieldValue],
   );
 
   const focusElement = (elementId: string) => {
@@ -257,41 +257,41 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           />
         </Box>
         <Box display={'flex'}>
-          <Box id={'startDate'} display={'inline-block'} onBlur={handleBlur('startDate')}>
+          <Box display={'inline-block'}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{
-                  width: 170,
-                  '& .MuiInputBase-input': {
-                    height: 10,
-                  },
-                }}
-                format="YYYY/MM/DD"
-                value={values.startDate ? dayjs(values.startDate) : null}
-                onChange={(newValue) => {
-                  setFieldValue('startDate', newValue?.toString());
-                }}
-                slotProps={{
-                  textField: {
-                    error: Boolean(errors.startDate),
-                    helperText: errors.startDate,
-                  },
-                }}
-              />
+              <Box id={'startDate'}>
+                <DatePicker
+                  sx={{
+                    width: 170,
+                    '& .MuiInputBase-input': {
+                      height: 10,
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderRadius: 2,
+                    },
+                  }}
+                  format="YYYY/MM/DD"
+                  value={values.startDate ? dayjs(values.startDate) : null}
+                  onChange={(newValue) => {
+                    setFieldValue('startDate', newValue?.toString());
+                  }}
+                  slotProps={{
+                    textField: {
+                      error: Boolean(errors.startDate),
+                      onBlur: () => setFieldTouched('startDate'),
+                    },
+                    popper: {
+                      onBlur: () => setFieldTouched('startDate'),
+                    },
+                  }}
+                />
+              </Box>
             </LocalizationProvider>
           </Box>
-          <Box
-            marginX={2}
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              position: 'relative',
-              top: errors.startDate ? 0 : 11.5,
-            }}
-          >
+          <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
             <Checkbox
               checked={endDateExists}
               onChange={(e) => {
@@ -302,33 +302,43 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
           </Box>
         </Box>
+        <Typography sx={{ color: '#D32F2F', fontSize: 12, width: 170, mt: 0.4 }}>{errors.startDate}</Typography>
         {endDateExists && (
-          <Box id={'endDate'} sx={{ my: 2 }} onBlur={handleBlur('endDate')}>
+          <Box sx={{ my: 2 }}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
             </InputLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{
-                  width: 170,
-                  '& .MuiInputBase-input': {
-                    height: 10,
-                  },
-                }}
-                format="YYYY/MM/DD"
-                minDate={dayjs(values.startDate)}
-                value={values.endDate ? dayjs(values.endDate) : null}
-                onChange={(newValue) => {
-                  setFieldValue('endDate', newValue?.toString());
-                }}
-                slotProps={{
-                  textField: {
-                    error: Boolean(errors.endDate),
-                    helperText: errors.endDate,
-                  },
-                }}
-              />
+              <Box id={'endDate'} width={170}>
+                <DatePicker
+                  sx={{
+                    width: 170,
+                    '& .MuiInputBase-input': {
+                      height: 10,
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderRadius: 2,
+                    },
+                  }}
+                  format="YYYY/MM/DD"
+                  minDate={dayjs(values.startDate)}
+                  value={values.endDate ? dayjs(values.endDate) : null}
+                  onChange={(newValue) => {
+                    setFieldValue('endDate', newValue?.toString());
+                  }}
+                  slotProps={{
+                    textField: {
+                      error: Boolean(errors.endDate),
+                      onBlur: () => setFieldTouched('endDate'),
+                    },
+                    popper: {
+                      onBlur: () => setFieldTouched('endDate'),
+                    },
+                  }}
+                />
+              </Box>
             </LocalizationProvider>
+            <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 0.4 }}>{errors.endDate}</Typography>
           </Box>
         )}
         {/* Team member box */}

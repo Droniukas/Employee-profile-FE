@@ -12,10 +12,10 @@ type ProjectEmployeeEditListProps = {
   projectEndDate: string;
   formikErrors: FormikErrors<ProjectEmployee>[];
   apiErrors: ProjectEmployeeError[];
-  touched: FormikTouched<ProjectEmployee>;
+  touched: FormikTouched<ProjectEmployee>[];
   setFieldValue: (field: string, value: string | undefined) => void;
-  setFieldTouched: (field: string, touched?: boolean | undefined, shouldValidate?: boolean | undefined) => void;
-  deleteProjectEmployee: (projectEmployeeId: number) => void;
+  setFieldTouched: (field: string) => void;
+  deleteProjectEmployee: (projectEmployeeIndex: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
   const {
@@ -48,11 +48,11 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
               projectStartDate={projectStartDate}
               projectEndDate={projectEndDate}
               formikErrors={getIn(formikErrors, `${index}`)}
+              touched={getIn(touched, `${index}`)}
               apiError={apiErrors.find((error) => error.employeeId === projectEmployee.id)}
-              isTouched={getIn(touched, `${index}`)}
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
-              onDelete={deleteProjectEmployee}
+              onDelete={() => deleteProjectEmployee(index)}
             />
           </ListItem>
           {index !== projectEmployees.length - 1 && <Divider variant="fullWidth" />}

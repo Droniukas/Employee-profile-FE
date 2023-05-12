@@ -14,20 +14,31 @@ export const projectEmployeeSchema = yup.object({
       return projectEmployeeStartDate <= projectEmployeeEndDate;
     }),
   projectEmployeeEndDate: yup.date().nullable().typeError('Invalid date'),
-  datesInActivityPeriod: yup
+  datesInProjectActivityPeriod: yup
     .string()
     .test(
       'datesInProjectActivityPeriod',
       'Team member activity dates should be within the project activity period',
       (_, context) => {
+        const projectStartDateValue = context.from?.[1].value.startDate;
+        const projectEndDateValue = context.from?.[1].value.endDate;
+
+        const validProjectDates =
+          projectStartDateValue &&
+          projectStartDateValue !== 'Invalid Date' &&
+          (!projectEndDateValue ||
+            (projectEndDateValue !== 'Invalid Date' && dayjs(projectStartDateValue) <= dayjs(projectEndDateValue)));
+
+        if (!validProjectDates) {
+          return true;
+        }
+
         const projectEmployeeStartDate = context.parent.projectEmployeeStartDate;
         const projectEmployeeEndDate = context.parent.projectEmployeeEndDate;
-        const projectStartDate = context.from?.[1].value.startDate
-          ? dayjs(context.from?.[1].value.startDate)
-          : undefined;
-        const projectEndDate = context.from?.[1].value.endDate ? dayjs(context.from?.[1].value.endDate) : undefined;
+        const projectStartDate = dayjs(projectStartDateValue);
+        const projectEndDate = projectEndDateValue ? dayjs(projectEndDateValue) : undefined;
 
-        if (!projectEmployeeStartDate || !projectStartDate || (projectEndDate && projectEndDate < projectStartDate)) {
+        if (!projectEmployeeStartDate) {
           return true;
         } else if (
           projectEmployeeStartDate < projectStartDate ||
