@@ -8,8 +8,6 @@ import ProjectEmployeeEditItem from './ProjectEmployeeEditItem';
 
 type ProjectEmployeeEditListProps = {
   projectEmployees: ProjectEmployee[];
-  projectStartDate: string;
-  projectEndDate: string;
   formikErrors: FormikErrors<ProjectEmployee>[];
   apiErrors: ProjectEmployeeError[];
   touched: FormikTouched<ProjectEmployee>[];
@@ -18,17 +16,8 @@ type ProjectEmployeeEditListProps = {
   deleteProjectEmployee: (projectEmployeeIndex: number) => void;
 };
 const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: ProjectEmployeeEditListProps) => {
-  const {
-    projectEmployees,
-    projectStartDate,
-    projectEndDate,
-    formikErrors,
-    apiErrors,
-    touched,
-    setFieldValue,
-    setFieldTouched,
-    deleteProjectEmployee,
-  } = props;
+  const { projectEmployees, formikErrors, apiErrors, touched, setFieldValue, setFieldTouched, deleteProjectEmployee } =
+    props;
 
   return (
     <List sx={{ marginTop: '8px' }}>
@@ -45,8 +34,6 @@ const ProjectEmployeeEditList: React.FC<ProjectEmployeeEditListProps> = (props: 
             <ProjectEmployeeEditItem
               index={index}
               projectEmployee={projectEmployee}
-              projectStartDate={projectStartDate}
-              projectEndDate={projectEndDate}
               formikErrors={getIn(formikErrors, `${index}`)}
               touched={getIn(touched, `${index}`)}
               apiError={apiErrors.find((error) => error.employeeId === projectEmployee.id)}

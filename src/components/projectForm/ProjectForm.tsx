@@ -36,7 +36,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   let initialValues: Project = {
     title: '',
     description: '',
-    startDate: dayjs().startOf('day').toISOString(),
+    startDate: dayjs().startOf('day').toString(),
     endDate: '',
     projectEmployees: [],
     status: '',
@@ -130,7 +130,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       setTouched(newTouched);
       setFieldValue('projectEmployees', newProjectEmployees, true);
     },
-    [values.projectEmployees, touched, setTouched, setFieldValue],
+    [values.projectEmployees, touched, setFieldValue, setTouched],
   );
 
   const focusElement = (elementId: string) => {
@@ -275,9 +275,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                   }}
                   format="YYYY/MM/DD"
                   value={values.startDate ? dayjs(values.startDate) : null}
-                  onChange={(newValue) => {
-                    setFieldValue('startDate', newValue?.toString());
-                  }}
+                  onChange={(newValue) => setFieldValue('startDate', newValue?.toString())}
                   slotProps={{
                     textField: {
                       error: Boolean(errors.startDate),
@@ -323,9 +321,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                   format="YYYY/MM/DD"
                   minDate={dayjs(values.startDate)}
                   value={values.endDate ? dayjs(values.endDate) : null}
-                  onChange={(newValue) => {
-                    setFieldValue('endDate', newValue?.toString());
-                  }}
+                  onChange={(newValue) => setFieldValue('endDate', newValue?.toString())}
                   slotProps={{
                     textField: {
                       error: Boolean(errors.endDate),
@@ -364,8 +360,6 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           {values.projectEmployees.length > 0 ? (
             <ProjectEmployeeEditList
               projectEmployees={values.projectEmployees}
-              projectStartDate={values.startDate}
-              projectEndDate={values.endDate}
               formikErrors={getIn(errors, 'projectEmployees')}
               apiErrors={projectEmployeeApiErrors}
               touched={getIn(touched, 'projectEmployees')}

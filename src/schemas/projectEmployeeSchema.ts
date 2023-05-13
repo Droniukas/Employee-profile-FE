@@ -20,23 +20,21 @@ export const projectEmployeeSchema = yup.object({
       'datesInProjectActivityPeriod',
       'Team member activity dates should be within the project activity period',
       (_, context) => {
-        const projectStartDateValue = context.from?.[1].value.startDate;
-        const projectEndDateValue = context.from?.[1].value.endDate;
+        const { projectEmployeeStartDate, projectEmployeeEndDate } = context.parent;
+        const project = context.from?.[1].value;
 
         const validProjectDates =
-          projectStartDateValue &&
-          projectStartDateValue !== 'Invalid Date' &&
-          (!projectEndDateValue ||
-            (projectEndDateValue !== 'Invalid Date' && dayjs(projectStartDateValue) <= dayjs(projectEndDateValue)));
+          project.startDate &&
+          project.startDate !== 'Invalid Date' &&
+          (!project.endDate ||
+            (project.endDate !== 'Invalid Date' && dayjs(project.startDate) <= dayjs(project.endDate)));
 
         if (!validProjectDates) {
           return true;
         }
 
-        const projectEmployeeStartDate = context.parent.projectEmployeeStartDate;
-        const projectEmployeeEndDate = context.parent.projectEmployeeEndDate;
-        const projectStartDate = dayjs(projectStartDateValue);
-        const projectEndDate = projectEndDateValue ? dayjs(projectEndDateValue) : undefined;
+        const projectStartDate = dayjs(project.startDate);
+        const projectEndDate = project.endDate ? dayjs(project.endDate) : undefined;
 
         if (!projectEmployeeStartDate) {
           return true;

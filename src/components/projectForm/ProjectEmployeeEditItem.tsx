@@ -14,7 +14,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { FormikErrors, getIn } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
@@ -24,8 +24,6 @@ import { UserStateRoot } from '../../store/types/user';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
-  projectStartDate: string;
-  projectEndDate: string;
   index: number;
   touched: boolean;
   formikErrors: FormikErrors<ProjectEmployee>;
@@ -36,19 +34,16 @@ type ProjectEmployeeEditItemProps = {
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const {
-    projectEmployee,
-    projectStartDate,
-    projectEndDate,
-    index,
-    touched,
-    formikErrors,
-    apiError,
-    setFieldValue,
-    setFieldTouched,
-    onDelete,
-  } = props;
+  const { projectEmployee, index, touched, formikErrors, apiError, setFieldValue, setFieldTouched, onDelete } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
+
+  const [startDateValue, setStartDateValue] = useState<string | undefined>(projectEmployee.projectEmployeeStartDate);
+  const [endDateValue, setEndDateValue] = useState<string | undefined>(projectEmployee.projectEmployeeEndDate);
+
+  const handleBlur = (field: string, value: string | undefined) => {
+    setFieldValue(field, value);
+    setTimeout(() => setFieldTouched(field), 100);
+  };
 
   const isInactiveOrDismissed = (status: string): boolean => {
     return ['INACTIVE', 'DISMISSED'].includes(status);
@@ -109,24 +104,17 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               },
             }}
             format="YYYY/MM/DD"
-            minDate={dayjs(projectStartDate)}
-            maxDate={dayjs(projectEndDate)}
             value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
-            onChange={(newValue) =>
-              setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newValue?.toString())
-            }
+            onChange={(newValue) => setStartDateValue(newValue?.toString())}
             slotProps={{
               textField: {
                 error:
                   Boolean(touched && startDateError) ||
                   Boolean(!startDateError && !endDateError && activityPeriodError),
-                onBlur: () => setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`),
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeStartDate`, startDateValue),
               },
               popper: {
-                onBlur: () =>
-                  setTimeout(() => {
-                    setFieldTouched(`projectEmployees.${index}.projectEmployeeStartDate`);
-                  }, 100),
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeStartDate`, startDateValue),
               },
             }}
           />
@@ -149,21 +137,15 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
             }}
             format="YYYY/MM/DD"
             minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
-            maxDate={dayjs(projectEndDate)}
             value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
-            onChange={(newValue) => {
-              setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newValue?.toString());
-            }}
+            onChange={(newValue) => setEndDateValue(newValue?.toString())}
             slotProps={{
               textField: {
                 error: Boolean(endDateError) || Boolean(!startDateError && !endDateError && activityPeriodError),
-                onBlur: () => setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`),
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeEndDate`, endDateValue),
               },
               popper: {
-                onBlur: () =>
-                  setTimeout(() => {
-                    setFieldTouched(`projectEmployees.${index}.projectEmployeeEndDate`);
-                  }, 100),
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeEndDate`, endDateValue),
               },
             }}
           />
