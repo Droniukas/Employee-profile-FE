@@ -130,10 +130,10 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       setTouched(newTouched);
       setFieldValue('projectEmployees', newProjectEmployees, true);
     },
-    [values.projectEmployees, touched, setFieldValue, setTouched],
+    [values.projectEmployees, touched, setTouched, setFieldValue],
   );
 
-  const focusElement = (elementId: string) => {
+  const focusErrorElement = (elementId: string) => {
     const element = document.getElementById(elementId);
     if (element) {
       element.focus();
@@ -150,16 +150,16 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       if (firstElementWithErrorId === 'projectEmployees') {
         const projectEmployeeErrors = errors.projectEmployees as FormikErrors<ProjectEmployee>[];
         const firstErrorIndex = projectEmployeeErrors.findIndex((error) => error !== undefined);
-        focusElement(`projectEmployees${values.projectEmployees[firstErrorIndex].id}`);
+        focusErrorElement(`projectEmployees${values.projectEmployees[firstErrorIndex].id}`);
       } else {
-        focusElement(firstElementWithErrorId);
+        focusErrorElement(firstElementWithErrorId);
       }
     }
   }, [isSubmitting, errors, values.projectEmployees]);
 
   useEffect(() => {
     if (projectEmployeeApiErrors.length > 0) {
-      focusElement(`projectEmployees${projectEmployeeApiErrors[0].employeeId}`);
+      focusErrorElement(`projectEmployees${projectEmployeeApiErrors[0].employeeId}`);
     }
   }, [projectEmployeeApiErrors]);
 
