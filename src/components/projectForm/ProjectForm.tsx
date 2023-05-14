@@ -275,7 +275,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                   }}
                   format="YYYY/MM/DD"
                   value={values.startDate ? dayjs(values.startDate) : null}
-                  onChange={(newValue) => setFieldValue('startDate', newValue?.toString())}
+                  onChange={(newValue) => {
+                    newValue
+                      ? setFieldValue('startDate', dayjs(newValue).startOf('day').toString())
+                      : setFieldValue('startDate', undefined);
+                  }}
                   slotProps={{
                     textField: {
                       error: Boolean(errors.startDate),
@@ -294,7 +298,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
               checked={endDateExists}
               onChange={(e) => {
                 setEndDateExists(e.target.checked);
-                setFieldValue('endDate', '', true);
+                setFieldValue('endDate', undefined, true);
               }}
             />
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
@@ -321,7 +325,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                   format="YYYY/MM/DD"
                   minDate={dayjs(values.startDate)}
                   value={values.endDate ? dayjs(values.endDate) : null}
-                  onChange={(newValue) => setFieldValue('endDate', newValue?.toString())}
+                  onChange={(newValue) => {
+                    newValue
+                      ? setFieldValue('endDate', dayjs(newValue).startOf('day').toString())
+                      : setFieldValue('endDate', undefined);
+                  }}
                   slotProps={{
                     textField: {
                       error: Boolean(errors.endDate),

@@ -105,7 +105,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
             }}
             format="YYYY/MM/DD"
             value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
-            onChange={(newValue) => setStartDateValue(newValue?.toString())}
+            onChange={(newValue) => {
+              newValue ? setStartDateValue(dayjs(newValue).startOf('day').toString()) : setStartDateValue(undefined);
+            }}
             slotProps={{
               textField: {
                 error:
@@ -138,7 +140,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
             format="YYYY/MM/DD"
             minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
             value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
-            onChange={(newValue) => setEndDateValue(newValue?.toString())}
+            onChange={(newValue) => {
+              newValue ? setEndDateValue(dayjs(newValue).startOf('day').toString()) : setEndDateValue(undefined);
+            }}
             slotProps={{
               textField: {
                 error: Boolean(endDateError) || Boolean(!startDateError && !endDateError && activityPeriodError),
