@@ -67,7 +67,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const visibleDescriptionLength = width * 0.7;
+    const visibleDescriptionLength = width * 0.9;
     const isTextOverflow = project.description.length > visibleDescriptionLength;
 
     return (
@@ -147,7 +147,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: '4',
+                    WebkitLineClamp: '3',
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
