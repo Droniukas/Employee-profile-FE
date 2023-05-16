@@ -22,8 +22,6 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
   const { employees } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
-  if (!employees) return null;
-
   const renderResultItem = (employee: Employee) => {
     return (
       <div key={employee.id}>
