@@ -21,6 +21,7 @@ import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
+import { EmployeeStatus } from '../enums/EmployeeStatus';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
@@ -45,10 +46,6 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
     setTimeout(() => setFieldTouched(field), 100);
   };
 
-  const isInactiveOrDismissed = (status: string): boolean => {
-    return ['INACTIVE', 'DISMISSED'].includes(status);
-  };
-
   const startDateError = getIn(formikErrors, 'projectEmployeeStartDate');
   const endDateError = getIn(formikErrors, 'projectEmployeeEndDate');
   const activityPeriodError = getIn(formikErrors, 'datesInProjectActivityPeriod');
@@ -62,14 +59,14 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               src={`data:${projectEmployee.imageType};base64,${projectEmployee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(projectEmployee.status) ? 0.35 : 1,
+                opacity: projectEmployee.status === EmployeeStatus.ACTIVE ? 1 : 0.35,
               }}
             />
           </ListItemAvatar>
           <ListItemText
             secondary={<>{projectEmployee.title}</>}
             sx={{
-              color: isInactiveOrDismissed(projectEmployee.status) ? '#666666' : 'primary.main',
+              color: projectEmployee.status === EmployeeStatus.ACTIVE ? 'primary.main' : '#666666',
             }}
           >
             <Link
