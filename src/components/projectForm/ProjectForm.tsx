@@ -122,10 +122,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         projectEmployees: touched.projectEmployees?.filter((_, idx) => idx !== index),
       };
 
-      const newProjectEmployees = [
-        ...values.projectEmployees.slice(0, index),
-        ...values.projectEmployees.slice(index + 1),
-      ];
+      const newProjectEmployees = values.projectEmployees.filter((_, idx) => idx !== index);
 
       setTouched(newTouched);
       setFieldValue('projectEmployees', newProjectEmployees, true);
