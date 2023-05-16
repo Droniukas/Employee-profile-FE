@@ -13,70 +13,60 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { FormikHandlers } from 'formik';
-import React from 'react';
+import { FormikErrors, getIn } from 'formik';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
+import { EmployeeStatus } from '../enums/EmployeeStatus';
 
 type ProjectEmployeeEditItemProps = {
   projectEmployee: ProjectEmployee;
   index: number;
-  startDateError: string;
-  endDateError: string;
-  error?: ProjectEmployeeError;
-  isTouched: boolean;
-  handleBlur: FormikHandlers['handleBlur'];
-  setFieldValue: (field: string, value: string) => void;
-  onDelete: (projectEmployeeId: number) => void;
+  touched: boolean;
+  formikErrors: FormikErrors<ProjectEmployee>;
+  apiError?: ProjectEmployeeError;
+  setFieldValue: (field: string, value: string | undefined) => void;
+  setFieldTouched: (field: string) => void;
+  onDelete: () => void;
 };
 
 const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: ProjectEmployeeEditItemProps) => {
-  const {
-    projectEmployee,
-    index,
-    startDateError,
-    endDateError,
-    error,
-    isTouched,
-    handleBlur,
-    setFieldValue,
-    onDelete,
-  } = props;
+  const { projectEmployee, index, touched, formikErrors, apiError, setFieldValue, setFieldTouched, onDelete } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
 
-  const isInactiveOrDismissed = (status: string): boolean => {
-    return ['INACTIVE', 'DISMISSED'].includes(status);
+  const [startDateValue, setStartDateValue] = useState<string | undefined>(projectEmployee.projectEmployeeStartDate);
+  const [endDateValue, setEndDateValue] = useState<string | undefined>(projectEmployee.projectEmployeeEndDate);
+
+  const handleBlur = (field: string, value: string | undefined) => {
+    setFieldValue(field, value);
+    setTimeout(() => setFieldTouched(field), 100);
   };
 
-  const setProjectEmployeeStartDate = (newDate: string) => {
-    setFieldValue(`projectEmployees.${index}.projectEmployeeStartDate`, newDate);
-  };
-
-  const setProjectEmployeeEndDate = (newDate: string) => {
-    setFieldValue(`projectEmployees.${index}.projectEmployeeEndDate`, newDate);
-  };
+  const startDateError = getIn(formikErrors, 'projectEmployeeStartDate');
+  const endDateError = getIn(formikErrors, 'projectEmployeeEndDate');
+  const activityPeriodError = getIn(formikErrors, 'datesInProjectActivityPeriod');
 
   return (
     <Grid container alignItems={'center'} mb={1}>
       <Grid item xs={5}>
-        <Box display={'flex'} alignItems={'center'} mt={2.4}>
+        <Box display={'flex'} alignItems={'center'} mt={2.5}>
           <ListItemAvatar>
             <Avatar
               src={`data:${projectEmployee.imageType};base64,${projectEmployee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(projectEmployee.status) ? 0.35 : 1,
+                opacity: projectEmployee.status === EmployeeStatus.ACTIVE ? 1 : 0.35,
               }}
             />
           </ListItemAvatar>
           <ListItemText
             secondary={<>{projectEmployee.title}</>}
             sx={{
-              color: isInactiveOrDismissed(projectEmployee.status) ? '#666666' : 'primary.main',
+              color: projectEmployee.status === EmployeeStatus.ACTIVE ? 'primary.main' : '#666666',
             }}
           >
             <Link
@@ -95,85 +85,104 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
           </ListItemText>
         </Box>
       </Grid>
-      <Grid item xs={6} display={'flex'}>
-        <Box mr={4}>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
-          </InputLabel>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              sx={{
-                width: 170,
-                '& .MuiInputBase-input': {
-                  height: 10,
-                },
-              }}
-              format="YYYY/MM/DD"
-              value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
-              onChange={(newValue) => {
-                dayjs(newValue).isValid()
-                  ? setProjectEmployeeStartDate(dayjs(newValue).toISOString())
-                  : setProjectEmployeeStartDate('');
-              }}
-              slotProps={{
-                textField: {
-                  error: isTouched && Boolean(startDateError),
-                  onBlur: handleBlur(`projectEmployees.${index}`),
-                },
-              }}
-            />
-          </LocalizationProvider>
-        </Box>
-        <Box>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
-          </InputLabel>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              sx={{
-                width: 170,
-                '& .MuiInputBase-input': {
-                  height: 10,
-                },
-              }}
-              format="YYYY/MM/DD"
-              minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
-              value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
-              onChange={(newValue) => {
-                dayjs(newValue).isValid()
-                  ? setProjectEmployeeEndDate(dayjs(newValue).toISOString())
-                  : setProjectEmployeeEndDate('');
-              }}
-              slotProps={{
-                textField: {
-                  error: isTouched && Boolean(endDateError),
-                },
-              }}
-            />
-          </LocalizationProvider>
-        </Box>
+      <Grid item xs={3}>
+        <InputLabel>
+          <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
+        </InputLabel>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            sx={{
+              width: 170,
+              '& .MuiInputBase-input': {
+                height: 10,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: 2,
+              },
+            }}
+            format="YYYY/MM/DD"
+            value={projectEmployee.projectEmployeeStartDate ? dayjs(projectEmployee.projectEmployeeStartDate) : null}
+            onChange={(newValue) => {
+              newValue ? setStartDateValue(dayjs(newValue).startOf('day').toString()) : setStartDateValue(undefined);
+            }}
+            slotProps={{
+              textField: {
+                error:
+                  Boolean(touched && startDateError) ||
+                  Boolean(!startDateError && !endDateError && activityPeriodError),
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeStartDate`, startDateValue),
+              },
+              popper: {
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeStartDate`, startDateValue),
+              },
+            }}
+          />
+        </LocalizationProvider>
       </Grid>
-      <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2.4 }}>
+      <Grid item xs={3}>
+        <InputLabel>
+          <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
+        </InputLabel>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            sx={{
+              width: 170,
+              '& .MuiInputBase-input': {
+                height: 10,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: 2,
+              },
+            }}
+            format="YYYY/MM/DD"
+            minDate={dayjs(projectEmployee.projectEmployeeStartDate)}
+            value={projectEmployee.projectEmployeeEndDate ? dayjs(projectEmployee.projectEmployeeEndDate) : null}
+            onChange={(newValue) => {
+              newValue ? setEndDateValue(dayjs(newValue).startOf('day').toString()) : setEndDateValue(undefined);
+            }}
+            slotProps={{
+              textField: {
+                error: Boolean(endDateError) || Boolean(!startDateError && !endDateError && activityPeriodError),
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeEndDate`, endDateValue),
+              },
+              popper: {
+                onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeEndDate`, endDateValue),
+              },
+            }}
+          />
+        </LocalizationProvider>
+      </Grid>
+      <Grid item xs={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <IconButton
           className="btn-delete"
           aria-label="delete"
           sx={{
             color: 'primary.main',
             backgroundColor: '#F4F4F4',
+            mt: 2.5,
           }}
-          onClick={() => onDelete(projectEmployee.id)}
+          onClick={onDelete}
         >
           <DeleteIcon />
         </IconButton>
       </Grid>
       <Grid item xs={5} />
+      <Grid item xs={3}>
+        <Typography sx={{ color: '#D32F2F', fontSize: 12, width: 170 }}>{touched && startDateError}</Typography>
+      </Grid>
+      <Grid item xs={3}>
+        <Typography sx={{ color: '#D32F2F', fontSize: 12 }}>{endDateError}</Typography>
+      </Grid>
+      <Grid item xs={5} />
       <Grid item xs={6}>
-        {isTouched && <Typography sx={{ color: '#d32f2f', fontSize: 12 }}>{startDateError}</Typography>}
-        {error && (
-          <Typography sx={{ color: '#d32f2f', fontSize: 12, mt: 1 }}>
-            {error.message}
+        <Typography sx={{ color: '#D32F2F', fontSize: 12 }}>
+          {!startDateError && !endDateError && activityPeriodError}
+        </Typography>
+        {apiError && (
+          <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 1 }}>
+            {apiError.message}
             <br />
-            {error.employmentDates.map((employmentDate, index) => {
+            {apiError.employmentDates.map((employmentDate, index) => {
               const hiringDate = dayjs(employmentDate.hiringDate).format('YYYY/MM/DD');
               const exitDate = employmentDate.exitDate
                 ? dayjs(employmentDate.exitDate).format('YYYY/MM/DD')
@@ -181,7 +190,7 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               return (
                 <span key={employmentDate.hiringDate}>
                   {hiringDate} - {exitDate}
-                  {index < error.employmentDates.length - 1 ? ',' : ''}
+                  {index < apiError.employmentDates.length - 1 ? ',' : ''}
                   <br />
                 </span>
               );

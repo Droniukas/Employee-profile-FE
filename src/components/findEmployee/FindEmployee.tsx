@@ -2,6 +2,7 @@ import './FindEmployee.scss';
 
 import { TablePagination } from '@mui/material';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
@@ -25,6 +26,7 @@ const FindEmployee = () => {
   const [selectedSkill, setSelectedSkill] = useState<SearchDropdownOption[]>([]);
   const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
   const [selectedAchievement, setSelectedAchievement] = useState<SearchDropdownOption[]>([]);
+  const [searchCriteria, setSearchCriteria] = useState<boolean>(false);
 
   const inputValueRef = useRef(inputValue);
   const rowsPerPageRef = useRef(rowsPerPage);
@@ -62,6 +64,7 @@ const FindEmployee = () => {
     selectedSkillRef.current = value;
     setSelectedSkill(value);
     getEmployees();
+    checkIfSearchCriteriaDefined();
   };
 
   const getAchievementsCategories = async () => {
@@ -73,6 +76,7 @@ const FindEmployee = () => {
     selectedAchievementRef.current = value;
     setSelectedAchievement(value);
     getEmployees();
+    checkIfSearchCriteriaDefined();
   };
 
   const getEmployees = async () => {
@@ -87,22 +91,18 @@ const FindEmployee = () => {
     setEmployeesCount(results.count);
   };
 
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      setPage(0);
+      getEmployees();
+      checkIfSearchCriteriaDefined();
+      event.preventDefault();
+    }
+  };
+
   useEffect(() => {
     getSkillsCategories();
     getAchievementsCategories();
-
-    const keyDownHandler = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        setPage(0);
-        getEmployees();
-        event.preventDefault();
-      }
-    };
-    window.addEventListener('keydown', keyDownHandler);
-
-    return () => {
-      window.removeEventListener('keydown', keyDownHandler);
-    };
   }, []);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -116,6 +116,58 @@ const FindEmployee = () => {
     getEmployees();
   };
 
+  const checkIfSearchCriteriaDefined = () => {
+    if (!selectedSkillRef.current.length && !selectedAchievementRef.current.length && !inputValueRef.current.length) {
+      setSearchCriteria(false);
+    } else {
+      setSearchCriteria(true);
+    }
+  };
+
+  const handleFindEmployeeResults = (employees: Employee[]) => {
+    if (employees.length > 0) {
+      return (
+        <>
+          <FindEmployeeResults employees={employees} />
+          <TablePagination
+            component="div"
+            count={totalEmployeesCount}
+            page={!totalEmployeesCount || totalEmployeesCount <= 0 ? 0 : pageRef.current}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPageRef.current}
+            rowsPerPageOptions={rowSizeOptions}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      );
+    } else {
+      if (searchCriteria)
+        return (
+          <Typography
+            sx={{
+              color: 'primary.main',
+              fontSize: 20,
+              mt: 3,
+            }}
+          >
+            No employees match search criteria.
+          </Typography>
+        );
+
+      return (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            fontSize: 20,
+            mt: 3,
+          }}
+        >
+          Please define search criteria.
+        </Typography>
+      );
+    }
+  };
+
   return (
     <>
       <div className="find-employee-container">
@@ -125,11 +177,15 @@ const FindEmployee = () => {
           sx={{
             position: 'relative',
             my: 0.25,
-            width: 1344,
+            width: '70vw',
             left: 0,
           }}
         >
-          <SearchInput placeholder="Search employees by name..." onChange={(value) => setInputValue(value)} />
+          <SearchInput
+            placeholder="Search employees by name, middle name or surname"
+            onChange={(value) => setInputValue(value)}
+            onKeyDown={keyDownHandler}
+          />
           <SearchDropdown
             id="skill-search-box"
             placeholder="Select skills"
@@ -158,20 +214,7 @@ const FindEmployee = () => {
           />
         </Box>
       </div>
-      {employees.length > 0 && (
-        <>
-          <FindEmployeeResults employees={employees} />
-          <TablePagination
-            component="div"
-            count={totalEmployeesCount}
-            page={!totalEmployeesCount || totalEmployeesCount <= 0 ? 0 : pageRef.current}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPageRef.current}
-            rowsPerPageOptions={rowSizeOptions}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </>
-      )}
+      {handleFindEmployeeResults(employees)}
     </>
   );
 };

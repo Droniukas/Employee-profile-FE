@@ -7,17 +7,18 @@ import React from 'react';
 type SearchInputProps = {
   placeholder: string;
   onChange: (value: string) => void;
+  onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 };
 
 const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
-  const { placeholder, onChange } = props;
+  const { placeholder, onChange, onKeyDown } = props;
 
   return (
     <Box
       component="form"
       sx={{
         width: '100%',
-        maxWidth: '40vw',
+        maxWidth: '70vw',
         justifyContent: 'flex-start',
         direction: 'column',
         alignSelf: 'flex-start',
@@ -47,6 +48,7 @@ const SearchInput: React.FC<SearchInputProps> = (props: SearchInputProps) => {
         }}
         variant="outlined"
         onChange={(event) => onChange(event.target.value)}
+        onKeyDown={(event) => onKeyDown(event)}
       />
     </Box>
   );

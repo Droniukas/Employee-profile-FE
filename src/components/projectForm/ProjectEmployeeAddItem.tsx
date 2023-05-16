@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Employee from '../../models/Employee.interface';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
+import { EmployeeStatus } from '../enums/EmployeeStatus';
 
 type ProjectEmployeeAddItemProps = {
   employee: Employee;
@@ -14,9 +15,6 @@ type ProjectEmployeeAddItemProps = {
 const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: ProjectEmployeeAddItemProps) => {
   const { employee, selected, onStateChange } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
-  const isInactiveOrDismissed = (status: string): boolean => {
-    return ['INACTIVE', 'DISMISSED'].includes(status);
-  };
 
   return (
     <>
@@ -32,7 +30,7 @@ const ProjectEmployeeAddItem: React.FC<ProjectEmployeeAddItemProps> = (props: Pr
               src={`data:${employee.imageType};base64,${employee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
+                opacity: employee.status === EmployeeStatus.ACTIVE ? 1 : 0.35,
               }}
             />
           </ListItemAvatar>
