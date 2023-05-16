@@ -6,7 +6,6 @@ import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -42,26 +41,6 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
     setOpenPopup(true);
   };
   const renderResultItem = (myProject: MyProject) => {
-    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-
-        const inputValue = event.currentTarget?.querySelector('input')?.value;
-        if (!inputValue) return;
-        const data = {
-          projectId: Number(myProject.id),
-          employeeId: Number(user.id),
-          responsibilities: inputValue,
-        };
-        try {
-          const addResponsibilitiesToMyProject = await projectsService.setMyProjectEmployeeResponsibilities(data);
-          addResponsibilitiesToMyProject.data;
-          getProjects();
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
     return (
       <div key={myProject.id}>
         <ListItem
@@ -83,7 +62,6 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               sx={{
                 width: '90%',
                 position: 'relative',
-                maxWidth: '90%',
                 marginRight: '150px',
               }}
             >
@@ -110,7 +88,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               </Box>
               <Box
                 sx={{
-                  widht: 'auto',
+                  width: 'auto',
                   position: 'relative',
                   left: 25,
                 }}
@@ -123,18 +101,10 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   }}
                 >
                   <>
-                    {myProject.projectEmployeeStartDate && (
-                      <>
-                        {'From '}
-                        {correctDateFormat(myProject.projectEmployeeStartDate)}
-                      </>
-                    )}
-                    {myProject.projectEmployeeEndDate && (
-                      <>
-                        {' to '}
-                        {correctDateFormat(myProject.projectEmployeeEndDate)}
-                      </>
-                    )}
+                    {'From '} {correctDateFormat(myProject.projectEmployeeStartDate)}
+                    {myProject.projectEmployeeEndDate
+                      ? ' to ' + correctDateFormat(myProject.projectEmployeeEndDate)
+                      : ''}
                   </>
                 </Typography>
                 <Typography
@@ -180,20 +150,10 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                         My responsibilities
                       </Typography>
                     </InputLabel>
-                    {myProject.responsibilities ? (
-                      <Typography sx={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#666666' }}>
-                        {myProject.responsibilities}
-                      </Typography>
-                    ) : (
-                      <TextField
-                        hiddenLabel
-                        fullWidth
-                        variant="standard"
-                        onKeyPress={handleKeyPress}
-                        placeholder="Enter responsibilities..."
-                        sx={{ color: 'primary.main' }}
-                      />
-                    )}
+
+                    <Typography sx={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#666666' }}>
+                      {myProject.responsibilities}
+                    </Typography>
                   </Box>
                   <Typography
                     sx={{
@@ -243,11 +203,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
     );
   };
   const correctDateFormat = (date: string) => {
-    if (date === null) {
-      return null;
-    } else {
-      return moment(date).format('YYYY/MM/DD');
-    }
+    return date === null ? null : moment(date).format('YYYY/MM/DD');
   };
 
   if (!myProjects.length) {

@@ -72,7 +72,6 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
         onCancel={() => setConfirmationDialog(false)}
         onConfirm={() => onClose()}
       />
-
       <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
         <Button
           sx={{ width: 15, height: 30 }}
