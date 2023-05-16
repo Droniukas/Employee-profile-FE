@@ -2,7 +2,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
@@ -136,25 +135,6 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                     my: 1,
                   }}
                 >
-                  <Box
-                    component="div"
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      my: 1,
-                    }}
-                  >
-                    <InputLabel>
-                      <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
-                        My responsibilities
-                      </Typography>
-                    </InputLabel>
-
-                    <Typography sx={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#666666' }}>
-                      {myProject.responsibilities}
-                    </Typography>
-                  </Box>
                   <Typography
                     sx={{
                       mt: 2,
