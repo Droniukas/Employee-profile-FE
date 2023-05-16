@@ -10,13 +10,13 @@ import { triggerOnCancel } from '../../states/onCancel';
 import { setSkillsTabState } from '../../states/skillsTabState';
 import store from '../../store/store';
 import { SkillWithErrorIdRoot } from '../../store/types/skills';
-import { SkillLevel } from '../enums/SkillLevel';
-import SkillsTab from './SkillsTab';
-import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
+import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import CustomSnackbar from '../customSnackbar/CustomSnackbar';
-import { UserStateRoot } from '../../store/types/user';
+import { SkillLevel } from '../enums/SkillLevel';
 import { changedSkillsHaveDifferences } from '../main/utils';
+import SkillsTab from './SkillsTab';
+import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
 
 type SkillsTabDataProps = {
   confirmationDialogOpen: boolean;

@@ -86,11 +86,7 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
               marginLeft: -2,
             }}
           />
-          <ListItemText
-            sx={{ fontWeight: '400', paddingLeft: '0px', marginLeft: '0px', color: 'primary.main', float: 'top' }}
-          >
-            {skill.skillName}
-          </ListItemText>
+          <ListItemText>{skill.skillName}</ListItemText>
           {viewState === SkillsTabState.VIEW_STATE ? (
             isChecked ? (
               <SkillLevelWithTooltip name={skillLevel} tooltipText={tooltipText} />

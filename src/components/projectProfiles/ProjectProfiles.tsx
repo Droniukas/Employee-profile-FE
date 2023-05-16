@@ -7,11 +7,11 @@ import React, { useEffect, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import { ProjectsService } from '../../services/projects.service';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
-import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);

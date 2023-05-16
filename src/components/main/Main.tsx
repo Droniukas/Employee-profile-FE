@@ -1,13 +1,12 @@
 import './Main.scss';
 
 import { Box, Button, CssBaseline, Tab, Tabs } from '@mui/material';
+import { isAxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Achievement } from '../../models/Achievement.interface';
-import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
-import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import Employee from '../../models/Employee.interface';
 import { Skill } from '../../models/Skill.interface';
 import AccessDeniedPage from '../../pages/accessDeniedPage/AccessDeniedPage';
@@ -31,7 +30,6 @@ import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
-import { isAxiosError } from 'axios';
 import { changedAchievementsHaveDifferences, changedSkillsHaveDifferences } from './utils';
 
 const getIndexedProps = (index: number) => {

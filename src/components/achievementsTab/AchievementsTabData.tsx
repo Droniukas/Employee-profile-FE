@@ -13,11 +13,10 @@ import store from '../../store/store';
 import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
 import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
-import AchievementsTab from './AchievementsTab';
-import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
-import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { changedAchievementsHaveDifferences } from '../main/utils';
+import AchievementsTab from './AchievementsTab';
+import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
 type AchievementsTabDataProps = {
   confirmationDialogOpen: boolean;

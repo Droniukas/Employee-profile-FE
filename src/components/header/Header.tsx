@@ -3,22 +3,25 @@ import './Header.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Avatar, Badge, BadgeProps, Box, IconButton, Link, Menu, MenuItem, styled } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { deleteAuthToken } from '../../config/auth';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
 import Loading from '../loading/Loading';
-import NotificationsDropdown from './NotificationsDropdown';
+import NotificationsDropdown from './Notifications/NotificationsDropdown';
+import { NotificationService } from '../../services/notifications.service';
+import { Notification } from '../../models/Notification.interface';
 
 const Header = () => {
-  const result = useSelector((state: UserStateRoot) => state.userState.value);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
   const [userIconAnchorEl, setUserIconAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationIconAnchorEl, setNotificationIconAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(userIconAnchorEl);
   const { logout } = useAuth0();
-  const [notificationCount, setNotificationCount] = useState<number>(2);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
+  const [notifications, setNotifications] = useState<Notification[] | null>();
 
   const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setUserIconAnchorEl(event.currentTarget);
@@ -31,6 +34,20 @@ const Header = () => {
     deleteAuthToken();
     logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}${ROUTES.LOGOUT}` } });
   };
+
+  const notificationService = new NotificationService();
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (user) {
+        const notifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
+        console.log(notifications);
+        setNotifications(notifications);
+        setNotificationCount(notifications.length);
+      }
+    };
+    fetchNotifications();
+  }, [user]);
 
   const StyledBadge = styled(Badge)<BadgeProps>(() => ({
     '& .MuiBadge-badge': {
@@ -77,10 +94,10 @@ const Header = () => {
           <NotificationsIcon sx={{ width: 35, height: 35, color: 'black' }} />
         </StyledBadge>
       </IconButton>
-      {result ? (
+      {user ? (
         <Avatar
-          src={`data:${result?.imageType};base64,${result?.imageBytes}`}
-          sx={{ width: 40, height: 40 display: 'inline-block', cursor: 'pointer', marginRight: 10 }}
+          src={`data:${user?.imageType};base64,${user?.imageBytes}`}
+          sx={{ width: 40, height: 40, display: 'inline-block', cursor: 'pointer', marginRight: 10 }}
           onClick={(event) => {
             handleUserIconClick(event);
           }}
@@ -115,10 +132,13 @@ const Header = () => {
           </MenuItem>
         </Link>
       </Menu>
-      <NotificationsDropdown
-        onClose={handleNotificationsDropdownClose}
-        notificationIconAnchorEl={notificationIconAnchorEl}
-      />
+      {notifications && (
+        <NotificationsDropdown
+          onClose={handleNotificationsDropdownClose}
+          notificationIconAnchorEl={notificationIconAnchorEl}
+          notifications={notifications}
+        />
+      )}
     </Box>
   );
 };
