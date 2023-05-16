@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { EmploymentDate } from '../../../models/EmployementData.interface';
+import { EmploymentDate } from '../../../models/EmploymentDate.interface';
 
 export const getDate = (date: string | null): string | null => {
   if (date === null) return null;
