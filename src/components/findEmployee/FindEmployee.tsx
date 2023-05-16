@@ -2,6 +2,7 @@ import './FindEmployee.scss';
 
 import { TablePagination } from '@mui/material';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Employee from '../../models/Employee.interface';
@@ -25,6 +26,7 @@ const FindEmployee = () => {
   const [selectedSkill, setSelectedSkill] = useState<SearchDropdownOption[]>([]);
   const [dropdownAchievements, setDropdownAchievements] = useState<SearchAchievement[]>([]);
   const [selectedAchievement, setSelectedAchievement] = useState<SearchDropdownOption[]>([]);
+  const [searchCriteria, setSearchCriteria] = useState<boolean>(false);
 
   const inputValueRef = useRef(inputValue);
   const rowsPerPageRef = useRef(rowsPerPage);
@@ -62,6 +64,7 @@ const FindEmployee = () => {
     selectedSkillRef.current = value;
     setSelectedSkill(value);
     getEmployees();
+    checkIfSearchCriteriaDefined();
   };
 
   const getAchievementsCategories = async () => {
@@ -73,6 +76,7 @@ const FindEmployee = () => {
     selectedAchievementRef.current = value;
     setSelectedAchievement(value);
     getEmployees();
+    checkIfSearchCriteriaDefined();
   };
 
   const getEmployees = async () => {
@@ -91,6 +95,7 @@ const FindEmployee = () => {
     if (event.key === 'Enter') {
       setPage(0);
       getEmployees();
+      checkIfSearchCriteriaDefined();
       event.preventDefault();
     }
   };
@@ -109,6 +114,58 @@ const FindEmployee = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     getEmployees();
+  };
+
+  const checkIfSearchCriteriaDefined = () => {
+    if (!selectedSkillRef.current.length && !selectedAchievementRef.current.length && !inputValueRef.current.length) {
+      setSearchCriteria(false);
+    } else {
+      setSearchCriteria(true);
+    }
+  };
+
+  const handleFindEmployeeResults = (employees: Employee[]) => {
+    if (employees.length > 0) {
+      return (
+        <>
+          <FindEmployeeResults employees={employees} />
+          <TablePagination
+            component="div"
+            count={totalEmployeesCount}
+            page={!totalEmployeesCount || totalEmployeesCount <= 0 ? 0 : pageRef.current}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPageRef.current}
+            rowsPerPageOptions={rowSizeOptions}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      );
+    } else {
+      if (searchCriteria)
+        return (
+          <Typography
+            sx={{
+              color: 'primary.main',
+              fontSize: 20,
+              mt: 3,
+            }}
+          >
+            No employees match search criteria.
+          </Typography>
+        );
+
+      return (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            fontSize: 20,
+            mt: 3,
+          }}
+        >
+          Please define search criteria.
+        </Typography>
+      );
+    }
   };
 
   return (
@@ -157,20 +214,7 @@ const FindEmployee = () => {
           />
         </Box>
       </div>
-      {employees.length > 0 && (
-        <>
-          <FindEmployeeResults employees={employees} />
-          <TablePagination
-            component="div"
-            count={totalEmployeesCount}
-            page={!totalEmployeesCount || totalEmployeesCount <= 0 ? 0 : pageRef.current}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPageRef.current}
-            rowsPerPageOptions={rowSizeOptions}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </>
-      )}
+      {handleFindEmployeeResults(employees)}
     </>
   );
 };
