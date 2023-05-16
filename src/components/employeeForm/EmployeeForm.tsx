@@ -40,6 +40,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
   const titleService = new TitleService();
   const employeeService = new EmployeeService();
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const [emailValid, setEmailValid] = useState(true);
 
   const getAllTitles = async () => {
     const response = await titleService.getAllTitles();
@@ -61,8 +62,11 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
   };
 
   const handleFormSubmit = async () => {
-    const result = await employeeService.createEmployee(values);
-    onClose();
+    await checkIfEmailExists(values.email);
+    if (emailValid) {
+      await employeeService.createEmployee(values);
+      onClose();
+    }
   };
 
   const employeeForm = useFormik({
@@ -90,10 +94,14 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
     setSelectedTitle(event.target.value);
   };
 
-  const checkIfEmailExists = async () => {
-    const response = await employeeService.validateEmail(values.email);
-    if (response.exists) {
-      setFieldError('email', 'Employee with this email already exists');
+  const checkIfEmailExists = async (email: string) => {
+    try {
+      const employeeService = new EmployeeService();
+      const response = await employeeService.validateEmail(email);
+      setEmailValid(!response.exists);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error validating email');
     }
   };
 
@@ -306,8 +314,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
             fullWidth
             onChange={handleChange}
             onBlur={(event) => {
-              checkIfEmailExists();
               handleBlur(event);
+              checkIfEmailExists(event.target.value);
             }}
             value={values.email}
             error={touched.email && Boolean(errors.email)}
@@ -322,6 +330,11 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
               },
             }}
           />
+          {!emailValid && (
+            <Typography marginY={0.5} color="#d32f2f" sx={{ fontSize: 12 }}>
+              Employee with this email already exists
+            </Typography>
+          )}
         </Grid>
         <Grid xs={6} mt={2}>
           <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -358,18 +371,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
             }}
           />
         </Grid>
-        <Grid xs={12}>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>{JSON.stringify(errors)}</Typography>
-          </InputLabel>
-        </Grid>
-        <Grid xs={12}>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>{JSON.stringify(touched)}</Typography>
-          </InputLabel>
-        </Grid>
       </Grid>
-
       {/* Cancel/save Buttons */}
       <Divider />
       <Box display={'flex'} justifyContent={'flex-end'}>
