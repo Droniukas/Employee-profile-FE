@@ -2,7 +2,6 @@ import './Footer.scss';
 
 import { Box } from '@mui/material';
 import moment from 'moment';
-import React from 'react';
 
 const Footer = () => {
   return (

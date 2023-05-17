@@ -1,4 +1,4 @@
-import { EmploymentDate } from './EmployementData.interface';
+import { EmploymentDate } from './EmploymentDate.interface';
 
 interface Employee {
   id: number;

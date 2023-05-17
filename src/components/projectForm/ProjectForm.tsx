@@ -1,11 +1,13 @@
+import './ProjectForm.scss';
+
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Checkbox, Dialog, Divider, InputLabel, Link, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { getIn, useFormik } from 'formik';
-import React, { useCallback, useState } from 'react';
+import { FormikErrors, getIn, useFormik } from 'formik';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
@@ -32,12 +34,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
-  const [projectEmployeeErrors, setProjectEmployeeErrors] = useState<ProjectEmployeeError[]>([]);
+
+  const [projectEmployeeApiErrors, setProjectEmployeeApiErrors] = useState<ProjectEmployeeError[]>([]);
 
   let initialValues: Project = {
     title: '',
     description: '',
-    startDate: dayjs().toISOString(),
+    startDate: dayjs().startOf('day').toString(),
     endDate: '',
     projectEmployees: [],
     status: '',
@@ -63,8 +66,8 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError && error.response && error.response.status === 400) {
-        const projectEmployeeErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
-        setProjectEmployeeErrors(projectEmployeeErrors);
+        const projectEmployeeApiErrors = (error as AxiosError).response?.data as ProjectEmployeeError[];
+        setProjectEmployeeApiErrors(projectEmployeeApiErrors);
       }
     }
   };
@@ -73,6 +76,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     initialValues,
     onSubmit: handleFormSubmit,
     validationSchema: projectSchema,
+    validateOnChange: false,
   });
 
   const {
@@ -80,12 +84,13 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     touched,
     errors,
     dirty,
+    isSubmitting,
     handleBlur,
     handleChange,
     setFieldValue,
     setFieldTouched,
-    handleSubmit,
     setTouched,
+    handleSubmit,
   } = projectForm;
 
   const handleAddEmployeesFormClose = () => {
@@ -115,18 +120,53 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     });
 
     setTouched(newTouched);
-    setFieldValue('projectEmployees', sortedProjectEmployees);
+    setFieldValue('projectEmployees', sortedProjectEmployees, true);
   };
 
   const deleteProjectEmployee = useCallback(
-    (projectEmployeeId: number) => {
-      const updatedProjectEmployees = values.projectEmployees.filter(
-        (projectEmployee: ProjectEmployee) => projectEmployee.id !== projectEmployeeId,
-      );
-      setFieldValue('projectEmployees', updatedProjectEmployees);
+    (index: number) => {
+      const newTouched = {
+        ...touched,
+        projectEmployees: touched.projectEmployees?.filter((_, idx) => idx !== index),
+      };
+
+      const newProjectEmployees = values.projectEmployees.filter((_, idx) => idx !== index);
+
+      setTouched(newTouched);
+      setFieldValue('projectEmployees', newProjectEmployees, true);
     },
-    [values.projectEmployees, setFieldValue],
+    [values.projectEmployees, touched, setTouched, setFieldValue],
   );
+
+  const focusErrorElement = (elementId: string) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.focus();
+      setTimeout(() => {
+        element.classList.add('field-error');
+      }, 100);
+      element.classList.remove('field-error');
+    }
+  };
+
+  useEffect(() => {
+    if (isSubmitting && errors) {
+      const firstElementWithErrorId = Object.keys(errors)[0];
+      if (firstElementWithErrorId === 'projectEmployees') {
+        const projectEmployeeErrors = errors.projectEmployees as FormikErrors<ProjectEmployee>[];
+        const firstErrorIndex = projectEmployeeErrors.findIndex((error) => error !== undefined);
+        focusErrorElement(`projectEmployees${values.projectEmployees[firstErrorIndex].id}`);
+      } else {
+        focusErrorElement(firstElementWithErrorId);
+      }
+    }
+  }, [isSubmitting, errors, values.projectEmployees]);
+
+  useEffect(() => {
+    if (projectEmployeeApiErrors.length > 0) {
+      focusErrorElement(`projectEmployees${projectEmployeeApiErrors[0].employeeId}`);
+    }
+  }, [projectEmployeeApiErrors]);
 
   return (
     <>
@@ -148,175 +188,215 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Button>
         </Box>
 
-        <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
-          <Typography
-            variant="h1"
+      <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            mb: 2,
+            fontWeight: 400,
+            fontSize: 25,
+            fontStyle: 'Regular',
+            color: 'primary.main',
+          }}
+        >
+          {project ? 'Edit project profile' : 'Add project profile'}
+        </Typography>
+        <Box>
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
+          </InputLabel>
+          <TextField
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.title}
+            error={touched.title && Boolean(errors.title)}
+            helperText={touched.title && errors.title}
+            size="small"
+            variant="outlined"
+            name={'title'}
+            id={'title'}
+            inputProps={{ maxLength: 50 }}
             sx={{
-              mb: 2,
-              fontWeight: 400,
-              fontSize: 25,
-              fontStyle: 'Regular',
-              color: 'primary.main',
+              '& fieldset': {
+                borderRadius: 2,
+              },
             }}
-          >
-            {project ? 'Edit project profile' : 'Add project profile'}
-          </Typography>
-          <Box>
-            <InputLabel>
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
-            </InputLabel>
-            <TextField
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.title}
-              error={touched.title && Boolean(errors.title)}
-              helperText={touched.title && errors.title}
-              size="small"
-              variant="outlined"
-              name={'title'}
-              inputProps={{ maxLength: 50 }}
-              sx={{
-                '& fieldset': {
-                  borderRadius: 2,
-                },
-              }}
-            />
-          </Box>
-          <Box
-            component="div"
+          />
+        </Box>
+        <Box
+          component="div"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            my: 2,
+          }}
+        >
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
+          </InputLabel>
+          <TextField
+            onChange={handleChange}
+            value={values.description}
+            onBlur={handleBlur}
+            error={touched.description && Boolean(errors.description)}
+            helperText={touched.description && errors.description}
+            name={'description'}
+            id={'description'}
+            fullWidth
+            multiline
+            rows={8}
+            variant="outlined"
+            placeholder="e.g., Give a short description about project background and expected outcome."
+            inputProps={{ maxLength: 1000 }}
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              my: 2,
+              '& .MuiOutlinedInput-root': {
+                padding: 0,
+              },
+              '& textarea': {
+                padding: 2,
+              },
+              '& fieldset': {
+                borderRadius: 2,
+              },
             }}
-          >
+          />
+        </Box>
+        <Box display={'flex'}>
+          <Box display={'inline-block'}>
             <InputLabel>
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
             </InputLabel>
-            <TextField
-              onChange={handleChange}
-              value={values.description}
-              onBlur={handleBlur}
-              error={touched.description && Boolean(errors.description)}
-              helperText={touched.description && errors.description}
-              name={'description'}
-              fullWidth
-              multiline
-              rows={8}
-              variant="outlined"
-              placeholder="e.g., Give a short description about project background and expected outcome."
-              inputProps={{ maxLength: 1000 }}
-              sx={{
-                '& fieldset': {
-                  borderRadius: 2,
-                },
-              }}
-            />
-          </Box>
-          <Box display={'flex'} sx={{}}>
-            <Box display={'inline-block'}>
-              <InputLabel>
-                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
-              </InputLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box id={'startDate'}>
                 <DatePicker
                   sx={{
                     width: 170,
                     '& .MuiInputBase-input': {
                       height: 10,
                     },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderRadius: 2,
+                    },
                   }}
                   format="YYYY/MM/DD"
-                  value={dayjs(values.startDate)}
+                  value={values.startDate ? dayjs(values.startDate) : null}
                   onChange={(newValue) => {
-                    if (newValue === null) return;
-                    setFieldValue('startDate', dayjs(newValue).toISOString());
-                    setFieldTouched('startDate', true);
-                    setFieldValue('endDate', '');
-                    setFieldTouched('endDate', true);
+                    newValue
+                      ? setFieldValue('startDate', dayjs(newValue).startOf('day').toString())
+                      : setFieldValue('startDate', undefined);
+                  }}
+                  slotProps={{
+                    textField: {
+                      error: Boolean(errors.startDate),
+                      onBlur: () => setFieldTouched('startDate'),
+                    },
+                    popper: {
+                      onBlur: () => setFieldTouched('startDate'),
+                    },
                   }}
                 />
-              </LocalizationProvider>
-            </Box>
-            <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
-              <Checkbox
-                checked={endDateExists}
-                onChange={(e) => {
-                  setEndDateExists(e.target.checked);
-                  setFieldValue('endDate', '');
-                }}
-              />
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
-            </Box>
+              </Box>
+            </LocalizationProvider>
           </Box>
-          {endDateExists && (
-            <Box sx={{ my: 2 }}>
-              <InputLabel>
-                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
-              </InputLabel>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
+            <Checkbox
+              checked={endDateExists}
+              onChange={(e) => {
+                setEndDateExists(e.target.checked);
+                setFieldValue('endDate', undefined, true);
+              }}
+            />
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
+          </Box>
+        </Box>
+        <Typography sx={{ color: '#D32F2F', fontSize: 12, width: 170, mt: 0.4 }}>{errors.startDate}</Typography>
+        {endDateExists && (
+          <Box sx={{ my: 2 }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
+            </InputLabel>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Box id={'endDate'} width={170}>
                 <DatePicker
                   sx={{
                     width: 170,
                     '& .MuiInputBase-input': {
                       height: 10,
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderRadius: 2,
                     },
                   }}
                   format="YYYY/MM/DD"
                   minDate={dayjs(values.startDate)}
                   value={values.endDate ? dayjs(values.endDate) : null}
-                  onChange={(newValue) => setFieldValue('endDate', dayjs(newValue).toISOString())}
-                />
-              </LocalizationProvider>
-            </Box>
-          )}
-          {/* Team member box */}
-          <Box component="div" sx={{ mt: 2 }}>
-            <Box sx={{ display: 'flex' }}>
-              <InputLabel>
-                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
-              </InputLabel>
-              {values.projectEmployees.length > 0 && (
-                <Link
-                  component="button"
-                  sx={{ marginLeft: 'auto', color: 'primary.main' }}
-                  onClick={(event) => {
-                    setShowAddEmployeesForm(true);
-                    event.preventDefault();
+                  onChange={(newValue) => {
+                    newValue
+                      ? setFieldValue('endDate', dayjs(newValue).startOf('day').toString())
+                      : setFieldValue('endDate', undefined);
                   }}
-                >
-                  <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'primary.main' }}>Add team member</Typography>
-                </Link>
-              )}
-            </Box>
-
-            {values.projectEmployees.length > 0 ? (
-              <ProjectEmployeeEditList
-                projectEmployees={values.projectEmployees}
-                formikErrors={getIn(errors, 'projectEmployees')}
-                errors={projectEmployeeErrors}
-                touched={getIn(touched, 'projectEmployees')}
-                handleBlur={handleBlur}
-                setFieldValue={setFieldValue}
-                deleteProjectEmployee={deleteProjectEmployee}
-              />
-            ) : (
-              <Box
-                component="div"
-                height={200}
-                sx={{
-                  backgroundColor: '#ededed',
-                  borderRadius: 2,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  slotProps={{
+                    textField: {
+                      error: Boolean(errors.endDate),
+                      onBlur: () => setFieldTouched('endDate'),
+                    },
+                    popper: {
+                      onBlur: () => setFieldTouched('endDate'),
+                    },
+                  }}
+                />
+              </Box>
+            </LocalizationProvider>
+            <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 0.4 }}>{errors.endDate}</Typography>
+          </Box>
+        )}
+        {/* Team member box */}
+        <Box component="div" sx={{ mt: 2 }}>
+          <Box sx={{ display: 'flex' }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
+            </InputLabel>
+            {values.projectEmployees.length > 0 && (
+              <Link
+                component="button"
+                sx={{ marginLeft: 'auto', color: 'primary.main' }}
+                onClick={(event) => {
+                  setShowAddEmployeesForm(true);
+                  event.preventDefault();
                 }}
               >
-                <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: 'primary.main' }}>
-                  No team members yet
-                </Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'primary.main' }}>Add team member</Typography>
+              </Link>
+            )}
+          </Box>
+
+          {values.projectEmployees.length > 0 ? (
+            <ProjectEmployeeEditList
+              projectEmployees={values.projectEmployees}
+              formikErrors={getIn(errors, 'projectEmployees')}
+              apiErrors={projectEmployeeApiErrors}
+              touched={getIn(touched, 'projectEmployees')}
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              deleteProjectEmployee={deleteProjectEmployee}
+            />
+          ) : (
+            <Box
+              component="div"
+              height={200}
+              sx={{
+                backgroundColor: '#ededed',
+                borderRadius: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: 'primary.main' }}>
+                No team members yet
+              </Typography>
 
                 <Typography
                   sx={{

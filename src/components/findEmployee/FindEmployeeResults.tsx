@@ -11,21 +11,16 @@ import { useSelector } from 'react-redux';
 import Employee from '../../models/Employee.interface';
 import { ROUTES } from '../../routes/routes';
 import { UserStateRoot } from '../../store/types/user';
+import { EmployeeStatus } from '../enums/EmployeeStatus';
 import StatusChip from './StatusChip';
 
 type FindEmployeeResultsProps = {
   employees: Employee[];
 };
 
-export const isInactiveOrDismissed = (status: string): boolean => {
-  return ['INACTIVE', 'DISMISSED'].includes(status);
-};
-
 const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmployeeResultsProps) => {
   const { employees } = props;
   const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
-
-  if (!employees) return null;
 
   const renderResultItem = (employee: Employee) => {
     return (
@@ -36,7 +31,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
               src={`data:${employee.imageType};base64,${employee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
+                opacity: employee.status === EmployeeStatus.ACTIVE ? 1 : 0.35,
               }}
             />
           </ListItemAvatar>
@@ -49,7 +44,7 @@ const FindEmployeeResults: React.FC<FindEmployeeResultsProps> = (props: FindEmpl
               </>
             }
             sx={{
-              color: isInactiveOrDismissed(employee.status) ? '#666666' : 'primary.main',
+              color: employee.status === EmployeeStatus.ACTIVE ? 'primary.main' : '#666666',
             }}
           >
             <Link
