@@ -55,13 +55,13 @@ export class ProjectsService {
 
   private mapMyProjectStatus(myProject: MyProject) {
     const today = new Date();
-    const startDateFormatted = myProject.startDate ? new Date(myProject.startDate) : undefined;
-    const endDateFormatted = myProject.endDate ? new Date(myProject.endDate) : undefined;
+    const startDateFormatted = new Date(myProject.startDate);
+    const endDateFormatted = new Date(myProject.endDate);
 
     if (startDateFormatted && startDateFormatted > today) {
       myProject.status = ProjectStatus.FUTURE;
     } else {
-      if (!endDateFormatted || endDateFormatted > today) {
+      if (myProject.endDate === null || endDateFormatted > today) {
         myProject.status = ProjectStatus.ONGOING;
       } else {
         myProject.status = ProjectStatus.FINISHED;
