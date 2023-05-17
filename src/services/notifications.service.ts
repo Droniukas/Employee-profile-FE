@@ -6,7 +6,7 @@ export class NotificationService {
     return response.data;
   }
 
-  public async setReadById(notificationId: number) {
-    await axios.get(`/notifications/setReadById/${notificationId}`);
+  public async setReadById(notificationId: number, read: boolean) {
+    await axios.put(`/notifications/setReadById/${notificationId}/${read}`);
   }
 }

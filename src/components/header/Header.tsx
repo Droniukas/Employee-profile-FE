@@ -4,14 +4,16 @@ import { useAuth0 } from '@auth0/auth0-react';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Avatar, Badge, BadgeProps, Box, IconButton, Link, Menu, MenuItem, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteAuthToken } from '../../config/auth';
 import { ROUTES } from '../../routes/routes';
+import { NotificationService } from '../../services/notifications.service';
 import { UserStateRoot } from '../../store/types/user';
 import Loading from '../loading/Loading';
 import NotificationsDropdown from './Notifications/NotificationsDropdown';
-import { NotificationService } from '../../services/notifications.service';
+import { notificationsRoot } from '../../store/types/notifications';
+import { setNotifications } from '../../states/notifications';
 import { Notification } from '../../models/Notification.interface';
 
 const Header = () => {
@@ -20,8 +22,9 @@ const Header = () => {
   const [notificationIconAnchorEl, setNotificationIconAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(userIconAnchorEl);
   const { logout } = useAuth0();
-  const [notificationCount, setNotificationCount] = useState<number>(0);
-  const [notifications, setNotifications] = useState<Notification[] | null>();
+  const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
+  const [notificationsCount, setNotificationsCount] = useState<number>(0);
+  const dispatch = useDispatch();
 
   const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
     setUserIconAnchorEl(event.currentTarget);
@@ -41,9 +44,11 @@ const Header = () => {
     const fetchNotifications = async () => {
       if (user) {
         const notifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
-        console.log(notifications);
-        setNotifications(notifications);
-        setNotificationCount(notifications.length);
+        dispatch(setNotifications(notifications));
+        const unreadNotificationsCount = notifications.filter(
+          (notification: Notification) => !notification.read,
+        ).length;
+        setNotificationsCount(unreadNotificationsCount);
       }
     };
     fetchNotifications();
@@ -90,7 +95,11 @@ const Header = () => {
           handleNotificationIconClick(event);
         }}
       >
-        <StyledBadge badgeContent={<b>{notificationCount}</b>} color="secondary">
+        <StyledBadge
+          invisible={notificationsCount === 0 && true}
+          badgeContent={<b>{notificationsCount}</b>}
+          color="secondary"
+        >
           <NotificationsIcon sx={{ width: 35, height: 35, color: 'black' }} />
         </StyledBadge>
       </IconButton>
@@ -136,7 +145,8 @@ const Header = () => {
         <NotificationsDropdown
           onClose={handleNotificationsDropdownClose}
           notificationIconAnchorEl={notificationIconAnchorEl}
-          notifications={notifications}
+          setNotificationsCount={setNotificationsCount}
+          notificationsCount={notificationsCount}
         />
       )}
     </Box>

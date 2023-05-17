@@ -10,6 +10,7 @@ import onCancelReducer from '../states/onCancel';
 import skillsTabStateReducer from '../states/skillsTabState';
 import skillWithErrorIdReducer from '../states/skillWithErrorId';
 import userStateReducer from '../states/userState';
+import notificationsReducer from '../states/notifications';
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     expandedAchievement: expandedAchievementReducer,
     skillWithErrorId: skillWithErrorIdReducer,
     achievementWithErrorId: achievementWithErrorIdReducer,
+    notifications: notificationsReducer,
   },
 });
 

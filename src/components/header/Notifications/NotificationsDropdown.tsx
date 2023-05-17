@@ -1,21 +1,22 @@
 import { Box, Menu, Typography } from '@mui/material';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Notification } from '../../../models/Notification.interface';
-import { UserStateRoot } from '../../../store/types/user';
 import NotificationItem from './NotificationItem';
+import { useSelector } from 'react-redux';
+import { notificationsRoot } from '../../../store/types/notifications';
 
 type NotificationsDropdownProps = {
   notificationIconAnchorEl: HTMLElement | null;
   onClose: () => void;
-  notifications: Notification[];
+  setNotificationsCount: React.Dispatch<React.SetStateAction<number>>;
+  notificationsCount: number;
 };
 
 const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps> = (props) => {
-  const { notificationIconAnchorEl, onClose, notifications } = props;
+  const { notificationIconAnchorEl, onClose, setNotificationsCount, notificationsCount } = props;
   const open = Boolean(notificationIconAnchorEl);
-  const user = useSelector((state: UserStateRoot) => state.userState.value);
+  const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
 
   return (
     <>
@@ -36,15 +37,19 @@ const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps>
         }}
       >
         <Box sx={{ width: '400px' }}>
-          <Typography
-            sx={{ margin: '15px', marginTop: 0, paddingBottom: '15px', borderBottom: 1.5, borderColor: 'divider' }}
-            fontSize={20}
-          >
+          <Typography sx={{ margin: '15px', marginTop: 0 }} fontSize={20}>
             Notifications
           </Typography>
         </Box>
         {notifications?.map((notification: Notification) => {
-          return <NotificationItem key={notification.id} notification={notification} />;
+          return (
+            <NotificationItem
+              key={notification.id}
+              currentNotification={notification}
+              setNotificationsCount={setNotificationsCount}
+              notificationsCount={notificationsCount}
+            />
+          );
         })}
       </Menu>
     </>

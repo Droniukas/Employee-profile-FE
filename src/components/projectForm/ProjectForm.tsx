@@ -188,215 +188,215 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
           </Button>
         </Box>
 
-      <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
-        <Typography
-          variant="h1"
-          sx={{
-            mb: 2,
-            fontWeight: 400,
-            fontSize: 25,
-            fontStyle: 'Regular',
-            color: 'primary.main',
-          }}
-        >
-          {project ? 'Edit project profile' : 'Add project profile'}
-        </Typography>
-        <Box>
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
-          </InputLabel>
-          <TextField
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.title}
-            error={touched.title && Boolean(errors.title)}
-            helperText={touched.title && errors.title}
-            size="small"
-            variant="outlined"
-            name={'title'}
-            id={'title'}
-            inputProps={{ maxLength: 50 }}
+        <Box component="form" sx={{ marginX: 5, marginTop: 3 }}>
+          <Typography
+            variant="h1"
             sx={{
-              '& fieldset': {
-                borderRadius: 2,
-              },
+              mb: 2,
+              fontWeight: 400,
+              fontSize: 25,
+              fontStyle: 'Regular',
+              color: 'primary.main',
             }}
-          />
-        </Box>
-        <Box
-          component="div"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            my: 2,
-          }}
-        >
-          <InputLabel>
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
-          </InputLabel>
-          <TextField
-            onChange={handleChange}
-            value={values.description}
-            onBlur={handleBlur}
-            error={touched.description && Boolean(errors.description)}
-            helperText={touched.description && errors.description}
-            name={'description'}
-            id={'description'}
-            fullWidth
-            multiline
-            rows={8}
-            variant="outlined"
-            placeholder="e.g., Give a short description about project background and expected outcome."
-            inputProps={{ maxLength: 1000 }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                padding: 0,
-              },
-              '& textarea': {
-                padding: 2,
-              },
-              '& fieldset': {
-                borderRadius: 2,
-              },
-            }}
-          />
-        </Box>
-        <Box display={'flex'}>
-          <Box display={'inline-block'}>
+          >
+            {project ? 'Edit project profile' : 'Add project profile'}
+          </Typography>
+          <Box>
             <InputLabel>
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
             </InputLabel>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box id={'startDate'}>
-                <DatePicker
-                  sx={{
-                    width: 170,
-                    '& .MuiInputBase-input': {
-                      height: 10,
-                    },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderRadius: 2,
-                    },
-                  }}
-                  format="YYYY/MM/DD"
-                  value={values.startDate ? dayjs(values.startDate) : null}
-                  onChange={(newValue) => {
-                    newValue
-                      ? setFieldValue('startDate', dayjs(newValue).startOf('day').toString())
-                      : setFieldValue('startDate', undefined);
-                  }}
-                  slotProps={{
-                    textField: {
-                      error: Boolean(errors.startDate),
-                      onBlur: () => setFieldTouched('startDate'),
-                    },
-                    popper: {
-                      onBlur: () => setFieldTouched('startDate'),
-                    },
-                  }}
-                />
-              </Box>
-            </LocalizationProvider>
-          </Box>
-          <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
-            <Checkbox
-              checked={endDateExists}
-              onChange={(e) => {
-                setEndDateExists(e.target.checked);
-                setFieldValue('endDate', undefined, true);
+            <TextField
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.title}
+              error={touched.title && Boolean(errors.title)}
+              helperText={touched.title && errors.title}
+              size="small"
+              variant="outlined"
+              name={'title'}
+              id={'title'}
+              inputProps={{ maxLength: 50 }}
+              sx={{
+                '& fieldset': {
+                  borderRadius: 2,
+                },
               }}
             />
-            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
           </Box>
-        </Box>
-        <Typography sx={{ color: '#D32F2F', fontSize: 12, width: 170, mt: 0.4 }}>{errors.startDate}</Typography>
-        {endDateExists && (
-          <Box sx={{ my: 2 }}>
+          <Box
+            component="div"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              my: 2,
+            }}
+          >
             <InputLabel>
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
             </InputLabel>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Box id={'endDate'} width={170}>
-                <DatePicker
-                  sx={{
-                    width: 170,
-                    '& .MuiInputBase-input': {
-                      height: 10,
-                    },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderRadius: 2,
-                    },
-                  }}
-                  format="YYYY/MM/DD"
-                  minDate={dayjs(values.startDate)}
-                  value={values.endDate ? dayjs(values.endDate) : null}
-                  onChange={(newValue) => {
-                    newValue
-                      ? setFieldValue('endDate', dayjs(newValue).startOf('day').toString())
-                      : setFieldValue('endDate', undefined);
-                  }}
-                  slotProps={{
-                    textField: {
-                      error: Boolean(errors.endDate),
-                      onBlur: () => setFieldTouched('endDate'),
-                    },
-                    popper: {
-                      onBlur: () => setFieldTouched('endDate'),
-                    },
-                  }}
-                />
-              </Box>
-            </LocalizationProvider>
-            <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 0.4 }}>{errors.endDate}</Typography>
+            <TextField
+              onChange={handleChange}
+              value={values.description}
+              onBlur={handleBlur}
+              error={touched.description && Boolean(errors.description)}
+              helperText={touched.description && errors.description}
+              name={'description'}
+              id={'description'}
+              fullWidth
+              multiline
+              rows={8}
+              variant="outlined"
+              placeholder="e.g., Give a short description about project background and expected outcome."
+              inputProps={{ maxLength: 1000 }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  padding: 0,
+                },
+                '& textarea': {
+                  padding: 2,
+                },
+                '& fieldset': {
+                  borderRadius: 2,
+                },
+              }}
+            />
           </Box>
-        )}
-        {/* Team member box */}
-        <Box component="div" sx={{ mt: 2 }}>
-          <Box sx={{ display: 'flex' }}>
-            <InputLabel>
-              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
-            </InputLabel>
-            {values.projectEmployees.length > 0 && (
-              <Link
-                component="button"
-                sx={{ marginLeft: 'auto', color: 'primary.main' }}
-                onClick={(event) => {
-                  setShowAddEmployeesForm(true);
-                  event.preventDefault();
+          <Box display={'flex'}>
+            <Box display={'inline-block'}>
+              <InputLabel>
+                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Start Date</Typography>
+              </InputLabel>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Box id={'startDate'}>
+                  <DatePicker
+                    sx={{
+                      width: 170,
+                      '& .MuiInputBase-input': {
+                        height: 10,
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderRadius: 2,
+                      },
+                    }}
+                    format="YYYY/MM/DD"
+                    value={values.startDate ? dayjs(values.startDate) : null}
+                    onChange={(newValue) => {
+                      newValue
+                        ? setFieldValue('startDate', dayjs(newValue).startOf('day').toString())
+                        : setFieldValue('startDate', undefined);
+                    }}
+                    slotProps={{
+                      textField: {
+                        error: Boolean(errors.startDate),
+                        onBlur: () => setFieldTouched('startDate'),
+                      },
+                      popper: {
+                        onBlur: () => setFieldTouched('startDate'),
+                      },
+                    }}
+                  />
+                </Box>
+              </LocalizationProvider>
+            </Box>
+            <Box marginX={2} sx={{ display: 'inline-flex', alignItems: 'center', position: 'relative', top: 12 }}>
+              <Checkbox
+                checked={endDateExists}
+                onChange={(e) => {
+                  setEndDateExists(e.target.checked);
+                  setFieldValue('endDate', undefined, true);
+                }}
+              />
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Add end date of a project</Typography>
+            </Box>
+          </Box>
+          <Typography sx={{ color: '#D32F2F', fontSize: 12, width: 170, mt: 0.4 }}>{errors.startDate}</Typography>
+          {endDateExists && (
+            <Box sx={{ my: 2 }}>
+              <InputLabel>
+                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>End Date</Typography>
+              </InputLabel>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Box id={'endDate'} width={170}>
+                  <DatePicker
+                    sx={{
+                      width: 170,
+                      '& .MuiInputBase-input': {
+                        height: 10,
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderRadius: 2,
+                      },
+                    }}
+                    format="YYYY/MM/DD"
+                    minDate={dayjs(values.startDate)}
+                    value={values.endDate ? dayjs(values.endDate) : null}
+                    onChange={(newValue) => {
+                      newValue
+                        ? setFieldValue('endDate', dayjs(newValue).startOf('day').toString())
+                        : setFieldValue('endDate', undefined);
+                    }}
+                    slotProps={{
+                      textField: {
+                        error: Boolean(errors.endDate),
+                        onBlur: () => setFieldTouched('endDate'),
+                      },
+                      popper: {
+                        onBlur: () => setFieldTouched('endDate'),
+                      },
+                    }}
+                  />
+                </Box>
+              </LocalizationProvider>
+              <Typography sx={{ color: '#D32F2F', fontSize: 12, mt: 0.4 }}>{errors.endDate}</Typography>
+            </Box>
+          )}
+          {/* Team member box */}
+          <Box component="div" sx={{ mt: 2 }}>
+            <Box sx={{ display: 'flex' }}>
+              <InputLabel>
+                <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Team Members</Typography>
+              </InputLabel>
+              {values.projectEmployees.length > 0 && (
+                <Link
+                  component="button"
+                  sx={{ marginLeft: 'auto', color: 'primary.main' }}
+                  onClick={(event) => {
+                    setShowAddEmployeesForm(true);
+                    event.preventDefault();
+                  }}
+                >
+                  <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'primary.main' }}>Add team member</Typography>
+                </Link>
+              )}
+            </Box>
+
+            {values.projectEmployees.length > 0 ? (
+              <ProjectEmployeeEditList
+                projectEmployees={values.projectEmployees}
+                formikErrors={getIn(errors, 'projectEmployees')}
+                apiErrors={projectEmployeeApiErrors}
+                touched={getIn(touched, 'projectEmployees')}
+                setFieldValue={setFieldValue}
+                setFieldTouched={setFieldTouched}
+                deleteProjectEmployee={deleteProjectEmployee}
+              />
+            ) : (
+              <Box
+                component="div"
+                height={200}
+                sx={{
+                  backgroundColor: '#ededed',
+                  borderRadius: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
-                <Typography sx={{ fontSize: 14, fontWeight: 400, color: 'primary.main' }}>Add team member</Typography>
-              </Link>
-            )}
-          </Box>
-
-          {values.projectEmployees.length > 0 ? (
-            <ProjectEmployeeEditList
-              projectEmployees={values.projectEmployees}
-              formikErrors={getIn(errors, 'projectEmployees')}
-              apiErrors={projectEmployeeApiErrors}
-              touched={getIn(touched, 'projectEmployees')}
-              setFieldValue={setFieldValue}
-              setFieldTouched={setFieldTouched}
-              deleteProjectEmployee={deleteProjectEmployee}
-            />
-          ) : (
-            <Box
-              component="div"
-              height={200}
-              sx={{
-                backgroundColor: '#ededed',
-                borderRadius: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: 'primary.main' }}>
-                No team members yet
-              </Typography>
+                <Typography sx={{ my: 1, fontSize: 20, fontWeight: 600, color: 'primary.main' }}>
+                  No team members yet
+                </Typography>
 
                 <Typography
                   sx={{

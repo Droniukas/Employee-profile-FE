@@ -9,4 +9,5 @@ export interface Notification {
   initiatorEmployee: Employee;
   notificationType: NotificationType;
   notificationCreatedAt: string;
+  read: boolean;
 }

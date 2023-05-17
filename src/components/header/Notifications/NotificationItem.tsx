@@ -1,32 +1,40 @@
-import { Avatar, Box, Button } from '@mui/material';
-
+import { Avatar, Box, Button, Theme } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { isInactiveOrDismissed } from '../../findEmployee/FindEmployeeResults';
+
 import { Notification } from '../../../models/Notification.interface';
-import NotificationTextElement from './NotificationTextElement';
 import { NotificationService } from '../../../services/notifications.service';
+import NotificationTextElement from './NotificationTextElement';
+import { useDispatch, useSelector } from 'react-redux';
+import { notificationsRoot } from '../../../store/types/notifications';
+import { setReadById } from '../../../states/notifications';
 
 type NotificationItemProps = {
-  notification: Notification;
+  currentNotification: Notification;
+  setNotificationsCount: React.Dispatch<React.SetStateAction<number>>;
+  notificationsCount: number;
 };
 
 const NotificationItem = (props: NotificationItemProps) => {
-  const { notification } = props;
+  const { currentNotification, setNotificationsCount, notificationsCount } = props;
+  const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
+  const dispatch = useDispatch();
+
   dayjs.extend(duration);
   dayjs.extend(relativeTime);
-  const elapsedTimeFromCreation = dayjs(notification.notificationCreatedAt).from(dayjs(), true);
+  const elapsedTimeFromCreation = dayjs(currentNotification.notificationCreatedAt).from(dayjs(), true);
 
   const notificationService = new NotificationService();
 
   const handleMarkAsReadClick = () => {
-    notificationService.setReadById(notification.id);
-    // think about is there any ways to delete this from the ui withouth rerendering and refetching the data, take a look how projects does it's deletion
+    notificationService.setReadById(currentNotification.id, true);
+    dispatch(setReadById(currentNotification.id));
+    setNotificationsCount(notificationsCount - 1);
   };
 
   const handleNotificationClick = () => {
-    console.log('notif click');
+    console.log('siyfbsd');
   };
 
   return (
@@ -38,28 +46,35 @@ const NotificationItem = (props: NotificationItemProps) => {
         borderColor: 'divider',
         display: 'flex',
         justifyContent: 'space-between',
+        ...(!currentNotification.read && {
+          backgroundColor: '#d8f8f7',
+        }),
+        transition: (theme: Theme) => theme.transitions.create(['background-color']),
       }}
     >
       <Box>
         <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <Box onClick={handleNotificationClick} sx={{ cursor: 'pointer' }}>
             <Avatar
-              src={`data:${notification.initiatorEmployee.imageType};base64,${notification.initiatorEmployee.imageBytes}`}
+              src={`data:${currentNotification.initiatorEmployee.imageType};base64,${currentNotification.initiatorEmployee.imageBytes}`}
               sx={{
                 border: '0.01px solid lightgrey',
-                opacity: isInactiveOrDismissed(notification.initiatorEmployee.status) ? 0.35 : 1,
               }}
             />
           </Box>
           <Box sx={{ cursor: 'pointer', fontSize: 12 }} onClick={handleNotificationClick}>
-            <NotificationTextElement notification={notification} />
+            <NotificationTextElement currentNotification={currentNotification} />
           </Box>
         </Box>
         <Box fontSize="10px" color="grey">
           {elapsedTimeFromCreation} ago
         </Box>
       </Box>
-      <Button onClick={handleMarkAsReadClick} sx={{ border: 1, borderColor: 'primary.main' }}>
+      <Button
+        disabled={currentNotification.read}
+        onClick={handleMarkAsReadClick}
+        sx={{ border: 1, borderColor: 'primary.main' }}
+      >
         Mark as read
       </Button>
     </Box>
