@@ -13,12 +13,12 @@ import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
-type ProjectFormProps = {
+type MyProjectEditProps = {
   onClose: (projectId?: number) => void;
   myProject: MyProject;
 };
 
-const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
+const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) => {
   const { onClose, myProject } = props;
 
   const projectsService = new ProjectsService();
@@ -50,11 +50,7 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   };
 
   const correctDateFormat = (date: string) => {
-    if (date === null) {
-      return null;
-    } else {
-      return moment(date).format('YYYY/MM/DD');
-    }
+    return date === null ? null : moment(date).format('YYYY/MM/DD');
   };
 
   const projectForm = useFormik({
@@ -141,18 +137,8 @@ const MyProjectEdit: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
             </InputLabel>
             <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
               <>
-                {myProject.projectEmployeeStartDate && (
-                  <>
-                    {'From '}
-                    {correctDateFormat(myProject.projectEmployeeStartDate)}
-                  </>
-                )}
-                {myProject.projectEmployeeEndDate && (
-                  <>
-                    {' to '}
-                    {correctDateFormat(myProject.projectEmployeeEndDate)}
-                  </>
-                )}
+                {'From '} {correctDateFormat(myProject.projectEmployeeStartDate)}
+                {myProject.projectEmployeeEndDate ? ' to ' + correctDateFormat(myProject.projectEmployeeEndDate) : ''}
               </>
             </Typography>
           </Box>
