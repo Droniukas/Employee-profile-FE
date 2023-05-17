@@ -39,9 +39,6 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
     setProjectToEdit(MyProject);
     setOpenPopup(true);
   };
-  // const correctDateFormat = (date: string) => {
-  //   return date === null ? null : moment(date).format('YYYY/MM/DD');
-  // };
 
   const renderResultItem = (myProject: MyProject) => {
     return (
