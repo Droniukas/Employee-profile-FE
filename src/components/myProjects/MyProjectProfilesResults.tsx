@@ -2,6 +2,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
@@ -10,6 +11,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
+import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
@@ -27,6 +29,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
+  const projectsService = new ProjectsService();
 
   const closeEditForm = () => {
     setOpenPopup(false);
@@ -125,6 +128,24 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                 >
                   {myProject.description}
                 </Typography>
+                <Box
+                  component="div"
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    my: 1,
+                  }}
+                >
+                  <InputLabel>
+                    <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
+                      My responsibilities
+                    </Typography>
+                  </InputLabel>
+                  <Typography sx={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#666666' }}>
+                    {myProject.responsibilities}
+                  </Typography>
+                </Box>
                 <Box
                   component="div"
                   sx={{

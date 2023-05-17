@@ -13,12 +13,12 @@ import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 
-type MyProjectEditProps = {
+type MyProjectFormProps = {
   onClose: (projectId?: number) => void;
   myProject: MyProject;
 };
 
-const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) => {
+const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
   const { onClose, myProject } = props;
 
   const projectsService = new ProjectsService();
@@ -26,6 +26,7 @@ const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) 
   const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   let initialValues: MyProject = {
+    id: Number(''),
     title: '',
     description: '',
     startDate: '',
@@ -38,15 +39,9 @@ const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) 
   if (myProject) initialValues = myProject;
 
   const handleFormSubmit = async () => {
-    let result;
     values.responsibilities.trim();
-
-    try {
-      result = await projectsService.updateMyProject(values);
-      onClose();
-    } catch (error: unknown) {
-      /* empty */
-    }
+    const result = await projectsService.updateMyProject(values);
+    onClose();
   };
 
   const projectForm = useFormik({
@@ -133,10 +128,12 @@ const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) 
             </InputLabel>
             <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
               <>
-                {'From '} {projectProfileDateFormat(myProject.projectEmployeeStartDate)}
-                {myProject.projectEmployeeEndDate
-                  ? ' to ' + projectProfileDateFormat(myProject.projectEmployeeEndDate)
-                  : ''}
+                <>
+                  {'From '} {projectProfileDateFormat(myProject.projectEmployeeStartDate)}
+                  {myProject.projectEmployeeEndDate
+                    ? ' to ' + projectProfileDateFormat(myProject.projectEmployeeEndDate)
+                    : ''}
+                </>
               </>
             </Typography>
           </Box>
