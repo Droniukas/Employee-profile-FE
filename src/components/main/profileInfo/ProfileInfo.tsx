@@ -3,7 +3,7 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import Employee from '../../../models/Employee.interface';
-import { isInactiveOrDismissed } from '../../findEmployee/FindEmployeeResults';
+import { EmployeeStatus } from '../../enums/EmployeeStatus';
 import StatusChip from '../../findEmployee/StatusChip';
 import Loading from '../../loading/Loading';
 import EmployeeDates from './EmployeeDates';
@@ -32,7 +32,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = (props: ProfileInfoProps) => {
               height: 64,
               left: '5vw',
               top: 150,
-              opacity: isInactiveOrDismissed(employee.status) ? 0.35 : 1,
+              opacity: employee.status === EmployeeStatus.ACTIVE ? 1 : 0.35,
             }}
           />
         ) : (

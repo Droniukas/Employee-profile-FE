@@ -15,6 +15,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
@@ -67,7 +68,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   };
 
   const renderResultItem = (project: Project) => {
-    const visibleDescriptionLength = width * 0.7;
+    const visibleDescriptionLength = width * 0.9;
     const isTextOverflow = project.description.length > visibleDescriptionLength;
 
     return (
@@ -147,7 +148,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: '4',
+                    WebkitLineClamp: '3',
                     WebkitBoxOrient: 'vertical',
                   }}
                 >
@@ -236,7 +237,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
     let additionalEmployees = 0;
 
     const filteredEmployeesList = employees.filter((employee) => {
-      if (employee.status === 'ACTIVE') {
+      if (employee.status === EmployeeStatus.ACTIVE) {
         if (counter < avatarsNeed) {
           counter++;
           return employee;
