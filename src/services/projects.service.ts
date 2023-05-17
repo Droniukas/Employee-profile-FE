@@ -58,7 +58,7 @@ export class ProjectsService {
     const startDateFormatted = new Date(myProject.startDate);
     const endDateFormatted = new Date(myProject.endDate);
 
-    if (startDateFormatted && startDateFormatted > today) {
+    if (startDateFormatted > today) {
       myProject.status = ProjectStatus.FUTURE;
     } else {
       if (myProject.endDate === null || endDateFormatted > today) {

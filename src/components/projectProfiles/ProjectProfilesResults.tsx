@@ -10,7 +10,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Project from '../../models/Project.interface';
@@ -19,6 +18,7 @@ import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import { correctDateFormat } from './ProjectProfiles';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
@@ -225,10 +225,6 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </ListItem>
       </div>
     );
-  };
-
-  const correctDateFormat = (date: string) => {
-    return date === null ? null : moment(date).format('YYYY/MM/DD');
   };
 
   const renderEmployeesAvatarGroup = (employees: ProjectEmployee[]) => {

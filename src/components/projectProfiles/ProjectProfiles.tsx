@@ -3,6 +3,7 @@ import './ProjectProfiles.scss';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 import Project from '../../models/Project.interface';
@@ -11,6 +12,10 @@ import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
+
+export const correctDateFormat = (date: string) => {
+  return date === null ? null : moment(date).format('YYYY/MM/DD');
+};
 
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);

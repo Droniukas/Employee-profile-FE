@@ -6,7 +6,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import moment from 'moment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
@@ -14,6 +13,7 @@ import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
+import { correctDateFormat } from '../projectProfiles/ProjectProfiles';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import MyProjectEdit from './MyProjectEdit';
 
@@ -39,9 +39,9 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
     setProjectToEdit(MyProject);
     setOpenPopup(true);
   };
-  const correctDateFormat = (date: string) => {
-    return date === null ? null : moment(date).format('YYYY/MM/DD');
-  };
+  // const correctDateFormat = (date: string) => {
+  //   return date === null ? null : moment(date).format('YYYY/MM/DD');
+  // };
 
   const renderResultItem = (myProject: MyProject) => {
     return (
@@ -104,7 +104,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(myProject.projectEmployeeStartDate)}{' '}
+                    {'From '} {correctDateFormat(myProject.projectEmployeeStartDate)}
                     {myProject.projectEmployeeEndDate
                       ? ' to ' + correctDateFormat(myProject.projectEmployeeEndDate)
                       : ''}

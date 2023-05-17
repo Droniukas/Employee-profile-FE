@@ -2,7 +2,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Dialog, InputLabel, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useFormik } from 'formik';
-import moment from 'moment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
@@ -11,6 +10,7 @@ import { responsibilitiesSchema } from '../../schemas/myResponsibilitySchema';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import { correctDateFormat } from '../projectProfiles/ProjectProfiles';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 
 type MyProjectEditProps = {
@@ -47,10 +47,6 @@ const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) 
     } catch (error: unknown) {
       /* empty */
     }
-  };
-
-  const correctDateFormat = (date: string) => {
-    return date === null ? null : moment(date).format('YYYY/MM/DD');
   };
 
   const projectForm = useFormik({
