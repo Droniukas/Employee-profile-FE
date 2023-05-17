@@ -29,14 +29,14 @@ const HomePage = () => {
   }, []);
 
   return (
-    <main>
-      <Header />
-      <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="img"></img>
-      <Main />
-      <footer>
-        <Footer />
-      </footer>
-    </main>
+    <>
+      <main>
+        <Header />
+        <img src="https://logosandtypes.com/wp-content/uploads/2022/03/Cognizant.png" alt="" className="img"></img>
+        <Main />
+      </main>
+      <Footer />
+    </>
   );
 };
 
