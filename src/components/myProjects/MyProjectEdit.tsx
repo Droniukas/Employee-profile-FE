@@ -10,8 +10,8 @@ import { responsibilitiesSchema } from '../../schemas/myResponsibilitySchema';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
-import { correctDateFormat } from '../projectProfiles/ProjectProfiles';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
+import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 
 type MyProjectEditProps = {
   onClose: (projectId?: number) => void;
@@ -133,8 +133,10 @@ const MyProjectEdit: React.FC<MyProjectEditProps> = (props: MyProjectEditProps) 
             </InputLabel>
             <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
               <>
-                {'From '} {correctDateFormat(myProject.projectEmployeeStartDate)}
-                {myProject.projectEmployeeEndDate ? ' to ' + correctDateFormat(myProject.projectEmployeeEndDate) : ''}
+                {'From '} {projectProfileDateFormat(myProject.projectEmployeeStartDate)}
+                {myProject.projectEmployeeEndDate
+                  ? ' to ' + projectProfileDateFormat(myProject.projectEmployeeEndDate)
+                  : ''}
               </>
             </Typography>
           </Box>

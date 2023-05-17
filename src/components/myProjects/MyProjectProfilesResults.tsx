@@ -10,11 +10,10 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
-import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
-import { correctDateFormat } from '../projectProfiles/ProjectProfiles';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
+import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 import MyProjectEdit from './MyProjectEdit';
 
 type MyProjectProfilesResultsProps = {
@@ -28,7 +27,6 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  const projectsService = new ProjectsService();
 
   const closeEditForm = () => {
     setOpenPopup(false);
@@ -101,9 +99,9 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(myProject.projectEmployeeStartDate)}
+                    {'From '} {projectProfileDateFormat(myProject.projectEmployeeStartDate)}
                     {myProject.projectEmployeeEndDate
-                      ? ' to ' + correctDateFormat(myProject.projectEmployeeEndDate)
+                      ? ' to ' + projectProfileDateFormat(myProject.projectEmployeeEndDate)
                       : ''}
                   </>
                 </Typography>

@@ -17,8 +17,8 @@ import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
+import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import { correctDateFormat } from './ProjectProfiles';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
@@ -129,8 +129,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(project.startDate)}
-                    {project.endDate ? ' to ' + correctDateFormat(project.endDate) : ''}
+                    {'From '} {projectProfileDateFormat(project.startDate)}
+                    {project.endDate ? ' to ' + projectProfileDateFormat(project.endDate) : ''}
                   </>
                 </Typography>
                 <Typography
