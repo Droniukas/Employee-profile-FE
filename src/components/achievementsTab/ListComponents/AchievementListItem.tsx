@@ -306,7 +306,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       sx={{ width: 150, marginRight: 7, top: -60, color: 'red', fontSize: 14 }}
                       value={achievementIssueDateExists ? dayjs(achievement.issueDate) : null}
                       onChange={(newValue) => {
-                        setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
+                        newValue === null
+                          ? setExpiringDate(null)
+                          : setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
                         wasChange = true;
                         if (achievement.hasError) {
                           achievement.hasError = false;
@@ -339,6 +341,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                       ),
                                     },
                                   },
+                                  actionBar: {
+                                    actions: ['clear', 'cancel', 'accept'],
+                                  },
                                 }
                               : {
                                   textField: {
@@ -357,6 +362,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                       ),
                                     },
                                   },
+                                  actionBar: {
+                                    actions: ['clear', 'cancel', 'accept'],
+                                  },
                                 }),
                           }}
                           sx={{ width: 150, top: -60, color: 'red' }}
@@ -365,7 +373,9 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists && expiringDate !== null ? dayjs(expiringDate) : null}
                           onChange={(newValue) => {
-                            setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
+                            newValue === null
+                              ? setExpiringDate(null)
+                              : setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
                             wasChange = true;
                             setEndDateExists(true);
                           }}
