@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import moment from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
@@ -199,17 +200,31 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
             >
               <ProjectStatusColor projectStatus={myProject.status} />
               <Box alignItems="flex-end" display="flex">
-                <IconButton
-                  className="btn-edit"
-                  aria-label="edit"
-                  sx={{
-                    color: 'primary.main',
-                    left: '3vh',
-                    backgroundColor: '#F4F4F4',
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
+                {window.location.href.includes('employeeId') ? (
+                  <IconButton
+                    className="btn-edit"
+                    aria-label="edit"
+                    sx={{
+                      color: 'primary.main',
+                      left: '3vh',
+                      backgroundColor: '#F4F4F4',
+                    }}
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    className="btn-edit"
+                    aria-label="edit"
+                    sx={{
+                      color: 'primary.main',
+                      left: '3vh',
+                      backgroundColor: '#F4F4F4',
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                )}
               </Box>
             </Stack>
           </Stack>
