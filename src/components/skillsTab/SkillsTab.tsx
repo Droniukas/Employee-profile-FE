@@ -45,6 +45,7 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
             </Box>
           </Box>
         )}
+        {employeeIdParam && skillsData.filter((skill) => skill.showOnFilter).length > 1 && <SkillsTabExpandButton />}
         {skillsData.length > 0 && !skillsData.filter((skill) => skill.showOnFilter).length && (
           <List
             sx={{

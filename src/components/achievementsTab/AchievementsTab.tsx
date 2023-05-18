@@ -51,6 +51,9 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
             </Box>
           </Box>
         )}
+        {employeeIdParam && achievementsData.filter((achievement) => achievement.showOnFilter).length > 1 && (
+          <AchievementsTabExpandButton />
+        )}
         {!achievementsData.filter((achievement) => achievement.showOnFilter).length ? (
           <List>
             <ListItem alignItems="flex-start">
