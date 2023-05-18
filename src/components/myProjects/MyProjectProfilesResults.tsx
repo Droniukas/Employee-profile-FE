@@ -16,7 +16,7 @@ import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
-import MyProjectEdit from './MyProjectEdit';
+import MyProjectEditView from './MyProjectEditView';
 
 type MyProjectProfilesResultsProps = {
   myProjects: MyProject[];
@@ -26,18 +26,18 @@ type MyProjectProfilesResultsProps = {
 
 const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props: MyProjectProfilesResultsProps) => {
   const { myProjects, getProjects, filterStatus } = props;
-  const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
+  const [projectToEditView, setProjectToEditView] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
 
-  const closeEditForm = () => {
+  const closeEditViewForm = () => {
     setOpenPopup(false);
-    setProjectToEdit(null);
+    setProjectToEditView(null);
     getProjects();
   };
   const setProject = (MyProject: MyProject) => {
-    setProjectToEdit(MyProject);
+    setProjectToEditView(MyProject);
     setOpenPopup(true);
   };
 
@@ -155,32 +155,18 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
             >
               <ProjectStatusColor projectStatus={myProject.status} />
               <Box alignItems="flex-end" display="flex">
-                {window.location.href.includes('employeeId') ? (
-                  <IconButton
-                    className="btn-edit"
-                    aria-label="edit"
-                    sx={{
-                      color: 'primary.main',
-                      left: '3vh',
-                      backgroundColor: '#F4F4F4',
-                    }}
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    className="btn-edit"
-                    aria-label="edit"
-                    sx={{
-                      color: 'primary.main',
-                      left: '3vh',
-                      backgroundColor: '#F4F4F4',
-                    }}
-                    onClick={() => setProject(myProject)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                )}
+                <IconButton
+                  className="btn-edit"
+                  aria-label="edit"
+                  sx={{
+                    color: 'primary.main',
+                    left: '3vh',
+                    backgroundColor: '#F4F4F4',
+                  }}
+                  onClick={() => setProject(myProject)}
+                >
+                  {window.location.href.includes('employeeId') ? <MoreHorizIcon /> : <EditIcon />}
+                </IconButton>
               </Box>
             </Stack>
           </Stack>
@@ -213,7 +199,9 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <MyProjectEdit onClose={closeEditForm} myProject={projectToEdit} />}
+        {openPopup && projectToEditView && (
+          <MyProjectEditView onClose={closeEditViewForm} myProject={projectToEditView} />
+        )}
         <List
           sx={{
             width: '100%',

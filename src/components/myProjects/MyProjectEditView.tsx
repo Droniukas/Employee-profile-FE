@@ -18,7 +18,7 @@ type MyProjectFormProps = {
   myProject: MyProject;
 };
 
-const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
+const MyProjectEditView: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
   const { onClose, myProject } = props;
 
   const projectsService = new ProjectsService();
@@ -52,6 +52,15 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
 
   const { values, dirty, handleBlur, handleChange, handleSubmit } = projectForm;
 
+  let titleText = '';
+  if (window.location.href.includes('employeeId')) {
+    titleText = 'View employee project profile';
+  } else if (myProject) {
+    titleText = 'Edit your responsibilities';
+  } else {
+    titleText = 'Add your responsibilities';
+  }
+
   return (
     <Dialog open={true} fullWidth maxWidth="md">
       <ConfirmationDialog
@@ -80,7 +89,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
             color: 'primary.main',
           }}
         >
-          {myProject ? 'Edit your responsibilities' : 'Add your responsibilities'}
+          {titleText}
         </Typography>
         <Box>
           <InputLabel>
@@ -97,7 +106,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
               {values.title}
             </Typography>
           </Box>
-          <Box mr={5} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 8 }}>
+          <Box sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 3, left: 25 }}>
             <ProjectStatusColor projectStatus={myProject.status} />
           </Box>
         </Box>
@@ -115,7 +124,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
           </InputLabel>
           <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{values.description}</Typography>
         </Box>
-        <Box display={'flex'}>
+        <Box display={'flex'} sx={{ paddingLeft: 1 }}>
           <Box mr={6} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 12 }}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Title</Typography>
@@ -144,49 +153,61 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
+            color: 'primary.main',
             my: 4,
+            height: `${window.location.href.includes('employeeId') ? '230px' : 0}`,
           }}
         >
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
           </InputLabel>
-          <TextField
-            onBlur={handleBlur}
-            name={'responsibilities'}
-            hiddenLabel
-            onChange={handleChange}
-            variant="outlined"
-            value={values.responsibilities}
-            placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
-            fullWidth
-            multiline
-            rows={8}
-            inputProps={{ maxLength: 2000 }}
-            sx={{
-              '& fieldset': {
-                borderRadius: 2,
-              },
-            }}
-          />
+          {window.location.href.includes('employeeId') ? (
+            values.responsibilities !== null ? (
+              values.responsibilities
+            ) : (
+              'No responsibilities'
+            )
+          ) : (
+            <TextField
+              onBlur={handleBlur}
+              name={'responsibilities'}
+              hiddenLabel
+              onChange={handleChange}
+              variant="outlined"
+              value={values.responsibilities}
+              placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
+              fullWidth
+              multiline
+              rows={8}
+              inputProps={{ maxLength: 2000 }}
+              sx={{
+                '& fieldset': {
+                  borderRadius: 2,
+                },
+              }}
+            />
+          )}
         </Box>
-        <Box display={'flex'} justifyContent={'flex-end'}>
-          <Button
-            variant="contained"
-            color="info"
-            sx={{ m: 1 }}
-            onClick={() => {
-              dirty ? setConfirmationDialog(true) : onClose();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
-            Save
-          </Button>
-        </Box>
+        {!window.location.href.includes('employeeId') && (
+          <Box display={'flex'} justifyContent={'flex-end'}>
+            <Button
+              variant="contained"
+              color="info"
+              sx={{ m: 1 }}
+              onClick={() => {
+                dirty ? setConfirmationDialog(true) : onClose();
+              }}
+            >
+              Cancel
+            </Button>
+            <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
+              Save
+            </Button>
+          </Box>
+        )}
       </Box>
     </Dialog>
   );
 };
 
-export default MyProjectEdit;
+export default MyProjectEditView;
