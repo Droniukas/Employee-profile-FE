@@ -38,7 +38,6 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
   };
   return (
     <>
-      {}
       <Box component="span" sx={{ width: '70vw', display: 'inline-block' }}>
         {!employeeIdParam ? (
           <Box component="span" sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -52,18 +51,21 @@ const AchievementsTab: React.FunctionComponent<AchievementsTabProps> = (props: A
           </Box>
         ) : null}
         {!achievementsData.filter((achievement) => achievement.showOnFilter).length ? (
-          <List>
+          <List
+            sx={{
+              width: '100%',
+            }}
+          >
             <ListItem alignItems="flex-start">
               <Typography
                 sx={{
                   color: 'primary.main',
+                  fontSize: 20,
                 }}
               >
-                {!employeeIdParam ? (
-                  <>No selected achievements found. Check the filter settings.</>
-                ) : (
-                  <>Employee has no selected achievements</>
-                )}
+                {!employeeIdParam
+                  ? 'No selected achievements found. Check the filter settings.'
+                  : 'Employee has no selected achievements.'}
               </Typography>
             </ListItem>
           </List>
