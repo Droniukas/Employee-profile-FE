@@ -306,9 +306,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       sx={{ width: 150, marginRight: 7, top: -60, color: 'red', fontSize: 14 }}
                       value={achievementIssueDateExists ? dayjs(achievement.issueDate) : null}
                       onChange={(newValue) => {
-                        newValue === null
-                          ? setExpiringDate(null)
-                          : setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
+                        setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
                         wasChange = true;
                         if (achievement.hasError) {
                           achievement.hasError = false;
