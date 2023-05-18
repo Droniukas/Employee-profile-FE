@@ -1,8 +1,7 @@
-import { Box, Menu, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Menu, Switch, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Notification } from '../../../models/Notification.interface';
 import { notificationsRoot } from '../../../store/types/notifications';
 import NotificationItem from './NotificationItem';
 
@@ -15,6 +14,7 @@ type NotificationsDropdownProps = {
 
 const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps> = (props) => {
   const { notificationIconAnchorEl, onClose, setNotificationsCount, notificationsCount } = props;
+  const [onlyShowUnread, setOnlyShowUnread] = useState<boolean>(false);
   const open = Boolean(notificationIconAnchorEl);
   const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
 
@@ -37,19 +37,25 @@ const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps>
         }}
       >
         <Box sx={{ mx: '15px' }}>
-          <Typography sx={{ mb: '15px', fontSize: 20 }}>Notifications</Typography>
-          <Typography sx={{ mb: '5px', fontSize: 12 }}>LATEST</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: '15px' }}>
+            <Typography sx={{ fontSize: 20 }}>Notifications</Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography sx={{ fontSize: 14 }}>Only show unread</Typography>
+              <Switch sx={{ top: 2 }} checked={onlyShowUnread} onChange={(e) => setOnlyShowUnread(e.target.checked)} />
+            </Box>
+          </Box>
+          <Typography sx={{ mb: '5px', fontSize: 13 }}>LATEST</Typography>
         </Box>
-        {notifications?.map((notification: Notification) => {
-          return (
+        {notifications
+          .filter((notification) => !onlyShowUnread || !notification.read)
+          .map((notification) => (
             <NotificationItem
               key={notification.id}
               currentNotification={notification}
               setNotificationsCount={setNotificationsCount}
               notificationsCount={notificationsCount}
             />
-          );
-        })}
+          ))}
       </Menu>
     </>
   );
