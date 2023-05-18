@@ -168,7 +168,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
             hiddenLabel
             onChange={handleChange}
             variant="outlined"
-            value={values.responsibilities}
+            value={values.responsibilities === null ? '' : values.responsibilities}
             placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
             fullWidth
             multiline
