@@ -2,12 +2,12 @@ import * as yup from 'yup';
 
 import { EmployeeStatus } from '../components/employeeForm/employeeStatus';
 
-const MAX_FILE_SIZE = 5242880; //5MB
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
 export const employeeSchema = yup.object({
   name: yup.string().required('Field is required'),
   surname: yup.string().required('Field is required'),
-  middleName: yup.string(),
+  middleName: yup.string().nullable(),
   titleId: yup.number().required('Field is required'),
   status: yup.mixed<EmployeeStatus>().oneOf(Object.values(EmployeeStatus)).required('Field is required'),
   isManager: yup.boolean().required(),
@@ -28,7 +28,7 @@ export const employeeSchema = yup.object({
     })
     .test('fileSize', 'Image must be 5MB or less', (value) => {
       const file = value as File;
-      return file.size <= MAX_FILE_SIZE;
+      return file.size <= MAX_FILE_SIZE_BYTES;
     })
     .required('Field is required'),
 });

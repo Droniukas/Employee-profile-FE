@@ -96,11 +96,9 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
 
   const checkIfEmailExists = async (email: string) => {
     try {
-      const employeeService = new EmployeeService();
       const response = await employeeService.validateEmail(email);
       setEmailValid(!response.exists);
     } catch (error) {
-      console.error(error);
       throw new Error('Error validating email');
     }
   };
@@ -213,10 +211,10 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
             type="file"
             accept="image/jpeg, image/png, image/jpg, image/webp"
             ref={imageInputRef}
-            onChange={(e) => {
-              if (e.target.files) {
+            onChange={(event) => {
+              if (event.target.files) {
                 setFieldTouched('image');
-                setFieldValue('image', e.target.files[0]);
+                setFieldValue('image', event.target.files[0]);
               }
             }}
             style={{ display: 'none' }}
@@ -232,7 +230,6 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
             sx={{
               '& fieldset': {
                 borderRadius: 2,
-                //width: 150,
               },
             }}
             endAdornment={
@@ -264,7 +261,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
             value={selectedTitle}
             onBlur={handleBlur}
             name={'titleId'}
-            onChange={(e) => handleTitleChange(e)}
+            onChange={(event) => handleTitleChange(event)}
             error={touched.titleId && Boolean(errors.titleId)}
             sx={{ borderRadius: 2, height: 40 }}
           >
@@ -340,8 +337,8 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
           <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
             <Checkbox
               checked={values.isManager}
-              onChange={(e) => {
-                setFieldValue('isManager', e.target.checked);
+              onChange={(event) => {
+                setFieldValue('isManager', event.target.checked);
                 setFieldTouched('isManager');
               }}
             />
