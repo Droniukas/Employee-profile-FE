@@ -1,10 +1,10 @@
 import { Box, Menu, Typography } from '@mui/material';
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { Notification } from '../../../models/Notification.interface';
-import NotificationItem from './NotificationItem';
-import { useSelector } from 'react-redux';
 import { notificationsRoot } from '../../../store/types/notifications';
+import NotificationItem from './NotificationItem';
 
 type NotificationsDropdownProps = {
   notificationIconAnchorEl: HTMLElement | null;
@@ -36,10 +36,9 @@ const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps>
           onClose();
         }}
       >
-        <Box sx={{ width: '400px' }}>
-          <Typography sx={{ margin: '15px', marginTop: 0 }} fontSize={20}>
-            Notifications
-          </Typography>
+        <Box sx={{ mx: '15px' }}>
+          <Typography sx={{ mb: '15px', fontSize: 20 }}>Notifications</Typography>
+          <Typography sx={{ mb: '5px', fontSize: 12 }}>LATEST</Typography>
         </Box>
         {notifications?.map((notification: Notification) => {
           return (

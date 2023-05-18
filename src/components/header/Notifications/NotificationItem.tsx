@@ -1,5 +1,5 @@
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
-import { Avatar, Box, IconButton, Theme } from '@mui/material';
+import { Avatar, Box, IconButton, Theme, Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -33,8 +33,6 @@ const NotificationItem = (props: NotificationItemProps) => {
     dispatch(setReadById(currentNotification.id));
     setNotificationsCount(notificationsCount - 1);
   };
-
-  console.log(currentNotification);
 
   const handleNotificationClick = () => {
     console.log('siyfbsd');
@@ -74,13 +72,15 @@ const NotificationItem = (props: NotificationItemProps) => {
         </Box>
       </Box>
       {!currentNotification.read && (
-        <IconButton
-          sx={{ color: 'primary.main', height: '50%' }}
-          disabled={currentNotification.read}
-          onClick={handleMarkAsReadClick}
-        >
-          <CircleRoundedIcon style={{ fontSize: 12 }} />
-        </IconButton>
+        <Tooltip title="Mark as read" placement="bottom-end">
+          <IconButton
+            sx={{ color: 'primary.main', height: '50%' }}
+            disabled={currentNotification.read}
+            onClick={handleMarkAsReadClick}
+          >
+            <CircleRoundedIcon style={{ fontSize: 10 }} />
+          </IconButton>
+        </Tooltip>
       )}
     </Box>
   );
