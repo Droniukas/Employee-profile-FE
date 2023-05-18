@@ -40,8 +40,10 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = (props
         <Typography>Deletion cannot be reverted.</Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancelClick}>Cancel</Button>
-        <Button onClick={handleDeleteClick} color="error">
+        <Button onClick={handleCancelClick} variant="contained">
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteClick} color="error" variant="contained">
           Delete
         </Button>
       </DialogActions>
