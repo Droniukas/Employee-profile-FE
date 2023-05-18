@@ -10,7 +10,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Project from '../../models/Project.interface';
@@ -18,6 +17,7 @@ import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
+import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import { useSelector } from 'react-redux';
 import { UserStateRoot } from '../../store/types/user';
@@ -137,8 +137,8 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(project.startDate)}
-                    {project.endDate ? ' to ' + correctDateFormat(project.endDate) : ''}
+                    {'From '} {projectProfileDateFormat(project.startDate)}
+                    {project.endDate ? ' to ' + projectProfileDateFormat(project.endDate) : ''}
                   </>
                 </Typography>
                 <Typography
@@ -233,10 +233,6 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
         </ListItem>
       </div>
     );
-  };
-
-  const correctDateFormat = (date: string) => {
-    return date === null ? null : moment(date).format('YYYY/MM/DD');
   };
 
   const renderEmployeesAvatarGroup = (employees: ProjectEmployee[]) => {

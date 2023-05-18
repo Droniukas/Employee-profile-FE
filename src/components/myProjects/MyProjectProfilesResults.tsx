@@ -2,14 +2,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
@@ -17,6 +14,8 @@ import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
+import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
+import MyProjectEdit from './MyProjectEdit';
 
 type MyProjectProfilesResultsProps = {
   myProjects: MyProject[];
@@ -26,30 +25,22 @@ type MyProjectProfilesResultsProps = {
 
 const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props: MyProjectProfilesResultsProps) => {
   const { myProjects, getProjects, filterStatus } = props;
+  const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
+  const [openPopup, setOpenPopup] = useState<boolean>(false);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
   const projectsService = new ProjectsService();
 
-  const renderResultItem = (myProject: MyProject) => {
-    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
+  const closeEditForm = () => {
+    setOpenPopup(false);
+    setProjectToEdit(null);
+    getProjects();
+  };
+  const setProject = (MyProject: MyProject) => {
+    setProjectToEdit(MyProject);
+    setOpenPopup(true);
+  };
 
-        const inputValue = event.currentTarget?.querySelector('input')?.value;
-        if (!inputValue) return;
-        const data = {
-          projectId: Number(myProject.id),
-          employeeId: Number(user.id),
-          responsibilities: inputValue,
-        };
-        try {
-          const addResponsibilitiesToMyProject = await projectsService.setMyProjectEmployeeResponsibilities(data);
-          addResponsibilitiesToMyProject.data;
-          getProjects();
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
+  const renderResultItem = (myProject: MyProject) => {
     return (
       <div key={myProject.id}>
         <ListItem
@@ -69,8 +60,8 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               justifyContent="flex-start"
               alignItems="center"
               sx={{
+                width: '90%',
                 position: 'relative',
-                maxWidth: '90%',
                 marginRight: '150px',
               }}
             >
@@ -97,6 +88,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
               </Box>
               <Box
                 sx={{
+                  width: 'auto',
                   position: 'relative',
                   left: 25,
                 }}
@@ -109,8 +101,10 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   }}
                 >
                   <>
-                    {'From '} {correctDateFormat(myProject.startDate)}
-                    {myProject.endDate ? ' to ' + correctDateFormat(myProject.endDate) : ''}
+                    {'From '} {projectProfileDateFormat(myProject.projectEmployeeStartDate)}
+                    {myProject.projectEmployeeEndDate
+                      ? ' to ' + projectProfileDateFormat(myProject.projectEmployeeEndDate)
+                      : ''}
                   </>
                 </Typography>
                 <Typography
@@ -133,57 +127,18 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                 >
                   {myProject.description}
                 </Typography>
-                <Box
-                  component="div"
+                <Typography
                   sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'realitive',
-                    my: 1,
+                    mt: 2,
+                    mb: 2,
+                    color: 'primary.main',
+                    fontSize: 14,
+                    height: 20,
+                    fontWeight: 500,
                   }}
                 >
-                  <Box
-                    component="div"
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      my: 1,
-                    }}
-                  >
-                    <InputLabel>
-                      <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
-                        My responsibilities
-                      </Typography>
-                    </InputLabel>
-                    {myProject.responsibilities ? (
-                      <Typography sx={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#666666' }}>
-                        {myProject.responsibilities}
-                      </Typography>
-                    ) : (
-                      <TextField
-                        hiddenLabel
-                        fullWidth
-                        variant="standard"
-                        onKeyPress={handleKeyPress}
-                        placeholder="Enter responsibilities..."
-                        sx={{ color: 'primary.main' }}
-                      />
-                    )}
-                  </Box>
-                  <Typography
-                    sx={{
-                      mt: 2,
-                      mb: 2,
-                      color: 'primary.main',
-                      fontSize: 14,
-                      height: 20,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {user.title}
-                  </Typography>
-                </Box>
+                  {user.title}
+                </Typography>
               </Box>
             </Stack>
             <Stack
@@ -207,6 +162,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                     left: '3vh',
                     backgroundColor: '#F4F4F4',
                   }}
+                  onClick={() => setProject(myProject)}
                 >
                   <EditIcon />
                 </IconButton>
@@ -216,13 +172,6 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
         </ListItem>
       </div>
     );
-  };
-  const correctDateFormat = (date: string) => {
-    if (date === null) {
-      return null;
-    } else {
-      return moment(date).format('YYYY/MM/DD');
-    }
   };
 
   if (!myProjects.length) {
@@ -249,6 +198,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   } else {
     return (
       <>
+        {openPopup && projectToEdit && <MyProjectEdit onClose={closeEditForm} myProject={projectToEdit} />}
         <List
           sx={{
             width: '100%',
