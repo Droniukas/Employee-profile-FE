@@ -83,7 +83,7 @@ export class ProjectsService {
       employeeId: this.userId,
       responsibilities: responsibilities,
     };
-    const response = await axios.post('project/setMyProjectEmployeeResponsibilities', data);
+    const response = await axios.post('project/updateMyProject', data);
     return response.data;
   }
 }
