@@ -58,6 +58,29 @@ const MyProjectProfiles = () => {
             <ProjectFilter onFilterValueSelection={onFilterValueSelection} />
           </Box>
         </Stack>
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          sx={{
+            position: 'relative',
+            width: '100%',
+            left: -30,
+            paddingTop: 1,
+          }}
+        >
+          <Box
+            sx={{
+              display: filteredProjectsList.length === 0 ? 'none' : 'inline',
+              color: 'primary.main',
+              fontSize: 14,
+            }}
+          >
+            {filterTextValue === 'All'
+              ? filteredProjectsList.length + ' projects found'
+              : filteredProjectsList.length + " '" + filterTextValue + "' projects found"}
+          </Box>
+        </Stack>
       </Stack>
       <Box
         sx={{
