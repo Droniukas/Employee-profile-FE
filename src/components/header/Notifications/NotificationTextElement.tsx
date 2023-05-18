@@ -1,6 +1,7 @@
+import { Box, Theme } from '@mui/material';
+
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationType } from '../../enums/NotificationType';
-import { Box, Theme } from '@mui/material';
 
 type NotificationTextElementProps = {
   currentNotification: Notification;
@@ -13,8 +14,8 @@ const NotificationTextElement = (props: NotificationTextElementProps) => {
     case NotificationType.ADD_EMPLOYEE: {
       notificationText = (
         <>
-          You were added to a project {`'${currentNotification.project.title}'`} by
-          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}
+          You were added to project {`'${currentNotification.project.title}'`} by
+          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
         </>
       );
       break;
@@ -22,19 +23,28 @@ const NotificationTextElement = (props: NotificationTextElementProps) => {
     case NotificationType.REMOVE_EMPLOYEE: {
       notificationText = (
         <>
-          You were added removed from a project {`'${currentNotification.project.title}'`} by
-          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}
+          You were removed from project {`'${currentNotification.project.title}'`} by
+          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
         </>
       );
       break;
     }
     case NotificationType.UPDATE_PROJECT_INFORMATION: {
-      notificationText = <>Your project {`'${currentNotification.project.title}'`} information has been updated</>;
+      notificationText = (
+        <>
+          Your project {`'${currentNotification.project.title}'`} information has been updated by
+          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
+        </>
+      );
       break;
     }
     case NotificationType.UPDATE_PROJECT_STATUS: {
-      notificationText = <>Your project {`'${currentNotification.project.title}'`} status has been updated</>;
-    }
+      notificationText = (
+        <>
+          Your project {`'${currentNotification.project.title}'`} status has been updated by
+          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
+        </>
+      );    }
   }
   return (
     <Box

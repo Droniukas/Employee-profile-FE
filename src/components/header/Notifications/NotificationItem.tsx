@@ -1,10 +1,14 @@
-import { Avatar, Box, Button, Theme } from '@mui/material';
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import { Avatar, Box, IconButton, Theme, Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
+import { setReadById } from '../../../states/notifications';
+import { notificationsRoot } from '../../../store/types/notifications';
 import NotificationTextElement from './NotificationTextElement';
 import { useDispatch } from 'react-redux';
 import { setReadById } from '../../../states/notifications';
@@ -51,31 +55,33 @@ const NotificationItem = (props: NotificationItemProps) => {
         transition: (theme: Theme) => theme.transitions.create(['background-color']),
       }}
     >
-      <Box>
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <Box onClick={handleNotificationClick} sx={{ cursor: 'pointer' }}>
-            <Avatar
-              src={`data:${currentNotification.initiatorEmployee.imageType};base64,${currentNotification.initiatorEmployee.imageBytes}`}
-              sx={{
-                border: '0.01px solid lightgrey',
-              }}
-            />
-          </Box>
-          <Box sx={{ cursor: 'pointer', fontSize: 12 }} onClick={handleNotificationClick}>
+      <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <Box onClick={handleNotificationClick} sx={{ cursor: 'pointer' }}>
+          <Avatar
+            src={`data:${currentNotification.initiatorEmployee.imageType};base64,${currentNotification.initiatorEmployee.imageBytes}`}
+            sx={{
+              border: '0.01px solid lightgrey',
+            }}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ cursor: 'pointer', fontSize: 12, mr: 2 }} onClick={handleNotificationClick}>
             <NotificationTextElement currentNotification={currentNotification} />
           </Box>
-        </Box>
-        <Box fontSize="10px" color="grey">
-          {elapsedTimeFromCreation} ago
+          <Box fontSize="10px" color="grey">
+            {elapsedTimeFromCreation} ago
+          </Box>
         </Box>
       </Box>
-      <Button
-        disabled={currentNotification.read}
-        onClick={handleMarkAsReadClick}
-        sx={{ border: 1, borderColor: 'primary.main' }}
-      >
-        Mark as read
-      </Button>
+      <Box sx={{ ml: 'auto' }}>
+        {!currentNotification.read && (
+          <Tooltip title="Mark as read" placement="bottom-end">
+            <IconButton sx={{ color: 'primary.main', bottom: 1 }} onClick={handleMarkAsReadClick}>
+              <CircleRoundedIcon style={{ fontSize: 10 }} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
     </Box>
   );
 };
