@@ -1,3 +1,4 @@
+import EventIcon from '@mui/icons-material/Event';
 import {
   Box,
   Checkbox,
@@ -14,7 +15,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import EventIcon from '@mui/icons-material/Event';
 
 import { customUSLocale } from '../../../config/customUSLocale';
 import { Achievement } from '../../../models/Achievement.interface';

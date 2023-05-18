@@ -1,5 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit';
 import FolderIcon from '@mui/icons-material/Folder';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -8,7 +9,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
