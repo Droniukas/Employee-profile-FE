@@ -73,11 +73,7 @@ const NotificationItem = (props: NotificationItemProps) => {
       </Box>
       {!currentNotification.read && (
         <Tooltip title="Mark as read" placement="bottom-end">
-          <IconButton
-            sx={{ color: 'primary.main', height: '50%' }}
-            disabled={currentNotification.read}
-            onClick={handleMarkAsReadClick}
-          >
+          <IconButton sx={{ color: 'primary.main', height: '50%' }} onClick={handleMarkAsReadClick}>
             <CircleRoundedIcon style={{ fontSize: 10 }} />
           </IconButton>
         </Tooltip>

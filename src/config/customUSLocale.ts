@@ -38,7 +38,7 @@ export const customUSLocale: PickersLocaleText<any> = {
   secondsClockNumberText: (seconds: any) => `${seconds} seconds`,
 
   // Digital clock labels
-  // selectViewText: (view: any) => `Select ${view}`,
+  selectViewText: (view: any) => `Select ${view}`,
 
   // Calendar labels
   calendarWeekNumberHeaderLabel: 'Week number',
