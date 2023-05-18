@@ -23,13 +23,17 @@ const NotificationItem = (props: NotificationItemProps) => {
 
   const notificationService = new NotificationService();
 
+  const setNotificationReadById = (id: number) => {
+    notificationService.setReadById(id, true);
+    dispatch(setReadById(id));
+  };
+
   const handleMarkAsReadClick = () => {
-    notificationService.setReadById(currentNotification.id, true);
-    dispatch(setReadById(currentNotification.id));
+    setNotificationReadById(currentNotification.id);
   };
 
   const handleNotificationClick = () => {
-    console.log('siyfbsd');
+    setNotificationReadById(currentNotification.id);
   };
 
   return (

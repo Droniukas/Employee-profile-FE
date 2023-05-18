@@ -16,10 +16,14 @@ import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat'
 type MyProjectFormProps = {
   onClose: (projectId?: number) => void;
   myProject: MyProject;
+  snackbarProps?: {
+    setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+    setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  };
 };
 
 const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
-  const { onClose, myProject } = props;
+  const { onClose, myProject, snackbarProps } = props;
 
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
@@ -40,7 +44,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
 
   const handleFormSubmit = async () => {
     values.responsibilities.trim();
-    const result = await projectsService.updateMyProject(values);
+    const result = await projectsService.updateMyProject(values, user.id);
     onClose();
   };
 
@@ -51,6 +55,14 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
   });
 
   const { values, dirty, handleBlur, handleChange, handleSubmit } = projectForm;
+
+  const handleSave = () => {
+    handleSubmit();
+    if (snackbarProps && dirty) {
+      snackbarProps.setOpenSnackbar(true);
+      snackbarProps.setSnackbarMessage(`Project "${myProject.title}" successfully updated.`);
+    }
+  };
 
   return (
     <Dialog open={true} fullWidth maxWidth="md">
@@ -180,7 +192,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
           >
             Cancel
           </Button>
-          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
+          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSave()}>
             Save
           </Button>
         </Box>

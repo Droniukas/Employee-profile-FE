@@ -10,12 +10,12 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
-import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 import MyProjectEdit from './MyProjectEdit';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 type MyProjectProfilesResultsProps = {
   myProjects: MyProject[];
@@ -28,7 +28,8 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   const [projectToEdit, setProjectToEdit] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  const projectsService = new ProjectsService();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
 
   const closeEditForm = () => {
     setOpenPopup(false);
@@ -198,7 +199,13 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <MyProjectEdit onClose={closeEditForm} myProject={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <MyProjectEdit
+            onClose={closeEditForm}
+            myProject={projectToEdit}
+            snackbarProps={{ setOpenSnackbar: setOpenSnackbar, setSnackbarMessage: setSnackbarMessage }}
+          />
+        )}
         <List
           sx={{
             width: '100%',
@@ -206,6 +213,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
         >
           {myProjects.map((myProject) => renderResultItem(myProject))}
         </List>
+        <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message={snackbarMessage} />
       </>
     );
   }

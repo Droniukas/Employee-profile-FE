@@ -72,11 +72,11 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async updateMyProject(myProject: FormikValues) {
+  public async updateMyProject(myProject: FormikValues, userId: number) {
     const { id, responsibilities } = myProject;
     const data = {
       projectId: id,
-      employeeId: this.userId,
+      employeeId: userId,
       responsibilities: responsibilities,
     };
     const response = await axios.post('project/updateMyProject', data);
