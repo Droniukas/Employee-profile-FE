@@ -9,10 +9,13 @@ import { ProjectsService } from '../../services/projects.service';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
 import MyProjectProfilesResults from './MyProjectProfilesResults';
+import { UserStateRoot } from '../../store/types/user';
+import { useSelector } from 'react-redux';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
   const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const projectsService = new ProjectsService();
 
@@ -21,7 +24,8 @@ const MyProjectProfiles = () => {
   }, []);
 
   const getMyProjects = async () => {
-    const myProjects = await projectsService.getMyProjects();
+    if (!user) return;
+    const myProjects = await projectsService.getMyProjects(user.id);
     setProjects(myProjects);
   };
 
