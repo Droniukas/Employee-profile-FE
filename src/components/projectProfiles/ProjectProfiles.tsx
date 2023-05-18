@@ -43,6 +43,7 @@ const ProjectProfiles = () => {
     await projectsService.deleteProjectById(id);
     setProjects(projects.filter((project) => project.id !== id));
   };
+
   const filteredProjectsList = projects.filter((project) => {
     if (filterTextValue !== ProjectStatus.ALL) {
       return filterTextValue === project.status;
