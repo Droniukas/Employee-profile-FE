@@ -62,8 +62,8 @@ const NotificationItem = (props: NotificationItemProps) => {
             }}
           />
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', mr: 2 }}>
-          <Box sx={{ cursor: 'pointer', fontSize: 12 }} onClick={handleNotificationClick}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ cursor: 'pointer', fontSize: 12, mr: 2 }} onClick={handleNotificationClick}>
             <NotificationTextElement currentNotification={currentNotification} />
           </Box>
           <Box fontSize="10px" color="grey">
@@ -71,13 +71,15 @@ const NotificationItem = (props: NotificationItemProps) => {
           </Box>
         </Box>
       </Box>
-      {!currentNotification.read && (
-        <Tooltip title="Mark as read" placement="bottom-end">
-          <IconButton sx={{ color: 'primary.main', height: '50%' }} onClick={handleMarkAsReadClick}>
-            <CircleRoundedIcon style={{ fontSize: 10 }} />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Box sx={{ ml: 'auto' }}>
+        {!currentNotification.read && (
+          <Tooltip title="Mark as read" placement="bottom-end">
+            <IconButton sx={{ color: 'primary.main', bottom: 1 }} onClick={handleMarkAsReadClick}>
+              <CircleRoundedIcon style={{ fontSize: 10 }} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Box>
     </Box>
   );
 };
