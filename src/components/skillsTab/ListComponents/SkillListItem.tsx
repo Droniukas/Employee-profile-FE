@@ -73,7 +73,21 @@ const SkillListItem: React.FunctionComponent<SkillListItemProps> = (props: Skill
   return (
     <>
       <Box>
-        <ListItem disablePadding sx={{ marginLeft: '27px' }}>
+        <ListItem
+          disablePadding
+          sx={{
+            marginLeft: '27px',
+            ...(skill.hasError
+              ? {
+                  borderColor: '#ef4349',
+                  color: '#ef4349',
+                }
+              : {
+                  borderColor: '#DDDDDD',
+                  color: 'primary.main',
+                }),
+          }}
+        >
           <Checkbox
             disabled={viewState === SkillsTabState.VIEW_STATE}
             checked={isChecked}

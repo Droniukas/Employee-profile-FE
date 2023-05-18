@@ -17,9 +17,14 @@ export const notificationsSlice = createSlice({
         }
       });
     },
+    removeByProjectId: (state, action: { payload: number }) => {
+      state.value = state.value.filter((notification) => {
+        return notification.project.id !== action.payload;
+      });
+    },
   },
 });
 
-export const { setNotifications, setReadById } = notificationsSlice.actions;
+export const { setNotifications, setReadById, removeByProjectId } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

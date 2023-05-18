@@ -23,7 +23,6 @@ const Header = () => {
   const open = Boolean(userIconAnchorEl);
   const { logout } = useAuth0();
   const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
-  const [notificationsCount, setNotificationsCount] = useState<number>(0);
   const dispatch = useDispatch();
 
   const handleUserIconClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -45,10 +44,6 @@ const Header = () => {
       if (user) {
         const notifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
         dispatch(setNotifications(notifications));
-        const unreadNotificationsCount = notifications.filter(
-          (notification: Notification) => !notification.read,
-        ).length;
-        setNotificationsCount(unreadNotificationsCount);
       }
     };
     fetchNotifications();
@@ -73,6 +68,8 @@ const Header = () => {
   const handleNotificationsDropdownClose = () => {
     setNotificationIconAnchorEl(null);
   };
+
+  const notificationsCount = notifications.filter((notification: Notification) => !notification.read).length;
 
   return (
     <Box
@@ -145,8 +142,6 @@ const Header = () => {
         <NotificationsDropdown
           onClose={handleNotificationsDropdownClose}
           notificationIconAnchorEl={notificationIconAnchorEl}
-          setNotificationsCount={setNotificationsCount}
-          notificationsCount={notificationsCount}
         />
       )}
     </Box>

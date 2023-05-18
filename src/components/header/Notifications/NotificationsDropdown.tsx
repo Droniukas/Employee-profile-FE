@@ -9,12 +9,10 @@ import { notificationsRoot } from '../../../store/types/notifications';
 type NotificationsDropdownProps = {
   notificationIconAnchorEl: HTMLElement | null;
   onClose: () => void;
-  setNotificationsCount: React.Dispatch<React.SetStateAction<number>>;
-  notificationsCount: number;
 };
 
 const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps> = (props) => {
-  const { notificationIconAnchorEl, onClose, setNotificationsCount, notificationsCount } = props;
+  const { notificationIconAnchorEl, onClose } = props;
   const open = Boolean(notificationIconAnchorEl);
   const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
 
@@ -41,15 +39,21 @@ const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps>
             Notifications
           </Typography>
         </Box>
+        {notifications.length === 0 && (
+          <Box
+            sx={{
+              padding: '15px',
+              paddingBottom: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontWeight: 'bold',
+            }}
+          >
+            You have no notifications
+          </Box>
+        )}
         {notifications?.map((notification: Notification) => {
-          return (
-            <NotificationItem
-              key={notification.id}
-              currentNotification={notification}
-              setNotificationsCount={setNotificationsCount}
-              notificationsCount={notificationsCount}
-            />
-          );
+          return <NotificationItem key={notification.id} currentNotification={notification} />;
         })}
       </Menu>
     </>

@@ -17,6 +17,8 @@ import { ProjectsService } from '../../services/projects.service';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
+import { useSelector } from 'react-redux';
+import { UserStateRoot } from '../../store/types/user';
 
 type ProjectFormProps = {
   onClose: (project?: Project) => void;
@@ -34,6 +36,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
   const [showAddEmployeesForm, setShowAddEmployeesForm] = useState<boolean>(false);
   const [endDateExists, setEndDateExists] = useState<boolean>(project?.endDate ? true : false);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const [projectEmployeeApiErrors, setProjectEmployeeApiErrors] = useState<ProjectEmployeeError[]>([]);
 
@@ -44,6 +47,7 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
     endDate: '',
     projectEmployees: [],
     status: '',
+    creatorEmployeeId: user.id,
   };
   if (project) initialValues = project;
 
@@ -54,7 +58,9 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
 
     try {
       if (project) {
-        result = await projectsService.updateProject(values);
+        if (dirty) {
+          result = await projectsService.updateProject(values);
+        }
         onClose();
         if (snackbarProps && dirty) {
           snackbarProps.setSnackbarMessage(`Project "${values.title}" successfully updated.`);

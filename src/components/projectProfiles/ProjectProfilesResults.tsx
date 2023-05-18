@@ -19,6 +19,8 @@ import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import { useSelector } from 'react-redux';
+import { UserStateRoot } from '../../store/types/user';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
@@ -40,6 +42,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const windowSize = useRef(window.innerWidth);
   const width = windowSize.current * 0.2;
@@ -57,6 +60,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   }, [buttonToFocusRef.current]);
 
   const setProject = (project: Project) => {
+    project.creatorEmployeeId = user.id;
     setProjectToEdit(project);
     setOpenPopup(true);
   };

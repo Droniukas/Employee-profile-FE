@@ -47,6 +47,12 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
     const skillWithError: Skill | undefined = skillsData.find((skill) => skill.skillId === childSkillId);
     if (skillWithError === undefined) return;
     skillWithError.hasError = false;
+
+    const skillsUnderTheSameCategory = skillsData.filter(
+      (skill) => skill.parentSkillId === skillWithError.parentSkillId,
+    );
+    if (skillsUnderTheSameCategory.some((skill) => skill.hasError)) return;
+
     const parentSkills = skillsData.filter((parentSkill) => parentSkill.skillId === skillWithError.parentSkillId);
     parentSkills.forEach((skill) => {
       setErrorForSkillById(skill.skillId);

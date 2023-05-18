@@ -6,19 +6,15 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
 import NotificationTextElement from './NotificationTextElement';
-import { useDispatch, useSelector } from 'react-redux';
-import { notificationsRoot } from '../../../store/types/notifications';
+import { useDispatch } from 'react-redux';
 import { setReadById } from '../../../states/notifications';
 
 type NotificationItemProps = {
   currentNotification: Notification;
-  setNotificationsCount: React.Dispatch<React.SetStateAction<number>>;
-  notificationsCount: number;
 };
 
 const NotificationItem = (props: NotificationItemProps) => {
-  const { currentNotification, setNotificationsCount, notificationsCount } = props;
-  const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
+  const { currentNotification } = props;
   const dispatch = useDispatch();
 
   dayjs.extend(duration);
@@ -30,7 +26,6 @@ const NotificationItem = (props: NotificationItemProps) => {
   const handleMarkAsReadClick = () => {
     notificationService.setReadById(currentNotification.id, true);
     dispatch(setReadById(currentNotification.id));
-    setNotificationsCount(notificationsCount - 1);
   };
 
   const handleNotificationClick = () => {

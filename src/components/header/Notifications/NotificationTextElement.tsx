@@ -23,17 +23,17 @@ const NotificationTextElement = (props: NotificationTextElementProps) => {
       notificationText = (
         <>
           You were added removed from a project {`'${currentNotification.project.title}'`} by
-          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
+          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}
         </>
       );
       break;
     }
     case NotificationType.UPDATE_PROJECT_INFORMATION: {
-      notificationText = <>Your project {`'${currentNotification.project.title}'`} information has been updated.</>;
+      notificationText = <>Your project {`'${currentNotification.project.title}'`} information has been updated</>;
       break;
     }
     case NotificationType.UPDATE_PROJECT_STATUS: {
-      notificationText = <>Your project {`'${currentNotification.project.title}'`} status has been updated.</>;
+      notificationText = <>Your project {`'${currentNotification.project.title}'`} status has been updated</>;
     }
   }
   return (

@@ -52,6 +52,12 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     );
     if (achievementWithError === undefined) return;
     achievementWithError.hasError = false;
+
+    const achievementsUnderTheSameCategory = achievementsData.filter(
+      (achievement) => achievement.parentAchievementId === achievementWithError.parentAchievementId,
+    );
+    if (achievementsUnderTheSameCategory.some((achievement) => achievement.hasError)) return;
+
     const parentAchievements = achievementsData.filter(
       (parentAchievement) => parentAchievement.achievementId === achievementWithError.parentAchievementId,
     );

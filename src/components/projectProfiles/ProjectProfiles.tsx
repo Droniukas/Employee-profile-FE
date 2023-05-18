@@ -12,6 +12,8 @@ import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
+import { useDispatch } from 'react-redux';
+import { removeByProjectId } from '../../states/notifications';
 
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -20,6 +22,8 @@ const ProjectProfiles = () => {
   const [filterTextValue, setFilterTextValue] = useState('All');
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+
+  const dispatch = useDispatch();
 
   const projectsService = new ProjectsService();
 
@@ -49,6 +53,7 @@ const ProjectProfiles = () => {
   const handleProjectDelete = async (id: number) => {
     await projectsService.deleteProjectById(id);
     setProjects(projects.filter((project) => project.id !== id));
+    dispatch(removeByProjectId(id));
   };
   const filteredProjectsList = projects.filter((project) => {
     if (filterTextValue !== ProjectStatus.ALL) {

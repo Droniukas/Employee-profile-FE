@@ -8,6 +8,7 @@ interface Project {
   description: string;
   projectEmployees: ProjectEmployee[];
   status: string;
+  creatorEmployeeId?: number;
 }
 
 export default Project;
