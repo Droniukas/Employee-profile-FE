@@ -1,0 +1,192 @@
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, Button, Dialog, InputLabel, TextField, Typography } from '@mui/material';
+import dayjs from 'dayjs';
+import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+
+import MyProject from '../../models/MyProject.interface';
+import { responsibilitiesSchema } from '../../schemas/myResponsibilitySchema';
+import { ProjectsService } from '../../services/projects.service';
+import { UserStateRoot } from '../../store/types/user';
+import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
+import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
+
+type MyProjectFormProps = {
+  onClose: (projectId?: number) => void;
+  myProject: MyProject;
+};
+
+const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
+  const { onClose, myProject } = props;
+
+  const projectsService = new ProjectsService();
+  const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+
+  let initialValues: MyProject = {
+    id: Number(''),
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    projectEmployeeStartDate: dayjs().toISOString(),
+    projectEmployeeEndDate: '',
+    responsibilities: '',
+    status: '',
+  };
+  if (myProject) initialValues = myProject;
+
+  const handleFormSubmit = async () => {
+    values.responsibilities.trim();
+    const result = await projectsService.updateMyProject(values);
+    onClose();
+  };
+
+  const projectForm = useFormik({
+    initialValues,
+    onSubmit: handleFormSubmit,
+    validationSchema: responsibilitiesSchema,
+  });
+
+  const { values, dirty, handleBlur, handleChange, handleSubmit } = projectForm;
+
+  return (
+    <Dialog open={true} fullWidth maxWidth="md">
+      <ConfirmationDialog
+        open={confirmationDialog}
+        onCancel={() => setConfirmationDialog(false)}
+        onConfirm={() => onClose()}
+      />
+      <Box display={'flex'} justifyContent={'flex-end'} mr={1} mt={2}>
+        <Button
+          sx={{ width: 15, height: 30 }}
+          onClick={() => {
+            dirty ? setConfirmationDialog(true) : onClose();
+          }}
+        >
+          <CloseIcon fontSize="medium" />
+        </Button>
+      </Box>
+      <Box component="form" sx={{ marginX: 5, marginY: 3 }}>
+        <Typography
+          variant="h1"
+          sx={{
+            mb: 2,
+            fontWeight: 400,
+            fontSize: 25,
+            fontStyle: 'Regular',
+            color: 'primary.main',
+          }}
+        >
+          {myProject ? 'Edit your responsibilities' : 'Add your responsibilities'}
+        </Typography>
+        <Box>
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Project title</Typography>
+          </InputLabel>
+          <Box mr={6} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 8 }}>
+            <Typography
+              sx={{
+                fontSize: 24,
+                fontWeight: 400,
+                color: 'primary.main',
+              }}
+            >
+              {values.title}
+            </Typography>
+          </Box>
+          <Box mr={5} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 8 }}>
+            <ProjectStatusColor projectStatus={myProject.status} />
+          </Box>
+        </Box>
+        <Box
+          component="div"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            my: 4,
+          }}
+        >
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
+          </InputLabel>
+          <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{values.description}</Typography>
+        </Box>
+        <Box display={'flex'}>
+          <Box mr={6} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 12 }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Title</Typography>
+            </InputLabel>
+            <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{user.title}</Typography>
+          </Box>
+          <Box marginX={6} sx={{ alignItems: 'center', position: 'relative', top: 12 }}>
+            <InputLabel>
+              <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Timeline</Typography>
+            </InputLabel>
+            <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>
+              <>
+                <>
+                  {'From '} {projectProfileDateFormat(myProject.projectEmployeeStartDate)}
+                  {myProject.projectEmployeeEndDate
+                    ? ' to ' + projectProfileDateFormat(myProject.projectEmployeeEndDate)
+                    : ''}
+                </>
+              </>
+            </Typography>
+          </Box>
+        </Box>
+        <Box
+          component="div"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            my: 4,
+          }}
+        >
+          <InputLabel>
+            <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
+          </InputLabel>
+          <TextField
+            onBlur={handleBlur}
+            name={'responsibilities'}
+            hiddenLabel
+            onChange={handleChange}
+            variant="outlined"
+            value={values.responsibilities}
+            placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
+            fullWidth
+            multiline
+            rows={8}
+            inputProps={{ maxLength: 2000 }}
+            sx={{
+              '& fieldset': {
+                borderRadius: 2,
+              },
+            }}
+          />
+        </Box>
+        <Box display={'flex'} justifyContent={'flex-end'}>
+          <Button
+            variant="contained"
+            color="info"
+            sx={{ m: 1 }}
+            onClick={() => {
+              dirty ? setConfirmationDialog(true) : onClose();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSubmit()}>
+            Save
+          </Button>
+        </Box>
+      </Box>
+    </Dialog>
+  );
+};
+
+export default MyProjectEdit;

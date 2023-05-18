@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import { ProjectStatus } from '../components/enums/ProjectStatus';
 import MyProject from '../models/MyProject.interface';
-import MyProjectEmployee from '../models/MyProjectEmployee.interface';
 import Project from '../models/Project.interface';
 import { UserStateRoot } from '../store/types/user';
 import axios from './axios';
@@ -77,14 +76,14 @@ export class ProjectsService {
     return response.data;
   }
 
-  public async setMyProjectEmployeeResponsibilities(myProjectEmployee: MyProjectEmployee) {
-    const { projectId, employeeId, responsibilities } = myProjectEmployee;
+  public async updateMyProject(myProject: FormikValues) {
+    const { id, responsibilities } = myProject;
     const data = {
-      projectId: projectId,
-      employeeId: employeeId,
+      projectId: id,
+      employeeId: this.userId,
       responsibilities: responsibilities,
     };
-    const response = await axios.post('project/setMyProjectEmployeeResponsibilities', data);
+    const response = await axios.post('project/updateMyProject', data);
     return response.data;
   }
 }
