@@ -54,7 +54,7 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
   const stylePaperComponents = (params: StylePaperParams) => {
     const { children } = params ?? {};
 
-    return <Paper style={{ color: 'primary.main' }}>{children}</Paper>;
+    return <Paper sx={{ color: 'primary.main' }}>{children}</Paper>;
   };
 
   interface RenderOptionParams {
