@@ -7,7 +7,7 @@ import NotificationItem from './NotificationItem';
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
 import { UserStateRoot } from '../../../store/types/user';
-import { setReadByEmployeeId } from '../../../states/notifications';
+import { setIsReadByEmployeeId } from '../../../states/notifications';
 
 type NotificationsDropdownProps = {
   notificationIconAnchorEl: HTMLElement | null;
@@ -24,8 +24,8 @@ const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps>
   const dispatch = useDispatch();
 
   const handleMarkAllAsReadClick = () => {
-    notificationService.setReadByEmployeeId(user.id, true);
-    dispatch(setReadByEmployeeId(user.id));
+    notificationService.setIsReadByEmployeeId(user.id, true);
+    dispatch(setIsReadByEmployeeId(user.id));
   };
 
   return (

@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
-import { setReadById } from '../../../states/notifications';
+import { setIsReadById } from '../../../states/notifications';
 import NotificationTextElement from './NotificationTextElement';
 
 type NotificationItemProps = {
@@ -24,17 +24,17 @@ const NotificationItem = (props: NotificationItemProps) => {
 
   const notificationService = new NotificationService();
 
-  const setNotificationReadById = (id: number) => {
-    notificationService.setReadById(id, true);
-    dispatch(setReadById(id));
+  const setNotificationIsReadById = (id: number) => {
+    notificationService.setIsReadById(id, true);
+    dispatch(setIsReadById(id));
   };
 
   const handleMarkAsReadClick = () => {
-    setNotificationReadById(currentNotification.id);
+    setNotificationIsReadById(currentNotification.id);
   };
 
   const handleNotificationClick = () => {
-    setNotificationReadById(currentNotification.id);
+    setNotificationIsReadById(currentNotification.id);
   };
 
   return (

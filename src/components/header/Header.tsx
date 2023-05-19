@@ -45,8 +45,8 @@ const Header = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       if (user) {
-        const notifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
-        dispatch(setNotifications(notifications));
+        const newNotifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
+        dispatch(setNotifications(newNotifications));
       }
     };
     fetchNotifications();
@@ -96,11 +96,8 @@ const Header = () => {
           paddingRight: '50px',
         }}
       >
-        <IconButton>
-          <AddIcon
-            sx={{ width: 20, height: 20, cursor: 'pointer', color: 'black' }}
-            onClick={() => setOpenEmployeeForm(true)}
-          />
+        <IconButton onClick={() => setOpenEmployeeForm(true)}>
+          <AddIcon sx={{ width: 20, height: 20, cursor: 'pointer', color: 'black' }} />
         </IconButton>
         <IconButton
           onClick={(event) => {

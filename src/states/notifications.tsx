@@ -10,7 +10,7 @@ export const notificationsSlice = createSlice({
     setNotifications: (state, action) => {
       state.value = action.payload;
     },
-    setReadById: (state, action: { payload: number }) => {
+    setIsReadById: (state, action: { payload: number }) => {
       state.value.forEach((notification) => {
         if (notification.id === action.payload) {
           notification.read = true;
@@ -22,7 +22,7 @@ export const notificationsSlice = createSlice({
         return notification.project.id !== action.payload;
       });
     },
-    setReadByEmployeeId: (state, action: { payload: number }) => {
+    setIsReadByEmployeeId: (state, action: { payload: number }) => {
       state.value.forEach((notification) => {
         if (notification.employeeId === action.payload) {
           notification.read = true;
@@ -32,6 +32,6 @@ export const notificationsSlice = createSlice({
   },
 });
 
-export const { setNotifications, setReadById, removeByProjectId, setReadByEmployeeId } = notificationsSlice.actions;
+export const { setNotifications, setIsReadById, removeByProjectId, setIsReadByEmployeeId } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

@@ -23,7 +23,7 @@ const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<number>();
-  const [filterTextValue, setFilterTextValue] = useState('All');
+  const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
   const user = useSelector((state: UserStateRoot) => state.userState.value);
