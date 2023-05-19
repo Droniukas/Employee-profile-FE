@@ -1,5 +1,16 @@
-import { Box, Checkbox, checkboxClasses, FormControlLabel, ListItem, ListItemText, Typography } from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import EventIcon from '@mui/icons-material/Event';
+import {
+  Box,
+  Checkbox,
+  checkboxClasses,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  ListItem,
+  ListItemText,
+  Typography,
+} from '@mui/material';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -235,8 +246,6 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                       right: 5,
                       '& fieldset': { border: '1px solid #DDDDDD', borderRadius: '8px', fontSize: 14 },
                       '& .MuiButtonBase-root': { color: 'primary.main' },
-                      '& .MuiDatePickerToolbar-root': { backgroundColor: 'red' },
-                      '& .MuiDatePickerToolbar-title': { backgroundColor: 'red' },
                       color: 'primary.main',
                     }}
                   >
@@ -251,7 +260,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     >
                       Issued date:
                     </Typography>
-                    <DatePicker
+                    <MobileDatePicker
                       slotProps={{
                         ...(!achievement.hasError
                           ? {
@@ -260,6 +269,15 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                 error: false,
                                 InputLabelProps: {
                                   shrink: false,
+                                },
+                                InputProps: {
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <IconButton edge="end">
+                                        <EventIcon />
+                                      </IconButton>
+                                    </InputAdornment>
+                                  ),
                                 },
                               },
                             }
@@ -270,13 +288,22 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                 InputLabelProps: {
                                   shrink: false,
                                 },
+                                InputProps: {
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      <IconButton edge="end">
+                                        <EventIcon />
+                                      </IconButton>
+                                    </InputAdornment>
+                                  ),
+                                },
                               },
                             }),
                       }}
                       disableFuture
                       format="MMM, YYYY"
                       views={['year', 'month']}
-                      sx={{ width: 150, marginRight: 7, top: -60, color: 'primary.main', fontSize: 14 }}
+                      sx={{ width: 150, marginRight: 7, top: -60, color: 'red', fontSize: 14 }}
                       value={achievementIssueDateExists ? dayjs(achievement.issueDate) : null}
                       onChange={(newValue) => {
                         setIssueDate(dayjs(newValue).format('YYYY-MM-DD'));
@@ -292,7 +319,7 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                     </Typography>
                     <Box sx={{ my: 1 }}>
                       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="us" localeText={customUSLocale}>
-                        <DatePicker
+                        <MobileDatePicker
                           slotProps={{
                             ...(achievement.hasError && issueDateExists
                               ? {
@@ -303,8 +330,17 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                       shrink: false,
                                     },
                                     InputProps: {
-                                      readOnly: true,
+                                      endAdornment: (
+                                        <InputAdornment position="end">
+                                          <IconButton edge="end">
+                                            <EventIcon />
+                                          </IconButton>
+                                        </InputAdornment>
+                                      ),
                                     },
+                                  },
+                                  actionBar: {
+                                    actions: ['clear', 'cancel', 'accept'],
                                   },
                                 }
                               : {
@@ -314,16 +350,30 @@ const AchievementListItem: React.FunctionComponent<AchievementListItemProps> = (
                                     InputLabelProps: {
                                       shrink: false,
                                     },
+                                    InputProps: {
+                                      endAdornment: (
+                                        <InputAdornment position="end">
+                                          <IconButton edge="end">
+                                            <EventIcon />
+                                          </IconButton>
+                                        </InputAdornment>
+                                      ),
+                                    },
+                                  },
+                                  actionBar: {
+                                    actions: ['clear', 'cancel', 'accept'],
                                   },
                                 }),
                           }}
-                          sx={{ width: 150, top: -60, color: 'rgba(0, 0, 72, 0.37)' }}
+                          sx={{ width: 150, top: -60, color: 'red' }}
                           format="MMM, YYYY"
                           views={['year', 'month']}
                           minDate={dayjs(issueDate).add(1, 'year')}
                           value={endDateExists && expiringDate !== null ? dayjs(expiringDate) : null}
                           onChange={(newValue) => {
-                            setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
+                            newValue === null
+                              ? setExpiringDate(null)
+                              : setExpiringDate(dayjs(newValue).format('YYYY-MM-DD'));
                             wasChange = true;
                             setEndDateExists(true);
                           }}

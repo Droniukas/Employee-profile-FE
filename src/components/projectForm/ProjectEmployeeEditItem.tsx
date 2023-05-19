@@ -148,6 +148,9 @@ const ProjectEmployeeEditItem: React.FC<ProjectEmployeeEditItemProps> = (props: 
               popper: {
                 onBlur: () => handleBlur(`projectEmployees.${index}.projectEmployeeEndDate`, endDateValue),
               },
+              actionBar: {
+                actions: ['clear'],
+              },
             }}
           />
         </LocalizationProvider>
