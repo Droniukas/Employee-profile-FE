@@ -44,7 +44,8 @@ const NotificationTextElement = (props: NotificationTextElementProps) => {
           Your project {`'${currentNotification.project.title}'`} status has been updated by
           {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
         </>
-      );    }
+      );
+    }
   }
   return (
     <Box

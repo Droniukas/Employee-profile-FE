@@ -3,15 +3,12 @@ import { Avatar, Box, IconButton, Theme, Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
 import { setReadById } from '../../../states/notifications';
-import { notificationsRoot } from '../../../store/types/notifications';
 import NotificationTextElement from './NotificationTextElement';
-import { useDispatch } from 'react-redux';
-import { setReadById } from '../../../states/notifications';
 
 type NotificationItemProps = {
   currentNotification: Notification;

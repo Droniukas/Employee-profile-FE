@@ -22,9 +22,16 @@ export const notificationsSlice = createSlice({
         return notification.project.id !== action.payload;
       });
     },
+    setReadByEmployeeId: (state, action: { payload: number }) => {
+      state.value.forEach((notification) => {
+        if (notification.employeeId === action.payload) {
+          notification.read = true;
+        }
+      });
+    },
   },
 });
 
-export const { setNotifications, setReadById, removeByProjectId } = notificationsSlice.actions;
+export const { setNotifications, setReadById, removeByProjectId, setReadByEmployeeId } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

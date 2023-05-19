@@ -1,9 +1,13 @@
 import { Box, Link, Menu, Switch, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { notificationsRoot } from '../../../store/types/notifications';
 import NotificationItem from './NotificationItem';
+import { Notification } from '../../../models/Notification.interface';
+import { NotificationService } from '../../../services/notifications.service';
+import { UserStateRoot } from '../../../store/types/user';
+import { setReadByEmployeeId } from '../../../states/notifications';
 
 type NotificationsDropdownProps = {
   notificationIconAnchorEl: HTMLElement | null;
@@ -12,12 +16,16 @@ type NotificationsDropdownProps = {
 
 const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps> = (props) => {
   const { notificationIconAnchorEl, onClose } = props;
-    const [onlyShowUnread, setOnlyShowUnread] = useState<boolean>(false);
+  const [onlyShowUnread, setOnlyShowUnread] = useState<boolean>(false);
   const open = Boolean(notificationIconAnchorEl);
   const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+  const notificationService = new NotificationService();
+  const dispatch = useDispatch();
 
   const handleMarkAllAsReadClick = () => {
-    console.log('Needs to be implemented');
+    notificationService.setReadByEmployeeId(user.id, true);
+    dispatch(setReadByEmployeeId(user.id));
   };
 
   return (
@@ -51,30 +59,44 @@ const NotificationsDropdown: React.FunctionComponent<NotificationsDropdownProps>
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography sx={{ ml: '1px', fontSize: 12 }}>LATEST</Typography>
-            <Link component="button" underline="hover" onClick={handleMarkAllAsReadClick}>
-              <Typography sx={{ fontSize: 12 }}>Mark all as read</Typography>
-            </Link>
+            {notifications.length > 0 && (
+              <>
+                <Typography sx={{ ml: '1px', fontSize: 12 }}>LATEST</Typography>
+                <Link
+                  component="button"
+                  underline="hover"
+                  onClick={handleMarkAllAsReadClick}
+                  {...(notifications.filter((notification) => !notification.read).length === 0 && {
+                    disabled: true,
+                    color: 'grey',
+                    sx: { cursor: 'default' },
+                    underline: 'none',
+                  })}
+                >
+                  <Typography sx={{ fontSize: 12 }}>Mark all as read</Typography>
+                </Link>
+              </>
+            )}
           </Box>
         </Box>
-               {notifications.length === 0 && (
-                  <Box
-                    sx={{
-                      padding: '15px',
-                      paddingBottom: '10px',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    You have no notifications
-                  </Box>
-                )}
-            {notifications?
-          .filter((notification) => !onlyShowUnread || !notification.read)
-            .map((notification: Notification) => {
-              return <NotificationItem key={notification.id} currentNotification={notification} />;
-            })}
+        {notifications.length === 0 && (
+          <Box
+            sx={{
+              padding: '15px',
+              paddingBottom: '10px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontWeight: 'bold',
+            }}
+          >
+            You have no notifications
+          </Box>
+        )}
+        {notifications
+          ?.filter((notification) => !onlyShowUnread || !notification.read)
+          .map((notification: Notification) => {
+            return <NotificationItem key={notification.id} currentNotification={notification} />;
+          })}
       </Menu>
     </>
   );
