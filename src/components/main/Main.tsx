@@ -98,7 +98,6 @@ const Main = () => {
       return;
     }
     setResult(user);
-    employeeHasAccess();
   }, [employeeIdParam, user]);
 
   const getEmployeeIdURLPart = (withOtherFilters?: boolean) => {
@@ -133,7 +132,7 @@ const Main = () => {
     return true;
   };
 
-  const employeeHasAccess = () => {
+  const userHasAccess = () => {
     if (user !== null && !user.isManager && employeeIdParam) {
       return false;
     }
@@ -189,7 +188,7 @@ const Main = () => {
 
   return (
     <Box>
-      {result && routeIsFound() && employeeHasAccess() && employeeIsFound && (
+      {result && routeIsFound() && userHasAccess() && employeeIsFound && (
         <>
           <ProfileInfo employee={result} />
           <CssBaseline />
@@ -320,7 +319,7 @@ const Main = () => {
         </>
       )}
       {(!routeIsFound() || !employeeIsFound) && <NotFoundPage />}
-      {employeeIsFound && !employeeHasAccess() && <AccessDeniedPage />}
+      {employeeIsFound && !userHasAccess() && <AccessDeniedPage />}
     </Box>
   );
 };

@@ -1,4 +1,3 @@
-import { NotificationRequestDto } from '../models/NotificationRequestDto';
 import axios from './axios';
 
 export class NotificationService {
@@ -13,11 +12,5 @@ export class NotificationService {
 
   public async setIsReadByEmployeeId(employeeId: number, read: boolean) {
     await axios.put(`/notifications/setIsReadByEmployeeId/${employeeId}/${read}`);
-  }
-
-  public async createNotifications(notificationRequestDto: NotificationRequestDto) {
-    await axios.post(`/notifications/createNotifications`, {
-      ...notificationRequestDto,
-    });
   }
 }
