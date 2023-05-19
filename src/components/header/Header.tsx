@@ -13,10 +13,10 @@ import { NotificationService } from '../../services/notifications.service';
 import { UserStateRoot } from '../../store/types/user';
 import EmployeeForm from '../employeeForm/EmployeeForm';
 import Loading from '../loading/Loading';
-import NotificationsDropdown from './Notifications/NotificationsDropdown';
 import { notificationsRoot } from '../../store/types/notifications';
 import { setNotifications } from '../../states/notifications';
 import { Notification } from '../../models/Notification.interface';
+import NotificationsDropdown from './Notifications/NotificationsDropdown';
 
 const Header = () => {
   const user = useSelector((state: UserStateRoot) => state.userState.value);
@@ -40,85 +40,87 @@ const Header = () => {
     logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}${ROUTES.LOGOUT}` } });
   };
 
-    const notificationService = new NotificationService();
+  const notificationService = new NotificationService();
 
-    useEffect(() => {
-      const fetchNotifications = async () => {
-        if (user) {
-          const notifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
-          dispatch(setNotifications(notifications));
-        }
-      };
-      fetchNotifications();
-    }, [user]);
-
-    const StyledBadge = styled(Badge)<BadgeProps>(() => ({
-      '& .MuiBadge-badge': {
-        right: 3,
-        top: 10,
-        height: '22px',
-        width: '22px',
-        border: '2px solid white',
-        padding: '4px',
-        borderRadius: '100%',
-      },
-    }));
-
-    const handleNotificationIconClick = (event: React.MouseEvent<HTMLElement>) => {
-      setNotificationIconAnchorEl(event.currentTarget);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (user) {
+        const notifications = await notificationService.getAllNotificationsByEmployeeId(user.id);
+        dispatch(setNotifications(notifications));
+      }
     };
+    fetchNotifications();
+  }, [user]);
 
-    const handleNotificationsDropdownClose = () => {
-      setNotificationIconAnchorEl(null);
-    };
+  const StyledBadge = styled(Badge)<BadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+      right: 3,
+      top: 10,
+      height: '22px',
+      width: '22px',
+      border: '2px solid white',
+      padding: '4px',
+      borderRadius: '100%',
+    },
+  }));
 
-    const notificationsCount = notifications.filter((notification: Notification) => !notification.read).length;
+  const handleNotificationIconClick = (event: React.MouseEvent<HTMLElement>) => {
+    setNotificationIconAnchorEl(event.currentTarget);
+  };
 
-      const onEmployeeFormClose = () => {
-        setOpenEmployeeForm(false);
-      };
+  const handleNotificationsDropdownClose = () => {
+    setNotificationIconAnchorEl(null);
+  };
+
+  const notificationsCount = notifications.filter((notification: Notification) => !notification.read).length;
+
+  const onEmployeeFormClose = () => {
+    setOpenEmployeeForm(false);
+  };
 
   return (
-  <>
-    <Box
-      sx={{
-        position: 'fixed',
-        zIndex: 4,
-        backgroundColor: '#FFFFFF',
-        borderBottom: 2,
-        borderColor: 'divider',
-        height: 64,
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'right',
-        alignItems: 'center',
-        gap: '40px'
-      }}
-    >
-      <div className="top-header">
-                <AddIcon
-                  sx={{ width: 20, height: 20, marginRight: 4, cursor: 'pointer' }}
-                  onClick={() => setOpenEmployeeForm(true)}
-                ></AddIcon>
-              <IconButton
-                onClick={(event) => {
-                  handleNotificationIconClick(event);
-                }}
-              >
-                <StyledBadge
-                  invisible={notificationsCount === 0 && true}
-                  badgeContent={<b>{notificationsCount}</b>}
-                  color="secondary"
-                >
-                  <NotificationsIcon sx={{ width: 35, height: 35, color: 'black' }} />
-                </StyledBadge>
-              </IconButton>
-        {result ? (
+    <>
+      <Box
+        sx={{
+          position: 'fixed',
+          zIndex: 4,
+          backgroundColor: '#FFFFFF',
+          borderBottom: 2,
+          borderColor: 'divider',
+          height: 64,
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'right',
+          alignItems: 'center',
+          gap: '15px',
+          paddingRight: '50px',
+        }}
+      >
+        <IconButton>
+          <AddIcon
+            sx={{ width: 20, height: 20, cursor: 'pointer', color: 'black' }}
+            onClick={() => setOpenEmployeeForm(true)}
+          />
+        </IconButton>
+        <IconButton
+          onClick={(event) => {
+            handleNotificationIconClick(event);
+          }}
+        >
+          <StyledBadge
+            invisible={notificationsCount === 0 && true}
+            badgeContent={<b>{notificationsCount}</b>}
+            color="secondary"
+          >
+            <NotificationsIcon sx={{ width: 35, height: 35, color: 'black' }} />
+          </StyledBadge>
+        </IconButton>
+        {user ? (
           <Avatar
-            src={`data:${result?.imageType};base64,${result?.imageBytes}`}
+            src={`data:${user?.imageType};base64,${user?.imageBytes}`}
             sx={{ width: 40, height: 40, cursor: 'pointer' }}
             onClick={(event) => {
-              handleClick(event);
+              handleUserIconClick(event);
             }}
           />
         ) : (
@@ -151,9 +153,14 @@ const Header = () => {
             </MenuItem>
           </Link>
         </Menu>
-      </div>
-    </Box>
+      </Box>
       {openEmployeeForm && <EmployeeForm onClose={() => onEmployeeFormClose()} />}
+      {notifications && (
+        <NotificationsDropdown
+          onClose={handleNotificationsDropdownClose}
+          notificationIconAnchorEl={notificationIconAnchorEl}
+        />
+      )}
     </>
   );
 };
