@@ -208,7 +208,8 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
             myProject={projectToEditView}
             snackbarProps={{ setOpenSnackbar: setOpenSnackbar, setSnackbarMessage: setSnackbarMessage }}
           />
-        )}        <List
+        )}{' '}
+        <List
           sx={{
             width: '100%',
           }}

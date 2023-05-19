@@ -3,12 +3,17 @@ import { Avatar, Box, IconButton, Theme, Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
 import { setIsReadById } from '../../../states/notifications';
 import NotificationTextElement from './NotificationTextElement';
+import MyProjectEditView from '../../myProjects/MyProjectEditView';
+import { ProjectsService } from '../../../services/projects.service';
+import { useEffect, useState } from 'react';
+import { UserStateRoot } from '../../../store/types/user';
+import MyProject from '../../../models/MyProject.interface';
 
 type NotificationItemProps = {
   currentNotification: Notification;
@@ -17,6 +22,9 @@ type NotificationItemProps = {
 const NotificationItem = (props: NotificationItemProps) => {
   const { currentNotification } = props;
   const dispatch = useDispatch();
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
+  const [myProject, setMyProject] = useState();
+  const [openPopup, setOpenPopup] = useState(false);
 
   dayjs.extend(duration);
   dayjs.extend(relativeTime);
@@ -35,6 +43,23 @@ const NotificationItem = (props: NotificationItemProps) => {
 
   const handleNotificationClick = () => {
     setNotificationIsReadById(currentNotification.id);
+    setOpenPopup(true);
+  };
+
+  const projectService = new ProjectsService();
+
+  useEffect(() => {
+    if (user) {
+      setUserMyProject();
+    }
+  }, []);
+
+  const setUserMyProject = async () => {
+    const allUserProjects = await projectService.getMyProjects(user.id);
+    const currentUserProject = allUserProjects.find(
+      (userMyProject: MyProject) => userMyProject.id === currentNotification.project.id,
+    );
+    setMyProject(currentUserProject);
   };
 
   return (
@@ -79,6 +104,15 @@ const NotificationItem = (props: NotificationItemProps) => {
           </Tooltip>
         )}
       </Box>
+      {openPopup && myProject && (
+        <MyProjectEditView
+          onClose={() => {
+            setOpenPopup(false);
+          }}
+          myProject={myProject}
+          forceViewMode={true}
+        />
+      )}
     </Box>
   );
 };

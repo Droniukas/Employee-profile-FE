@@ -12,12 +12,8 @@ import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeByProjectId } from '../../states/notifications';
-import { NotificationService } from '../../services/notifications.service';
-import { NotificationRequestDto } from '../../models/NotificationRequestDto';
-import { NotificationType } from '../enums/NotificationType';
-import { UserStateRoot } from '../../store/types/user';
 
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -26,12 +22,10 @@ const ProjectProfiles = () => {
   const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
-  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const dispatch = useDispatch();
 
   const projectsService = new ProjectsService();
-  const notificationsService = new NotificationService();
 
   useEffect(() => {
     getProjects();
@@ -43,28 +37,7 @@ const ProjectProfiles = () => {
 
   const getProjects = async () => {
     const newProjects: Project[] = await projectsService.getAllProjects();
-    createProjectStatusChangeNotifications(projects, newProjects);
     setProjects(newProjects);
-  };
-
-  const createProjectStatusChangeNotifications = (oldProjects: Project[], newProjects: Project[]) => {
-    const differentStatusProjects = newProjects.filter((newProject) => {
-      const oldProject = oldProjects.find((oldProject) => oldProject.id === newProject.id);
-      return oldProject && oldProject.status !== newProject.status;
-    });
-    differentStatusProjects.forEach((project) => {
-      const oldProject = oldProjects.find((oldProject) => oldProject.id === project.id);
-      if (project.id === undefined || oldProject === undefined) return;
-      const oldProjectEmployees = oldProject.projectEmployees.map((employee) => employee.id);
-
-      const notificationRequestDto: NotificationRequestDto = {
-        employeeIds: oldProjectEmployees,
-        initiatorEmployeeId: user.id,
-        notificationType: NotificationType.UPDATE_PROJECT_STATUS,
-        projectId: project.id,
-      };
-      notificationsService.createNotifications(notificationRequestDto);
-    });
   };
 
   const closeProjectForm = (project?: Project) => {

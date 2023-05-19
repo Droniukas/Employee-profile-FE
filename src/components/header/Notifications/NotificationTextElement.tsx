@@ -38,14 +38,6 @@ const NotificationTextElement = (props: NotificationTextElementProps) => {
       );
       break;
     }
-    case NotificationType.UPDATE_PROJECT_STATUS: {
-      notificationText = (
-        <>
-          Your project {`'${currentNotification.project.title}'`} status has been updated by
-          {` ${currentNotification.initiatorEmployee.name} ${currentNotification.initiatorEmployee.surname}`}.
-        </>
-      );
-    }
   }
   return (
     <Box

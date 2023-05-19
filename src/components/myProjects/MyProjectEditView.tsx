@@ -20,10 +20,11 @@ type MyProjectEditViewProps = {
     setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
     setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   };
+  forceViewMode?: boolean;
 };
 
 const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEditViewProps) => {
-  const { onClose, myProject, snackbarProps } = props;
+  const { onClose, myProject, snackbarProps, forceViewMode } = props;
 
   const projectsService = new ProjectsService();
   const [confirmationDialog, setConfirmationDialog] = useState<boolean>(false);
@@ -55,10 +56,10 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
   });
 
   const { values, dirty, handleBlur, handleChange, handleSubmit } = projectForm;
-  const employeeIDInURL = window.location.href.includes('employeeId');
+  const showInViewMode = window.location.href.includes('employeeId') || forceViewMode;
 
   let titleText = '';
-  if (employeeIDInURL) {
+  if (showInViewMode) {
     titleText = 'View employee project profile';
   } else if (myProject.responsibilities) {
     titleText = 'Edit your responsibilities';
@@ -174,7 +175,7 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
           </InputLabel>
-          {employeeIDInURL ? (
+          {showInViewMode ? (
             values.responsibilities !== null ? (
               values.responsibilities
             ) : (
@@ -201,7 +202,7 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
             />
           )}
         </Box>
-        {!employeeIDInURL && (
+        {!showInViewMode && (
           <Box display={'flex'} justifyContent={'flex-end'}>
             <Button
               variant="contained"
