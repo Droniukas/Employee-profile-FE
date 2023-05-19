@@ -154,6 +154,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
                     color: '#666666',
                     fontSize: 14,
                     overflow: 'hidden',
+                    whiteSpace: 'pre-wrap',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: '3',

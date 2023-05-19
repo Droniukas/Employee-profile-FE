@@ -194,7 +194,16 @@ const Main = () => {
           <ProfileInfo employee={result} />
           <CssBaseline />
           <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '20px 250px 0px' }}>
-            <Tabs value={currentRouteValue} indicatorColor="secondary" aria-label="secondary">
+            <Tabs
+              value={currentRouteValue}
+              indicatorColor="secondary"
+              aria-label="secondary"
+              sx={{
+                '& button': { color: 'primary.main' },
+                '& button:active': { fontWeight: 'bold' },
+                '& button.Mui-selected': { fontWeight: 'bold' },
+              }}
+            >
               <Tab
                 label="Skills"
                 value={ROUTES.SKILLS}

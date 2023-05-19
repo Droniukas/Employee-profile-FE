@@ -59,11 +59,9 @@ const SkillsTab: React.FunctionComponent<SkillsTabProps> = (props: SkillsTabProp
                   fontSize: 20,
                 }}
               >
-                {!employeeIdParam ? (
-                  <>No selected skills found. Check the filter settings</>
-                ) : (
-                  <>Employee has no selected skills</>
-                )}
+                {!employeeIdParam
+                  ? 'No selected skills found. Check the filter settings.'
+                  : 'Employee has no selected skills.'}
               </Typography>
             </ListItem>
           </List>

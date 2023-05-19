@@ -120,10 +120,12 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
                   sx={{
                     color: '#666666',
                     fontSize: 14,
+                    overflow: 'hidden',
                     whiteSpace: 'pre-wrap',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    WebkitLineClamp: '5',
+                    WebkitLineClamp: '3',
+                    WebkitBoxOrient: 'vertical',
                   }}
                 >
                   {myProject.description}

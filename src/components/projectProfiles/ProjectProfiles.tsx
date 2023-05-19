@@ -82,6 +82,7 @@ const ProjectProfiles = () => {
     setProjects(projects.filter((project) => project.id !== id));
     dispatch(removeByProjectId(id));
   };
+
   const filteredProjectsList = projects.filter((project) => {
     if (filterTextValue !== ProjectStatus.ALL) {
       return filterTextValue === project.status;
