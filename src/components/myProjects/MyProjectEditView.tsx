@@ -13,12 +13,12 @@ import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 
-type MyProjectFormProps = {
+type MyProjectEditViewProps = {
   onClose: (projectId?: number) => void;
   myProject: MyProject;
 };
 
-const MyProjectEditView: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
+const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEditViewProps) => {
   const { onClose, myProject } = props;
 
   const projectsService = new ProjectsService();
@@ -51,11 +51,12 @@ const MyProjectEditView: React.FC<MyProjectFormProps> = (props: MyProjectFormPro
   });
 
   const { values, dirty, handleBlur, handleChange, handleSubmit } = projectForm;
+  const employeeIDInURL = window.location.href.includes('employeeId');
 
   let titleText = '';
-  if (window.location.href.includes('employeeId')) {
+  if (employeeIDInURL) {
     titleText = 'View employee project profile';
-  } else if (myProject) {
+  } else if (myProject.responsibilities) {
     titleText = 'Edit your responsibilities';
   } else {
     titleText = 'Add your responsibilities';
@@ -124,7 +125,7 @@ const MyProjectEditView: React.FC<MyProjectFormProps> = (props: MyProjectFormPro
           </InputLabel>
           <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{values.description}</Typography>
         </Box>
-        <Box display={'flex'} sx={{ paddingLeft: 1 }}>
+        <Box display={'flex'}>
           <Box mr={6} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 12 }}>
             <InputLabel>
               <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Title</Typography>
@@ -161,7 +162,7 @@ const MyProjectEditView: React.FC<MyProjectFormProps> = (props: MyProjectFormPro
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
           </InputLabel>
-          {window.location.href.includes('employeeId') ? (
+          {employeeIDInURL ? (
             values.responsibilities !== null ? (
               values.responsibilities
             ) : (
@@ -188,7 +189,7 @@ const MyProjectEditView: React.FC<MyProjectFormProps> = (props: MyProjectFormPro
             />
           )}
         </Box>
-        {!window.location.href.includes('employeeId') && (
+        {!employeeIDInURL && (
           <Box display={'flex'} justifyContent={'flex-end'}>
             <Button
               variant="contained"
