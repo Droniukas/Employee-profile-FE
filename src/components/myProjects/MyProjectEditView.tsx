@@ -13,7 +13,7 @@ import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 
-type MyProjectFormProps = {
+type MyProjectEditViewProps = {
   onClose: (projectId?: number) => void;
   myProject: MyProject;
   snackbarProps?: {
@@ -22,7 +22,7 @@ type MyProjectFormProps = {
   };
 };
 
-const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) => {
+const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEditViewProps) => {
   const { onClose, myProject, snackbarProps } = props;
 
   const projectsService = new ProjectsService();
@@ -55,6 +55,16 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
   });
 
   const { values, dirty, handleBlur, handleChange, handleSubmit } = projectForm;
+  const employeeIDInURL = window.location.href.includes('employeeId');
+
+  let titleText = '';
+  if (employeeIDInURL) {
+    titleText = 'View employee project profile';
+  } else if (myProject.responsibilities) {
+    titleText = 'Edit your responsibilities';
+  } else {
+    titleText = 'Add your responsibilities';
+  }
 
   const handleSave = () => {
     handleSubmit();
@@ -92,7 +102,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
             color: 'primary.main',
           }}
         >
-          {myProject ? 'Edit your responsibilities' : 'Add your responsibilities'}
+          {titleText}
         </Typography>
         <Box>
           <InputLabel>
@@ -109,7 +119,7 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
               {values.title}
             </Typography>
           </Box>
-          <Box mr={5} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 8 }}>
+          <Box sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 3, left: 25 }}>
             <ProjectStatusColor projectStatus={myProject.status} />
           </Box>
         </Box>
@@ -156,49 +166,61 @@ const MyProjectEdit: React.FC<MyProjectFormProps> = (props: MyProjectFormProps) 
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
+            color: 'primary.main',
             my: 4,
+            height: `${window.location.href.includes('employeeId') ? '230px' : 0}`,
           }}
         >
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
           </InputLabel>
-          <TextField
-            onBlur={handleBlur}
-            name={'responsibilities'}
-            hiddenLabel
-            onChange={handleChange}
-            variant="outlined"
-            value={values.responsibilities === null ? '' : values.responsibilities}
-            placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
-            fullWidth
-            multiline
-            rows={8}
-            inputProps={{ maxLength: 2000 }}
-            sx={{
-              '& fieldset': {
-                borderRadius: 2,
-              },
-            }}
-          />
+          {employeeIDInURL ? (
+            values.responsibilities !== null ? (
+              values.responsibilities
+            ) : (
+              'No responsibilities'
+            )
+          ) : (
+            <TextField
+              onBlur={handleBlur}
+              name={'responsibilities'}
+              hiddenLabel
+              onChange={handleChange}
+              variant="outlined"
+              value={values.responsibilities === null ? '' : values.responsibilities}
+              placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
+              fullWidth
+              multiline
+              rows={8}
+              inputProps={{ maxLength: 2000 }}
+              sx={{
+                '& fieldset': {
+                  borderRadius: 2,
+                },
+              }}
+            />
+          )}
         </Box>
-        <Box display={'flex'} justifyContent={'flex-end'}>
-          <Button
-            variant="contained"
-            color="info"
-            sx={{ m: 1 }}
-            onClick={() => {
-              dirty ? setConfirmationDialog(true) : onClose();
-            }}
-          >
-            Cancel
-          </Button>
-          <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSave()}>
-            Save
-          </Button>
-        </Box>
+        {!employeeIDInURL && (
+          <Box display={'flex'} justifyContent={'flex-end'}>
+            <Button
+              variant="contained"
+              color="info"
+              sx={{ m: 1 }}
+              onClick={() => {
+                dirty ? setConfirmationDialog(true) : onClose();
+              }}
+            >
+              Cancel
+            </Button>
+            <Button sx={{ m: 1 }} variant="contained" onClick={() => handleSave()}>
+              Save
+            </Button>
+          </Box>
+        )}
       </Box>
     </Dialog>
   );
 };
 
-export default MyProjectEdit;
+export default MyProjectEditView;
