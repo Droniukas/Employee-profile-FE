@@ -34,7 +34,7 @@ const FindEmployee = () => {
   const selectedSkillRef = useRef(selectedSkill);
   const selectedAchievementRef = useRef(selectedAchievement);
 
-  const rowSizeOptions = [10, 20, 30, { label: 'all', value: -1 }];
+  const rowSizeOptions = [10, 20, 30, { label: 'All', value: -1 }];
 
   const employeeService = new EmployeeService();
   const skillService = new SkillsService();
