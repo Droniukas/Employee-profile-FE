@@ -2,12 +2,12 @@ import { Box, Link, Menu, Switch, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { notificationsRoot } from '../../../store/types/notifications';
-import NotificationItem from './NotificationItem';
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
-import { UserStateRoot } from '../../../store/types/user';
 import { setIsReadByEmployeeId } from '../../../states/notifications';
+import { notificationsRoot } from '../../../store/types/notifications';
+import { UserStateRoot } from '../../../store/types/user';
+import NotificationItem from './NotificationItem';
 
 type NotificationsDropdownProps = {
   notificationIconAnchorEl: HTMLElement | null;

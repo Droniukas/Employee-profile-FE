@@ -3,14 +3,14 @@ import '../projectProfiles/ProjectProfiles.scss';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
+import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
 import MyProjectProfilesResults from './MyProjectProfilesResults';
-import { UserStateRoot } from '../../store/types/user';
-import { useSelector } from 'react-redux';
 
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);

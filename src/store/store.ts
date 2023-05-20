@@ -6,11 +6,11 @@ import achievementNamesReducer from '../states/changedAchievements';
 import skillNamesReducer from '../states/changedSkills';
 import expandedAchievementReducer from '../states/expandedAchievement';
 import expandedSkillReducer from '../states/expandedSkill';
+import notificationsReducer from '../states/notifications';
 import onCancelReducer from '../states/onCancel';
 import skillsTabStateReducer from '../states/skillsTabState';
 import skillWithErrorIdReducer from '../states/skillWithErrorId';
 import userStateReducer from '../states/userState';
-import notificationsReducer from '../states/notifications';
 
 const store = configureStore({
   reducer: {

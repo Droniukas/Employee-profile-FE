@@ -8,17 +8,17 @@ import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { FormikErrors, getIn, useFormik } from 'formik';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import ProjectEmployeeError from '../../models/ProjectEmployeeError.interface';
 import { projectSchema } from '../../schemas/projectSchema';
 import { ProjectsService } from '../../services/projects.service';
+import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
 import ProjectEmployeeAddForm from './ProjectEmployeeAddForm';
 import ProjectEmployeeEditList from './ProjectEmployeeEditList';
-import { useSelector } from 'react-redux';
-import { UserStateRoot } from '../../store/types/user';
 
 type ProjectFormProps = {
   onClose: (project?: Project) => void;

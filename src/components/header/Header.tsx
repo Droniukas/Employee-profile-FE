@@ -8,14 +8,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteAuthToken } from '../../config/auth';
+import { Notification } from '../../models/Notification.interface';
 import { ROUTES } from '../../routes/routes';
 import { NotificationService } from '../../services/notifications.service';
+import { setNotifications } from '../../states/notifications';
+import { notificationsRoot } from '../../store/types/notifications';
 import { UserStateRoot } from '../../store/types/user';
 import EmployeeForm from '../employeeForm/EmployeeForm';
 import Loading from '../loading/Loading';
-import { notificationsRoot } from '../../store/types/notifications';
-import { setNotifications } from '../../states/notifications';
-import { Notification } from '../../models/Notification.interface';
 import NotificationsDropdown from './Notifications/NotificationsDropdown';
 
 const Header = () => {

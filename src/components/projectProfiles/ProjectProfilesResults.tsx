@@ -11,16 +11,16 @@ import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import { UserStateRoot } from '../../store/types/user';
 import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import { useSelector } from 'react-redux';
-import { UserStateRoot } from '../../store/types/user';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];

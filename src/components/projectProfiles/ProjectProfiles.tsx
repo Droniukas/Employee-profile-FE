@@ -4,16 +4,16 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Project from '../../models/Project.interface';
 import { ProjectsService } from '../../services/projects.service';
+import { removeByProjectId } from '../../states/notifications';
 import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
 import ProjectProfilesResult from './ProjectProfilesResults';
-import { useDispatch } from 'react-redux';
-import { removeByProjectId } from '../../states/notifications';
 
 const ProjectProfiles = () => {
   const [projects, setProjects] = useState<Project[]>([]);

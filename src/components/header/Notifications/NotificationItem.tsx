@@ -3,17 +3,17 @@ import { Avatar, Box, IconButton, Theme, Tooltip } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import MyProject from '../../../models/MyProject.interface';
 import { Notification } from '../../../models/Notification.interface';
 import { NotificationService } from '../../../services/notifications.service';
-import { setIsReadById } from '../../../states/notifications';
-import NotificationTextElement from './NotificationTextElement';
-import MyProjectEditView from '../../myProjects/MyProjectEditView';
 import { ProjectsService } from '../../../services/projects.service';
-import { useEffect, useState } from 'react';
+import { setIsReadById } from '../../../states/notifications';
 import { UserStateRoot } from '../../../store/types/user';
-import MyProject from '../../../models/MyProject.interface';
+import MyProjectEditView from '../../myProjects/MyProjectEditView';
+import NotificationTextElement from './NotificationTextElement';
 
 type NotificationItemProps = {
   currentNotification: Notification;

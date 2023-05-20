@@ -12,11 +12,11 @@ import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
 import { UserStateRoot } from '../../store/types/user';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
 import MyProjectEditView from './MyProjectEditView';
-import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 
 type MyProjectProfilesResultsProps = {
   myProjects: MyProject[];

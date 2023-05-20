@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { Notification } from '../models/Notification.interface';
 
 const initStateValue: Notification[] = [];
