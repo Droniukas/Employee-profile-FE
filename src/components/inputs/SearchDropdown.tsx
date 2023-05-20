@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
 import TextField from '@mui/material/TextField';
 import React, { useRef, useState } from 'react';
 
@@ -58,10 +57,6 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
     return <Paper sx={{ color: 'primary.main' }}>{children}</Paper>;
   };
 
-  const stylePopperComponent = (props: any) => {
-    return <Popper {...props} style={{ borderRadius: 8 }} />;
-  };
-
   interface RenderOptionParams {
     selected: boolean;
   }
@@ -100,7 +95,6 @@ const SearchDropdown: React.FC<SearchDropdownProps> = (props: SearchDropdownProp
         multiple
         disableCloseOnSelect
         PaperComponent={stylePaperComponents}
-        PopperComponent={stylePopperComponent}
         renderInput={(params) => (
           <TextField
             {...params}
