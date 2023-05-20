@@ -16,7 +16,7 @@ const Footer = () => {
         }}
       >
         <p className="footer copyright">Copyright © {moment().format('YYYY')} Cognizant</p>
-        <p className="footer policy">Privacy policy</p>
+        <p className="footer policy">Privacy policy</p>{' '}
       </Box>
     </>
   );

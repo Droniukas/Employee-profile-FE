@@ -11,9 +11,11 @@ import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
+import { UserStateRoot } from '../../store/types/user';
 import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
@@ -26,16 +28,21 @@ type ProjectProfilesResultsProps = {
   handleProjectDelete: (id: number) => void;
   focusProjectId?: number;
   filterStatus: string;
+  snackbarProps: {
+    setOpenSnackbar: React.Dispatch<React.SetStateAction<boolean>>;
+    setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  };
 };
 
 const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: ProjectProfilesResultsProps) => {
-  const { projects, rerender, handleProjectDelete, focusProjectId, filterStatus } = props;
+  const { projects, rerender, handleProjectDelete, focusProjectId, filterStatus, snackbarProps } = props;
 
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const buttonToFocusRef = useRef<HTMLButtonElement>(null);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const windowSize = useRef(window.innerWidth);
   const width = windowSize.current * 0.2;
@@ -53,6 +60,7 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   }, [buttonToFocusRef.current]);
 
   const setProject = (project: Project) => {
+    project.creatorEmployeeId = user.id;
     setProjectToEdit(project);
     setOpenPopup(true);
   };
@@ -339,7 +347,9 @@ const ProjectProfilesResult: React.FC<ProjectProfilesResultsProps> = (props: Pro
   } else {
     return (
       <>
-        {openPopup && projectToEdit && <ProjectForm onClose={closeEditForm} project={projectToEdit} />}
+        {openPopup && projectToEdit && (
+          <ProjectForm onClose={closeEditForm} project={projectToEdit} snackbarProps={snackbarProps} />
+        )}
         {showDeleteConfirmation && projectToDelete && (
           <DeleteConfirmationDialog
             project={projectToDelete}

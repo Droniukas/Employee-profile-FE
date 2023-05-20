@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -13,6 +13,8 @@ import store from '../../store/store';
 import { AchievementWithErrorIdRoot } from '../../store/types/achievements';
 import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
+import { changedAchievementsHaveDifferences } from '../main/utils';
 import AchievementsTab from './AchievementsTab';
 import { getAchievementsDataWithCount, getFilteredAchievementsData } from './utils';
 
@@ -35,7 +37,7 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
   const achievementsService = new AchievementsService();
   const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
-  const userId = useSelector((state: UserStateRoot) => state.userState.value).id;
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -50,6 +52,12 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     );
     if (achievementWithError === undefined) return;
     achievementWithError.hasError = false;
+
+    const achievementsUnderTheSameCategory = achievementsData.filter(
+      (achievement) => achievement.parentAchievementId === achievementWithError.parentAchievementId,
+    );
+    if (achievementsUnderTheSameCategory.some((achievement) => achievement.hasError)) return;
+
     const parentAchievements = achievementsData.filter(
       (parentAchievement) => parentAchievement.achievementId === achievementWithError.parentAchievementId,
     );
@@ -58,9 +66,7 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     });
   };
 
-  useEffect(() => {
-    fetchAndFilterAchievementsData();
-  }, [location.href]);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const fetchAndFilterAchievementsData = async () => {
     if (employeeIdParam) {
@@ -69,12 +75,18 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
       );
       setAchievementsData(getFilteredAchievementsData(getAchievementsDataWithCount(response), 'my'));
     } else {
-      const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(userId);
-      setAchievementsData(
-        getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
-      );
+      if (user) {
+        const response: Achievement[] = await achievementsService.fetchAchievementsDataByEmployeeId(user.id);
+        setAchievementsData(
+          getFilteredAchievementsData(getAchievementsDataWithCount(response), searchParams.get('filter')),
+        );
+      }
     }
   };
+
+  useEffect(() => {
+    fetchAndFilterAchievementsData();
+  }, [location.href]);
 
   const setErrorForAchievements = (childAchievement: ChangedAchievement | Achievement) => {
     const achievementWithError = achievementsData.find(
@@ -122,6 +134,9 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
     await fetchAndFilterAchievementsData();
     dispatch(setAchievementsTabState());
     dispatch(setChangedAchievements([]));
+    if (changedAchievementsHaveDifferences(changedAchievements, achievementsData)) {
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCancel = async () => {
@@ -142,6 +157,7 @@ const AchievementsTabData: React.FunctionComponent<AchievementsTabDataProps> = (
         onCancel={confirmationDialogOnCancel}
         onConfirm={confirmationDialogOnConfirm}
       />
+      <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message="Achievements successfully updated" />
     </>
   );
 };

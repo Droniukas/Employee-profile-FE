@@ -1,15 +1,11 @@
 import { FormikValues } from 'formik';
-import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import { ProjectStatus } from '../components/enums/ProjectStatus';
 import MyProject from '../models/MyProject.interface';
 import Project from '../models/Project.interface';
-import { UserStateRoot } from '../store/types/user';
 import axios from './axios';
 
 export class ProjectsService {
-  userId = useSelector((state: UserStateRoot) => state.userState.value).id;
-
   public async getAllProjects() {
     const response = await axios.get('/project/all', {});
     response.data.map((project: Project) => {
@@ -68,19 +64,19 @@ export class ProjectsService {
     }
   }
 
-  public async getMyProjects() {
-    const response = await axios.get(`/project/getMyProjectsByEmployee/${this.userId}`);
+  public async getMyProjects(userId: number) {
+    const response = await axios.get(`/project/getMyProjectsByEmployee/${userId}`);
     response.data.map((myProject: MyProject) => {
       this.mapMyProjectStatus(myProject);
     });
     return response.data;
   }
 
-  public async updateMyProject(myProject: FormikValues) {
+  public async updateMyProject(myProject: FormikValues, userId: number) {
     const { id, responsibilities } = myProject;
     const data = {
       projectId: id,
-      employeeId: this.userId,
+      employeeId: userId,
       responsibilities: responsibilities,
     };
     const response = await axios.post('project/updateMyProject', data);

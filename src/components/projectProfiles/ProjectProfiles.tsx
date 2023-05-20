@@ -4,9 +4,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Project from '../../models/Project.interface';
 import { ProjectsService } from '../../services/projects.service';
+import { removeByProjectId } from '../../states/notifications';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import ProjectFilter from './ProjectFilter';
@@ -17,6 +20,10 @@ const ProjectProfiles = () => {
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const [addedProjectId, setAddedProjectId] = useState<number>();
   const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+
+  const dispatch = useDispatch();
 
   const projectsService = new ProjectsService();
 
@@ -29,19 +36,24 @@ const ProjectProfiles = () => {
   };
 
   const getProjects = async () => {
-    const projects = await projectsService.getAllProjects();
-    setProjects(projects);
+    const newProjects: Project[] = await projectsService.getAllProjects();
+    setProjects(newProjects);
   };
 
-  const closeProjectForm = (projectId?: number) => {
+  const closeProjectForm = (project?: Project) => {
     setOpenPopup(false);
-    if (projectId) setAddedProjectId(projectId);
+    if (project) {
+      setAddedProjectId(project.id);
+      setSnackbarMessage(`Project "${project.title}" successfully created.`);
+      setOpenSnackbar(true);
+    }
     getProjects();
   };
 
   const handleProjectDelete = async (id: number) => {
     await projectsService.deleteProjectById(id);
     setProjects(projects.filter((project) => project.id !== id));
+    dispatch(removeByProjectId(id));
   };
 
   const filteredProjectsList = projects.filter((project) => {
@@ -148,8 +160,10 @@ const ProjectProfiles = () => {
           handleProjectDelete={handleProjectDelete}
           focusProjectId={addedProjectId}
           filterStatus={filterTextValue}
+          snackbarProps={{ setOpenSnackbar: setOpenSnackbar, setSnackbarMessage: setSnackbarMessage }}
         />
       </Box>
+      <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message={snackbarMessage} />
     </div>
   );
 };

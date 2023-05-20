@@ -2,10 +2,12 @@ import '../projectProfiles/ProjectProfiles.scss';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
+import { UserStateRoot } from '../../store/types/user';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
 import MyProjectProfilesResults from './MyProjectProfilesResults';
@@ -13,6 +15,7 @@ import MyProjectProfilesResults from './MyProjectProfilesResults';
 const MyProjectProfiles = () => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
   const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
+  const user = useSelector((state: UserStateRoot) => state.userState.value);
 
   const projectsService = new ProjectsService();
 
@@ -21,7 +24,8 @@ const MyProjectProfiles = () => {
   }, []);
 
   const getMyProjects = async () => {
-    const myProjects = await projectsService.getMyProjects();
+    if (!user) return;
+    const myProjects = await projectsService.getMyProjects(user.id);
     setProjects(myProjects);
   };
 

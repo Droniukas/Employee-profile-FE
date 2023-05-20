@@ -1,13 +1,12 @@
 import './Main.scss';
 
 import { Box, Button, CssBaseline, Tab, Tabs } from '@mui/material';
+import { isAxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Achievement } from '../../models/Achievement.interface';
-import { ChangedAchievement } from '../../models/ChangedAchievement.interface';
-import { ChangedSkill } from '../../models/ChangedSkill.interface';
 import Employee from '../../models/Employee.interface';
 import { Skill } from '../../models/Skill.interface';
 import AccessDeniedPage from '../../pages/accessDeniedPage/AccessDeniedPage';
@@ -32,6 +31,7 @@ import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import SkillsTabData from '../skillsTab/SkillsTabData';
 import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
+import { changedAchievementsHaveDifferences, changedSkillsHaveDifferences } from './utils';
 
 const getIndexedProps = (index: number) => {
   return {
@@ -51,6 +51,7 @@ const Main = () => {
   const [selectedTabValue, setSelectedTabValue] = useState<ROUTES>();
   const [skillsData, setSkillsData] = useState<Skill[]>([]);
   const [achievementsData, setAchievementsData] = useState<Achievement[]>([]);
+  const [employeeIsFound, setEmployeeIsFound] = useState<boolean>(true);
 
   const skillsViewState = useSelector((state: SkillsTabStateRoot) => state.skillsTabState.value);
   const achievementsViewState = useSelector((state: achievementsTabStateRoot) => state.achievementsTabState.value);
@@ -73,8 +74,22 @@ const Main = () => {
   const employeeService = new EmployeeService();
 
   const getResult = async (id: string) => {
-    const employee = await employeeService.getById(id);
-    setResult(employee);
+    try {
+      const employee = await employeeService.getById(id);
+      setEmployeeIsFound(true);
+      setResult(employee);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        if (!(error.response?.status === 401)) {
+          setEmployeeIsFound(false);
+          throw new Error('unknown axios error');
+        } else {
+          throw new Error('Unauthorized');
+        }
+      } else {
+        throw new Error(String(error));
+      }
+    }
   };
 
   useEffect(() => {
@@ -112,10 +127,16 @@ const Main = () => {
     { path: ROUTES.SEARCH, managerOnly: true },
     { path: ROUTES.PROJECT_PROFILES, managerOnly: true },
   ];
-  const routeIsFound = routes.find((route) => matchPath(route.path, location.pathname));
+  const routeIsFound = () => {
+    if (result) return routes.find((route) => matchPath(route.path, location.pathname));
+    return true;
+  };
 
-  const employeeHasAccess = () => {
-    if (!result?.isManager || employeeIdParam) {
+  const userHasAccess = () => {
+    if (user !== null && !user.isManager && employeeIdParam) {
+      return false;
+    }
+    if ((result && !result?.isManager) || employeeIdParam) {
       return !routes.some((route) => route.path === location.pathname && route.managerOnly);
     }
     return true;
@@ -138,41 +159,16 @@ const Main = () => {
     dispatch(triggerOnCancel());
   };
 
-  const changedSkillsHaveDifferences = (changedSkills: ChangedSkill[]) => {
-    return !changedSkills.every((changedSkill) => {
-      return skillsData.some((skill) => {
-        return (
-          skill.skillId === changedSkill.skillId &&
-          skill.checked === changedSkill.checked &&
-          skill.skillLevel === changedSkill.skillLevel
-        );
-      });
-    });
-  };
-
-  const changedAchievementsHaveDifferences = (changedAchievements: ChangedAchievement[]) => {
-    return !changedAchievements.every((changedAchievement) => {
-      return achievementsData.some((achievement) => {
-        return (
-          achievement.achievementId === changedAchievement.achievementId &&
-          achievement.checked === changedAchievement.checked &&
-          achievement.issueDate === changedAchievement.issueDate &&
-          achievement.expiringDate === changedAchievement.expiringDate
-        );
-      });
-    });
-  };
-
   const handleTabClick = (currentTabURL: string, currentTabValue: ROUTES) => {
     setSelectedTabURL(currentTabURL);
     setSelectedTabValue(currentTabValue);
     const changedSkills = store.getState().changedSkills.value;
-    if (changedSkillsHaveDifferences(changedSkills)) {
+    if (changedSkillsHaveDifferences(changedSkills, skillsData)) {
       setSkillsConfirmationDialog(true);
       return;
     }
     const changedAchievements = store.getState().changedAchievements.value;
-    if (changedAchievementsHaveDifferences(changedAchievements)) {
+    if (changedAchievementsHaveDifferences(changedAchievements, achievementsData)) {
       setAchievementsConfirmationDialog(true);
       return;
     }
@@ -191,8 +187,8 @@ const Main = () => {
   };
 
   return (
-    <>
-      {result && routeIsFound && employeeHasAccess() && (
+    <Box>
+      {result && routeIsFound() && userHasAccess() && employeeIsFound && (
         <>
           <ProfileInfo employee={result} />
           <CssBaseline />
@@ -322,9 +318,9 @@ const Main = () => {
           </Box>
         </>
       )}
-      {!employeeHasAccess() && <AccessDeniedPage />}
-      {!routeIsFound && <NotFoundPage />}
-    </>
+      {(!routeIsFound() || !employeeIsFound) && <NotFoundPage />}
+      {employeeIsFound && !userHasAccess() && <AccessDeniedPage />}
+    </Box>
   );
 };
 

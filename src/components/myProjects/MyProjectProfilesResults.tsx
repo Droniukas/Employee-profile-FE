@@ -11,8 +11,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import MyProject from '../../models/MyProject.interface';
-import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectStatusColor from '../projectProfiles/ProjectStatusColor';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
@@ -29,7 +29,8 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
   const [projectToEditView, setProjectToEditView] = useState<MyProject | null>(null);
   const [openPopup, setOpenPopup] = useState<boolean>(false);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  const projectsService = new ProjectsService();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
 
   const closeEditViewForm = () => {
     setOpenPopup(false);
@@ -202,8 +203,12 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
     return (
       <>
         {openPopup && projectToEditView && (
-          <MyProjectEditView onClose={closeEditViewForm} myProject={projectToEditView} />
-        )}
+          <MyProjectEditView
+            onClose={closeEditViewForm}
+            myProject={projectToEditView}
+            snackbarProps={{ setOpenSnackbar: setOpenSnackbar, setSnackbarMessage: setSnackbarMessage }}
+          />
+        )}{' '}
         <List
           sx={{
             width: '100%',
@@ -211,6 +216,7 @@ const MyProjectProfilesResults: React.FC<MyProjectProfilesResultsProps> = (props
         >
           {myProjects.map((myProject) => renderResultItem(myProject))}
         </List>
+        <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message={snackbarMessage} />
       </>
     );
   }

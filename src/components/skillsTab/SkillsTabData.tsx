@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -12,7 +12,9 @@ import store from '../../store/store';
 import { SkillWithErrorIdRoot } from '../../store/types/skills';
 import { UserStateRoot } from '../../store/types/user';
 import ConfirmationDialog from '../confirmationDialog/ConfirmationDialog';
+import CustomSnackbar from '../customSnackbar/CustomSnackbar';
 import { SkillLevel } from '../enums/SkillLevel';
+import { changedSkillsHaveDifferences } from '../main/utils';
 import SkillsTab from './SkillsTab';
 import { getFilteredSkillsData, getSkillsDataWithCount } from './utils';
 
@@ -28,8 +30,9 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
   const { confirmationDialogOnCancel, confirmationDialogOnConfirm, confirmationDialogOpen, skillsData, setSkillsData } =
     props;
   const skillsService = new SkillsService();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const employeeIdParam = searchParams.get('employeeId');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -44,29 +47,35 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
     const skillWithError: Skill | undefined = skillsData.find((skill) => skill.skillId === childSkillId);
     if (skillWithError === undefined) return;
     skillWithError.hasError = false;
+
+    const skillsUnderTheSameCategory = skillsData.filter(
+      (skill) => skill.parentSkillId === skillWithError.parentSkillId,
+    );
+    if (skillsUnderTheSameCategory.some((skill) => skill.hasError)) return;
+
     const parentSkills = skillsData.filter((parentSkill) => parentSkill.skillId === skillWithError.parentSkillId);
     parentSkills.forEach((skill) => {
       setErrorForSkillById(skill.skillId);
     });
   };
 
-  useEffect(() => {
-    fetchAndFilterSkillsData();
-  }, [location.href]);
-
   const user = useSelector((state: UserStateRoot) => state.userState.value);
-  if (!user) return null;
-  const userId = user.id;
 
   const fetchAndFilterSkillsData = async () => {
     if (employeeIdParam) {
       const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(Number(employeeIdParam));
       setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), 'my'));
     } else {
-      const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(userId);
-      setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+      if (user) {
+        const response: Skill[] = await skillsService.fetchSkillsDataByEmployeeId(user.id);
+        setSkillsData(getFilteredSkillsData(getSkillsDataWithCount(response), searchParams.get('filter')));
+      }
     }
   };
+
+  useEffect(() => {
+    fetchAndFilterSkillsData();
+  }, [location.href]);
 
   const setErrorForSkills = (childSkill: ChangedSkill | Skill) => {
     const skillWithError = skillsData.find((skill) => skill.skillId === childSkill.skillId);
@@ -99,6 +108,9 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
     await fetchAndFilterSkillsData();
     dispatch(setSkillsTabState());
     dispatch(setChangedSkills([]));
+    if (changedSkillsHaveDifferences(changedSkills, skillsData)) {
+      setOpenSnackbar(true);
+    }
   };
 
   const handleCancel = async () => {
@@ -117,6 +129,7 @@ const SkillsTabData: React.FunctionComponent<SkillsTabDataProps> = (props) => {
         onCancel={confirmationDialogOnCancel}
         onConfirm={confirmationDialogOnConfirm}
       />
+      <CustomSnackbar open={openSnackbar} setOpen={setOpenSnackbar} message="Skills successfully updated" />
     </>
   );
 };
