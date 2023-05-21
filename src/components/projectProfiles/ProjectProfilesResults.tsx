@@ -16,11 +16,11 @@ import { useSelector } from 'react-redux';
 import Project from '../../models/Project.interface';
 import ProjectEmployee from '../../models/ProjectEmployee.interface';
 import { UserStateRoot } from '../../store/types/user';
+import DeleteConfirmationDialog from '../confirmationDialog/DeleteConfirmationDialog';
 import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
-import DeleteConfirmationDialog from '../confirmationDialog/DeleteConfirmationDialog';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
