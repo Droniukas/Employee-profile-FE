@@ -136,7 +136,25 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>Description</Typography>
           </InputLabel>
-          <Typography sx={{ fontSize: 16, fontWeight: 400, color: 'primary.main' }}>{values.description}</Typography>
+          <TextField
+            name={'description'}
+            variant="standard"
+            hiddenLabel
+            value={values.description}
+            fullWidth
+            multiline
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true,
+            }}
+            sx={{
+              '& .MuiInputBase-root': {
+                color: 'primary.main',
+                fontSize: 16,
+                fontWeight: 400,
+              },
+            }}
+          />
         </Box>
         <Box display={'flex'}>
           <Box mr={6} sx={{ display: 'inline-block', alignItems: 'center', position: 'relative', top: 12 }}>
@@ -197,6 +215,11 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
               sx={{
                 '& fieldset': {
                   borderRadius: 2,
+                },
+                '& .MuiInputBase-root': {
+                  color: 'primary.main',
+                  fontSize: 16,
+                  fontWeight: 400,
                 },
               }}
             />

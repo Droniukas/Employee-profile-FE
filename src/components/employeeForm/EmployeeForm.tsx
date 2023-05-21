@@ -132,7 +132,7 @@ const EmployeeForm: React.FC<EmployeeFormProps> = (props: EmployeeFormProps) => 
             color: 'primary.main',
           }}
         >
-          Create employee
+          Add new employee
         </Typography>
       </Box>
       <Grid marginX={5} marginBottom={3} container spacing={3} width={'90%'}>

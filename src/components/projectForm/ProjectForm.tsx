@@ -226,6 +226,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                 '& fieldset': {
                   borderRadius: 2,
                 },
+                '& .MuiInputBase-root': {
+                  color: 'primary.main',
+                  fontSize: 16,
+                  fontWeight: 400,
+                },
               }}
             />
           </Box>
@@ -264,6 +269,11 @@ const ProjectForm: React.FC<ProjectFormProps> = (props: ProjectFormProps) => {
                 },
                 '& fieldset': {
                   borderRadius: 2,
+                },
+                '& .MuiInputBase-root': {
+                  color: 'primary.main',
+                  fontSize: 16,
+                  fontWeight: 400,
                 },
               }}
             />
