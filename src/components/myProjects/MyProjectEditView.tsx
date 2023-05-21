@@ -169,7 +169,7 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
             alignItems: 'flex-start',
             color: 'primary.main',
             my: 4,
-            height: `${window.location.href.includes('employeeId') ? '230px' : 0}`,
+            height: `${showInViewMode ? '230px' : 0}`,
           }}
         >
           <InputLabel>
