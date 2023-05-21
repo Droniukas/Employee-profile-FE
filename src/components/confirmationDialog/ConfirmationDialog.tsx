@@ -16,7 +16,7 @@ const ConfirmationDialog: React.FunctionComponent<ConfirmationDialogProps> = (pr
         <Typography>Changes will be lost, are you sure you want to leave?</Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} color="error" variant="contained">
+        <Button onClick={onCancel} color="info" variant="contained">
           Cancel
         </Button>
         <Button onClick={onConfirm} sx={{ m: 1 }} variant="contained">

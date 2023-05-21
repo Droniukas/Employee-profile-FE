@@ -3,7 +3,7 @@ import './Header.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 import AddIcon from '@mui/icons-material/Add';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Avatar, Badge, BadgeProps, Box, IconButton, Link, Menu, MenuItem, styled } from '@mui/material';
+import { Avatar, Badge, BadgeProps, Box, IconButton, Link, Menu, MenuItem, styled, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -96,22 +96,30 @@ const Header = () => {
           paddingRight: '50px',
         }}
       >
-        <IconButton onClick={() => setOpenEmployeeForm(true)}>
-          <AddIcon sx={{ width: 20, height: 20, cursor: 'pointer', color: 'black' }} />
-        </IconButton>
-        <IconButton
-          onClick={(event) => {
-            handleNotificationIconClick(event);
-          }}
-        >
-          <StyledBadge
-            invisible={notificationsCount === 0 && true}
-            badgeContent={<b>{notificationsCount}</b>}
-            color="secondary"
+        <Tooltip title="Add new employee">
+          <IconButton
+            onClick={() => setOpenEmployeeForm(true)}
+            sx={{ width: 40, height: 40, backgroundColor: '#F4F4F4', color: 'primary.main' }}
           >
-            <NotificationsIcon sx={{ width: 35, height: 35, color: 'black' }} />
-          </StyledBadge>
-        </IconButton>
+            <AddIcon sx={{ cursor: 'pointer' }} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Notifications">
+          <IconButton
+            onClick={(event) => {
+              handleNotificationIconClick(event);
+            }}
+            sx={{ width: 40, height: 40, backgroundColor: '#F4F4F4', color: 'primary.main' }}
+          >
+            <StyledBadge
+              invisible={notificationsCount === 0 && true}
+              badgeContent={<b>{notificationsCount}</b>}
+              color="secondary"
+            >
+              <NotificationsIcon />
+            </StyledBadge>
+          </IconButton>
+        </Tooltip>
         {user ? (
           <Avatar
             src={`data:${user?.imageType};base64,${user?.imageBytes}`}

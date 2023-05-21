@@ -20,7 +20,7 @@ import { EmployeeStatus } from '../enums/EmployeeStatus';
 import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectForm from '../projectForm/ProjectForm';
 import { projectProfileDateFormat } from '../utilities/projectProfileDateFormat';
-import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import DeleteConfirmationDialog from '../confirmationDialog/DeleteConfirmationDialog';
 
 type ProjectProfilesResultsProps = {
   projects: Project[];
