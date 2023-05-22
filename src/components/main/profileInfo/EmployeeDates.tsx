@@ -26,7 +26,16 @@ const EmployeeDates: React.FunctionComponent<EmployeeDatesProps> = (props) => {
           return (
             <div key={index} style={{ display: 'inline-block' }}>
               From {hiringDateFormated}
-              {exitDateFormated ? <> to {exitDateFormated}, &nbsp;</> : ''}
+              {exitDateFormated && index === employee.employmentDates.length - 1 ? (
+                <> to {exitDateFormated} &nbsp;</>
+              ) : (
+                ''
+              )}
+              {exitDateFormated && index !== employee.employmentDates.length - 1 ? (
+                <> to {exitDateFormated}, &nbsp;</>
+              ) : (
+                ''
+              )}
             </div>
           );
         }
