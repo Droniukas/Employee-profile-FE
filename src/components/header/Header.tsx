@@ -96,14 +96,16 @@ const Header = () => {
           paddingRight: '50px',
         }}
       >
-        <Tooltip title="Add new employee">
-          <IconButton
-            onClick={() => setOpenEmployeeForm(true)}
-            sx={{ width: 40, height: 40, backgroundColor: '#F4F4F4', color: 'primary.main' }}
-          >
-            <AddIcon sx={{ cursor: 'pointer' }} />
-          </IconButton>
-        </Tooltip>
+        {user && user.isManager && (
+          <Tooltip title="Add new employee">
+            <IconButton
+              onClick={() => setOpenEmployeeForm(true)}
+              sx={{ width: 40, height: 40, backgroundColor: '#F4F4F4', color: 'primary.main' }}
+            >
+              <AddIcon sx={{ cursor: 'pointer' }} />
+            </IconButton>
+          </Tooltip>
+        )}
         <Tooltip title="Notifications">
           <IconButton
             onClick={(event) => {
