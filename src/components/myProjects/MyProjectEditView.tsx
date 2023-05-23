@@ -208,8 +208,8 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
             rows={8}
             inputProps={{ maxLength: 2000 }}
             InputProps={{
-              readOnly: showInViewMode ? true : false,
-              disableUnderline: showInViewMode ? true : false,
+              readOnly: showInViewMode,
+              disableUnderline: showInViewMode,
             }}
             sx={{
               '& fieldset': {
