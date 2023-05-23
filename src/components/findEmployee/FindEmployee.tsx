@@ -42,6 +42,7 @@ const FindEmployee = () => {
 
   const setInputValue = (val: string) => {
     inputValueRef.current = val;
+    setPage(0);
     _setInputValue(val);
   };
 
@@ -63,6 +64,7 @@ const FindEmployee = () => {
   const handleSearchSkillChange = (value: SearchDropdownOption[]) => {
     selectedSkillRef.current = value;
     setSelectedSkill(value);
+    setPage(0);
     getEmployees();
     checkIfSearchCriteriaDefined();
   };
@@ -75,6 +77,7 @@ const FindEmployee = () => {
   const handleSearchAchievementChange = (value: SearchDropdownOption[]) => {
     selectedAchievementRef.current = value;
     setSelectedAchievement(value);
+    setPage(0);
     getEmployees();
     checkIfSearchCriteriaDefined();
   };

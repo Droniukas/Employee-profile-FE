@@ -193,37 +193,35 @@ const MyProjectEditView: React.FC<MyProjectEditViewProps> = (props: MyProjectEdi
           <InputLabel>
             <Typography sx={{ fontSize: 14, fontWeight: 400 }}>My responsibilities</Typography>
           </InputLabel>
-          {showInViewMode ? (
-            values.responsibilities !== null ? (
-              values.responsibilities
-            ) : (
-              'No responsibilities'
-            )
-          ) : (
-            <TextField
-              onBlur={handleBlur}
-              name={'responsibilities'}
-              hiddenLabel
-              onChange={handleChange}
-              variant="outlined"
-              value={values.responsibilities === null ? '' : values.responsibilities}
-              placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
-              fullWidth
-              multiline
-              rows={8}
-              inputProps={{ maxLength: 2000 }}
-              sx={{
-                '& fieldset': {
-                  borderRadius: 2,
-                },
-                '& .MuiInputBase-root': {
-                  color: 'primary.main',
-                  fontSize: 16,
-                  fontWeight: 400,
-                },
-              }}
-            />
-          )}
+          <TextField
+            onBlur={handleBlur}
+            name={'responsibilities'}
+            hiddenLabel
+            onChange={handleChange}
+            variant={showInViewMode ? 'standard' : 'outlined'}
+            value={
+              values.responsibilities === null ? (showInViewMode ? 'No responsibilities' : '') : values.responsibilities
+            }
+            placeholder="e.g., Give more details about your role, responsibilities and main tasks in the project."
+            fullWidth
+            multiline
+            rows={8}
+            inputProps={{ maxLength: 2000 }}
+            InputProps={{
+              readOnly: showInViewMode,
+              disableUnderline: showInViewMode,
+            }}
+            sx={{
+              '& fieldset': {
+                borderRadius: 2,
+              },
+              '& .MuiInputBase-root': {
+                color: 'primary.main',
+                fontSize: 16,
+                fontWeight: 400,
+              },
+            }}
+          />
         </Box>
         {!showInViewMode && (
           <Box display={'flex'} justifyContent={'flex-end'}>
