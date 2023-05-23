@@ -289,7 +289,7 @@ const Main = () => {
                   path={ROUTES.MY_PROJECTS}
                   element={
                     <TabPanel value={currentRouteValue} index={2}>
-                      <MyProjectProfiles />
+                      <MyProjectProfiles employee={result} />
                     </TabPanel>
                   }
                 />
