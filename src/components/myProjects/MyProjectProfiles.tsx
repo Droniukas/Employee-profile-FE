@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import Employee from '../../models/Employee.interface';
 import MyProject from '../../models/MyProject.interface';
 import { ProjectsService } from '../../services/projects.service';
 import { UserStateRoot } from '../../store/types/user';
@@ -12,10 +13,14 @@ import { ProjectStatus } from '../enums/ProjectStatus';
 import ProjectFilter from '../projectProfiles/ProjectFilter';
 import MyProjectProfilesResults from './MyProjectProfilesResults';
 
-const MyProjectProfiles = () => {
+type MyProjectProfilesProps = {
+  employee: Employee;
+};
+const MyProjectProfiles: React.FC<MyProjectProfilesProps> = (props: MyProjectProfilesProps) => {
   const [myProjects, setProjects] = useState<MyProject[]>([]);
   const [filterTextValue, setFilterTextValue] = useState<ProjectStatus>(ProjectStatus.ALL);
   const user = useSelector((state: UserStateRoot) => state.userState.value);
+  const { employee } = props;
 
   const projectsService = new ProjectsService();
 
@@ -25,7 +30,7 @@ const MyProjectProfiles = () => {
 
   const getMyProjects = async () => {
     if (!user) return;
-    const myProjects = await projectsService.getMyProjects(user.id);
+    const myProjects = await projectsService.getMyProjects(employee.id);
     setProjects(myProjects);
   };
 
