@@ -9,7 +9,6 @@ import { matchPath, Route, Routes, useNavigate, useSearchParams } from 'react-ro
 import { Achievement } from '../../models/Achievement.interface';
 import Employee from '../../models/Employee.interface';
 import { Skill } from '../../models/Skill.interface';
-import AccessDeniedPage from '../../pages/accessDeniedPage/AccessDeniedPage';
 import NotFoundPage from '../../pages/notFoundPage/NotFoundPage';
 import { ROUTES } from '../../routes/routes';
 import { EmployeeService } from '../../services/employee.service';
@@ -26,10 +25,8 @@ import AchievementsTabData from '../achievementsTab/AchievementsTabData';
 import { AchievementsTabState } from '../enums/AchievementsTabState';
 import { SkillsTabState } from '../enums/SkillsTabState';
 import FindEmployee from '../findEmployee/FindEmployee';
-import MyProjectProfiles from '../myProjects/MyProjectProfiles';
 import ProjectProfiles from '../projectProfiles/ProjectProfiles';
 import SkillsTabData from '../skillsTab/SkillsTabData';
-import ProfileInfo from './profileInfo/ProfileInfo';
 import TabPanel from './TabPanel';
 import { changedAchievementsHaveDifferences, changedSkillsHaveDifferences } from './utils';
 
@@ -132,16 +129,6 @@ const Main = () => {
     return true;
   };
 
-  const userHasAccess = () => {
-    if (user !== null && !user.isManager && employeeIdParam) {
-      return false;
-    }
-    if ((result && !result?.isManager) || employeeIdParam) {
-      return !routes.some((route) => route.path === location.pathname && route.managerOnly);
-    }
-    return true;
-  };
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [skillsConfirmationDialog, setSkillsConfirmationDialog] = useState<boolean>(false);
@@ -188,9 +175,9 @@ const Main = () => {
 
   return (
     <Box>
-      {result && routeIsFound() && userHasAccess() && employeeIsFound && (
+      {routeIsFound() && (
         <>
-          <ProfileInfo employee={result} />
+          {/* <ProfileInfo employee={result} /> */}
           <CssBaseline />
           <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '70vw', margin: '20px 250px 0px' }}>
             <Tabs
@@ -289,7 +276,7 @@ const Main = () => {
                   path={ROUTES.MY_PROJECTS}
                   element={
                     <TabPanel value={currentRouteValue} index={2}>
-                      <MyProjectProfiles employee={result} />
+                      {/* <MyProjectProfiles employee={result} /> */}
                     </TabPanel>
                   }
                 />
@@ -319,7 +306,6 @@ const Main = () => {
         </>
       )}
       {(!routeIsFound() || !employeeIsFound) && <NotFoundPage />}
-      {employeeIsFound && !userHasAccess() && <AccessDeniedPage />}
     </Box>
   );
 };

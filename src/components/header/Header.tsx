@@ -1,13 +1,11 @@
 import './Header.scss';
 
-import { useAuth0 } from '@auth0/auth0-react';
 import AddIcon from '@mui/icons-material/Add';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Avatar, Badge, BadgeProps, Box, IconButton, Link, Menu, MenuItem, styled, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { deleteAuthToken } from '../../config/auth';
 import { Notification } from '../../models/Notification.interface';
 import { ROUTES } from '../../routes/routes';
 import { NotificationService } from '../../services/notifications.service';
@@ -23,7 +21,6 @@ const Header = () => {
   const [userIconAnchorEl, setUserIconAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationIconAnchorEl, setNotificationIconAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(userIconAnchorEl);
-  const { logout } = useAuth0();
   const [openEmployeeForm, setOpenEmployeeForm] = useState(false);
   const notifications = useSelector((state: notificationsRoot) => state.notifications.value);
   const dispatch = useDispatch();
@@ -33,11 +30,6 @@ const Header = () => {
   };
   const handleMyProfileSelection = () => {
     setUserIconAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    deleteAuthToken();
-    logout({ logoutParams: { returnTo: `${process.env.REACT_APP_BASE_URL}${ROUTES.LOGOUT}` } });
   };
 
   const notificationService = new NotificationService();
@@ -91,7 +83,6 @@ const Header = () => {
           width: '100%',
           display: 'flex',
           justifyContent: 'right',
-          alignItems: 'center',
           gap: '15px',
           paddingRight: '50px',
         }}
@@ -152,11 +143,6 @@ const Header = () => {
           <Link href={`${process.env.REACT_APP_BASE_URL}${ROUTES.SKILLS}`} underline="none">
             <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleMyProfileSelection}>
               My Profile
-            </MenuItem>
-          </Link>
-          <Link underline="none">
-            <MenuItem sx={{ color: 'primary.main', fontWeight: 'bold' }} onClick={handleLogout}>
-              Log out
             </MenuItem>
           </Link>
         </Menu>
